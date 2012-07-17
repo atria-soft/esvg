@@ -24,8 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Circle.h>
-#include <agg-2.4/agg_conv_stroke.h>
-#include <agg-2.4/agg_ellipse.h>
+#include <agg/agg_conv_stroke.h>
+#include <agg/agg_ellipse.h>
 
 
 svg::Circle::Circle(PaintState parentPaintState) : svg::Base(parentPaintState)

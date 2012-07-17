@@ -24,8 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Polyline.h>
-#include <agg-2.4/agg_conv_stroke.h>
-#include <agg-2.4/agg_path_storage.h>
+#include <agg/agg_conv_stroke.h>
+#include <agg/agg_path_storage.h>
 
 svg::Polyline::Polyline(PaintState parentPaintState) : svg::Base(parentPaintState)
 {

@@ -26,7 +26,7 @@
 #define __SVG_PATH_H__
 
 #include <parserSVG/Base.h>
-#include <agg-2.4/agg_path_storage.h>
+#include <agg/agg_path_storage.h>
 
 namespace svg
 {

@@ -24,8 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Ellipse.h>
-#include <agg-2.4/agg_conv_stroke.h>
-#include <agg-2.4/agg_ellipse.h>
+#include <agg/agg_conv_stroke.h>
+#include <agg/agg_ellipse.h>
 
 svg::Ellipse::Ellipse(PaintState parentPaintState) : svg::Base(parentPaintState)
 {

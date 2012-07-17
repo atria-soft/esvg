@@ -24,11 +24,11 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Path.h>
-#include <agg-2.4/agg_conv_stroke.h>
-#include <agg-2.4/agg_conv_dash.h>
-#include <agg-2.4/agg_conv_curve.h>
-#include <agg-2.4/agg_conv_contour.h>
-#include <agg-2.4/agg_conv_smooth_poly1.h>
+#include <agg/agg_conv_stroke.h>
+#include <agg/agg_conv_dash.h>
+#include <agg/agg_conv_curve.h>
+#include <agg/agg_conv_contour.h>
+#include <agg/agg_conv_smooth_poly1.h>
 
 svg::Path::Path(PaintState parentPaintState) : svg::Base(parentPaintState)
 {

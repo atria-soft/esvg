@@ -24,8 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Rectangle.h>
-#include <agg-2.4/agg_rounded_rect.h>
-#include <agg-2.4/agg_conv_stroke.h>
+#include <agg/agg_rounded_rect.h>
+#include <agg/agg_conv_stroke.h>
 
 svg::Rectangle::Rectangle(PaintState parentPaintState) : svg::Base(parentPaintState)
 {

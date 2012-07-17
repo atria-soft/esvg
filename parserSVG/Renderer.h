@@ -27,16 +27,16 @@
 
 #include <etk/UString.h>
 
-#include <agg-2.4/agg_basics.h>
-#include <agg-2.4/agg_rendering_buffer.h>
-#include <agg-2.4/agg_rasterizer_scanline_aa.h>
-#include <agg-2.4/agg_scanline_p.h>
-#include <agg-2.4/agg_renderer_scanline.h>
-#include <agg-2.4/agg_path_storage.h>
-#include <agg-2.4/agg_conv_transform.h>
-#include <agg-2.4/agg_bounding_rect.h>
-#include <agg-2.4/agg_color_rgba.h>
-#include <agg-2.4/agg_pixfmt_rgba.h>
+#include <agg/agg_basics.h>
+#include <agg/agg_rendering_buffer.h>
+#include <agg/agg_rasterizer_scanline_aa.h>
+#include <agg/agg_scanline_p.h>
+#include <agg/agg_renderer_scanline.h>
+#include <agg/agg_path_storage.h>
+#include <agg/agg_conv_transform.h>
+#include <agg/agg_bounding_rect.h>
+#include <agg/agg_color_rgba.h>
+#include <agg/agg_pixfmt_rgba.h>
 
 namespace svg
 {
