@@ -184,7 +184,7 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 								maxSize.y=size.y;
 							}
 							// add element in the system
-							m_subElementList.PushBack(elementParser);
+							m_subElementList.push_back(elementParser);
 						}
 					}
 				}
@@ -217,7 +217,7 @@ svg::Parser::~Parser(void)
 void svg::Parser::DisplayDebug(void)
 {
 	SVG_DEBUG("Main SVG node : size=" << m_size);
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->Display(1);
 		}
@@ -227,7 +227,7 @@ void svg::Parser::DisplayDebug(void)
 
 void svg::Parser::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->AggDraw(myRenderer, basicTrans);
 		}

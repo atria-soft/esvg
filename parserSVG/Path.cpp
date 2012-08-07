@@ -42,12 +42,12 @@ svg::Path::~Path(void)
 
 
 // return the next char position ... (after 'X' or NULL)
-const char * extractCmd(const char * input, char& cmd, etk::VectorType<float>& outputList)
+const char * extractCmd(const char * input, char& cmd, std::vector<float>& outputList)
 {
 	if (*input == '\0') {
 		return NULL;
 	}
-	outputList.Clear();
+	outputList.clear();
 	cmd = '\0';
 	const char * outputPointer = NULL;
 	if (!( (input[0] <= 'Z' && input[0] >= 'A') || (input[0] <= 'z' && input[0] >= 'a') ) ) {
@@ -67,7 +67,7 @@ const char * extractCmd(const char * input, char& cmd, etk::VectorType<float>& o
 	while(    sscanf(&input[iii], "%1[, ]%f%n", spacer, &element, &nbElementRead) == 2
 	       || sscanf(&input[iii], "%f%n", &element, &nbElementRead) == 1) {
 		SVG_VERBOSE("Find element : " << element);
-		outputList.PushBack(element);
+		outputList.push_back(element);
 		iii += nbElementRead;
 	}
 	outputPointer = &input[iii];
@@ -95,7 +95,7 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D
 	SVG_VERBOSE("Parse Path : \"" << elementXML << "\"");
 	
 	char command;
-	etk::VectorType<float> listDot;
+	std::vector<float> listDot;
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
 	     NULL != sss;
@@ -123,144 +123,144 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D
 			case 'M': // Move To (absolute)
 			case 'm': // Move To (relative)
 				// 2 Elements ...
-				if(listDot.Size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%2 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_MOVETO;
-				if (listDot.Size() >= 2) {
+				if (listDot.size() >= 2) {
 					pathElement.element[0] = listDot[0];
 					pathElement.element[1] = listDot[1];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				pathElement.cmd = svg::PATH_ENUM_LINETO;
-				for(int32_t iii=2; iii<listDot.Size(); iii+=2) {
+				for(int32_t iii=2; iii<listDot.size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'L': // Line To (absolute)
 			case 'l': // Line To (relative)
 				// 2 Elements ...
-				if(listDot.Size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%2 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_LINETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=2) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'V': // Vertical Line To (absolute)
 			case 'v': // Vertical Line To (relative)
 				// 1 Element ...
-				if(listDot.Size() == 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size() == 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_LINETO_V;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=1) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.element[0] = listDot[iii];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'H': // Horizantal Line To (absolute)
 			case 'h': // Horizantal Line To (relative)
 				// 1 Element ...
-				if(listDot.Size() == 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size() == 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_LINETO_H;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=1) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.element[0] = listDot[iii];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'Q': // Quadratic Bezier curve (absolute)
 			case 'q': // Quadratic Bezier curve (relative)
 				// 4 Elements ...
-				if(listDot.Size()%4 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%4 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_BEZIER_CURVETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=4) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
 					pathElement.element[2] = listDot[iii+2];
 					pathElement.element[3] = listDot[iii+3];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'T': // smooth quadratic Bezier curve to (absolute)
 			case 't': // smooth quadratic Bezier curve to (relative)
 				// 2 Elements ...
-				if(listDot.Size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%2 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_BEZIER_SMOTH_CURVETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=2) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'C': // curve to (absolute)
 			case 'c': // curve to (relative)
 				// 6 Elements ...
-				if(listDot.Size()%6 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%6 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_CURVETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=6) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=6) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
 					pathElement.element[2] = listDot[iii+2];
 					pathElement.element[3] = listDot[iii+3];
 					pathElement.element[4] = listDot[iii+4];
 					pathElement.element[5] = listDot[iii+5];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'S': // smooth curve to (absolute)
 			case 's': // smooth curve to (relative)
 				// 4 Elements ...
-				if(listDot.Size()%4 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%4 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_SMOTH_CURVETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=4) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
 					pathElement.element[2] = listDot[iii+2];
 					pathElement.element[3] = listDot[iii+3];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
 			case 'A': // elliptical Arc (absolute)
 			case 'a': // elliptical Arc (relative)
 				// 7 Elements ...
-				if(listDot.Size()%7 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size()%7 != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_ELLIPTIC;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=7) {
+				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
 					pathElement.element[2] = listDot[iii+2];
@@ -268,18 +268,18 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D
 					pathElement.element[4] = listDot[iii+4];
 					pathElement.element[5] = listDot[iii+5];
 					pathElement.element[6] = listDot[iii+6];
-					m_listElement.PushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 			case 'Z': // closepath (absolute)
 			case 'z': // closepath (relative)
 				// 0 Element ...
-				if(listDot.Size() != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
+				if(listDot.size() != 0) {
+					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_STOP;
-				m_listElement.PushBack(pathElement);
+				m_listElement.push_back(pathElement);
 				break;
 			default:
 				SVG_ERROR ("Unknow error : \"" << command << "\"");
@@ -292,7 +292,7 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D
 void svg::Path::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Path");
-	for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
+	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
 		switch (m_listElement[iii].cmd) {
 			case PATH_ENUM_STOP:
 				SVG_DEBUG(SpacingDist(spacing+4) << "STOP");
@@ -353,7 +353,7 @@ void svg::Path::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans
 	path.start_new_path();
 	
 	
-	for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
+	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
 		switch (m_listElement[iii].cmd) {
 			case PATH_ENUM_STOP:
 				AbstractCloseSubpath(path);

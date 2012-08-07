@@ -26,7 +26,7 @@
 #define __SVG_PARSER_H__
 
 #include <etk/File.h>
-#include <etk/VectorType.h>
+#include <vector>
 #include <parserSVG/Base.h>
 
 namespace svg
@@ -34,13 +34,13 @@ namespace svg
 	class Parser : public svg::Base
 	{
 		private:
-			etk::File                    m_fileName;
-			bool                         m_loadOK;
-			etk::UString                 m_version;
-			etk::UString                 m_title;
-			etk::VectorType<svg::Base *> m_subElementList;
-			Vector2D<float>              m_size;
-			svg::Renderer*               m_renderedElement;
+			etk::File                m_fileName;
+			bool                     m_loadOK;
+			etk::UString             m_version;
+			etk::UString             m_title;
+			std::vector<svg::Base *> m_subElementList;
+			Vector2D<float>          m_size;
+			svg::Renderer*           m_renderedElement;
 	
 		public:
 			Parser(etk::File fileName);

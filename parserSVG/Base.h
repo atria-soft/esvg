@@ -26,7 +26,7 @@
 #define __SVG_BASE_H__
 
 #include <etk/Types.h>
-#include <etk/VectorType.h>
+#include <vector>
 
 #include <tinyXML/tinyxml.h>
 #include <parserSVG/Renderer.h>

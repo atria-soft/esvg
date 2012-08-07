@@ -61,7 +61,7 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vecto
 		Vector2D<float> pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.x, &pos.y, &n) == 2) {
-			m_listPoint.PushBack(pos);
+			m_listPoint.push_back(pos);
 			sss += n;
 			sizeMax.x = etk_max(sizeMax.x, pos.x);
 			sizeMax.y = etk_max(sizeMax.y, pos.y);
@@ -77,7 +77,7 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vecto
 
 void svg::Polygon::Display(int32_t spacing)
 {
-	SVG_DEBUG(SpacingDist(spacing) << "Polygon nbPoint=" << m_listPoint.Size());
+	SVG_DEBUG(SpacingDist(spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
 void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
@@ -88,7 +88,7 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	path.start_new_path();
 	
 	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
-	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
+	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
 		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
 	}
 	path.close_polygon();

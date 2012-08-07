@@ -26,7 +26,7 @@
 #define __SVG_POLYGON_H__
 
 #include <parserSVG/Base.h>
-#include <etk/VectorType.h>
+#include <vector>
 
 namespace svg
 {
@@ -37,8 +37,8 @@ namespace svg
 	class Polygon : public svg::Base
 	{
 		private:
-			etk::VectorType<Vector2D<float> > m_listPoint;    //!< list of all point of the polygone
-			PolygonMode_te                    m_diplayMode;   //!< polygone specific display mode
+			std::vector<Vector2D<float> > m_listPoint;    //!< list of all point of the polygone
+			PolygonMode_te                m_diplayMode;   //!< polygone specific display mode
 		public:
 			Polygon(PaintState parentPaintState);
 			~Polygon(void);
