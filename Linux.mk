@@ -8,17 +8,18 @@ LOCAL_MODULE := parsersvg
 # name of the dependency
 LOCAL_STATIC_LIBRARIES := etk agg tinyxml
 
-LOCAL_C_INCLUDES := 
+LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DSVG_DEBUG_LEVEL=3 \
-                -Wall
+                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\""
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -DSVG_DEBUG_LEVEL=1
+                -DSVG_DEBUG_LEVEL=1 \
+                -DPARSER_SVG_VERSION_TAG_NAME="\"???-release\""
 endif
 
 # load the common sources file of the platform

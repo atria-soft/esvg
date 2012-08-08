@@ -6,16 +6,16 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := parsersvg
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES := libetk libagg libtinyxml
+LOCAL_STATIC_LIBRARIES := etk agg tinyxml
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DSVG_DEBUG_LEVEL=3 \
-                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\"" \
+                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\""
 else
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DSVG_DEBUG_LEVEL=1 \
