@@ -26,14 +26,14 @@
 #define __SVG_GROUP_H__
 
 #include <parserSVG/Base.h>
-#include <vector>
+#include <etk/VectorType.h>
 
 namespace svg
 {
 	class Group : public svg::Base
 	{
 		private:
-			std::vector<svg::Base *> m_subElementList;  //!< group sub elements ...
+			etk::VectorType<svg::Base *> m_subElementList;  //!< group sub elements ...
 		public:
 			Group(PaintState parentPaintState);
 			~Group(void);

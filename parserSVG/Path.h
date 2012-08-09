@@ -27,7 +27,6 @@
 
 #include <parserSVG/Base.h>
 #include <agg/agg_path_storage.h>
-#include <vector>
 
 namespace svg
 {
@@ -53,7 +52,7 @@ namespace svg
 	class Path : public svg::Base
 	{
 		private:
-			std::vector<pathBasic_ts> m_listElement;
+			etk::VectorType<pathBasic_ts> m_listElement;
 		public:
 			Path(PaintState parentPaintState);
 			~Path(void);

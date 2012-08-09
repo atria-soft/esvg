@@ -105,7 +105,7 @@ bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2
 					sizeMax.x = etk_max(sizeMax.x, tmpPos.x);
 					sizeMax.y = etk_max(sizeMax.y, tmpPos.y);
 					// add element in the system
-					m_subElementList.push_back(elementParser);
+					m_subElementList.PushBack(elementParser);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2
 void svg::Group::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->Display(spacing+1);
 		}
@@ -126,7 +126,7 @@ void svg::Group::Display(int32_t spacing)
 
 void svg::Group::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->AggDraw(myRenderer, basicTrans);
 		}

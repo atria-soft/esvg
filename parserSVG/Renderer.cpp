@@ -22,8 +22,6 @@
  *******************************************************************************
  */
 
-#include <etk/Types.h>
-#include <etk/Memory.h>
 #include <parserSVG/Debug.h>
 #include <parserSVG/Renderer.h>
 
