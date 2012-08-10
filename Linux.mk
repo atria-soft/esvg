@@ -12,15 +12,8 @@ LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
-ifeq ($(DEBUG),1)
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -DSVG_DEBUG_LEVEL=3 \
-                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\""
-else
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -DSVG_DEBUG_LEVEL=1 \
-                -DPARSER_SVG_VERSION_TAG_NAME="\"???-release\""
-endif
+LOCAL_CFLAGS := -DPARSER_SVG_VERSION_TAG_NAME="\"???-$(BUILD_DIRECTORY_MODE)\""
+
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

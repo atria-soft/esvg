@@ -30,46 +30,15 @@
 
 extern const char * parserSVGLibName;
 
-#define SVG_CRITICAL(data)         ETK_CRITICAL(parserSVGLibName, data)
-// General 
-#if SVG_DEBUG_LEVEL > 0
-#	define SVG_WARNING(data)       ETK_WARNING(parserSVGLibName, data)
-#	define SVG_ERROR(data)         ETK_ERROR(parserSVGLibName, data)
-#else
-#	define SVG_WARNING(data)       do {}while(0)
-#	define SVG_ERROR(data)         do {}while(0)
-#endif
-
-#if SVG_DEBUG_LEVEL > 1
-#	define SVG_INFO(data)          ETK_INFO(parserSVGLibName, data)
-#else
-#	define SVG_INFO(data)          do {}while(0)
-#endif
-
-#if SVG_DEBUG_LEVEL > 2
-#	define SVG_DEBUG(data)         ETK_DEBUG(parserSVGLibName, data)
-#else
-#	define SVG_DEBUG(data)         do {}while(0)
-#endif
-
-#if SVG_DEBUG_LEVEL > 3
-#	define SVG_VERBOSE(data)         ETK_VERBOSE(parserSVGLibName, data)
-#else
-#	define SVG_VERBOSE(data)         do {}while(0)
-#endif
-
-#define SVG_TODO(data)             SVG_WARNING("TODO : " << data)
-
-#define SVG_ASSERT(cond, data)     ETK_ASSERT(parserSVGLibName, cond, data)
-
-#if SVG_DEBUG_LEVEL > 1
-#	define SVG_CHECK_INOUT(cond)   ETK_CHECK_INOUT_ASSERT(parserSVGLibName, cond)
-#elif SVG_DEBUG_LEVEL > 0
-#	define SVG_CHECK_INOUT(cond)   ETK_CHECK_INOUT_WARNING(parserSVGLibName, cond)
-#else
-#	define SVG_CHECK_INOUT(cond)   do { } while (0)
-#endif
-
+#define SVG_CRITICAL(data)			ETK_CRITICAL(parserSVGLibName, data)
+#define SVG_WARNING(data)			ETK_WARNING(parserSVGLibName, data)
+#define SVG_ERROR(data)				ETK_ERROR(parserSVGLibName, data)
+#define SVG_INFO(data)				ETK_INFO(parserSVGLibName, data)
+#define SVG_DEBUG(data)				ETK_DEBUG(parserSVGLibName, data)
+#define SVG_VERBOSE(data)			ETK_VERBOSE(parserSVGLibName, data)
+#define SVG_ASSERT(cond, data)		ETK_ASSERT(parserSVGLibName, cond, data)
+#define SVG_CHECK_INOUT(cond)		ETK_CHECK_INOUT(parserSVGLibName, cond)
+#define SVG_TODO(cond)				ETK_TODO(parserSVGLibName, cond)
 
 #endif
 
