@@ -26,14 +26,14 @@
 #define __SVG_POLYLINE_H__
 
 #include <parserSVG/Base.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 namespace svg
 {
 	class Polyline : public svg::Base
 	{
 		private:
-			etk::VectorType<Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
+			etk::Vector<Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
 		public:
 			Polyline(PaintState parentPaintState);
 			~Polyline(void);

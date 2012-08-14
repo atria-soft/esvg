@@ -96,7 +96,7 @@ void svg::Renderer::WritePpm(etk::UString fileName)
 	if (NULL == m_buffer) {
 		return;
 	}
-	FILE* fd = fopen(fileName.Utf8Data(), "wb");
+	FILE* fd = fopen(fileName.c_str(), "wb");
 	if(NULL != fd) {
 		int32_t sizeX = m_size.x;
 		int32_t sizeY = m_size.y;

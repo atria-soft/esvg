@@ -26,7 +26,7 @@
 #define __SVG_PARSER_H__
 
 #include <etk/File.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 #include <parserSVG/Base.h>
 
 namespace svg
@@ -38,7 +38,7 @@ namespace svg
 			bool                         m_loadOK;
 			etk::UString                 m_version;
 			etk::UString                 m_title;
-			etk::VectorType<svg::Base *> m_subElementList;
+			etk::Vector<svg::Base *> m_subElementList;
 			Vector2D<float>              m_size;
 			svg::Renderer*               m_renderedElement;
 	

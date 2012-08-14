@@ -42,7 +42,7 @@ svg::Path::~Path(void)
 
 
 // return the next char position ... (after 'X' or NULL)
-const char * extractCmd(const char * input, char& cmd, etk::VectorType<float>& outputList)
+const char * extractCmd(const char * input, char& cmd, etk::Vector<float>& outputList)
 {
 	if (*input == '\0') {
 		return NULL;
@@ -95,7 +95,7 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D
 	SVG_VERBOSE("Parse Path : \"" << elementXML << "\"");
 	
 	char command;
-	etk::VectorType<float> listDot;
+	etk::Vector<float> listDot;
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
 	     NULL != sss;

@@ -407,9 +407,9 @@ bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen)
  * @param[in] inputData Data C String with the xml definition
  * @return the parsed color
  */
-color_ts svg::Base::ParseColor(const char *inputData)
+etk::Color svg::Base::ParseColor(const char *inputData)
 {
-	color_ts localColor = etk::color::color_White;;
+	etk::Color localColor = etk::color::white;
 	
 	size_t len = strlen(inputData);
 	
@@ -423,7 +423,7 @@ color_ts svg::Base::ParseColor(const char *inputData)
 		}
 		SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> url(XXX) is not supported now ...");
 	} else {
-		localColor = etk::color::Parse(inputData);
+		localColor = inputData;
 	}
 	SVG_VERBOSE("Parse color : \"" << inputData << "\" ==> " << localColor);
 	return localColor;
@@ -455,7 +455,7 @@ const char * svg::Base::SpacingDist(int32_t spacing)
 
 
 /*
-void svg::Base::AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
+void svg::Base::AggCheckChange(agg::path_storage& path, etk::Vector<agg::rgba8> &colors, etk::Vector<uint32_t> &pathIdx, PaintState &curentPaintProp)
 {
 	if (curentPaintProp != m_paint) {
 		SVG_INFO("add path color = " << m_paint.fill);

@@ -52,7 +52,7 @@ namespace svg
 	class Path : public svg::Base
 	{
 		private:
-			etk::VectorType<pathBasic_ts> m_listElement;
+			etk::Vector<pathBasic_ts> m_listElement;
 		public:
 			Path(PaintState parentPaintState);
 			~Path(void);
