@@ -11,7 +11,7 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES := etk agg tinyxml
+LOCAL_LIBRARIES := etk agg tinyxml
 
 LOCAL_C_INCLUDES :=
 
