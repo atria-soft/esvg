@@ -82,7 +82,7 @@ void svg::Polygon::Display(int32_t spacing)
 
 void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
 	agg::path_storage path;
 	path.start_new_path();
@@ -121,7 +121,7 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	agg::trans_affine mtx = m_transformMatrix;
 	mtx *= basicTrans;
 	
-	if (m_paint.fill.alpha != 0x00) {
+	if (m_paint.fill.a != 0x00) {
 		agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
 		// set the filling mode : 
 		myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
@@ -129,8 +129,8 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
 	}
 	
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);

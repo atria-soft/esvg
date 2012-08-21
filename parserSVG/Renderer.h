@@ -26,7 +26,7 @@
 #define __SVG_RENDERER_H__
 
 #include <etk/UString.h>
-#include <etk/Color.h>
+#include <draw/Color.h>
 
 #include <agg/agg_basics.h>
 #include <agg/agg_rendering_buffer.h>
@@ -54,8 +54,8 @@ namespace svg
 	
 	class PaintState {
 		public:
-			etk::Color        fill;
-			etk::Color        stroke;
+			draw::Color       fill;
+			draw::Color       stroke;
 			float             strokeWidth;
 			bool              flagEvenOdd;
 			lineCap_te        lineCap;

@@ -112,7 +112,7 @@ void svg::Line::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans
 	mtx *= basicTrans;
 	
 	if (m_paint.strokeWidth > 0) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);

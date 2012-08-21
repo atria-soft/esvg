@@ -52,15 +52,8 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 	m_fileName = fileName;
 	m_version = "0.0";
 	m_loadOK = true;
-	m_paint.fill.red = 0xFF;
-	m_paint.fill.green = 0;
-	m_paint.fill.blue = 0;
-	m_paint.fill.alpha = 0xFF;
-	
-	m_paint.stroke.red = 0xFF;
-	m_paint.stroke.green = 0xFF;
-	m_paint.stroke.blue = 0xFF;
-	m_paint.stroke.alpha = 0;
+	m_paint.fill = (int32_t)0xFF0000FF;
+	m_paint.stroke = (int32_t)0xFFFFFF00;
 	
 	m_paint.strokeWidth = 1.0;
 	m_paint.viewPort.x = 255;

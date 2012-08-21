@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <etk/Vector.h>
-#include <etk/Color.h>
+#include <draw/Color.h>
 
 #include <tinyXML/tinyxml.h>
 #include <parserSVG/Renderer.h>
@@ -64,7 +64,7 @@ namespace svg
 			void ParsePosition(const TiXmlNode *node, Vector2D<float> &pos, Vector2D<float> &size);
 			float ParseLength(const char *dataInput);
 			void ParsePaintAttr(const TiXmlNode *node);
-			etk::Color ParseColor(const char *inputData);
+			draw::Color ParseColor(const char *inputData);
 	};
 };
 

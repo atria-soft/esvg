@@ -86,7 +86,7 @@ void svg::Ellipse::Display(int32_t spacing)
 
 void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
 	agg::ellipse myEllipse(m_c.x, m_c.y, m_r.x, m_r.y, 0);
 	
@@ -97,14 +97,14 @@ void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	// set the filling mode : 
 	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 	
-	if (m_paint.fill.alpha != 0x00) {
+	if (m_paint.fill.a != 0x00) {
 		agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
 		myRenderer.m_rasterizer.add_path(trans);
 		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
 	}
 
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
 		myEllipseStroke.width(m_paint.strokeWidth);

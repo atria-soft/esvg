@@ -221,14 +221,14 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	const char * content = node->ToElement()->Attribute("fill");
 	if (NULL != content) {
 		m_paint.fill = ParseColor(content);
-		if (m_paint.fill.alpha == 0) {
+		if (m_paint.fill.a == 0) {
 			fillNone = true;
 		}
 	}
 	content = node->ToElement()->Attribute("stroke");
 	if (NULL != content) {
 		m_paint.stroke = ParseColor(content);
-		if (m_paint.stroke.alpha == 0) {
+		if (m_paint.stroke.a == 0) {
 			strokeNone = true;
 		}
 	}
@@ -240,20 +240,20 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	if (NULL != content) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
-		m_paint.fill.alpha = opacity*0xFF;
-		m_paint.stroke.alpha = opacity*0xFF;
+		m_paint.fill.a = opacity*0xFF;
+		m_paint.stroke.a = opacity*0xFF;
 	}
 	content = node->ToElement()->Attribute("fill-opacity");
 	if (NULL != content) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
-		m_paint.fill.alpha = opacity*0xFF;
+		m_paint.fill.a = opacity*0xFF;
 	}
 	content = node->ToElement()->Attribute("stroke-opacity");
 	if (NULL != content) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
-		m_paint.stroke.alpha = opacity*0xFF;
+		m_paint.stroke.a = opacity*0xFF;
 	}
 	content = node->ToElement()->Attribute("fill-rule");
 	if (NULL != content) {
@@ -303,13 +303,13 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 			if (0 == strcmp(outputType, "fill") ) {
 				m_paint.fill = ParseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
-				if (m_paint.fill.alpha == 0) {
+				if (m_paint.fill.a == 0) {
 					fillNone = true;
 				}
 			} else if (0 == strcmp(outputType, "stroke") ) {
 				m_paint.stroke = ParseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
-				if (m_paint.stroke.alpha == 0) {
+				if (m_paint.stroke.a == 0) {
 					strokeNone = true;
 				}
 			} else if (0 == strcmp(outputType, "stroke-width") ) {
@@ -318,18 +318,18 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 			} else if (0 == strcmp(outputType, "opacity") ) {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
-				m_paint.fill.alpha = opacity*0xFF;
-				m_paint.stroke.alpha = opacity*0xFF;
+				m_paint.fill.a = opacity*0xFF;
+				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "fill-opacity") ) {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
-				m_paint.fill.alpha = opacity*0xFF;
+				m_paint.fill.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "stroke-opacity") ) {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
-				m_paint.stroke.alpha = opacity*0xFF;
+				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
 			} else if (0 == strcmp(outputType, "fill-rule") ) {
 				if (0 == strcmp(outputValue, "nonzero") ) {
@@ -370,10 +370,10 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	}
 	// check if somewere none is set to the filling:
 	if (true == fillNone) {
-		m_paint.fill.alpha = 0;
+		m_paint.fill.a = 0;
 	}
 	if (true == strokeNone) {
-		m_paint.stroke.alpha = 0;
+		m_paint.stroke.a = 0;
 	}
 }
 
@@ -407,9 +407,9 @@ bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen)
  * @param[in] inputData Data C String with the xml definition
  * @return the parsed color
  */
-etk::Color svg::Base::ParseColor(const char *inputData)
+draw::Color svg::Base::ParseColor(const char *inputData)
 {
-	etk::Color localColor = etk::color::white;
+	draw::Color localColor = draw::color::white;
 	
 	size_t len = strlen(inputData);
 	
@@ -460,7 +460,7 @@ void svg::Base::AggCheckChange(agg::path_storage& path, etk::Vector<agg::rgba8> 
 	if (curentPaintProp != m_paint) {
 		SVG_INFO("add path color = " << m_paint.fill);
 		// New color. Every new color creates new path in the path object.
-		colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+		colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.a));
 		uint32_t tmpPathNew = path.start_new_path();
 		pathIdx.PushBack(tmpPathNew);
 		curentPaintProp = m_paint;
