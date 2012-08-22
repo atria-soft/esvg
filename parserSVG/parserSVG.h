@@ -28,6 +28,7 @@
 #include <etk/File.h>
 #include <etk/Vector.h>
 #include <parserSVG/Base.h>
+#include <draw/Image.h>
 
 namespace svg
 {
@@ -49,6 +50,7 @@ namespace svg
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
 			void GenerateAnImage(int32_t sizeX, int32_t sizeY);
+			void GenerateAnImage(Vector2D<int32_t> size, draw::Image& output);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 			uint8_t* GetPointerOnData(void);
 			uint32_t GetSizeOnData(void);

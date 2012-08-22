@@ -295,6 +295,21 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	*/
 }
 
+void svg::Parser::GenerateAnImage(Vector2D<int32_t> size, draw::Image& output)
+{
+	GenerateAnImage(size.x, size.y);
+	output.Resize(size);
+	draw::Color tmpp(0,0,0,0);
+	output.SetFillColor(tmpp);
+	output.Clear();
+	if(NULL != m_renderedElement) {
+		uint8_t* pointerOnData = m_renderedElement->GetDataPointer();
+		int32_t  sizeData = m_renderedElement->GetDataSize();
+		uint8_t* tmpOut = (uint8_t*)output.GetTextureDataPointer();
+		memcpy(tmpOut, pointerOnData, sizeData);
+	}
+}
+
 uint8_t* svg::Parser::GetPointerOnData(void)
 {
 	if(NULL == m_renderedElement) {
