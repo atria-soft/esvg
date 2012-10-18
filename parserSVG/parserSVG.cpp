@@ -232,11 +232,11 @@ void svg::Parser::GenerateTestFile(void)
 {
 	int32_t SizeX = m_size.x;
 	if (SizeX == 0) {
-		SizeX = 50;
+		SizeX = 64;
 	}
 	int32_t SizeY = m_size.y;
 	if (SizeY == 0) {
-		SizeY = 50;
+		SizeY = 64;
 	}
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
@@ -267,12 +267,15 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 {
 	int32_t SizeX = sizeX;
 	if (SizeX == 0) {
-		SizeX = 50;
+		SVG_ERROR("SizeX == 0 ==> set 64");
+		SizeX = 64;
 	}
 	int32_t SizeY = sizeY;
 	if (SizeY == 0) {
-		SizeY = 50;
+		SVG_ERROR("SizeY == 0 ==> set 64");
+		SizeY = 64;
 	}
+	SVG_INFO("Generate size (" << SizeX << "," << SizeY << ")");
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
