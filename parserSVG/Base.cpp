@@ -109,7 +109,7 @@ void svg::Base::ParseTransform(TiXmlNode *node)
  * @param[out] size parsed dimention
  * @return ---
  */
-void svg::Base::ParsePosition(const TiXmlNode *node, Vector2D<float> &pos, Vector2D<float> &size)
+void svg::Base::ParsePosition(const TiXmlNode *node, etk::Vector2D<float> &pos, etk::Vector2D<float> &size)
 {
 	pos.x = 0;
 	pos.y = 0;
@@ -435,7 +435,7 @@ draw::Color svg::Base::ParseColor(const char *inputData)
  * @param[in] node standart XML node
  * @return true if no problem arrived
  */
-bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
 	sizeMax.x = 0;

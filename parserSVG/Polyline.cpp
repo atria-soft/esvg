@@ -37,7 +37,7 @@ svg::Polyline::~Polyline(void)
 	
 }
 
-bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
@@ -56,7 +56,7 @@ bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vect
 	sizeMax.y = 0;
 	SVG_VERBOSE("Parse polyline : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
-		Vector2D<float> pos;
+		etk::Vector2D<float> pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.x, &pos.y, &n) == 2) {
 			m_listPoint.PushBack(pos);

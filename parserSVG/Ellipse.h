@@ -32,12 +32,12 @@ namespace svg
 	class Ellipse : public svg::Base
 	{
 		private:
-			Vector2D<float> m_c;        //!< Center property of the ellipse
-			Vector2D<float> m_r;        //!< Radius property of the ellipse
+			etk::Vector2D<float> m_c;        //!< Center property of the ellipse
+			etk::Vector2D<float> m_r;        //!< Radius property of the ellipse
 		public:
 			Ellipse(PaintState parentPaintState);
 			~Ellipse(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

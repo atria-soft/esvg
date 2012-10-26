@@ -40,7 +40,7 @@ svg::Line::~Line(void)
 	
 }
 
-bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;

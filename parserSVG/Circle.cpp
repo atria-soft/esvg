@@ -38,7 +38,7 @@ svg::Circle::~Circle(void)
 	
 }
 
-bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	m_radius = 0.0;
 	m_position.x = 0.0;

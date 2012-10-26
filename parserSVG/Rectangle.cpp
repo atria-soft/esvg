@@ -42,7 +42,7 @@ svg::Rectangle::~Rectangle(void)
 	
 }
 
-bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	m_position.x = 0.0;
 	m_position.y = 0.0;

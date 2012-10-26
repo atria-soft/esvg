@@ -25,7 +25,7 @@
 #ifndef __SVG_PARSER_H__
 #define __SVG_PARSER_H__
 
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <etk/Vector.h>
 #include <parserSVG/Base.h>
 #include <draw/Image.h>
@@ -40,7 +40,7 @@ namespace svg
 			etk::UString                 m_version;
 			etk::UString                 m_title;
 			etk::Vector<svg::Base *> m_subElementList;
-			Vector2D<float>              m_size;
+			etk::Vector2D<float>              m_size;
 			svg::Renderer*               m_renderedElement;
 	
 		public:
@@ -50,11 +50,11 @@ namespace svg
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
 			void GenerateAnImage(int32_t sizeX, int32_t sizeY);
-			void GenerateAnImage(Vector2D<int32_t> size, draw::Image& output);
+			void GenerateAnImage(etk::Vector2D<int32_t> size, draw::Image& output);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 			uint8_t* GetPointerOnData(void);
 			uint32_t GetSizeOnData(void);
-			Vector2D<float> GetDefinedSize(void) { return m_size;};
+			etk::Vector2D<float> GetDefinedSize(void) { return m_size;};
 	};
 };
 

@@ -37,7 +37,7 @@ svg::Polygon::~Polygon(void)
 	
 }
 
-bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
+bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);
@@ -58,7 +58,7 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vecto
 	sizeMax.y = 0;
 	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
-		Vector2D<float> pos;
+		etk::Vector2D<float> pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.x, &pos.y, &n) == 2) {
 			m_listPoint.PushBack(pos);

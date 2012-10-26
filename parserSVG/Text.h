@@ -36,7 +36,7 @@ namespace svg
 		public:
 			Text(PaintState parentPaintState);
 			~Text(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 	};
 };

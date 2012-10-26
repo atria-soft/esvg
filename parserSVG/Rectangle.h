@@ -32,13 +32,13 @@ namespace svg
 	class Rectangle : public svg::Base
 	{
 		private:
-			Vector2D<float> m_position;        //!< position of the rectangle
-			Vector2D<float> m_size;            //!< size of the rectangle
-			Vector2D<float> m_roundedCorner;   //!< property of the rounded corner
+			etk::Vector2D<float> m_position;        //!< position of the rectangle
+			etk::Vector2D<float> m_size;            //!< size of the rectangle
+			etk::Vector2D<float> m_roundedCorner;   //!< property of the rounded corner
 		public:
 			Rectangle(PaintState parentPaintState);
 			~Rectangle(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

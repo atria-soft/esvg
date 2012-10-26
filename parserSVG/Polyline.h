@@ -33,11 +33,11 @@ namespace svg
 	class Polyline : public svg::Base
 	{
 		private:
-			etk::Vector<Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
+			etk::Vector<etk::Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
 		public:
 			Polyline(PaintState parentPaintState);
 			~Polyline(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
