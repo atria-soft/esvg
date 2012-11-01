@@ -47,7 +47,7 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
+svg::Parser::Parser(etk::FSNode fileName) : m_renderedElement(NULL)
 {
 	m_fileName = fileName;
 	m_version = "0.0";
@@ -74,13 +74,13 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 		m_loadOK = false;
 		return;
 	}
-	int32_t fileSize = m_fileName.Size();
+	int32_t fileSize = m_fileName.FileSize();
 	if (0==fileSize) {
 		SVG_ERROR("This file is empty : " << m_fileName);
 		m_loadOK = false;
 		return;
 	}
-	if (false == m_fileName.fOpenRead()) {
+	if (false == m_fileName.FileOpenRead()) {
 		SVG_ERROR("Can not open the file : " << m_fileName);
 		m_loadOK = false;
 		return;
@@ -94,9 +94,9 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 	}
 	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
 	// load data from the file :
-	m_fileName.fRead(fileBuffer, 1, fileSize);
+	m_fileName.FileRead(fileBuffer, 1, fileSize);
 	// close the file:
-	m_fileName.fClose();
+	m_fileName.FileClose();
 	// load the XML from the memory
 	XmlDocument.Parse((const char*)fileBuffer, 0, TIXML_ENCODING_UTF8);
 
@@ -255,7 +255,7 @@ void svg::Parser::GenerateTestFile(void)
 	
 	AggDraw(*m_renderedElement, basicTrans);
 	etk::UString tmpFileOut = "yyy_out_";
-	tmpFileOut += m_fileName.GetShortFilename();
+	tmpFileOut += m_fileName.GetNameFile();
 	tmpFileOut += ".ppm";
 	m_renderedElement->WritePpm(tmpFileOut);
 	

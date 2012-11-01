@@ -25,7 +25,7 @@
 #ifndef __SVG_PARSER_H__
 #define __SVG_PARSER_H__
 
-#include <etk/os/File.h>
+#include <etk/os/FSNode.h>
 #include <etk/Vector.h>
 #include <parserSVG/Base.h>
 #include <draw/Image.h>
@@ -35,16 +35,16 @@ namespace svg
 	class Parser : public svg::Base
 	{
 		private:
-			etk::File                    m_fileName;
+			etk::FSNode                  m_fileName;
 			bool                         m_loadOK;
 			etk::UString                 m_version;
 			etk::UString                 m_title;
-			etk::Vector<svg::Base *> m_subElementList;
-			etk::Vector2D<float>              m_size;
+			etk::Vector<svg::Base *>     m_subElementList;
+			etk::Vector2D<float>         m_size;
 			svg::Renderer*               m_renderedElement;
 	
 		public:
-			Parser(etk::File fileName);
+			Parser(etk::FSNode fileName);
 			~Parser(void);
 			bool IsLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);
