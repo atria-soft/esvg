@@ -35,7 +35,7 @@ namespace svg
 	class Parser : public svg::Base
 	{
 		private:
-			etk::FSNode                  m_fileName;
+			etk::UString                 m_fileName;
 			bool                         m_loadOK;
 			etk::UString                 m_version;
 			etk::UString                 m_title;
@@ -44,7 +44,7 @@ namespace svg
 			svg::Renderer*               m_renderedElement;
 	
 		public:
-			Parser(etk::FSNode fileName);
+			Parser(etk::UString fileName);
 			~Parser(void);
 			bool IsLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);

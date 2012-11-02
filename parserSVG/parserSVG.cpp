@@ -47,7 +47,7 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-svg::Parser::Parser(etk::FSNode fileName) : m_renderedElement(NULL)
+svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 {
 	m_fileName = fileName;
 	m_version = "0.0";
@@ -66,21 +66,22 @@ svg::Parser::Parser(etk::FSNode fileName) : m_renderedElement(NULL)
 	
 	// Start loading the XML : 
 	SVG_DEBUG("open file (SVG) \"" << m_fileName << "\"");
-
+	etk::FSNode tmpFile(m_fileName);
+	
 	// allocate the document in the stack
 	TiXmlDocument XmlDocument;
-	if (false == m_fileName.Exist()) {
+	if (false == tmpFile.Exist()) {
 		SVG_ERROR("File Does not exist : " << m_fileName);
 		m_loadOK = false;
 		return;
 	}
-	int32_t fileSize = m_fileName.FileSize();
+	int64_t fileSize = tmpFile.FileSize();
 	if (0==fileSize) {
 		SVG_ERROR("This file is empty : " << m_fileName);
 		m_loadOK = false;
 		return;
 	}
-	if (false == m_fileName.FileOpenRead()) {
+	if (false == tmpFile.FileOpenRead()) {
 		SVG_ERROR("Can not open the file : " << m_fileName);
 		m_loadOK = false;
 		return;
@@ -94,9 +95,9 @@ svg::Parser::Parser(etk::FSNode fileName) : m_renderedElement(NULL)
 	}
 	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
 	// load data from the file :
-	m_fileName.FileRead(fileBuffer, 1, fileSize);
+	tmpFile.FileRead(fileBuffer, 1, fileSize);
 	// close the file:
-	m_fileName.FileClose();
+	tmpFile.FileClose();
 	// load the XML from the memory
 	XmlDocument.Parse((const char*)fileBuffer, 0, TIXML_ENCODING_UTF8);
 
@@ -155,8 +156,14 @@ svg::Parser::Parser(etk::FSNode fileName) : m_renderedElement(NULL)
 					elementParser = new svg::Polygon(m_paint);
 				} else if (localValue == "text") {
 					elementParser = new svg::Text(m_paint);
+				} else if (localValue == "defs") {
+					// Node ignore : must implement it later ...
+					normalNoElement = true;
+				} else if (localValue == "sodipodi:namedview") {
+					// Node ignore : generaly inkscape data
+					normalNoElement = true;
 				} else if (localValue == "metadata") {
-					// nothing to do : generaly inkscape data
+					// Node ignore : generaly inkscape data
 					normalNoElement = true;
 				} else {
 					SVG_ERROR("(l "<<child->Row()<<") node not suported : \""<<localValue<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
@@ -255,7 +262,7 @@ void svg::Parser::GenerateTestFile(void)
 	
 	AggDraw(*m_renderedElement, basicTrans);
 	etk::UString tmpFileOut = "yyy_out_";
-	tmpFileOut += m_fileName.GetNameFile();
+	tmpFileOut += m_fileName;
 	tmpFileOut += ".ppm";
 	m_renderedElement->WritePpm(tmpFileOut);
 	
