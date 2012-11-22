@@ -25,7 +25,7 @@
 #ifndef __PARSER_SVG_DEBUG_H__
 #define __PARSER_SVG_DEBUG_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/Debug.h>
 
 extern const char * parserSVGLibName;

@@ -26,6 +26,7 @@
 #define __SVG_RENDERER_H__
 
 #include <etk/UString.h>
+#include <etk/math/Vector2D.h>
 #include <draw/Color.h>
 
 #include <agg/agg_basics.h>

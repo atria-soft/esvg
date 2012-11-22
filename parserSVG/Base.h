@@ -25,8 +25,9 @@
 #ifndef __SVG_BASE_H__
 #define __SVG_BASE_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/Vector.h>
+#include <etk/math/Vector2D.h>
 #include <draw/Color.h>
 
 #include <tinyXML/tinyxml.h>

@@ -25,8 +25,11 @@
 #ifndef __SVG_PARSER_H__
 #define __SVG_PARSER_H__
 
-#include <etk/os/FSNode.h>
+#include <etk/types.h>
 #include <etk/Vector.h>
+#include <etk/math/Vector2D.h>
+#include <etk/os/FSNode.h>
+
 #include <parserSVG/Base.h>
 #include <draw/Image.h>
 
