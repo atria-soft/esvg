@@ -108,3 +108,5 @@ void svg::Renderer::WritePpm(etk::UString fileName)
 		fclose(fd);
 	}
 }
+
+
