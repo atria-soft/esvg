@@ -88,11 +88,11 @@ void svg::Base::ParseTransform(TiXmlNode *node)
 			m_transformMatrix *= agg::trans_affine_rotation(angle);
 		} else if (sscanf(pointerOnData, "skewX (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			SVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "\Uffffffff");
+			SVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= agg::trans_affine_skewing(angle, 0.0);
 		} else if (sscanf(pointerOnData, "skewY (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			SVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "\Uffffffff");
+			SVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= agg::trans_affine_skewing(0.0, angle);
 		} else {
 			break;
