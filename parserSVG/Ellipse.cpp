@@ -45,35 +45,32 @@ bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= parentTrans;
 	
-	m_c.x = 0.0;
-	m_c.y = 0.0;
-	m_r.x = 0.0;
-	m_r.y = 0.0;
+	m_c.setValue(0,0);
+	m_r.setValue(0,0);
 	
 	const char * content = node->ToElement()->Attribute("cx");
 	if (NULL != content) {
-		m_c.x = ParseLength(content);
+		m_c.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("cy");
 	if (NULL != content) {
-		m_c.y = ParseLength(content);
+		m_c.setY(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("rx");
 	if (NULL != content) {
-		m_r.x = ParseLength(content);
+		m_r.setX(ParseLength(content));
 	} else {
 		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
 	content = node->ToElement()->Attribute("ry");
 	if (NULL != content) {
-		m_r.y = ParseLength(content);
+		m_r.setY(ParseLength(content));
 	} else {
 		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
-	sizeMax.x = m_c.x + m_r.x;
-	sizeMax.y = m_c.y + m_r.y;
+	sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
 	
 	return true;
 }
@@ -88,7 +85,7 @@ void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 {
 	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
-	agg::ellipse myEllipse(m_c.x, m_c.y, m_r.x, m_r.y, 0);
+	agg::ellipse myEllipse(m_c.x(), m_c.y(), m_r.x(), m_r.y(), 0);
 	
 	// Calculate transformation matrix ...
 	agg::trans_affine  mtx = m_transformMatrix;

@@ -29,10 +29,8 @@
 
 svg::Line::Line(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
-	m_startPos.x = 0.0;
-	m_startPos.y = 0.0;
-	m_stopPos.x = 0.0;
-	m_stopPos.y = 0.0;
+	m_startPos.setValue(0,0);
+	m_stopPos.setValue(0,0);
 }
 
 svg::Line::~Line(void)
@@ -52,22 +50,22 @@ bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vec
 	
 	const char * content = node->ToElement()->Attribute("x1");
 	if (NULL != content) {
-		m_startPos.x = ParseLength(content);
+		m_startPos.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("y1");
 	if (NULL != content) {
-		m_startPos.y = ParseLength(content);
+		m_startPos.setY(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("x2");
 	if (NULL != content) {
-		m_stopPos.x = ParseLength(content);
+		m_stopPos.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("y2");
 	if (NULL != content) {
-		m_stopPos.y = ParseLength(content);
+		m_stopPos.setY(ParseLength(content));
 	}
-	sizeMax.x = etk_max(m_startPos.x, m_stopPos.x);
-	sizeMax.y = etk_max(m_startPos.y, m_stopPos.y);
+	sizeMax.setValue(etk_max(m_startPos.x(), m_stopPos.x()),
+	                 etk_max(m_startPos.y(), m_stopPos.y()));
 	return true;
 }
 
@@ -81,8 +79,8 @@ void svg::Line::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans
 {
 	agg::path_storage path;
 	path.start_new_path();
-	path.move_to(m_startPos.x, m_startPos.y);
-	path.line_to(m_stopPos.x, m_stopPos.y);
+	path.move_to(m_startPos.x(), m_startPos.y());
+	path.line_to(m_stopPos.x(), m_stopPos.y());
 	/*
 	// configure the end of the line : 
 	switch (m_paint.lineCap) {

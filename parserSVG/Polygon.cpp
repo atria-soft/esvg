@@ -54,17 +54,16 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::
 		SVG_ERROR("(l "<<node->Row()<<") polygon: missing points attribute");
 		return false;
 	}
-	sizeMax.x = 0;
-	sizeMax.y = 0;
+	sizeMax.setValue(0,0);
 	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
-		etk::Vector2D<float> pos;
+		vec2 pos(0,0);
 		int32_t n;
-		if (sscanf(sss, "%f,%f%n", &pos.x, &pos.y, &n) == 2) {
+		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.PushBack(pos);
 			sss += n;
-			sizeMax.x = etk_max(sizeMax.x, pos.x);
-			sizeMax.y = etk_max(sizeMax.y, pos.y);
+			sizeMax.setValue(etk_max(sizeMax.x(), pos.x()),
+			                 etk_max(sizeMax.y(), pos.y()));
 			if(sss[0] == ' ' || sss[0] == ',') {
 				sss++;
 			}
@@ -87,9 +86,9 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	agg::path_storage path;
 	path.start_new_path();
 	
-	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
+	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
 	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
-		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
+		path.line_to(m_listPoint[iii].x(), m_listPoint[iii].y());
 	}
 	path.close_polygon();
 	/*

@@ -111,26 +111,24 @@ void svg::Base::ParseTransform(TiXmlNode *node)
  */
 void svg::Base::ParsePosition(const TiXmlNode *node, etk::Vector2D<float> &pos, etk::Vector2D<float> &size)
 {
-	pos.x = 0;
-	pos.y = 0;
-	size.x = 0;
-	size.y = 0;
+	pos.setValue(0,0);
+	size.setValue(0,0);
 
 	const char * content = node->ToElement()->Attribute("x");
 	if (NULL != content) {
-		pos.x = ParseLength(content);
+		pos.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("y");
 	if (NULL != content) {
-		pos.y = ParseLength(content);
+		pos.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("width");
 	if (NULL != content) {
-		size.x = ParseLength(content);
+		size.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("height");
 	if (NULL != content) {
-		size.y = ParseLength(content);
+		size.setY(ParseLength(content));
 	}
 }
 
@@ -153,7 +151,7 @@ float svg::Base::ParseLength(const char *dataInput)
 	if (unit[0] == '\0' || unit[0] == ';' ) {
 		return n;
 	} else if (unit[0] == '%') {                   // xxx %
-		return n / 100.0 * m_paint.viewPort.x;
+		return n / 100.0 * m_paint.viewPort.x();
 	} else if (unit[0] == 'e' && unit[1] == 'm') { // xxx em
 		return n * font_size;
 	} else if (unit[0] == 'e' && unit[1] == 'x') { // xxx ex
@@ -438,8 +436,7 @@ draw::Color svg::Base::ParseColor(const char *inputData)
 bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
-	sizeMax.x = 0;
-	sizeMax.y = 0;
+	sizeMax.setValue(0,0);
 	return false;
 }
 

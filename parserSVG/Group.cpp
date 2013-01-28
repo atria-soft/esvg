@@ -49,8 +49,8 @@ svg::Group::~Group(void)
 bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	// parse ...
-	etk::Vector2D<float> pos;
-	etk::Vector2D<float> size;
+	etk::Vector2D<float> pos(0,0);
+	etk::Vector2D<float> size(0,0);
 	ParseTransform(node);
 	ParsePosition(node, pos, size);
 	ParsePaintAttr(node);
@@ -61,9 +61,8 @@ bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Ve
 	
 	SVG_VERBOSE("parsed G2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
-	sizeMax.x = 0;
-	sizeMax.y = 0;
-	etk::Vector2D<float> tmpPos;
+	sizeMax.setValue(0,0);
+	vec2 tmpPos(0,0);
 	// parse all sub node :
 	for(TiXmlNode * child = node->FirstChild(); NULL != child; child = child->NextSibling() ) {
 		svg::Base *elementParser = NULL;
@@ -102,8 +101,8 @@ bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Ve
 					delete(elementParser);
 					elementParser = NULL;
 				} else {
-					sizeMax.x = etk_max(sizeMax.x, tmpPos.x);
-					sizeMax.y = etk_max(sizeMax.y, tmpPos.y);
+					sizeMax.setValue(etk_max(sizeMax.x(), tmpPos.x()),
+					                 etk_max(sizeMax.y(), tmpPos.y()));
 					// add element in the system
 					m_subElementList.PushBack(elementParser);
 				}

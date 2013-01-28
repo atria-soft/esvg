@@ -56,13 +56,11 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 	m_paint.stroke = (int32_t)0xFFFFFF00;
 	
 	m_paint.strokeWidth = 1.0;
-	m_paint.viewPort.x = 255;
-	m_paint.viewPort.y = 255;
+	m_paint.viewPort.setValue(255,255);
 	m_paint.flagEvenOdd = false;
 	m_paint.lineJoin = svg::LINEJOIN_MITER;
 	m_paint.lineCap = svg::LINECAP_BUTT;
-	m_size.x = 0.0;
-	m_size.y = 0.0;
+	m_size.setValue(0,0);
 	
 	// Start loading the XML : 
 	SVG_DEBUG("open file (SVG) \"" << m_fileName << "\"");
@@ -119,11 +117,9 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 		SVG_VERBOSE("parsed .ROOT trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 		
 		
-		etk::Vector2D<float> maxSize;
-		maxSize.x = 0.0;
-		maxSize.y = 0.0;
+		vec2 maxSize(0,0);
 		
-		etk::Vector2D<float> size;
+		vec2 size;
 		// parse all sub node :
 		for(TiXmlNode * child = root->FirstChild(); NULL != child; child = child->NextSibling() ) {
 			svg::Base *elementParser = NULL;
@@ -177,11 +173,11 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 							delete(elementParser);
 							elementParser = NULL;
 						} else {
-							if (maxSize.x<size.x) {
-								maxSize.x=size.x;
+							if (maxSize.x()<size.x()) {
+								maxSize.setX(size.x());
 							}
-							if (maxSize.y<size.y) {
-								maxSize.y=size.y;
+							if (maxSize.y()<size.y()) {
+								maxSize.setY(size.y());
 							}
 							// add element in the system
 							m_subElementList.PushBack(elementParser);
@@ -190,12 +186,10 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 				}
 			}
 		}
-		if (m_size.x==0 || m_size.y==0) {
-			m_size.x=(int32_t)maxSize.x;
-			m_size.y=(int32_t)maxSize.y;
+		if (m_size.x()==0 || m_size.y()==0) {
+			m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
 		} else {
-			m_size.x=(int32_t)m_size.x;
-			m_size.y=(int32_t)m_size.y;
+			m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
 		}
 	}
 	if (NULL != fileBuffer) {
@@ -237,11 +231,11 @@ void svg::Parser::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTra
 
 void svg::Parser::GenerateTestFile(void)
 {
-	int32_t SizeX = m_size.x;
+	int32_t SizeX = m_size.x();
 	if (SizeX == 0) {
 		SizeX = 64;
 	}
-	int32_t SizeY = m_size.y;
+	int32_t SizeY = m_size.y();
 	if (SizeY == 0) {
 		SizeY = 64;
 	}
@@ -292,7 +286,7 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x, SizeY/m_size.y);
+	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x(), SizeY/m_size.y());
 	//basicTrans *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	//basicTrans *= agg::trans_affine_skewing(2.0, 5.0);
 	//basicTrans *= agg::trans_affine_translation(width*0.3, height/2);
@@ -307,7 +301,7 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 
 void svg::Parser::GenerateAnImage(etk::Vector2D<int32_t> size, draw::Image& output)
 {
-	GenerateAnImage(size.x, size.y);
+	GenerateAnImage(size.x(), size.y());
 	output.Resize(size);
 	draw::Color tmpp(0,0,0,0);
 	output.SetFillColor(tmpp);

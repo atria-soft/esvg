@@ -37,8 +37,7 @@ svg::Text::~Text(void)
 
 bool svg::Text::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
-	sizeMax.x = 0;
-	sizeMax.y = 0;
+	sizeMax.setValue(0,0);
 	SVG_ERROR("NOT IMPLEMENTED");
 	return false;
 }

@@ -31,8 +31,7 @@
 svg::Renderer::Renderer(uint32_t width, uint32_t height)
 {
 	m_allocatedSize = 0;
-	m_size.x = width;
-	m_size.y = height;
+	m_size.setValue(width, height);
 	
 	int32_t dataSize = ((int32_t)width * (int32_t)height * DATA_ALLOCATION_ELEMENT);
 	m_allocatedSize = dataSize;
@@ -49,7 +48,7 @@ svg::Renderer::Renderer(uint32_t width, uint32_t height)
 	
 	memset(m_buffer, 0x00, dataSize * sizeof(uint8_t) );
 
-	m_renderingBuffer = new agg::rendering_buffer(m_buffer, m_size.x, m_size.y, m_size.x * DATA_ALLOCATION_ELEMENT);
+	m_renderingBuffer = new agg::rendering_buffer(m_buffer, m_size.x(), m_size.y(), m_size.x() * DATA_ALLOCATION_ELEMENT);
 	if (NULL == m_renderingBuffer) {
 		SVG_ERROR("Allocation of the m_renderingBuffer for SVG drawing error");
 		return;
@@ -98,8 +97,8 @@ void svg::Renderer::WritePpm(etk::UString fileName)
 	}
 	FILE* fd = fopen(fileName.c_str(), "wb");
 	if(NULL != fd) {
-		int32_t sizeX = m_size.x;
-		int32_t sizeY = m_size.y;
+		int32_t sizeX = m_size.x();
+		int32_t sizeY = m_size.y();
 		SVG_DEBUG("Generate ppm : " << m_size);
 		fprintf(fd, "P6 %d %d 255 ", sizeX, sizeY);
 		for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {

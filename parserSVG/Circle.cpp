@@ -41,8 +41,7 @@ svg::Circle::~Circle(void)
 bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
 	m_radius = 0.0;
-	m_position.x = 0.0;
-	m_position.y = 0.0;
+	m_position.setValue(0,0);;
 	ParseTransform(node);
 	ParsePaintAttr(node);
 	
@@ -51,11 +50,11 @@ bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::V
 	
 	const char * content = node->ToElement()->Attribute("cx");
 	if (NULL != content) {
-		m_position.x = ParseLength(content);
+		m_position.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("cy");
 	if (NULL != content) {
-		m_position.y = ParseLength(content);
+		m_position.setY(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("r");
 	if (NULL != content) {
@@ -70,8 +69,7 @@ bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::V
 		SVG_ERROR("(l "<<node->Row()<<") Circle \"r\" is negative");
 		return false;
 	}
-	sizeMax.x = m_position.x + m_radius;
-	sizeMax.y = m_position.y + m_radius;
+	sizeMax.setValue(m_position.x() + m_radius, m_position.y() + m_radius);
 	return true;
 }
 
@@ -85,7 +83,7 @@ void svg::Circle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTra
 {
 	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
-	agg::ellipse myCircle(m_position.x, m_position.y, m_radius, m_radius, 0);
+	agg::ellipse myCircle(m_position.x(), m_position.y(), m_radius, m_radius, 0);
 	
 	// Calculate transformation matrix ...
 	agg::trans_affine  mtx = m_transformMatrix;

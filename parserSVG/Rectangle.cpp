@@ -29,12 +29,9 @@
 
 svg::Rectangle::Rectangle(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
-	m_position.x = 0.0;
-	m_position.y = 0.0;
-	m_size.x = 0.0;
-	m_size.y = 0.0;
-	m_roundedCorner.x = 0.0;
-	m_roundedCorner.y = 0.0;
+	m_position.setValue(0,0);
+	m_size.setValue(0,0);
+	m_roundedCorner.setValue(0,0);
 }
 
 svg::Rectangle::~Rectangle(void)
@@ -44,12 +41,9 @@ svg::Rectangle::~Rectangle(void)
 
 bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
 {
-	m_position.x = 0.0;
-	m_position.y = 0.0;
-	m_size.x = 0.0;
-	m_size.y = 0.0;
-	m_roundedCorner.x = 0.0;
-	m_roundedCorner.y = 0.0;
+	m_position.setValue(0,0);
+	m_size.setValue(0,0);
+	m_roundedCorner.setValue(0,0);
 	
 	ParseTransform(node);
 	ParsePaintAttr(node);
@@ -61,14 +55,14 @@ bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk
 	
 	const char * content = node->ToElement()->Attribute("rx");
 	if (NULL != content) {
-		m_roundedCorner.x = ParseLength(content);
+		m_roundedCorner.setX(ParseLength(content));
 	}
 	content = node->ToElement()->Attribute("ry");
 	if (NULL != content) {
-		m_roundedCorner.y = ParseLength(content);
+		m_roundedCorner.setY(ParseLength(content));
 	}
-	sizeMax.x = m_position.x + m_size.x + m_paint.strokeWidth;
-	sizeMax.y = m_position.y + m_size.y + m_paint.strokeWidth;
+	sizeMax.setValue(m_position.x() + m_size.x() + m_paint.strokeWidth,
+	                 m_position.y() + m_size.y() + m_paint.strokeWidth);
 	return true;
 }
 
@@ -81,8 +75,8 @@ void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basic
 {
 	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating a rounded rectangle
-	agg::rounded_rect rect_r(m_position.x, m_position.y, m_position.x+m_size.x, m_position.y+m_size.y, m_roundedCorner.x);
-	rect_r.radius(m_roundedCorner.x, m_roundedCorner.y);
+	agg::rounded_rect rect_r(m_position.x(), m_position.y(), m_position.x()+m_size.x(), m_position.y()+m_size.y(), m_roundedCorner.x());
+	rect_r.radius(m_roundedCorner.x(), m_roundedCorner.y());
 	rect_r.normalize_radius();
 	
 	agg::trans_affine  mtx = m_transformMatrix;
