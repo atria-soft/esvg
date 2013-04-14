@@ -38,13 +38,13 @@ namespace svg
 	class Parser : public svg::Base
 	{
 		private:
-			etk::UString                 m_fileName;
-			bool                         m_loadOK;
-			etk::UString                 m_version;
-			etk::UString                 m_title;
-			etk::Vector<svg::Base *>     m_subElementList;
-			etk::Vector2D<float>         m_size;
-			svg::Renderer*               m_renderedElement;
+			etk::UString m_fileName;
+			bool m_loadOK;
+			etk::UString m_version;
+			etk::UString m_title;
+			etk::Vector<svg::Base *> m_subElementList;
+			vec2 m_size;
+			svg::Renderer* m_renderedElement;
 	
 		public:
 			Parser(etk::UString fileName);
@@ -53,11 +53,12 @@ namespace svg
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
 			void GenerateAnImage(int32_t sizeX, int32_t sizeY);
-			void GenerateAnImage(etk::Vector2D<int32_t> size, draw::Image& output);
+			void GenerateAnImage(ivec2 size, draw::Image& output);
+			void GenerateAnImage(draw::Image& output);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 			uint8_t* GetPointerOnData(void);
 			uint32_t GetSizeOnData(void);
-			etk::Vector2D<float> GetDefinedSize(void) { return m_size;};
+			vec2 GetDefinedSize(void) { return m_size;};
 	};
 };
 

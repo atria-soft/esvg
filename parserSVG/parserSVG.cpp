@@ -110,16 +110,13 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 			m_version = version;
 		}
 		// parse ...
-		etk::Vector2D<float> pos;
+		vec2 pos(0,0);
 		ParseTransform(root);
 		ParsePosition(root, pos, m_size);
 		ParsePaintAttr(root);
 		SVG_VERBOSE("parsed .ROOT trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
-		
-		
 		vec2 maxSize(0,0);
-		
-		vec2 size;
+		vec2 size(0,0);
 		// parse all sub node :
 		for(TiXmlNode * child = root->FirstChild(); NULL != child; child = child->NextSibling() ) {
 			svg::Base *elementParser = NULL;
@@ -299,7 +296,12 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	*/
 }
 
-void svg::Parser::GenerateAnImage(etk::Vector2D<int32_t> size, draw::Image& output)
+void svg::Parser::GenerateAnImage(draw::Image& output)
+{
+	GenerateAnImage(ivec2(m_size.x(),m_size.y()), output);
+}
+
+void svg::Parser::GenerateAnImage(ivec2 size, draw::Image& output)
 {
 	GenerateAnImage(size.x(), size.y());
 	output.Resize(size);
