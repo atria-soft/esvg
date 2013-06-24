@@ -6,19 +6,19 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_POLYGON_H__
-#define __SVG_POLYGON_H__
+#ifndef __ESVG_POLYGON_H__
+#define __ESVG_POLYGON_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 #include <etk/Vector.h>
 
-namespace svg
+namespace esvg
 {
 	typedef enum {
 		POLYGONE_MODE__NON_ZERO,
 		POLYGONE_MODE__EVEN_ODD,
 	} PolygonMode_te;
-	class Polygon : public svg::Base
+	class Polygon : public esvg::Base
 	{
 		private:
 			etk::Vector<etk::Vector2D<float> > m_listPoint;    //!< list of all point of the polygone
@@ -28,7 +28,7 @@ namespace svg
 			~Polygon(void);
 			virtual bool Parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
-			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+			virtual void AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
 };
 

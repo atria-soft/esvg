@@ -6,6 +6,6 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
+#include <esvg/Debug.h>
 
-const char * parserSVGLibName = "parserSVG";
+const char * esvgLibName = "esvg     ";

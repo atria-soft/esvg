@@ -6,31 +6,31 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Group.h>
+#include <esvg/Debug.h>
+#include <esvg/Group.h>
 #include <etk/UString.h>
-#include <parserSVG/Base.h>
-#include <parserSVG/Circle.h>
-#include <parserSVG/Ellipse.h>
-#include <parserSVG/Line.h>
-#include <parserSVG/Path.h>
-#include <parserSVG/Polygon.h>
-#include <parserSVG/Polyline.h>
-#include <parserSVG/Rectangle.h>
-#include <parserSVG/Text.h>
-#include <parserSVG/Group.h>
+#include <esvg/Base.h>
+#include <esvg/Circle.h>
+#include <esvg/Ellipse.h>
+#include <esvg/Line.h>
+#include <esvg/Path.h>
+#include <esvg/Polygon.h>
+#include <esvg/Polyline.h>
+#include <esvg/Rectangle.h>
+#include <esvg/Text.h>
+#include <esvg/Group.h>
 
-svg::Group::Group(PaintState _parentPaintState) : svg::Base(_parentPaintState)
+esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	
 }
 
-svg::Group::~Group(void)
+esvg::Group::~Group(void)
 {
 	
 }
 
-bool svg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	if (NULL==_element) {
 		return false;
@@ -60,27 +60,27 @@ bool svg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTrans
 			// nothing to do, just proceed to next step
 			continue;
 		}
-		svg::Base *elementParser = NULL;
+		esvg::Base *elementParser = NULL;
 		if (child->GetValue() == "g") {
-			elementParser = new svg::Group(m_paint);
+			elementParser = new esvg::Group(m_paint);
 		} else if (child->GetValue() == "a") {
 			// TODO ...
 		} else if (child->GetValue() == "path") {
-			elementParser = new svg::Path(m_paint);
+			elementParser = new esvg::Path(m_paint);
 		} else if (child->GetValue() == "rect") {
-			elementParser = new svg::Rectangle(m_paint);
+			elementParser = new esvg::Rectangle(m_paint);
 		} else if (child->GetValue() == "circle") {
-			elementParser = new svg::Circle(m_paint);
+			elementParser = new esvg::Circle(m_paint);
 		} else if (child->GetValue() == "ellipse") {
-			elementParser = new svg::Ellipse(m_paint);
+			elementParser = new esvg::Ellipse(m_paint);
 		} else if (child->GetValue() == "line") {
-			elementParser = new svg::Line(m_paint);
+			elementParser = new esvg::Line(m_paint);
 		} else if (child->GetValue() == "polyline") {
-			elementParser = new svg::Polyline(m_paint);
+			elementParser = new esvg::Polyline(m_paint);
 		} else if (child->GetValue() == "polygon") {
-			elementParser = new svg::Polygon(m_paint);
+			elementParser = new esvg::Polygon(m_paint);
 		} else if (child->GetValue() == "text") {
-			elementParser = new svg::Text(m_paint);
+			elementParser = new esvg::Text(m_paint);
 		} else {
 			SVG_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
@@ -102,7 +102,7 @@ bool svg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	return true;
 }
 
-void svg::Group::Display(int32_t _spacing)
+void esvg::Group::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
@@ -113,7 +113,7 @@ void svg::Group::Display(int32_t _spacing)
 	SVG_DEBUG(SpacingDist(_spacing) << "Group (STOP)");
 }
 
-void svg::Group::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Group::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {

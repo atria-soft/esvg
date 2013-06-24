@@ -6,14 +6,14 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_TEXT_H__
-#define __SVG_TEXT_H__
+#ifndef __ESVG_TEXT_H__
+#define __ESVG_TEXT_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 
-namespace svg
+namespace esvg
 {
-	class Text : public svg::Base
+	class Text : public esvg::Base
 	{
 		private:
 			

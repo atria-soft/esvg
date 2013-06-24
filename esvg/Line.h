@@ -6,14 +6,14 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_LINE_H__
-#define __SVG_LINE_H__
+#ifndef __ESVG_LINE_H__
+#define __ESVG_LINE_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 
-namespace svg
+namespace esvg
 {
-	class Line : public svg::Base
+	class Line : public esvg::Base
 	{
 		private:
 			etk::Vector2D<float> m_startPos;       //!< Start line position
@@ -23,7 +23,7 @@ namespace svg
 			~Line(void);
 			virtual bool Parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
-			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+			virtual void AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
 };
 

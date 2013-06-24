@@ -6,13 +6,13 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Renderer.h>
+#include <esvg/Debug.h>
+#include <esvg/Renderer.h>
 
 // 4 is for the RGBA ...
 #define DATA_ALLOCATION_ELEMENT        (4)
 
-svg::Renderer::Renderer(uint32_t width, uint32_t height)
+esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 {
 	m_allocatedSize = 0;
 	m_size.setValue(width, height);
@@ -63,7 +63,7 @@ svg::Renderer::Renderer(uint32_t width, uint32_t height)
 	//m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
 }
 
-svg::Renderer::~Renderer(void)
+esvg::Renderer::~Renderer(void)
 {
 	if (NULL != m_buffer) {
 		ETK_FREE(m_buffer);
@@ -74,7 +74,7 @@ svg::Renderer::~Renderer(void)
 // Writing the buffer to a .PPM file, assuming it has 
 // RGB-structure, one byte per color component
 //--------------------------------------------------
-void svg::Renderer::WritePpm(etk::UString fileName)
+void esvg::Renderer::WritePpm(etk::UString fileName)
 {
 	if (NULL == m_buffer) {
 		return;

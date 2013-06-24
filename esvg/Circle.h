@@ -6,14 +6,14 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_CIRCLE_H__
-#define __SVG_CIRCLE_H__
+#ifndef __ESVG_CIRCLE_H__
+#define __ESVG_CIRCLE_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 
-namespace svg
+namespace esvg
 {
-	class Circle : public svg::Base
+	class Circle : public esvg::Base
 	{
 		private:
 			etk::Vector2D<float> m_position; //!< Position of the Circle
@@ -23,7 +23,7 @@ namespace svg
 			~Circle(void);
 			virtual bool Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void Display(int32_t _spacing);
-			virtual void AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};
 };
 

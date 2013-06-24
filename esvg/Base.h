@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_BASE_H__
-#define __SVG_BASE_H__
+#ifndef __ESVG_BASE_H__
+#define __ESVG_BASE_H__
 
 #include <etk/types.h>
 #include <etk/Vector.h>
@@ -15,7 +15,7 @@
 #include <draw/Color.h>
 
 #include <exml/exml.h>
-#include <parserSVG/Renderer.h>
+#include <esvg/Renderer.h>
 
 #include <agg/agg_basics.h>
 #include <agg/agg_rendering_buffer.h>
@@ -28,7 +28,7 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-namespace svg
+namespace esvg
 {
 	class Base
 	{
@@ -42,7 +42,7 @@ namespace svg
 			virtual ~Base(void) { };
 			virtual bool Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			//specific drawing for AAG librairy ...
-			virtual void AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
+			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
 			
 			virtual void Display(int32_t _spacing) { };
 			void ParseTransform(exml::Element *_element);

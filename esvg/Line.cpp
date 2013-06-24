@@ -6,22 +6,23 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Polyline.h>
+#include <esvg/Debug.h>
+#include <esvg/Line.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>
 
-svg::Polyline::Polyline(PaintState _parentPaintState) : svg::Base(_parentPaintState)
+esvg::Line::Line(PaintState parentPaintState) : esvg::Base(parentPaintState)
+{
+	m_startPos.setValue(0,0);
+	m_stopPos.setValue(0,0);
+}
+
+esvg::Line::~Line(void)
 {
 	
 }
 
-svg::Polyline::~Polyline(void)
-{
-	
-}
-
-bool svg::Polyline::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Line::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
@@ -34,70 +35,64 @@ bool svg::Polyline::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString sss1 = _element->GetAttribute("points");
-	if (sss1.Size()==0) {
-		SVG_ERROR("(l "<<_element->Pos()<<") polyline: missing points attribute");
-		return false;
+	etk::UString content = _element->GetAttribute("x1");
+	if (content.Size()!=0) {
+		m_startPos.setX(ParseLength(content));
 	}
-	_sizeMax.setValue(0,0);
-	SVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
-	etk::Char sss2 = sss1.c_str();
-	const char* sss = sss2;
-	while ('\0' != sss[0]) {
-		etk::Vector2D<float> pos;
-		int32_t n;
-		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.PushBack(pos);
-			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
-			                  etk_max(_sizeMax.y(), pos.y()));
-			sss += n;
-		} else {
-			break;
-		}
+	content = _element->GetAttribute("y1");
+	if (content.Size()!=0) {
+		m_startPos.setY(ParseLength(content));
 	}
+	content = _element->GetAttribute("x2");
+	if (content.Size()!=0) {
+		m_stopPos.setX(ParseLength(content));
+	}
+	content = _element->GetAttribute("y2");
+	if (content.Size()!=0) {
+		m_stopPos.setY(ParseLength(content));
+	}
+	_sizeMax.setValue(etk_max(m_startPos.x(), m_stopPos.x()),
+	                  etk_max(m_startPos.y(), m_stopPos.y()));
 	return true;
 }
 
-void svg::Polyline::Display(int32_t _spacing)
+void esvg::Line::Display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.Size());
+	SVG_DEBUG(SpacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
 }
 
 
-void svg::Polyline::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Line::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	agg::path_storage path;
 	path.start_new_path();
-	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
-	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
-		path.line_to(m_listPoint[iii].x(), m_listPoint[iii].y());
-	}
+	path.move_to(m_startPos.x(), m_startPos.y());
+	path.line_to(m_stopPos.x(), m_stopPos.y());
 	/*
 	// configure the end of the line : 
 	switch (m_paint.lineCap) {
-		case svg::LINECAP_SQUARE:
+		case esvg::LINECAP_SQUARE:
 			path.line_cap(agg::square_cap);
 			break;
-		case svg::LINECAP_ROUND:
+		case esvg::LINECAP_ROUND:
 			path.line_cap(agg::round_cap);
 			break;
-		default: // svg::LINECAP_BUTT
+		default: // esvg::LINECAP_BUTT
 			path.line_cap(agg::butt_cap);
 			break;
 	}
 	switch (m_paint.lineJoin) {
-		case svg::LINEJOIN_BEVEL:
+		case esvg::LINEJOIN_BEVEL:
 			path.line_join(agg::bevel_join);
 			break;
-		case svg::LINEJOIN_ROUND:
+		case esvg::LINEJOIN_ROUND:
 			path.line_join(agg::round_join);
 			break;
-		default: // svg::LINEJOIN_MITER
+		default: // esvg::LINEJOIN_MITER
 			path.line_join(agg::miter_join);
 			break;
 	}
 	*/
-	
 	agg::trans_affine mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	

@@ -6,12 +6,12 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_STROKING_H__
-#define __SVG_STROKING_H__
+#ifndef __ESVG_STROKING_H__
+#define __ESVG_STROKING_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 
-namespace svg
+namespace esvg
 {
 	
 };

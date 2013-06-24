@@ -7,17 +7,17 @@
  */
 
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Base.h>
+#include <esvg/Debug.h>
+#include <esvg/Base.h>
 #include <math.h>
 
-svg::Base::Base(PaintState _parentPaintState)
+esvg::Base::Base(PaintState _parentPaintState)
 {
 	// copy the parent painting properties ...
 	m_paint = _parentPaintState;
 }
 
-void svg::Base::ParseTransform(exml::Element* _element)
+void esvg::Base::ParseTransform(exml::Element* _element)
 {
 	if (NULL == _element) {
 		return;
@@ -85,7 +85,7 @@ void svg::Base::ParseTransform(exml::Element* _element)
  * @param[out] _pos parsed position
  * @param[out] _size parsed dimention
  */
-void svg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
+void esvg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
 {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
@@ -117,8 +117,9 @@ void svg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<float
  * @param[in] _dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-float svg::Base::ParseLength(const etk::UString& _dataInput)
+float esvg::Base::ParseLength(const etk::UString& _dataInput)
 {
+	SVG_DEBUG(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.ToFloat();
 	etk::UString unit;
 	for (int32_t iii=0; iii<_dataInput.Size(); iii++) {
@@ -128,11 +129,12 @@ float svg::Base::ParseLength(const etk::UString& _dataInput)
 		    || _dataInput[iii]<='.') {
 			continue;
 		}
-		unit = _dataInput.Extract(iii);
+		unit = _dataInput.Extract(iii-1);
 	}
 	//SVG_INFO("          ==> ?? = " << n );
 	float font_size = 20.0f;
 	
+	SVG_DEBUG(" lenght : '" << n << "' => unit=" << unit);
 	// note : ";" is for the parsing of the style elements ...
 	if(    unit.Size()==0
 	    || unit[0] == ';' ) {
@@ -164,12 +166,17 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 {
 	_outputType = "";
 	_outputData = "";
+	if (_pos==-1) {
+		return -2;
+	}
 	int32_t typeStart = _pos;
 	int32_t typeStop = _pos;
 	int32_t dataStart = _pos;
 	int32_t dataStop = _pos;
 	bool processFirst=true;
+	//SVG_DEBUG("parse : '" << _data.Extract(_pos) << "'");
 	for( int32_t iii=_pos; iii<_data.Size(); iii++) {
+		//SVG_DEBUG("   ? '" << _data[iii] << "'");
 		if (_data[iii] == ';') {
 			// end of the element
 			return iii+1;
@@ -186,6 +193,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 			}
 		}
 	}
+	SVG_DEBUG("    extract : '" << _outputType << "':'" << _outputData << "'");
 	return -1;
 }
 
@@ -193,7 +201,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
  * @brief Parse a Painting attribute of a specific node
  * @param[in] _element Basic node of the XML that might be parsed
  */
-void svg::Base::ParsePaintAttr(const exml::Element *_element)
+void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 {
 	if (_element==NULL) {
 		return;
@@ -250,26 +258,26 @@ void svg::Base::ParsePaintAttr(const exml::Element *_element)
 	content = _element->GetAttribute("stroke-linecap");
 	if (content.Size()!=0) {
 		if (content == "butt" ) {
-			m_paint.lineCap = svg::LINECAP_BUTT;
+			m_paint.lineCap = esvg::LINECAP_BUTT;
 		} else if (content == "round" ) {
-			m_paint.lineCap = svg::LINECAP_ROUND;
+			m_paint.lineCap = esvg::LINECAP_ROUND;
 		} else if (content == "square" ) {
-			m_paint.lineCap = svg::LINECAP_SQUARE;
+			m_paint.lineCap = esvg::LINECAP_SQUARE;
 		} else {
-			m_paint.lineCap = svg::LINECAP_BUTT;
+			m_paint.lineCap = esvg::LINECAP_BUTT;
 			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
 	content = _element->GetAttribute("stroke-linejoin");
 	if (content.Size()!=0) {
 		if (content == "miter" ) {
-			m_paint.lineJoin = svg::LINEJOIN_MITER;
+			m_paint.lineJoin = esvg::LINEJOIN_MITER;
 		} else if (content == "round" ) {
-			m_paint.lineJoin = svg::LINEJOIN_ROUND;
+			m_paint.lineJoin = esvg::LINEJOIN_ROUND;
 		} else if (content == "bevel" ) {
-			m_paint.lineJoin = svg::LINEJOIN_BEVEL;
+			m_paint.lineJoin = esvg::LINEJOIN_BEVEL;
 		} else {
-			m_paint.lineJoin = svg::LINEJOIN_MITER;
+			m_paint.lineJoin = esvg::LINEJOIN_MITER;
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
@@ -278,8 +286,8 @@ void svg::Base::ParsePaintAttr(const exml::Element *_element)
 		etk::UString outputType;
 		etk::UString outputValue;
 		
-		for( int32_t sss=extractPartOfStyle(content, outputType, outputValue, 1024);
-		     -1 != sss;
+		for( int32_t sss=extractPartOfStyle(content, outputType, outputValue, 0);
+		     -2 != sss;
 		     sss=extractPartOfStyle(content, outputType, outputValue, sss) ) {
 			SVG_VERBOSE(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			if (outputType == "fill") {
@@ -323,24 +331,24 @@ void svg::Base::ParsePaintAttr(const exml::Element *_element)
 				}
 			} else if (outputType == "stroke-linecap") {
 				if (outputValue == "butt") {
-					m_paint.lineCap = svg::LINECAP_BUTT;
+					m_paint.lineCap = esvg::LINECAP_BUTT;
 				} else if (outputValue == "round") {
-					m_paint.lineCap = svg::LINECAP_ROUND;
+					m_paint.lineCap = esvg::LINECAP_ROUND;
 				} else if (outputValue == "square") {
-					m_paint.lineCap = svg::LINECAP_SQUARE;
+					m_paint.lineCap = esvg::LINECAP_SQUARE;
 				} else {
-					m_paint.lineCap = svg::LINECAP_BUTT;
+					m_paint.lineCap = esvg::LINECAP_BUTT;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [butt,round,square]");
 				}
 			} else if (outputType == "stroke-linejoin") {
 				if (outputValue == "miter") {
-					m_paint.lineJoin = svg::LINEJOIN_MITER;
+					m_paint.lineJoin = esvg::LINEJOIN_MITER;
 				} else if (outputValue == "round") {
-					m_paint.lineJoin = svg::LINEJOIN_ROUND;
+					m_paint.lineJoin = esvg::LINEJOIN_ROUND;
 				} else if (outputValue == "bevel") {
-					m_paint.lineJoin = svg::LINEJOIN_BEVEL;
+					m_paint.lineJoin = esvg::LINEJOIN_BEVEL;
 				} else {
-					m_paint.lineJoin = svg::LINEJOIN_MITER;
+					m_paint.lineJoin = esvg::LINEJOIN_MITER;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
 			} else if (outputType == "marker-start") {
@@ -364,7 +372,7 @@ void svg::Base::ParsePaintAttr(const exml::Element *_element)
  * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color svg::Base::ParseColor(const etk::UString& _inputData)
+draw::Color esvg::Base::ParseColor(const etk::UString& _inputData)
 {
 	draw::Color localColor = draw::color::white;
 	
@@ -390,7 +398,7 @@ draw::Color svg::Base::ParseColor(const etk::UString& _inputData)
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool svg::Base::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Base::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
@@ -398,7 +406,7 @@ bool svg::Base::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 }
 
 
-const char * svg::Base::SpacingDist(int32_t _spacing)
+const char * esvg::Base::SpacingDist(int32_t _spacing)
 {
 	static const char *tmpValue = "                                                                                ";
 	if (_spacing>20) {

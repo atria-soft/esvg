@@ -6,23 +6,23 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Circle.h>
+#include <esvg/Debug.h>
+#include <esvg/Circle.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_ellipse.h>
 
 
-svg::Circle::Circle(PaintState _parentPaintState) : svg::Base(_parentPaintState)
+esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	
 }
 
-svg::Circle::~Circle(void)
+esvg::Circle::~Circle(void)
 {
 	
 }
 
-bool svg::Circle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Circle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
@@ -60,13 +60,13 @@ bool svg::Circle::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 	return true;
 }
 
-void svg::Circle::Display(int32_t _spacing)
+void esvg::Circle::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
 }
 
 
-void svg::Circle::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Circle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse

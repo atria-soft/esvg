@@ -6,18 +6,18 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/parserSVG.h>
-#include <parserSVG/Base.h>
-#include <parserSVG/Circle.h>
-#include <parserSVG/Ellipse.h>
-#include <parserSVG/Line.h>
-#include <parserSVG/Path.h>
-#include <parserSVG/Polygon.h>
-#include <parserSVG/Polyline.h>
-#include <parserSVG/Rectangle.h>
-#include <parserSVG/Text.h>
-#include <parserSVG/Group.h>
+#include <esvg/Debug.h>
+#include <esvg/esvg.h>
+#include <esvg/Base.h>
+#include <esvg/Circle.h>
+#include <esvg/Ellipse.h>
+#include <esvg/Line.h>
+#include <esvg/Path.h>
+#include <esvg/Polygon.h>
+#include <esvg/Polyline.h>
+#include <esvg/Rectangle.h>
+#include <esvg/Text.h>
+#include <esvg/Group.h>
 
 #include <agg/agg_basics.h>
 #include <agg/agg_rendering_buffer.h>
@@ -30,7 +30,7 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-svg::Parser::Parser(etk::UString _fileName) : m_renderedElement(NULL)
+esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL)
 {
 	m_fileName = _fileName;
 	m_version = "0.0";
@@ -41,13 +41,11 @@ svg::Parser::Parser(etk::UString _fileName) : m_renderedElement(NULL)
 	m_paint.strokeWidth = 1.0;
 	m_paint.viewPort.setValue(255,255);
 	m_paint.flagEvenOdd = false;
-	m_paint.lineJoin = svg::LINEJOIN_MITER;
-	m_paint.lineCap = svg::LINECAP_BUTT;
+	m_paint.lineJoin = esvg::LINEJOIN_MITER;
+	m_paint.lineCap = esvg::LINECAP_BUTT;
 	m_size.setValue(0,0);
 	
 	exml::Document doc;
-	
-	bool Load(const etk::UString& _file);
 	if (false == doc.Load(m_fileName)) {
 		SVG_ERROR("Error occured when loading XML : " << m_fileName);
 		m_loadOK = false;
@@ -82,35 +80,35 @@ svg::Parser::Parser(etk::UString _fileName) : m_renderedElement(NULL)
 		if (child==NULL) {
 			continue;
 		}
-		svg::Base *elementParser = NULL;
+		esvg::Base *elementParser = NULL;
 		if (!child->IsElement()) {
 			// nothing to do, just proceed to next step
 			continue;
 		}
 		if (child->GetValue() == "g") {
-			elementParser = new svg::Group(m_paint);
+			elementParser = new esvg::Group(m_paint);
 		} else if (child->GetValue() == "a") {
 			SVG_INFO("Note : 'a' balise is parsed like a g balise ...");
-			elementParser = new svg::Group(m_paint);
+			elementParser = new esvg::Group(m_paint);
 		} else if (child->GetValue() == "title") {
 			m_title = "TODO : set the title here ...";
 			continue;
 		} else if (child->GetValue() == "path") {
-			elementParser = new svg::Path(m_paint);
+			elementParser = new esvg::Path(m_paint);
 		} else if (child->GetValue() == "rect") {
-			elementParser = new svg::Rectangle(m_paint);
+			elementParser = new esvg::Rectangle(m_paint);
 		} else if (child->GetValue() == "circle") {
-			elementParser = new svg::Circle(m_paint);
+			elementParser = new esvg::Circle(m_paint);
 		} else if (child->GetValue() == "ellipse") {
-			elementParser = new svg::Ellipse(m_paint);
+			elementParser = new esvg::Ellipse(m_paint);
 		} else if (child->GetValue() == "line") {
-			elementParser = new svg::Line(m_paint);
+			elementParser = new esvg::Line(m_paint);
 		} else if (child->GetValue() == "polyline") {
-			elementParser = new svg::Polyline(m_paint);
+			elementParser = new esvg::Polyline(m_paint);
 		} else if (child->GetValue() == "polygon") {
-			elementParser = new svg::Polygon(m_paint);
+			elementParser = new esvg::Polygon(m_paint);
 		} else if (child->GetValue() == "text") {
-			elementParser = new svg::Text(m_paint);
+			elementParser = new esvg::Text(m_paint);
 		} else if (child->GetValue() == "defs") {
 			// Node ignore : must implement it later ...
 			continue;
@@ -150,7 +148,7 @@ svg::Parser::Parser(etk::UString _fileName) : m_renderedElement(NULL)
 	DisplayDebug();
 }
 
-svg::Parser::~Parser(void)
+esvg::Document::~Document(void)
 {
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
@@ -160,7 +158,7 @@ svg::Parser::~Parser(void)
 
 
 
-void svg::Parser::DisplayDebug(void)
+void esvg::Document::DisplayDebug(void)
 {
 	SVG_DEBUG("Main SVG node : size=" << m_size);
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
@@ -171,7 +169,7 @@ void svg::Parser::DisplayDebug(void)
 }
 
 
-void svg::Parser::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+void esvg::Document::AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
@@ -181,7 +179,7 @@ void svg::Parser::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTra
 }
 
 
-void svg::Parser::GenerateTestFile(void)
+void esvg::Document::GenerateTestFile(void)
 {
 	int32_t SizeX = m_size.x();
 	if (SizeX == 0) {
@@ -195,7 +193,7 @@ void svg::Parser::GenerateTestFile(void)
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
 	}
-	m_renderedElement = new svg::Renderer(SizeX, SizeY);
+	m_renderedElement = new esvg::Renderer(SizeX, SizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
@@ -216,7 +214,7 @@ void svg::Parser::GenerateTestFile(void)
 
 
 
-void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
+void esvg::Document::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 {
 	int32_t SizeX = sizeX;
 	if (SizeX == 0) {
@@ -234,7 +232,7 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 		m_renderedElement = NULL;
 	}
 	
-	m_renderedElement = new svg::Renderer(SizeX, SizeY);
+	m_renderedElement = new esvg::Renderer(SizeX, SizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
@@ -251,12 +249,12 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	*/
 }
 
-void svg::Parser::GenerateAnImage(draw::Image& output)
+void esvg::Document::GenerateAnImage(draw::Image& output)
 {
 	GenerateAnImage(ivec2(m_size.x(),m_size.y()), output);
 }
 
-void svg::Parser::GenerateAnImage(ivec2 size, draw::Image& output)
+void esvg::Document::GenerateAnImage(ivec2 size, draw::Image& output)
 {
 	GenerateAnImage(size.x(), size.y());
 	output.Resize(size);
@@ -271,7 +269,7 @@ void svg::Parser::GenerateAnImage(ivec2 size, draw::Image& output)
 	}
 }
 
-uint8_t* svg::Parser::GetPointerOnData(void)
+uint8_t* esvg::Document::GetPointerOnData(void)
 {
 	if(NULL == m_renderedElement) {
 		return NULL;
@@ -279,7 +277,7 @@ uint8_t* svg::Parser::GetPointerOnData(void)
 	return m_renderedElement->GetDataPointer();
 }
 
-uint32_t svg::Parser::GetSizeOnData(void)
+uint32_t esvg::Document::GetSizeOnData(void)
 {
 	if(NULL == m_renderedElement) {
 		return 0;

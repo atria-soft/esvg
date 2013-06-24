@@ -6,22 +6,22 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Ellipse.h>
+#include <esvg/Debug.h>
+#include <esvg/Ellipse.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_ellipse.h>
 
-svg::Ellipse::Ellipse(PaintState parentPaintState) : svg::Base(parentPaintState)
+esvg::Ellipse::Ellipse(PaintState parentPaintState) : esvg::Base(parentPaintState)
 {
 	
 }
 
-svg::Ellipse::~Ellipse(void)
+esvg::Ellipse::~Ellipse(void)
 {
 	
 }
 
-bool svg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	if (NULL==_element) {
 		return false;
@@ -62,13 +62,13 @@ bool svg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTra
 	return true;
 }
 
-void svg::Ellipse::Display(int32_t _spacing)
+void esvg::Ellipse::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
 }
 
 
-void svg::Ellipse::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Ellipse::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse

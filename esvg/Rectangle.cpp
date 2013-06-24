@@ -6,24 +6,24 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Rectangle.h>
+#include <esvg/Debug.h>
+#include <esvg/Rectangle.h>
 #include <agg/agg_rounded_rect.h>
 #include <agg/agg_conv_stroke.h>
 
-svg::Rectangle::Rectangle(PaintState _parentPaintState) : svg::Base(_parentPaintState)
+esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	m_position.setValue(0,0);
 	m_size.setValue(0,0);
 	m_roundedCorner.setValue(0,0);
 }
 
-svg::Rectangle::~Rectangle(void)
+esvg::Rectangle::~Rectangle(void)
 {
 	
 }
 
-bool svg::Rectangle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Rectangle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	if (NULL==_element) {
 		return false;
@@ -53,12 +53,12 @@ bool svg::Rectangle::Parse(exml::Element * _element, agg::trans_affine& _parentT
 	return true;
 }
 
-void svg::Rectangle::Display(int32_t _spacing)
+void esvg::Rectangle::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
-void svg::Rectangle::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Rectangle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating a rounded rectangle

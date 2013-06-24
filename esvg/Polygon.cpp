@@ -6,22 +6,22 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Polygon.h>
+#include <esvg/Debug.h>
+#include <esvg/Polygon.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>
 
-svg::Polygon::Polygon(PaintState parentPaintState) : svg::Base(parentPaintState)
+esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState)
 {
 	
 }
 
-svg::Polygon::~Polygon(void)
+esvg::Polygon::~Polygon(void)
 {
 	
 }
 
-bool svg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	if (NULL==_element) {
 		return false;
@@ -63,12 +63,12 @@ bool svg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTra
 	return true;
 }
 
-void svg::Polygon::Display(int32_t _spacing)
+void esvg::Polygon::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.Size());
 }
 
-void svg::Polygon::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Polygon::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
@@ -83,24 +83,24 @@ void svg::Polygon::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basic
 	/*
 	// configure the end of the line : 
 	switch (m_paint.lineCap) {
-		case svg::LINECAP_SQUARE:
+		case esvg::LINECAP_SQUARE:
 			path.line_cap(agg::square_cap);
 			break;
-		case svg::LINECAP_ROUND:
+		case esvg::LINECAP_ROUND:
 			path.line_cap(agg::round_cap);
 			break;
-		default: // svg::LINECAP_BUTT
+		default: // esvg::LINECAP_BUTT
 			path.line_cap(agg::butt_cap);
 			break;
 	}
 	switch (m_paint.lineJoin) {
-		case svg::LINEJOIN_BEVEL:
+		case esvg::LINEJOIN_BEVEL:
 			path.line_join(agg::bevel_join);
 			break;
-		case svg::LINEJOIN_ROUND:
+		case esvg::LINEJOIN_ROUND:
 			path.line_join(agg::round_join);
 			break;
-		default: // svg::LINEJOIN_MITER
+		default: // esvg::LINEJOIN_MITER
 			path.line_join(agg::miter_join);
 			break;
 	}

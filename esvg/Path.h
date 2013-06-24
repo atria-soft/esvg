@@ -6,13 +6,13 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __SVG_PATH_H__
-#define __SVG_PATH_H__
+#ifndef __ESVG_PATH_H__
+#define __ESVG_PATH_H__
 
-#include <parserSVG/Base.h>
+#include <esvg/Base.h>
 #include <agg/agg_path_storage.h>
 
-namespace svg
+namespace esvg
 {
 	typedef enum {
 		PATH_ENUM_STOP,
@@ -33,7 +33,7 @@ namespace svg
 		float       element[7];
 	}pathBasic_ts;
 	
-	class Path : public svg::Base
+	class Path : public esvg::Base
 	{
 		private:
 			etk::Vector<pathBasic_ts> m_listElement;
@@ -42,7 +42,7 @@ namespace svg
 			~Path(void);
 			virtual bool Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void Display(int32_t _spacing);
-			virtual void AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 		private:
 			void AbstractMoveTo(agg::path_storage& _path, bool _rel, double _x, double _y);
 			void AbstractLineTo(agg::path_storage& _path, bool _rel, double _x, double _y);

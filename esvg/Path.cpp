@@ -6,20 +6,20 @@
  * @license BSD v3 (see license file)
  */
 
-#include <parserSVG/Debug.h>
-#include <parserSVG/Path.h>
+#include <esvg/Debug.h>
+#include <esvg/Path.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_conv_dash.h>
 #include <agg/agg_conv_curve.h>
 #include <agg/agg_conv_contour.h>
 #include <agg/agg_conv_smooth_poly1.h>
 
-svg::Path::Path(PaintState _parentPaintState) : svg::Base(_parentPaintState)
+esvg::Path::Path(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	
 }
 
-svg::Path::~Path(void)
+esvg::Path::~Path(void)
 {
 	
 }
@@ -62,7 +62,7 @@ const char * extractCmd(const char* input, char& cmd, etk::Vector<float>& output
 	return outputPointer;
 }
 
-bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	if (NULL==_element) {
 		return false;
@@ -117,13 +117,13 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_MOVETO;
+				pathElement.cmd = esvg::PATH_ENUM_MOVETO;
 				if (listDot.Size() >= 2) {
 					pathElement.element[0] = listDot[0];
 					pathElement.element[1] = listDot[1];
 					m_listElement.PushBack(pathElement);
 				}
-				pathElement.cmd = svg::PATH_ENUM_LINETO;
+				pathElement.cmd = esvg::PATH_ENUM_LINETO;
 				for(int32_t iii=2; iii<listDot.Size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -138,7 +138,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_LINETO;
+				pathElement.cmd = esvg::PATH_ENUM_LINETO;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -153,7 +153,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_LINETO_V;
+				pathElement.cmd = esvg::PATH_ENUM_LINETO_V;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=1) {
 					pathElement.element[0] = listDot[iii];
 					m_listElement.PushBack(pathElement);
@@ -167,7 +167,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_LINETO_H;
+				pathElement.cmd = esvg::PATH_ENUM_LINETO_H;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=1) {
 					pathElement.element[0] = listDot[iii];
 					m_listElement.PushBack(pathElement);
@@ -181,7 +181,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_BEZIER_CURVETO;
+				pathElement.cmd = esvg::PATH_ENUM_BEZIER_CURVETO;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=4) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -198,7 +198,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_BEZIER_SMOTH_CURVETO;
+				pathElement.cmd = esvg::PATH_ENUM_BEZIER_SMOTH_CURVETO;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -213,7 +213,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_CURVETO;
+				pathElement.cmd = esvg::PATH_ENUM_CURVETO;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=6) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -232,7 +232,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_SMOTH_CURVETO;
+				pathElement.cmd = esvg::PATH_ENUM_SMOTH_CURVETO;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=4) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -249,7 +249,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_ELLIPTIC;
+				pathElement.cmd = esvg::PATH_ENUM_ELLIPTIC;
 				for(int32_t iii=0; iii<listDot.Size(); iii+=7) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
@@ -268,7 +268,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.Size() );
 					break;
 				}
-				pathElement.cmd = svg::PATH_ENUM_STOP;
+				pathElement.cmd = esvg::PATH_ENUM_STOP;
 				m_listElement.PushBack(pathElement);
 				break;
 			default:
@@ -279,7 +279,7 @@ bool svg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans,
 	return true;
 }
 
-void svg::Path::Display(int32_t _spacing)
+void esvg::Path::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Path");
 	for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
@@ -335,7 +335,7 @@ void svg::Path::Display(int32_t _spacing)
 
 
 
-void svg::Path::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Path::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
@@ -432,7 +432,7 @@ void svg::Path::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTra
 }
 
 
-void svg::Path::AbstractMoveTo(agg::path_storage& _path, bool _rel, double _x, double _y)
+void esvg::Path::AbstractMoveTo(agg::path_storage& _path, bool _rel, double _x, double _y)
 {
 	if(true == _rel) {
 		_path.rel_to_abs(&_x, &_y);
@@ -440,7 +440,7 @@ void svg::Path::AbstractMoveTo(agg::path_storage& _path, bool _rel, double _x, d
 	_path.move_to(_x, _y);
 }
 
-void svg::Path::AbstractLineTo(agg::path_storage& _path, bool _rel, double _x, double _y)
+void esvg::Path::AbstractLineTo(agg::path_storage& _path, bool _rel, double _x, double _y)
 {
 	if(true == _rel) {
 		_path.rel_to_abs(&_x, &_y);
@@ -448,7 +448,7 @@ void svg::Path::AbstractLineTo(agg::path_storage& _path, bool _rel, double _x, d
 	_path.line_to(_x, _y);
 }
 
-void svg::Path::AbstractHLineTo(agg::path_storage& _path, bool _rel, double _x)
+void esvg::Path::AbstractHLineTo(agg::path_storage& _path, bool _rel, double _x)
 {
 	double x2 = 0.0;
 	double y2 = 0.0;
@@ -461,7 +461,7 @@ void svg::Path::AbstractHLineTo(agg::path_storage& _path, bool _rel, double _x)
 	}
 }
 
-void svg::Path::AbstractVLineTo(agg::path_storage& _path, bool _rel, double _y)
+void esvg::Path::AbstractVLineTo(agg::path_storage& _path, bool _rel, double _y)
 {
 	double x2 = 0.0;
 	double y2 = 0.0;
@@ -474,7 +474,7 @@ void svg::Path::AbstractVLineTo(agg::path_storage& _path, bool _rel, double _y)
 	}
 }
 
-void svg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x, double _y)
+void esvg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x, double _y)
 {
 	if(true == _rel) {
 		_path.rel_to_abs(&_x1, &_y1);
@@ -483,7 +483,7 @@ void svg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x1, 
 	_path.curve3(_x1, _y1, _x, _y);
 }
 
-void svg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x, double _y)
+void esvg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x, double _y)
 {
 	if(true == _rel) {
 		_path.curve3_rel(_x, _y);
@@ -492,7 +492,7 @@ void svg::Path::AbstractCurve3(agg::path_storage& _path, bool _rel, double _x, d
 	}
 }
 
-void svg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y)
+void esvg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y)
 {
 	if(true == _rel) {
 		_path.rel_to_abs(&_x1, &_y1);
@@ -502,7 +502,7 @@ void svg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x1, 
 	_path.curve4(_x1, _y1, _x2, _y2, _x, _y);
 }
 
-void svg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x2, double _y2, double _x,  double _y)
+void esvg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x2, double _y2, double _x,  double _y)
 {
 	if(true == _rel) {
 		_path.curve4_rel(_x2, _y2, _x, _y);
@@ -511,7 +511,7 @@ void svg::Path::AbstractCurve4(agg::path_storage& _path, bool _rel, double _x2, 
 	}
 }
 
-void svg::Path::AbstractCloseSubpath(agg::path_storage& _path)
+void esvg::Path::AbstractCloseSubpath(agg::path_storage& _path)
 {
 	_path.end_poly(agg::path_flags_close);
 }
