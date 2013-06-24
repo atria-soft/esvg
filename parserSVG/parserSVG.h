@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file parserSVG/parserSVG.h
- * @brief parserSVG : basic header of the SVG parser (Header)
  * @author Edouard DUPIN
- * @date 20/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #ifndef __SVG_PARSER_H__
@@ -47,15 +31,15 @@ namespace svg
 			svg::Renderer* m_renderedElement;
 	
 		public:
-			Parser(etk::UString fileName);
+			Parser(etk::UString _fileName);
 			~Parser(void);
 			bool IsLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
-			void GenerateAnImage(int32_t sizeX, int32_t sizeY);
-			void GenerateAnImage(ivec2 size, draw::Image& output);
-			void GenerateAnImage(draw::Image& output);
-			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+			void GenerateAnImage(int32_t _sizeX, int32_t _sizeY);
+			void GenerateAnImage(ivec2 _size, draw::Image& _output);
+			void GenerateAnImage(draw::Image& _output);
+			virtual void AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 			uint8_t* GetPointerOnData(void);
 			uint32_t GetSizeOnData(void);
 			vec2 GetDefinedSize(void) { return m_size;};

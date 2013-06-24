@@ -5,7 +5,7 @@ import lutinTools
 def Create(target):
 	myModule = lutinModule.module(__file__, 'parsersvg', 'LIBRARY')
 	
-	myModule.AddModuleDepend(['etk', 'agg', 'tinyxml'])
+	myModule.AddModuleDepend(['etk', 'agg', 'exml'])
 	
 	myModule.AddSrcFile([
 		'parserSVG/Base.cpp',

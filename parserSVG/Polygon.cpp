@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file parserSVG/Polygon.cpp
- * @brief basic poligon parsing (Sources)
  * @author Edouard DUPIN
- * @date 20/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <parserSVG/Debug.h>
@@ -37,24 +21,29 @@ svg::Polygon::~Polygon(void)
 	
 }
 
-bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
+bool svg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	ParseTransform(node);
-	ParsePaintAttr(node);
+	if (NULL==_element) {
+		return false;
+	}
+	ParseTransform(_element);
+	ParsePaintAttr(_element);
 	
 	SVG_VERBOSE("parsed P1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= parentTrans;
+	m_transformMatrix *= _parentTrans;
 	
 	SVG_VERBOSE("parsed P2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
-	const char *sss = node->ToElement()->Attribute("points");
-	if (NULL == sss) {
-		SVG_ERROR("(l "<<node->Row()<<") polygon: missing points attribute");
+	const etk::UString sss1 = _element->GetAttribute("points");
+	if (sss1.Size()==0) {
+		SVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
 	}
-	sizeMax.setValue(0,0);
+	etk::Char sss2 = sss1.c_str();
+	const char * sss = sss2;
+	_sizeMax.setValue(0,0);
 	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
 		vec2 pos(0,0);
@@ -62,8 +51,8 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::
 		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.PushBack(pos);
 			sss += n;
-			sizeMax.setValue(etk_max(sizeMax.x(), pos.x()),
-			                 etk_max(sizeMax.y(), pos.y()));
+			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
+			                  etk_max(_sizeMax.y(), pos.y()));
 			if(sss[0] == ' ' || sss[0] == ',') {
 				sss++;
 			}
@@ -74,14 +63,14 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::
 	return true;
 }
 
-void svg::Polygon::Display(int32_t spacing)
+void svg::Polygon::Display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(spacing) << "Polygon nbPoint=" << m_listPoint.Size());
+	SVG_DEBUG(SpacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.Size());
 }
 
-void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+void svg::Polygon::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
-	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
+	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
 	agg::path_storage path;
 	path.start_new_path();
@@ -118,26 +107,26 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	*/
 	
 	agg::trans_affine mtx = m_transformMatrix;
-	mtx *= basicTrans;
+	mtx *= _basicTrans;
 	
 	if (m_paint.fill.a != 0x00) {
 		agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
 		// set the filling mode : 
-		myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-		myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+		_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+		_myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
 	
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
+		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
 		// set the filling mode : 
-		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		_myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
 }
 

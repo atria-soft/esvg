@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file parserSVG/Base.cpp
- * @brief basic Element parsing (Sources)
  * @author Edouard DUPIN
- * @date 20/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 
@@ -27,41 +11,34 @@
 #include <parserSVG/Base.h>
 #include <math.h>
 
-svg::Base::Base(PaintState parentPaintState)
+svg::Base::Base(PaintState _parentPaintState)
 {
 	// copy the parent painting properties ...
-	m_paint = parentPaintState;
+	m_paint = _parentPaintState;
 }
 
-/**
- * @brief Parse the transform balise C String.
- * @param[in] inputString String data inside the transform attribute
- * @param[in,out] baseMatrice matrice that must be update
- * @return ---
- */
-void svg::Base::ParseTransform(TiXmlNode *node)
+void svg::Base::ParseTransform(exml::Element* _element)
 {
-	SVG_CHECK_INOUT(node);
-	const char * inputString = (char*)node->ToElement()->Attribute("transform");
-	if (NULL == inputString) {
+	if (NULL == _element) {
+		return;
+	}
+	
+	etk::UString inputString = _element->GetAttribute("transform");
+	if (inputString.Size()==0) {
 		return;
 	}
 	SVG_VERBOSE("find transform : \"" << inputString << "\"");
-	char tmpData[2048];
-	for (int32_t iii=0; inputString[iii]!='\0' && iii<2047; iii++) {
+	for (int32_t iii=0; iii<inputString.Size(); iii++) {
 		if (inputString[iii] == ',') {
-			tmpData[iii] = ' ';
-		} else {
-			tmpData[iii] = inputString[iii];
+			inputString[iii] = ' ';
 		}
-		// end of the string ...
-		tmpData[iii+1] = '\0';
 	}
-	SVG_VERBOSE("find transform : \"" << tmpData << "\"");
+	SVG_VERBOSE("find transform : \"" << inputString << "\"");
 	double matrix[6];
 	float angle, xxx, yyy;
 	int32_t n;
-	char * pointerOnData = tmpData;
+	etk::Char myData = inputString.c_str();
+	const char * pointerOnData = myData;
 	while (*pointerOnData) {
 		if (sscanf(pointerOnData, "matrix (%lf %lf %lf %lf %lf %lf) %n", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5], &n) == 6) {
 			m_transformMatrix.load_from(matrix);
@@ -104,262 +81,269 @@ void svg::Base::ParseTransform(TiXmlNode *node)
 
 /**
  * @brief Parse x, y, width, height attribute of the xml node
- * @param[in] node XML node
- * @param[out] pos parsed position
- * @param[out] size parsed dimention
- * @return ---
+ * @param[in] _element XML node
+ * @param[out] _pos parsed position
+ * @param[out] _size parsed dimention
  */
-void svg::Base::ParsePosition(const TiXmlNode *node, etk::Vector2D<float> &pos, etk::Vector2D<float> &size)
+void svg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
 {
-	pos.setValue(0,0);
-	size.setValue(0,0);
-
-	const char * content = node->ToElement()->Attribute("x");
-	if (NULL != content) {
-		pos.setX(ParseLength(content));
+	_pos.setValue(0,0);
+	_size.setValue(0,0);
+	
+	if (NULL == _element) {
+		return;
 	}
-	content = node->ToElement()->Attribute("y");
-	if (NULL != content) {
-		pos.setX(ParseLength(content));
+	etk::UString content = _element->GetAttribute("x");
+	if (content.Size()!=0) {
+		_pos.setX(ParseLength(content));
 	}
-	content = node->ToElement()->Attribute("width");
-	if (NULL != content) {
-		size.setX(ParseLength(content));
+	content = _element->GetAttribute("y");
+	if (content.Size()!=0) {
+		_pos.setX(ParseLength(content));
 	}
-	content = node->ToElement()->Attribute("height");
-	if (NULL != content) {
-		size.setY(ParseLength(content));
+	content = _element->GetAttribute("width");
+	if (content.Size()!=0) {
+		_size.setX(ParseLength(content));
+	}
+	content = _element->GetAttribute("height");
+	if (content.Size()!=0) {
+		_size.setY(ParseLength(content));
 	}
 }
 
 
 /**
  * @brief Parse a lenght of the xml element
- * @param[in] dataInput Data C String with the printed lenght
+ * @param[in] _dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-float svg::Base::ParseLength(const char *dataInput)
+float svg::Base::ParseLength(const etk::UString& _dataInput)
 {
-	int32_t numLength = strspn(dataInput, "0123456789+-.");
-	const char *unit = dataInput + numLength;
-	//SVG_INFO("          ==> \"" << dataInput << "\"");
-	float n = atof(dataInput);
+	float n = _dataInput.ToFloat();
+	etk::UString unit;
+	for (int32_t iii=0; iii<_dataInput.Size(); iii++) {
+		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
+		    || _dataInput[iii]<='+'
+		    || _dataInput[iii]<='-'
+		    || _dataInput[iii]<='.') {
+			continue;
+		}
+		unit = _dataInput.Extract(iii);
+	}
 	//SVG_INFO("          ==> ?? = " << n );
-	float font_size = 20.0;
+	float font_size = 20.0f;
 	
 	// note : ";" is for the parsing of the style elements ...
-	if (unit[0] == '\0' || unit[0] == ';' ) {
+	if(    unit.Size()==0
+	    || unit[0] == ';' ) {
 		return n;
 	} else if (unit[0] == '%') {                   // xxx %
 		return n / 100.0 * m_paint.viewPort.x();
 	} else if (unit[0] == 'e' && unit[1] == 'm') { // xxx em
 		return n * font_size;
 	} else if (unit[0] == 'e' && unit[1] == 'x') { // xxx ex
-		return n / 2.0 * font_size;
+		return n / 2.0f * font_size;
 	} else if (unit[0] == 'p' && unit[1] == 'x') { // xxx px
 		return n;
 	} else if (unit[0] == 'p' && unit[1] == 't') { // xxx pt
-		return n * 1.25;
+		return n * 1.25f;
 	} else if (unit[0] == 'p' && unit[1] == 'c') { // xxx pc
-		return n * 15.0;
+		return n * 15.0f;
 	} else if (unit[0] == 'm' && unit[1] == 'm') { // xxx mm
-		return n * 3.543307;
+		return n * 3.543307f;
 	} else if (unit[0] == 'c' && unit[1] == 'm') { // xxx cm
-		return n * 35.43307;
+		return n * 35.43307f;
 	} else if (unit[0] == 'i' && unit[1] == 'n') { // xxx in
-		return n * 90;
+		return n * 90.0f;
 	}
-	return 0;
+	return 0.0f;
 }
 
 // return the next char position ... (after ';' or NULL)
-const char * extractPartOfStyle(const char * input, char * outputType, char * outputData, int32_t maxLen)
+int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType, etk::UString& _outputData, int32_t _pos)
 {
-	if (*input == '\0') {
-		return NULL;
-	}
-	int32_t jjj = 0;
-	const char * outputPointer = NULL;
-	outputType[maxLen-1] = '\0';
-	outputType[0] = '\0';
-	outputData[maxLen-1] = '\0';
-	outputData[0] = '\0';
-	char * output = outputType;
-	for( int32_t iii=0; iii<maxLen-1 && input[iii]!='\0'; iii++) {
-		outputPointer = &input[iii];
-		if (input[iii] != ';') {
-			if (input[iii] == ' ') {
-				// nothing to do ... we do not copy espaces ...
-			} else if (input[iii] == ':') {
-				// change the output ...
-				output = outputData;
-				jjj = 0;
-			} else {
-				output[jjj] = input[iii];
-				output[jjj+1] = '\0';
-				jjj++;
-			}
+	_outputType = "";
+	_outputData = "";
+	int32_t typeStart = _pos;
+	int32_t typeStop = _pos;
+	int32_t dataStart = _pos;
+	int32_t dataStop = _pos;
+	bool processFirst=true;
+	for( int32_t iii=_pos; iii<_data.Size(); iii++) {
+		if (_data[iii] == ';') {
+			// end of the element
+			return iii+1;
+		}
+		if (_data[iii] == ' ') {
+			// nothing to do ... we do not copy espaces ...
+		} else if (_data[iii] == ':') {
+			processFirst = false;
 		} else {
-			break;
+			if (processFirst) {
+				_outputType += _data[iii];
+			} else {
+				_outputData += _data[iii];
+			}
 		}
 	}
-	outputPointer++;
-	return outputPointer;
+	return -1;
 }
 
 /**
  * @brief Parse a Painting attribute of a specific node
- * @param[in] node : basic node of the XML that might be parsed
- * @return ---
+ * @param[in] _element Basic node of the XML that might be parsed
  */
-void svg::Base::ParsePaintAttr(const TiXmlNode *node)
+void svg::Base::ParsePaintAttr(const exml::Element *_element)
 {
+	if (_element==NULL) {
+		return;
+	}
 	bool fillNone = false;
 	bool strokeNone = false;
-	const char * content = node->ToElement()->Attribute("fill");
-	if (NULL != content) {
+	etk::UString content = _element->GetAttribute("fill");
+	if (content.Size()!=0) {
 		m_paint.fill = ParseColor(content);
 		if (m_paint.fill.a == 0) {
 			fillNone = true;
 		}
 	}
-	content = node->ToElement()->Attribute("stroke");
-	if (NULL != content) {
+	content = _element->GetAttribute("stroke");
+	if (content.Size()!=0) {
 		m_paint.stroke = ParseColor(content);
 		if (m_paint.stroke.a == 0) {
 			strokeNone = true;
 		}
 	}
-	content = node->ToElement()->Attribute("stroke-width");
-	if (NULL != content) {
+	content = _element->GetAttribute("stroke-width");
+	if (content.Size()!=0) {
 		m_paint.strokeWidth = ParseLength(content);
 	}
-	content = node->ToElement()->Attribute("opacity");
-	if (NULL != content) {
+	content = _element->GetAttribute("opacity");
+	if (content.Size()!=0) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.a = opacity*0xFF;
 		m_paint.stroke.a = opacity*0xFF;
 	}
-	content = node->ToElement()->Attribute("fill-opacity");
-	if (NULL != content) {
+	content = _element->GetAttribute("fill-opacity");
+	if (content.Size()!=0) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.a = opacity*0xFF;
 	}
-	content = node->ToElement()->Attribute("stroke-opacity");
-	if (NULL != content) {
+	content = _element->GetAttribute("stroke-opacity");
+	if (content.Size()!=0) {
 		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.stroke.a = opacity*0xFF;
 	}
-	content = node->ToElement()->Attribute("fill-rule");
-	if (NULL != content) {
-		if (0 == strcmp(content, "nonzero") ) {
+	content = _element->GetAttribute("fill-rule");
+	if (content.Size()!=0) {
+		if (content == "nonzero") {
 			m_paint.flagEvenOdd = false;
-		} else if (0 == strcmp(content, "evenodd") ) {
+		} else if (content == "evenodd" ) {
 			m_paint.flagEvenOdd = true;
 		} else {
 			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
 		}
 	}
-	content = node->ToElement()->Attribute("stroke-linecap");
-	if (NULL != content) {
-		if (0 == strcmp(content, "butt") ) {
+	content = _element->GetAttribute("stroke-linecap");
+	if (content.Size()!=0) {
+		if (content == "butt" ) {
 			m_paint.lineCap = svg::LINECAP_BUTT;
-		} else if (0 == strcmp(content, "round") ) {
+		} else if (content == "round" ) {
 			m_paint.lineCap = svg::LINECAP_ROUND;
-		} else if (0 == strcmp(content, "square") ) {
+		} else if (content == "square" ) {
 			m_paint.lineCap = svg::LINECAP_SQUARE;
 		} else {
 			m_paint.lineCap = svg::LINECAP_BUTT;
 			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
-	content = node->ToElement()->Attribute("stroke-linejoin");
-	if (NULL != content) {
-		if (0 == strcmp(content, "miter") ) {
+	content = _element->GetAttribute("stroke-linejoin");
+	if (content.Size()!=0) {
+		if (content == "miter" ) {
 			m_paint.lineJoin = svg::LINEJOIN_MITER;
-		} else if (0 == strcmp(content, "round") ) {
+		} else if (content == "round" ) {
 			m_paint.lineJoin = svg::LINEJOIN_ROUND;
-		} else if (0 == strcmp(content, "bevel") ) {
+		} else if (content == "bevel" ) {
 			m_paint.lineJoin = svg::LINEJOIN_BEVEL;
 		} else {
 			m_paint.lineJoin = svg::LINEJOIN_MITER;
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
-	content = node->ToElement()->Attribute("style");
-	if (NULL != content) {
-		char outputType[1024] = "";
-		char outputValue[1024] = "";
+	content = _element->GetAttribute("style");
+	if (content.Size()!=0) {
+		etk::UString outputType;
+		etk::UString outputValue;
 		
-		for( const char *sss=extractPartOfStyle(content, outputType, outputValue, 1024);
-		     NULL != sss;
-		     sss=extractPartOfStyle(sss, outputType, outputValue, 1024) ) {
+		for( int32_t sss=extractPartOfStyle(content, outputType, outputValue, 1024);
+		     -1 != sss;
+		     sss=extractPartOfStyle(content, outputType, outputValue, sss) ) {
 			SVG_VERBOSE(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
-			if (0 == strcmp(outputType, "fill") ) {
+			if (outputType == "fill") {
 				m_paint.fill = ParseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 				if (m_paint.fill.a == 0) {
 					fillNone = true;
 				}
-			} else if (0 == strcmp(outputType, "stroke") ) {
+			} else if (outputType == "stroke") {
 				m_paint.stroke = ParseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
 				if (m_paint.stroke.a == 0) {
 					strokeNone = true;
 				}
-			} else if (0 == strcmp(outputType, "stroke-width") ) {
+			} else if (outputType == "stroke-width" ) {
 				m_paint.strokeWidth = ParseLength(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.strokeWidth);
-			} else if (0 == strcmp(outputType, "opacity") ) {
+			} else if (outputType == "opacity" ) {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.a = opacity*0xFF;
 				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
-			} else if (0 == strcmp(outputType, "fill-opacity") ) {
+			} else if (outputType == "fill-opacity") {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
-			} else if (0 == strcmp(outputType, "stroke-opacity") ) {
+			} else if (outputType == "stroke-opacity") {
 				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
-			} else if (0 == strcmp(outputType, "fill-rule") ) {
-				if (0 == strcmp(outputValue, "nonzero") ) {
+			} else if (outputType == "fill-rule" ) {
+				if (outputValue == "nonzero" ) {
 					m_paint.flagEvenOdd = false;
-				} else if (0 == strcmp(outputValue, "evenodd") ) {
+				} else if (outputValue == "evenodd") {
 					m_paint.flagEvenOdd = true;
 				} else {
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [nonzero,evenodd]");
 				}
-			} else if (0 == strcmp(outputType, "stroke-linecap") ) {
-				if (0 == strcmp(outputValue, "butt") ) {
+			} else if (outputType == "stroke-linecap") {
+				if (outputValue == "butt") {
 					m_paint.lineCap = svg::LINECAP_BUTT;
-				} else if (0 == strcmp(outputValue, "round") ) {
+				} else if (outputValue == "round") {
 					m_paint.lineCap = svg::LINECAP_ROUND;
-				} else if (0 == strcmp(outputValue, "square") ) {
+				} else if (outputValue == "square") {
 					m_paint.lineCap = svg::LINECAP_SQUARE;
 				} else {
 					m_paint.lineCap = svg::LINECAP_BUTT;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [butt,round,square]");
 				}
-			} else if (0 == strcmp(outputType, "stroke-linejoin") ) {
-				if (0 == strcmp(outputValue, "miter") ) {
+			} else if (outputType == "stroke-linejoin") {
+				if (outputValue == "miter") {
 					m_paint.lineJoin = svg::LINEJOIN_MITER;
-				} else if (0 == strcmp(outputValue, "round") ) {
+				} else if (outputValue == "round") {
 					m_paint.lineJoin = svg::LINEJOIN_ROUND;
-				} else if (0 == strcmp(outputValue, "bevel") ) {
+				} else if (outputValue == "bevel") {
 					m_paint.lineJoin = svg::LINEJOIN_BEVEL;
 				} else {
 					m_paint.lineJoin = svg::LINEJOIN_MITER;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
-			} else if (0 == strcmp(outputType, "marker-start") ) {
+			} else if (outputType == "marker-start") {
 				// TODO : ...
 			} else {
 				SVG_ERROR("not know painting element in style balise : \"" << outputType << "\" with value : \"" << outputValue << "\"");
@@ -375,92 +359,51 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	}
 }
 
-bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen)
-{
-	int32_t iii=0;
-	while ('\0' != *input1 && '\0' != *input2 && iii < maxLen) {
-		char in1 = *input1;
-		char in2 = *input2;
-		if (in1 != in2) {
-			if (in1 <= 'Z' && in1 >= 'A') {
-				in1 = in1 - 'A' + 'a';
-			}
-			if (in2 <= 'Z' && in2 >= 'A') {
-				in2 = in2 - 'A' + 'a';
-			}
-			if (in1 != in2) {
-				return false;
-			}
-		}
-		iii++;
-		input1++;
-		input2++;
-	}
-	return true;
-}
-
-
 /**
  * @brief Parse a color specification from the svg file
- * @param[in] inputData Data C String with the xml definition
+ * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color svg::Base::ParseColor(const char *inputData)
+draw::Color svg::Base::ParseColor(const etk::UString& _inputData)
 {
 	draw::Color localColor = draw::color::white;
 	
-	size_t len = strlen(inputData);
-	
-	if(    4 < len
-	    && inputData[0] == 'u'
-	    && inputData[1] == 'r'
-	    && inputData[2] == 'l'
-	    && inputData[3] == '(') {
-		if (inputData[4] == '#') {
+	if(    _inputData.Size() > 4
+	    && _inputData[0] == 'u'
+	    && _inputData[1] == 'r'
+	    && _inputData[2] == 'l'
+	    && _inputData[3] == '(') {
+		if (_inputData[4] == '#') {
 			// TODO : parse gradient ...
 		}
-		SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> url(XXX) is not supported now ...");
+		SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\" ==> url(XXX) is not supported now ...");
 	} else {
-		localColor = inputData;
+		localColor = _inputData.c_str();
 	}
-	SVG_VERBOSE("Parse color : \"" << inputData << "\" ==> " << localColor);
+	SVG_INFO("Parse color : \"" << _inputData << "\" ==> " << localColor);
 	return localColor;
 }
 
 
 /**
  * @brief Parse all the element needed in the basic node
- * @param[in] node standart XML node
+ * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
+bool svg::Base::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
-	sizeMax.setValue(0,0);
+	_sizeMax.setValue(0,0);
 	return false;
 }
 
 
-const char * svg::Base::SpacingDist(int32_t spacing)
+const char * svg::Base::SpacingDist(int32_t _spacing)
 {
 	static const char *tmpValue = "                                                                                ";
-	if (spacing>20) {
-		spacing = 20;
+	if (_spacing>20) {
+		_spacing = 20;
 	}
-	return tmpValue + 20*4 - spacing*4;
+	return tmpValue + 20*4 - _spacing*4;
 }
 
-
-/*
-void svg::Base::AggCheckChange(agg::path_storage& path, etk::Vector<agg::rgba8> &colors, etk::Vector<uint32_t> &pathIdx, PaintState &curentPaintProp)
-{
-	if (curentPaintProp != m_paint) {
-		SVG_INFO("add path color = " << m_paint.fill);
-		// New color. Every new color creates new path in the path object.
-		colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.a));
-		uint32_t tmpPathNew = path.start_new_path();
-		pathIdx.PushBack(tmpPathNew);
-		curentPaintProp = m_paint;
-	}
-}
-*/

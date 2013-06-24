@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file parserSVG/Polyline.cpp
- * @brief basic Poliline parsing (Sources)
  * @author Edouard DUPIN
- * @date 20/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <parserSVG/Debug.h>
@@ -27,7 +11,7 @@
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>
 
-svg::Polyline::Polyline(PaintState parentPaintState) : svg::Base(parentPaintState)
+svg::Polyline::Polyline(PaintState _parentPaintState) : svg::Base(_parentPaintState)
 {
 	
 }
@@ -37,30 +21,35 @@ svg::Polyline::~Polyline(void)
 	
 }
 
-bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
+bool svg::Polyline::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
-	ParseTransform(node);
-	ParsePaintAttr(node);
-	
-	// add the property of the parrent modifications ...
-	m_transformMatrix *= parentTrans;
-	
-	const char *sss = node->ToElement()->Attribute("points");
-	if (NULL == sss) {
-		SVG_ERROR("(l "<<node->Row()<<") polyline: missing points attribute");
+	if (NULL==_element) {
 		return false;
 	}
-	sizeMax.setValue(0,0);
-	SVG_VERBOSE("Parse polyline : \"" << sss << "\"");
+	ParseTransform(_element);
+	ParsePaintAttr(_element);
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= _parentTrans;
+	
+	etk::UString sss1 = _element->GetAttribute("points");
+	if (sss1.Size()==0) {
+		SVG_ERROR("(l "<<_element->Pos()<<") polyline: missing points attribute");
+		return false;
+	}
+	_sizeMax.setValue(0,0);
+	SVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
+	etk::Char sss2 = sss1.c_str();
+	const char* sss = sss2;
 	while ('\0' != sss[0]) {
 		etk::Vector2D<float> pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.PushBack(pos);
-			sizeMax.setValue(etk_max(sizeMax.x(), pos.x()),
-			                 etk_max(sizeMax.y(), pos.y()));
+			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
+			                  etk_max(_sizeMax.y(), pos.y()));
 			sss += n;
 		} else {
 			break;
@@ -69,13 +58,13 @@ bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk:
 	return true;
 }
 
-void svg::Polyline::Display(int32_t spacing)
+void svg::Polyline::Display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(spacing) << "Polyline nbPoint=" << m_listPoint.Size());
+	SVG_DEBUG(SpacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.Size());
 }
 
 
-void svg::Polyline::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+void svg::Polyline::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	agg::path_storage path;
 	path.start_new_path();
@@ -110,18 +99,18 @@ void svg::Polyline::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicT
 	*/
 	
 	agg::trans_affine mtx = m_transformMatrix;
-	mtx *= basicTrans;
+	mtx *= _basicTrans;
 	
 	if (m_paint.strokeWidth > 0) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
+		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
 		// set the filling mode : 
-		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		_myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
 }
 

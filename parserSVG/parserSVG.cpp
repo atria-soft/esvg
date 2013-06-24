@@ -1,30 +1,13 @@
 /**
- *******************************************************************************
- * @file parserSVG/parserSVG.cpp
- * @brief parserSVG : basic header of the SVG parser (Sources)
  * @author Edouard DUPIN
- * @date 18/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/parserSVG.h>
-#include <tinyXML/tinyxml.h>
 #include <parserSVG/Base.h>
 #include <parserSVG/Circle.h>
 #include <parserSVG/Ellipse.h>
@@ -47,9 +30,9 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
+svg::Parser::Parser(etk::UString _fileName) : m_renderedElement(NULL)
 {
-	m_fileName = fileName;
+	m_fileName = _fileName;
 	m_version = "0.0";
 	m_loadOK = true;
 	m_paint.fill = (int32_t)0xFF0000FF;
@@ -62,137 +45,109 @@ svg::Parser::Parser(etk::UString fileName) : m_renderedElement(NULL)
 	m_paint.lineCap = svg::LINECAP_BUTT;
 	m_size.setValue(0,0);
 	
-	// Start loading the XML : 
-	SVG_DEBUG("open file (SVG) \"" << m_fileName << "\"");
-	etk::FSNode tmpFile(m_fileName);
+	exml::Document doc;
 	
-	// allocate the document in the stack
-	TiXmlDocument XmlDocument;
-	if (false == tmpFile.Exist()) {
-		SVG_ERROR("File Does not exist : " << m_fileName);
+	bool Load(const etk::UString& _file);
+	if (false == doc.Load(m_fileName)) {
+		SVG_ERROR("Error occured when loading XML : " << m_fileName);
 		m_loadOK = false;
 		return;
 	}
-	int64_t fileSize = tmpFile.FileSize();
-	if (0==fileSize) {
-		SVG_ERROR("This file is empty : " << m_fileName);
+	
+	if (0 == doc.Size() ) {
+		SVG_ERROR("(l ?) No nodes in the xml file ... \"" << m_fileName << "\"");
 		m_loadOK = false;
 		return;
 	}
-	if (false == tmpFile.FileOpenRead()) {
-		SVG_ERROR("Can not open the file : " << m_fileName);
-		m_loadOK = false;
-		return;
-	}
-	// allocate data
-	char * fileBuffer = new char[fileSize+5];
-	if (NULL == fileBuffer) {
-		SVG_ERROR("Error Memory allocation size=" << fileSize);
-		m_loadOK = false;
-		return;
-	}
-	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
-	// load data from the file :
-	tmpFile.FileRead(fileBuffer, 1, fileSize);
-	// close the file:
-	tmpFile.FileClose();
-	// load the XML from the memory
-	XmlDocument.Parse((const char*)fileBuffer, 0, TIXML_ENCODING_UTF8);
-
-	TiXmlElement* root = XmlDocument.FirstChildElement( "svg" );
+	
+	exml::Element* root = (exml::Element*)doc.GetNamed( "svg" );
 	if (NULL == root ) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
 		m_loadOK = false;
-	} else {
-		// get the svg version :
-		const char *version = root->ToElement()->Attribute("version");
-		if (NULL != version) {
-			m_version = version;
+		return;
+	}
+	// get the svg version :
+	m_version = root->GetAttribute("version");
+	// parse ...
+	vec2 pos(0,0);
+	ParseTransform(root);
+	ParsePosition(root, pos, m_size);
+	ParsePaintAttr(root);
+	SVG_VERBOSE("parsed .ROOT trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	vec2 maxSize(0,0);
+	vec2 size(0,0);
+	// parse all sub node :
+	for(int32_t iii=0; iii< root->Size(); iii++) {
+		exml::Node* child = root->Get(iii);
+		if (child==NULL) {
+			continue;
 		}
-		// parse ...
-		vec2 pos(0,0);
-		ParseTransform(root);
-		ParsePosition(root, pos, m_size);
-		ParsePaintAttr(root);
-		SVG_VERBOSE("parsed .ROOT trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
-		vec2 maxSize(0,0);
-		vec2 size(0,0);
-		// parse all sub node :
-		for(TiXmlNode * child = root->FirstChild(); NULL != child; child = child->NextSibling() ) {
-			svg::Base *elementParser = NULL;
-			if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
-				// nothing to do, just proceed to next step
-			} else {
-				etk::UString localValue = child->Value();
-				bool normalNoElement = false;
-				if (localValue == "g") {
-					elementParser = new svg::Group(m_paint);
-				} else if (localValue == "a") {
-					SVG_INFO("Note : 'a' balise is parsed like a g balise ...");
-					elementParser = new svg::Group(m_paint);
-				} else if (localValue == "title") {
-					m_title = "TODO : set the title here ...";
-					normalNoElement = true;
-				} else if (localValue == "path") {
-					elementParser = new svg::Path(m_paint);
-				} else if (localValue == "rect") {
-					elementParser = new svg::Rectangle(m_paint);
-				} else if (localValue == "circle") {
-					elementParser = new svg::Circle(m_paint);
-				} else if (localValue == "ellipse") {
-					elementParser = new svg::Ellipse(m_paint);
-				} else if (localValue == "line") {
-					elementParser = new svg::Line(m_paint);
-				} else if (localValue == "polyline") {
-					elementParser = new svg::Polyline(m_paint);
-				} else if (localValue == "polygon") {
-					elementParser = new svg::Polygon(m_paint);
-				} else if (localValue == "text") {
-					elementParser = new svg::Text(m_paint);
-				} else if (localValue == "defs") {
-					// Node ignore : must implement it later ...
-					normalNoElement = true;
-				} else if (localValue == "sodipodi:namedview") {
-					// Node ignore : generaly inkscape data
-					normalNoElement = true;
-				} else if (localValue == "metadata") {
-					// Node ignore : generaly inkscape data
-					normalNoElement = true;
-				} else {
-					SVG_ERROR("(l "<<child->Row()<<") node not suported : \""<<localValue<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
-				}
-				if (false == normalNoElement) {
-					if (NULL == elementParser) {
-						SVG_ERROR("(l "<<child->Row()<<") error on node: \""<<localValue<<"\" allocation error or not supported ...");
-					} else {
-						if (false == elementParser->Parse(child, m_transformMatrix, size)) {
-							SVG_ERROR("(l "<<child->Row()<<") error on node: \""<<localValue<<"\" Sub Parsing ERROR");
-							delete(elementParser);
-							elementParser = NULL;
-						} else {
-							if (maxSize.x()<size.x()) {
-								maxSize.setX(size.x());
-							}
-							if (maxSize.y()<size.y()) {
-								maxSize.setY(size.y());
-							}
-							// add element in the system
-							m_subElementList.PushBack(elementParser);
-						}
-					}
-				}
-			}
+		svg::Base *elementParser = NULL;
+		if (!child->IsElement()) {
+			// nothing to do, just proceed to next step
+			continue;
 		}
-		if (m_size.x()==0 || m_size.y()==0) {
-			m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
+		if (child->GetValue() == "g") {
+			elementParser = new svg::Group(m_paint);
+		} else if (child->GetValue() == "a") {
+			SVG_INFO("Note : 'a' balise is parsed like a g balise ...");
+			elementParser = new svg::Group(m_paint);
+		} else if (child->GetValue() == "title") {
+			m_title = "TODO : set the title here ...";
+			continue;
+		} else if (child->GetValue() == "path") {
+			elementParser = new svg::Path(m_paint);
+		} else if (child->GetValue() == "rect") {
+			elementParser = new svg::Rectangle(m_paint);
+		} else if (child->GetValue() == "circle") {
+			elementParser = new svg::Circle(m_paint);
+		} else if (child->GetValue() == "ellipse") {
+			elementParser = new svg::Ellipse(m_paint);
+		} else if (child->GetValue() == "line") {
+			elementParser = new svg::Line(m_paint);
+		} else if (child->GetValue() == "polyline") {
+			elementParser = new svg::Polyline(m_paint);
+		} else if (child->GetValue() == "polygon") {
+			elementParser = new svg::Polygon(m_paint);
+		} else if (child->GetValue() == "text") {
+			elementParser = new svg::Text(m_paint);
+		} else if (child->GetValue() == "defs") {
+			// Node ignore : must implement it later ...
+			continue;
+		} else if (child->GetValue() == "sodipodi:namedview") {
+			// Node ignore : generaly inkscape data
+			continue;
+		} else if (child->GetValue() == "metadata") {
+			// Node ignore : generaly inkscape data
+			continue;
 		} else {
-			m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
+			SVG_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
+		if (NULL == elementParser) {
+			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			continue;
+		}
+		if (false == elementParser->Parse((exml::Element*)child, m_transformMatrix, size)) {
+			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+			delete(elementParser);
+			elementParser = NULL;
+			continue;
+		}
+		if (maxSize.x()<size.x()) {
+			maxSize.setX(size.x());
+		}
+		if (maxSize.y()<size.y()) {
+			maxSize.setY(size.y());
+		}
+		// add element in the system
+		m_subElementList.PushBack(elementParser);
 	}
-	if (NULL != fileBuffer) {
-		delete[] fileBuffer;
+	if (m_size.x()==0 || m_size.y()==0) {
+		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
+	} else {
+		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
 	}
-	//DisplayDebug();
+	DisplayDebug();
 }
 
 svg::Parser::~Parser(void)

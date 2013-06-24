@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file parserSVG/Ellipse.cpp
- * @brief basic ellipse parsing (Sources)
  * @author Edouard DUPIN
- * @date 20/03/2012
- * @par Project
- * parserSVG
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <parserSVG/Debug.h>
@@ -37,79 +21,82 @@ svg::Ellipse::~Ellipse(void)
 	
 }
 
-bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax)
+bool svg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	ParseTransform(node);
-	ParsePaintAttr(node);
+	if (NULL==_element) {
+		return false;
+	}
+	ParseTransform(_element);
+	ParsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= parentTrans;
+	m_transformMatrix *= _parentTrans;
 	
 	m_c.setValue(0,0);
 	m_r.setValue(0,0);
 	
-	const char * content = node->ToElement()->Attribute("cx");
-	if (NULL != content) {
+	etk::UString content = _element->GetAttribute("cx");
+	if (content.Size()!=0) {
 		m_c.setX(ParseLength(content));
 	}
-	content = node->ToElement()->Attribute("cy");
-	if (NULL != content) {
+	content = _element->GetAttribute("cy");
+	if (content.Size()!=0) {
 		m_c.setY(ParseLength(content));
 	}
-	content = node->ToElement()->Attribute("rx");
-	if (NULL != content) {
+	content = _element->GetAttribute("rx");
+	if (content.Size()!=0) {
 		m_r.setX(ParseLength(content));
 	} else {
-		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"rx\" is not present");
+		SVG_ERROR("(l "<<_element->Pos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
-	content = node->ToElement()->Attribute("ry");
-	if (NULL != content) {
+	content = _element->GetAttribute("ry");
+	if (content.Size()!=0) {
 		m_r.setY(ParseLength(content));
 	} else {
-		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"ry\" is not present");
+		SVG_ERROR("(l "<<_element->Pos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
-	sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
+	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
 	
 	return true;
 }
 
-void svg::Ellipse::Display(int32_t spacing)
+void svg::Ellipse::Display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+	SVG_DEBUG(SpacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
 }
 
 
-void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+void svg::Ellipse::AggDraw(svg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
-	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
+	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
 	agg::ellipse myEllipse(m_c.x(), m_c.y(), m_r.x(), m_r.y(), 0);
 	
 	// Calculate transformation matrix ...
 	agg::trans_affine  mtx = m_transformMatrix;
-	mtx *= basicTrans;
+	mtx *= _basicTrans;
 	
 	// set the filling mode : 
-	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+	_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 	
 	if (m_paint.fill.a != 0x00) {
 		agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
-		myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+		_myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
 
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
+		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// Drawing as an outline
 		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
 		myEllipseStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::ellipse>, agg::trans_affine> transStroke(myEllipseStroke, mtx);
 		// set the filling mode : 
-		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		_myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
 
 }
