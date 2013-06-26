@@ -11,6 +11,10 @@
 #include <esvg/Base.h>
 #include <math.h>
 
+
+#undef __class__
+#define __class__	"Base"
+
 esvg::Base::Base(PaintState _parentPaintState)
 {
 	// copy the parent painting properties ...
@@ -119,7 +123,7 @@ void esvg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<floa
  */
 float esvg::Base::ParseLength(const etk::UString& _dataInput)
 {
-	SVG_DEBUG(" lenght : '" << _dataInput << "'");
+	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.ToFloat();
 	etk::UString unit;
 	for (int32_t iii=0; iii<_dataInput.Size(); iii++) {
@@ -134,7 +138,7 @@ float esvg::Base::ParseLength(const etk::UString& _dataInput)
 	//SVG_INFO("          ==> ?? = " << n );
 	float font_size = 20.0f;
 	
-	SVG_DEBUG(" lenght : '" << n << "' => unit=" << unit);
+	SVG_VERBOSE(" lenght : '" << n << "' => unit=" << unit);
 	// note : ";" is for the parsing of the style elements ...
 	if(    unit.Size()==0
 	    || unit[0] == ';' ) {
@@ -388,7 +392,7 @@ draw::Color esvg::Base::ParseColor(const etk::UString& _inputData)
 	} else {
 		localColor = _inputData.c_str();
 	}
-	SVG_INFO("Parse color : \"" << _inputData << "\" ==> " << localColor);
+	SVG_VERBOSE("Parse color : \"" << _inputData << "\" ==> " << localColor);
 	return localColor;
 }
 

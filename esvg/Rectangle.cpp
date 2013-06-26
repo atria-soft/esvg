@@ -11,6 +11,10 @@
 #include <agg/agg_rounded_rect.h>
 #include <agg/agg_conv_stroke.h>
 
+#undef __class__
+#define __class__	"Rectangle"
+
+
 esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	m_position.setValue(0,0);

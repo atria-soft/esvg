@@ -20,6 +20,9 @@
 #include <esvg/Text.h>
 #include <esvg/Group.h>
 
+#undef __class__
+#define __class__	"Group"
+
 esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	
@@ -52,12 +55,9 @@ bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 	vec2 tmpPos(0,0);
 	// parse all sub node :
 	for(int32_t iii=0; iii<_element->Size() ; iii++) {
-		exml::Node* child = _element->Get(iii);
+		exml::Element* child = _element->GetElement(iii);
 		if (NULL == child) {
-			continue;
-		}
-		if (!child->IsElement()) {
-			// nothing to do, just proceed to next step
+			// can be a comment ...
 			continue;
 		}
 		esvg::Base *elementParser = NULL;
@@ -87,7 +87,7 @@ bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 		if (NULL == elementParser) {
 			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 		} else {
-			if (false == elementParser->Parse((exml::Element*)child, m_transformMatrix, tmpPos)) {
+			if (false == elementParser->Parse(child, m_transformMatrix, tmpPos)) {
 				SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
 				elementParser = NULL;

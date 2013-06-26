@@ -11,6 +11,8 @@
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_ellipse.h>
 
+#undef __class__
+#define __class__	"Circle"
 
 esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {

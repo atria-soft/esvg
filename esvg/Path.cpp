@@ -14,6 +14,9 @@
 #include <agg/agg_conv_contour.h>
 #include <agg/agg_conv_smooth_poly1.h>
 
+#undef __class__
+#define __class__	"Path"
+
 esvg::Path::Path(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	

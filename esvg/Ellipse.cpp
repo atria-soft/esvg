@@ -11,6 +11,9 @@
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_ellipse.h>
 
+#undef __class__
+#define __class__	"Ellipse"
+
 esvg::Ellipse::Ellipse(PaintState parentPaintState) : esvg::Base(parentPaintState)
 {
 	

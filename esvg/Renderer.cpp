@@ -12,6 +12,9 @@
 // 4 is for the RGBA ...
 #define DATA_ALLOCATION_ELEMENT        (4)
 
+#undef __class__
+#define __class__	"Renderer"
+
 esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 {
 	m_allocatedSize = 0;

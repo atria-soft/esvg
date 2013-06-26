@@ -11,6 +11,9 @@
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>
 
+#undef __class__
+#define __class__	"Polygon"
+
 esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState)
 {
 	

@@ -30,6 +30,11 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
+
+#undef __class__
+#define __class__	"Document"
+
+
 esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL)
 {
 	m_fileName = _fileName;
@@ -76,15 +81,12 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 	vec2 size(0,0);
 	// parse all sub node :
 	for(int32_t iii=0; iii< root->Size(); iii++) {
-		exml::Node* child = root->Get(iii);
+		exml::Element* child = root->GetElement(iii);
 		if (child==NULL) {
+			// comment trsh here...
 			continue;
 		}
 		esvg::Base *elementParser = NULL;
-		if (!child->IsElement()) {
-			// nothing to do, just proceed to next step
-			continue;
-		}
 		if (child->GetValue() == "g") {
 			elementParser = new esvg::Group(m_paint);
 		} else if (child->GetValue() == "a") {
@@ -125,7 +127,7 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
-		if (false == elementParser->Parse((exml::Element*)child, m_transformMatrix, size)) {
+		if (false == elementParser->Parse(child, m_transformMatrix, size)) {
 			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 			delete(elementParser);
 			elementParser = NULL;
@@ -145,7 +147,7 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 	} else {
 		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
 	}
-	DisplayDebug();
+	//DisplayDebug();
 }
 
 esvg::Document::~Document(void)

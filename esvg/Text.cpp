@@ -9,6 +9,9 @@
 #include <esvg/Debug.h>
 #include <esvg/Text.h>
 
+#undef __class__
+#define __class__	"Text"
+
 esvg::Text::Text(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 {
 	
