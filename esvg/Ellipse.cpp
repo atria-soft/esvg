@@ -50,14 +50,14 @@ bool esvg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 	if (content.Size()!=0) {
 		m_r.setX(ParseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->Pos()<<") Ellipse \"rx\" is not present");
+		SVG_ERROR("(l "<<_element->GetPos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
 	content = _element->GetAttribute("ry");
 	if (content.Size()!=0) {
 		m_r.setY(ParseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->Pos()<<") Ellipse \"ry\" is not present");
+		SVG_ERROR("(l "<<_element->GetPos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
 	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());

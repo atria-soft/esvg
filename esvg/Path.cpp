@@ -79,7 +79,7 @@ bool esvg::Path::Parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	
 	etk::UString elementXML1 = _element->GetAttribute("d");
 	if (elementXML1.Size()==0) {
-		SVG_ERROR("(l "<<_element->Pos()<<") path: missing 'p' attribute");
+		SVG_ERROR("(l "<<_element->GetPos()<<") path: missing 'p' attribute");
 		return false;
 	}
 	SVG_VERBOSE("Parse Path : \"" << elementXML << "\"");

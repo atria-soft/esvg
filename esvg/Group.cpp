@@ -82,13 +82,13 @@ bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 		} else if (child->GetValue() == "text") {
 			elementParser = new esvg::Text(m_paint);
 		} else {
-			SVG_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+			SVG_ERROR("(l "<<child->GetPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 		} else {
 			if (false == elementParser->Parse(child, m_transformMatrix, tmpPos)) {
-				SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+				SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
 				elementParser = NULL;
 			} else {

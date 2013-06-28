@@ -121,14 +121,14 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 			// Node ignore : generaly inkscape data
 			continue;
 		} else {
-			SVG_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+			SVG_ERROR("(l "<<child->GetPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
 		if (false == elementParser->Parse(child, m_transformMatrix, size)) {
-			SVG_ERROR("(l "<<child->Pos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 			delete(elementParser);
 			elementParser = NULL;
 			continue;

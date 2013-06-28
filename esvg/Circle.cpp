@@ -49,13 +49,13 @@ bool esvg::Circle::Parse(exml::Element * _element, agg::trans_affine& _parentTra
 	if (content.Size()!=0) {
 		m_radius = ParseLength(content);
 	} else {
-		SVG_ERROR("(l "<<_element->Pos()<<") Circle \"r\" is not present");
+		SVG_ERROR("(l "<<_element->GetPos()<<") Circle \"r\" is not present");
 		return false;
 	}
 
 	if (0 > m_radius) {
 		m_radius = 0;
-		SVG_ERROR("(l "<<_element->Pos()<<") Circle \"r\" is negative");
+		SVG_ERROR("(l "<<_element->GetPos()<<") Circle \"r\" is negative");
 		return false;
 	}
 	_sizeMax.setValue(m_position.x() + m_radius, m_position.y() + m_radius);

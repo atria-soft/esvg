@@ -36,7 +36,7 @@ bool esvg::Polyline::Parse(exml::Element * _element, agg::trans_affine& _parentT
 	
 	etk::UString sss1 = _element->GetAttribute("points");
 	if (sss1.Size()==0) {
-		SVG_ERROR("(l "<<_element->Pos()<<") polyline: missing points attribute");
+		SVG_ERROR("(l "<<_element->GetPos()<<") polyline: missing points attribute");
 		return false;
 	}
 	_sizeMax.setValue(0,0);
