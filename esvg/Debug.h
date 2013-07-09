@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EPARSER_SVG_DEBUG_H__
-#define __EPARSER_SVG_DEBUG_H__
+#ifndef __ESVG_DEBUG_H__
+#define __ESVG_DEBUG_H__
 
 #include <etk/types.h>
 #include <etk/Debug.h>
