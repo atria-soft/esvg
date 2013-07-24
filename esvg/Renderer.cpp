@@ -24,7 +24,7 @@ esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 	m_allocatedSize = dataSize;
 	
 	// allocate Data
-	SVG_DEBUG("Allocate buffer : " << dataSize);
+	SVG_VERBOSE("Allocate buffer : " << dataSize);
 	
 	ETK_MALLOC(m_buffer, dataSize, uint8_t);
 	if (NULL == m_buffer) {

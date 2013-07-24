@@ -197,7 +197,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 			}
 		}
 	}
-	SVG_DEBUG("    extract : '" << _outputType << "':'" << _outputData << "'");
+	SVG_VERBOSE("    extract : '" << _outputType << "':'" << _outputData << "'");
 	return -1;
 }
 
