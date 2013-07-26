@@ -26,7 +26,7 @@ esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 	// allocate Data
 	SVG_VERBOSE("Allocate buffer : " << dataSize);
 	
-	ETK_MALLOC(m_buffer, dataSize, uint8_t);
+	m_buffer = new uint8_t[dataSize];
 	if (NULL == m_buffer) {
 		SVG_ERROR("Allocation of the output buffer for SVG drawing error");
 		m_allocatedSize = 0;
@@ -69,7 +69,7 @@ esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 esvg::Renderer::~Renderer(void)
 {
 	if (NULL != m_buffer) {
-		ETK_FREE(m_buffer);
+		delete[] m_buffer;
 		m_buffer = NULL;
 	}
 }
