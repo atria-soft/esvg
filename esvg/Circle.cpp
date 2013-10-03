@@ -24,38 +24,38 @@ esvg::Circle::~Circle(void)
 	
 }
 
-bool esvg::Circle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
-	ParseTransform(_element);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString content = _element->GetAttribute("cx");
-	if (content.Size()!=0) {
-		m_position.setX(ParseLength(content));
+	etk::UString content = _element->getAttribute("cx");
+	if (content.size()!=0) {
+		m_position.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("cy");
-	if (content.Size()!=0) {
-		m_position.setY(ParseLength(content));
+	content = _element->getAttribute("cy");
+	if (content.size()!=0) {
+		m_position.setY(parseLength(content));
 	}
-	content = _element->GetAttribute("r");
-	if (content.Size()!=0) {
-		m_radius = ParseLength(content);
+	content = _element->getAttribute("r");
+	if (content.size()!=0) {
+		m_radius = parseLength(content);
 	} else {
-		SVG_ERROR("(l "<<_element->GetPos()<<") Circle \"r\" is not present");
+		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is not present");
 		return false;
 	}
 
 	if (0 > m_radius) {
 		m_radius = 0;
-		SVG_ERROR("(l "<<_element->GetPos()<<") Circle \"r\" is negative");
+		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is negative");
 		return false;
 	}
 	_sizeMax.setValue(m_position.x() + m_radius, m_position.y() + m_radius);
@@ -89,7 +89,7 @@ void esvg::Circle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basi
 	
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// Drawing as an outline
+		// drawing as an outline
 		agg::conv_stroke<agg::ellipse> myCircleStroke(myCircle);
 		myCircleStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::ellipse>, agg::trans_affine> transStroke(myCircleStroke, mtx);

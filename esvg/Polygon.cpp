@@ -24,13 +24,13 @@ esvg::Polygon::~Polygon(void)
 	
 }
 
-bool esvg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
-	ParseTransform(_element);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePaintAttr(_element);
 	
 	SVG_VERBOSE("parsed P1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
@@ -39,8 +39,8 @@ bool esvg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 	
 	SVG_VERBOSE("parsed P2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
-	const etk::UString sss1 = _element->GetAttribute("points");
-	if (sss1.Size()==0) {
+	const etk::UString sss1 = _element->getAttribute("points");
+	if (sss1.size() == 0) {
 		SVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
 	}
@@ -52,7 +52,7 @@ bool esvg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 		vec2 pos(0,0);
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.PushBack(pos);
+			m_listPoint.pushBack(pos);
 			sss += n;
 			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
 			                  etk_max(_sizeMax.y(), pos.y()));
@@ -68,7 +68,7 @@ bool esvg::Polygon::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 
 void esvg::Polygon::Display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.Size());
+	SVG_DEBUG(SpacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
 void esvg::Polygon::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
@@ -79,7 +79,7 @@ void esvg::Polygon::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 	path.start_new_path();
 	
 	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
-	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
+	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
 		path.line_to(m_listPoint[iii].x(), m_listPoint[iii].y());
 	}
 	path.close_polygon();
@@ -122,7 +122,7 @@ void esvg::Polygon::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 	
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// Drawing as an outline
+		// drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);

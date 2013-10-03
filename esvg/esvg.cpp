@@ -57,78 +57,78 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 		return;
 	}
 	
-	if (0 == doc.Size() ) {
+	if (0 == doc.size() ) {
 		SVG_ERROR("(l ?) No nodes in the xml file ... \"" << m_fileName << "\"");
 		m_loadOK = false;
 		return;
 	}
 	
-	exml::Element* root = (exml::Element*)doc.GetNamed( "svg" );
+	exml::Element* root = (exml::Element*)doc.getNamed( "svg" );
 	if (NULL == root ) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
 		m_loadOK = false;
 		return;
 	}
 	// get the svg version :
-	m_version = root->GetAttribute("version");
+	m_version = root->getAttribute("version");
 	// parse ...
 	vec2 pos(0,0);
-	ParseTransform(root);
-	ParsePosition(root, pos, m_size);
-	ParsePaintAttr(root);
+	parseTransform(root);
+	parsePosition(root, pos, m_size);
+	parsePaintAttr(root);
 	SVG_VERBOSE("parsed .ROOT trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	vec2 maxSize(0,0);
 	vec2 size(0,0);
 	// parse all sub node :
-	for(int32_t iii=0; iii< root->Size(); iii++) {
-		exml::Element* child = root->GetElement(iii);
-		if (child==NULL) {
+	for(int32_t iii=0; iii< root->size(); iii++) {
+		exml::Element* child = root->getElement(iii);
+		if (child == NULL) {
 			// comment trsh here...
 			continue;
 		}
 		esvg::Base *elementParser = NULL;
-		if (child->GetValue() == "g") {
+		if (child->getValue() == "g") {
 			elementParser = new esvg::Group(m_paint);
-		} else if (child->GetValue() == "a") {
+		} else if (child->getValue() == "a") {
 			SVG_INFO("Note : 'a' balise is parsed like a g balise ...");
 			elementParser = new esvg::Group(m_paint);
-		} else if (child->GetValue() == "title") {
+		} else if (child->getValue() == "title") {
 			m_title = "TODO : set the title here ...";
 			continue;
-		} else if (child->GetValue() == "path") {
+		} else if (child->getValue() == "path") {
 			elementParser = new esvg::Path(m_paint);
-		} else if (child->GetValue() == "rect") {
+		} else if (child->getValue() == "rect") {
 			elementParser = new esvg::Rectangle(m_paint);
-		} else if (child->GetValue() == "circle") {
+		} else if (child->getValue() == "circle") {
 			elementParser = new esvg::Circle(m_paint);
-		} else if (child->GetValue() == "ellipse") {
+		} else if (child->getValue() == "ellipse") {
 			elementParser = new esvg::Ellipse(m_paint);
-		} else if (child->GetValue() == "line") {
+		} else if (child->getValue() == "line") {
 			elementParser = new esvg::Line(m_paint);
-		} else if (child->GetValue() == "polyline") {
+		} else if (child->getValue() == "polyline") {
 			elementParser = new esvg::Polyline(m_paint);
-		} else if (child->GetValue() == "polygon") {
+		} else if (child->getValue() == "polygon") {
 			elementParser = new esvg::Polygon(m_paint);
-		} else if (child->GetValue() == "text") {
+		} else if (child->getValue() == "text") {
 			elementParser = new esvg::Text(m_paint);
-		} else if (child->GetValue() == "defs") {
+		} else if (child->getValue() == "defs") {
 			// Node ignore : must implement it later ...
 			continue;
-		} else if (child->GetValue() == "sodipodi:namedview") {
+		} else if (child->getValue() == "sodipodi:namedview") {
 			// Node ignore : generaly inkscape data
 			continue;
-		} else if (child->GetValue() == "metadata") {
+		} else if (child->getValue() == "metadata") {
 			// Node ignore : generaly inkscape data
 			continue;
 		} else {
-			SVG_ERROR("(l "<<child->GetPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
-		if (false == elementParser->Parse(child, m_transformMatrix, size)) {
-			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+		if (false == elementParser->parse(child, m_transformMatrix, size)) {
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 			delete(elementParser);
 			elementParser = NULL;
 			continue;
@@ -140,9 +140,9 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 			maxSize.setY(size.y());
 		}
 		// add element in the system
-		m_subElementList.PushBack(elementParser);
+		m_subElementList.pushBack(elementParser);
 	}
-	if (m_size.x()==0 || m_size.y()==0) {
+	if (m_size.x() == 0 || m_size.y()==0) {
 		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
 	} else {
 		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
@@ -163,7 +163,7 @@ esvg::Document::~Document(void)
 void esvg::Document::DisplayDebug(void)
 {
 	SVG_DEBUG("Main SVG node : size=" << m_size);
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->Display(1);
 		}
@@ -173,7 +173,7 @@ void esvg::Document::DisplayDebug(void)
 
 void esvg::Document::AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->AggDraw(myRenderer, basicTrans);
 		}
@@ -181,21 +181,21 @@ void esvg::Document::AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basi
 }
 
 
-void esvg::Document::GenerateTestFile(void)
+void esvg::Document::generateTestFile(void)
 {
-	int32_t SizeX = m_size.x();
+	int32_t sizeX = m_size.x();
 	if (SizeX == 0) {
-		SizeX = 64;
+		sizeX = 64;
 	}
-	int32_t SizeY = m_size.y();
+	int32_t sizeY = m_size.y();
 	if (SizeY == 0) {
-		SizeY = 64;
+		sizeY = 64;
 	}
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
 	}
-	m_renderedElement = new esvg::Renderer(SizeX, SizeY);
+	m_renderedElement = new esvg::Renderer(SizeX, sizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
@@ -216,29 +216,29 @@ void esvg::Document::GenerateTestFile(void)
 
 
 
-void esvg::Document::GenerateAnImage(int32_t sizeX, int32_t sizeY)
+void esvg::Document::generateAnImage(int32_t sizeX, int32_t sizeY)
 {
-	int32_t SizeX = sizeX;
+	int32_t sizeX = sizeX;
 	if (SizeX == 0) {
 		SVG_ERROR("SizeX == 0 ==> set 64");
-		SizeX = 64;
+		sizeX = 64;
 	}
-	int32_t SizeY = sizeY;
+	int32_t sizeY = sizeY;
 	if (SizeY == 0) {
 		SVG_ERROR("SizeY == 0 ==> set 64");
-		SizeY = 64;
+		sizeY = 64;
 	}
-	SVG_INFO("Generate size (" << SizeX << "," << SizeY << ")");
+	SVG_INFO("Generate size (" << sizeX << "," << SizeY << ")");
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
 	}
 	
-	m_renderedElement = new esvg::Renderer(SizeX, SizeY);
+	m_renderedElement = new esvg::Renderer(SizeX, sizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x(), SizeY/m_size.y());
+	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x(), sizeY/m_size.y());
 	//basicTrans *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	//basicTrans *= agg::trans_affine_skewing(2.0, 5.0);
 	//basicTrans *= agg::trans_affine_translation(width*0.3, height/2);
@@ -251,40 +251,40 @@ void esvg::Document::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	*/
 }
 
-void esvg::Document::GenerateAnImage(draw::Image& output)
+void esvg::Document::generateAnImage(draw::Image& output)
 {
-	GenerateAnImage(ivec2(m_size.x(),m_size.y()), output);
+	generateAnImage(ivec2(m_size.x(),m_size.y()), output);
 }
 
-void esvg::Document::GenerateAnImage(ivec2 size, draw::Image& output)
+void esvg::Document::generateAnImage(ivec2 size, draw::Image& output)
 {
-	GenerateAnImage(size.x(), size.y());
+	generateAnImage(size.x(), size.y());
 	output.Resize(size);
 	draw::Color tmpp(0,0,0,0);
-	output.SetFillColor(tmpp);
-	output.Clear();
+	output.setFillColor(tmpp);
+	output.clear();
 	if(NULL != m_renderedElement) {
-		uint8_t* pointerOnData = m_renderedElement->GetDataPointer();
-		int32_t  sizeData = m_renderedElement->GetDataSize();
-		uint8_t* tmpOut = (uint8_t*)output.GetTextureDataPointer();
+		uint8_t* pointerOnData = m_renderedElement->getDataPointer();
+		int32_t  sizeData = m_renderedElement->getDataSize();
+		uint8_t* tmpOut = (uint8_t*)output.getTextureDataPointer();
 		memcpy(tmpOut, pointerOnData, sizeData);
 	}
 }
 
-uint8_t* esvg::Document::GetPointerOnData(void)
+uint8_t* esvg::Document::getPointerOnData(void)
 {
 	if(NULL == m_renderedElement) {
 		return NULL;
 	}
-	return m_renderedElement->GetDataPointer();
+	return m_renderedElement->getDataPointer();
 }
 
-uint32_t esvg::Document::GetSizeOnData(void)
+uint32_t esvg::Document::getSizeOnData(void)
 {
 	if(NULL == m_renderedElement) {
 		return 0;
 	}
-	return m_renderedElement->GetDataSize();
+	return m_renderedElement->getDataSize();
 }
 
 

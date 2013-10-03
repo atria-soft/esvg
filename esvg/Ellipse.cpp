@@ -24,13 +24,13 @@ esvg::Ellipse::~Ellipse(void)
 	
 }
 
-bool esvg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Ellipse::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
-	ParseTransform(_element);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
@@ -38,26 +38,26 @@ bool esvg::Ellipse::Parse(exml::Element * _element, agg::trans_affine& _parentTr
 	m_c.setValue(0,0);
 	m_r.setValue(0,0);
 	
-	etk::UString content = _element->GetAttribute("cx");
-	if (content.Size()!=0) {
-		m_c.setX(ParseLength(content));
+	etk::UString content = _element->getAttribute("cx");
+	if (content.size()!=0) {
+		m_c.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("cy");
-	if (content.Size()!=0) {
-		m_c.setY(ParseLength(content));
+	content = _element->getAttribute("cy");
+	if (content.size()!=0) {
+		m_c.setY(parseLength(content));
 	}
-	content = _element->GetAttribute("rx");
-	if (content.Size()!=0) {
-		m_r.setX(ParseLength(content));
+	content = _element->getAttribute("rx");
+	if (content.size()!=0) {
+		m_r.setX(parseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->GetPos()<<") Ellipse \"rx\" is not present");
+		SVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
-	content = _element->GetAttribute("ry");
-	if (content.Size()!=0) {
-		m_r.setY(ParseLength(content));
+	content = _element->getAttribute("ry");
+	if (content.size()!=0) {
+		m_r.setY(parseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->GetPos()<<") Ellipse \"ry\" is not present");
+		SVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
 	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
@@ -92,7 +92,7 @@ void esvg::Ellipse::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// Drawing as an outline
+		// drawing as an outline
 		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
 		myEllipseStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::ellipse>, agg::trans_affine> transStroke(myEllipseStroke, mtx);

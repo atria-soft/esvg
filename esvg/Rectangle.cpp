@@ -27,30 +27,30 @@ esvg::Rectangle::~Rectangle(void)
 	
 }
 
-bool esvg::Rectangle::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
 	m_position.setValue(0,0);
 	m_size.setValue(0,0);
 	m_roundedCorner.setValue(0,0);
 	
-	ParseTransform(_element);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	ParsePosition(_element, m_position, m_size);
+	parsePosition(_element, m_position, m_size);
 	
-	etk::UString content = _element->GetAttribute("rx");
-	if (content.Size()!=0) {
-		m_roundedCorner.setX(ParseLength(content));
+	etk::UString content = _element->getAttribute("rx");
+	if (content.size()!=0) {
+		m_roundedCorner.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("ry");
-	if (content.Size()!=0) {
-		m_roundedCorner.setY(ParseLength(content));
+	content = _element->getAttribute("ry");
+	if (content.size()!=0) {
+		m_roundedCorner.setY(parseLength(content));
 	}
 	_sizeMax.setValue(m_position.x() + m_size.x() + m_paint.strokeWidth,
 	                  m_position.y() + m_size.y() + m_paint.strokeWidth);
@@ -84,7 +84,7 @@ void esvg::Rectangle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _b
 
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// Drawing as an outline
+		// drawing as an outline
 		agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);
 		// set the filling mode : 
 		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);

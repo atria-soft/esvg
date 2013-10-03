@@ -40,7 +40,7 @@ namespace esvg
 		public:
 			Path(PaintState _parentPaintState);
 			~Path(void);
-			virtual bool Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void Display(int32_t _spacing);
 			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 		private:

@@ -33,17 +33,17 @@ esvg::Group::~Group(void)
 	
 }
 
-bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
 	// parse ...
 	etk::Vector2D<float> pos(0,0);
 	etk::Vector2D<float> size(0,0);
-	ParseTransform(_element);
-	ParsePosition(_element, pos, size);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePosition(_element, pos, size);
+	parsePaintAttr(_element);
 	SVG_VERBOSE("parsed G1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
 	// add the property of the parrent modifications ...
@@ -54,48 +54,48 @@ bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 	_sizeMax.setValue(0,0);
 	vec2 tmpPos(0,0);
 	// parse all sub node :
-	for(int32_t iii=0; iii<_element->Size() ; iii++) {
-		exml::Element* child = _element->GetElement(iii);
+	for(int32_t iii=0; iii<_element->size() ; iii++) {
+		exml::Element* child = _element->getElement(iii);
 		if (NULL == child) {
 			// can be a comment ...
 			continue;
 		}
 		esvg::Base *elementParser = NULL;
-		if (child->GetValue() == "g") {
+		if (child->getValue() == "g") {
 			elementParser = new esvg::Group(m_paint);
-		} else if (child->GetValue() == "a") {
+		} else if (child->getValue() == "a") {
 			// TODO ...
-		} else if (child->GetValue() == "path") {
+		} else if (child->getValue() == "path") {
 			elementParser = new esvg::Path(m_paint);
-		} else if (child->GetValue() == "rect") {
+		} else if (child->getValue() == "rect") {
 			elementParser = new esvg::Rectangle(m_paint);
-		} else if (child->GetValue() == "circle") {
+		} else if (child->getValue() == "circle") {
 			elementParser = new esvg::Circle(m_paint);
-		} else if (child->GetValue() == "ellipse") {
+		} else if (child->getValue() == "ellipse") {
 			elementParser = new esvg::Ellipse(m_paint);
-		} else if (child->GetValue() == "line") {
+		} else if (child->getValue() == "line") {
 			elementParser = new esvg::Line(m_paint);
-		} else if (child->GetValue() == "polyline") {
+		} else if (child->getValue() == "polyline") {
 			elementParser = new esvg::Polyline(m_paint);
-		} else if (child->GetValue() == "polygon") {
+		} else if (child->getValue() == "polygon") {
 			elementParser = new esvg::Polygon(m_paint);
-		} else if (child->GetValue() == "text") {
+		} else if (child->getValue() == "text") {
 			elementParser = new esvg::Text(m_paint);
 		} else {
-			SVG_ERROR("(l "<<child->GetPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
 		} else {
-			if (false == elementParser->Parse(child, m_transformMatrix, tmpPos)) {
-				SVG_ERROR("(l "<<child->GetPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+			if (false == elementParser->parse(child, m_transformMatrix, tmpPos)) {
+				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
 				elementParser = NULL;
 			} else {
 				_sizeMax.setValue(etk_max(_sizeMax.x(), tmpPos.x()),
 				                  etk_max(_sizeMax.y(), tmpPos.y()));
 				// add element in the system
-				m_subElementList.PushBack(elementParser);
+				m_subElementList.pushBack(elementParser);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ bool esvg::Group::Parse(exml::Element * _element, agg::trans_affine& _parentTran
 void esvg::Group::Display(int32_t _spacing)
 {
 	SVG_DEBUG(SpacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->Display(_spacing+1);
 		}
@@ -115,7 +115,7 @@ void esvg::Group::Display(int32_t _spacing)
 
 void esvg::Group::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
-	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->AggDraw(_myRenderer, _basicTrans);
 		}

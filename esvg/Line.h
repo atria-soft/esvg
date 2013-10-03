@@ -21,7 +21,7 @@ namespace esvg
 		public:
 			Line(PaintState parentPaintState);
 			~Line(void);
-			virtual bool Parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
+			virtual bool parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

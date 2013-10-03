@@ -22,7 +22,7 @@ esvg::Text::~Text(void)
 	
 }
 
-bool esvg::Text::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Text::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	_sizeMax.setValue(0,0);
 	SVG_ERROR("NOT IMPLEMENTED");

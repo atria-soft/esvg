@@ -33,16 +33,16 @@ namespace esvg
 		public:
 			Document(const etk::UString& _fileName);
 			~Document(void);
-			bool IsLoadOk(void) { return m_loadOK; };
+			bool isLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);
-			void GenerateTestFile(void);
-			void GenerateAnImage(int32_t _sizeX, int32_t _sizeY);
-			void GenerateAnImage(ivec2 _size, draw::Image& _output);
-			void GenerateAnImage(draw::Image& _output);
+			void generateTestFile(void);
+			void generateAnImage(int32_t _sizeX, int32_t _sizeY);
+			void generateAnImage(ivec2 _size, draw::Image& _output);
+			void generateAnImage(draw::Image& _output);
 			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
-			uint8_t* GetPointerOnData(void);
-			uint32_t GetSizeOnData(void);
-			vec2 GetDefinedSize(void) { return m_size;};
+			uint8_t* getPointerOnData(void);
+			uint32_t getSizeOnData(void);
+			vec2 getDefinedSize(void) { return m_size;};
 	};
 };
 

@@ -20,7 +20,7 @@ namespace esvg
 		public:
 			Text(PaintState _parentPaintState);
 			~Text(void);
-			virtual bool Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void Display(int32_t _spacing);
 	};
 };

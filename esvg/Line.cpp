@@ -25,34 +25,34 @@ esvg::Line::~Line(void)
 	
 }
 
-bool esvg::Line::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
-	if (NULL==_element) {
+	if (NULL == _element) {
 		return false;
 	}
-	ParseTransform(_element);
-	ParsePaintAttr(_element);
+	parseTransform(_element);
+	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString content = _element->GetAttribute("x1");
-	if (content.Size()!=0) {
-		m_startPos.setX(ParseLength(content));
+	etk::UString content = _element->getAttribute("x1");
+	if (content.size()!=0) {
+		m_startPos.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("y1");
-	if (content.Size()!=0) {
-		m_startPos.setY(ParseLength(content));
+	content = _element->getAttribute("y1");
+	if (content.size()!=0) {
+		m_startPos.setY(parseLength(content));
 	}
-	content = _element->GetAttribute("x2");
-	if (content.Size()!=0) {
-		m_stopPos.setX(ParseLength(content));
+	content = _element->getAttribute("x2");
+	if (content.size()!=0) {
+		m_stopPos.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("y2");
-	if (content.Size()!=0) {
-		m_stopPos.setY(ParseLength(content));
+	content = _element->getAttribute("y2");
+	if (content.size()!=0) {
+		m_stopPos.setY(parseLength(content));
 	}
 	_sizeMax.setValue(etk_max(m_startPos.x(), m_stopPos.x()),
 	                  etk_max(m_startPos.y(), m_stopPos.y()));
@@ -101,7 +101,7 @@ void esvg::Line::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicT
 	
 	if (m_paint.strokeWidth > 0) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// Drawing as an outline
+		// drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
 		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);

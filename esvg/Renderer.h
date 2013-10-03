@@ -67,8 +67,8 @@ namespace esvg
 			rendererSolid_t * m_renderArea;
 			agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
 			agg::scanline_p8 m_scanLine;    //!< 
-			uint8_t* GetDataPointer(void) { return m_buffer; };
-			uint32_t GetDataSize(void) { return m_allocatedSize; };
+			uint8_t* getDataPointer(void) { return m_buffer; };
+			uint32_t getDataSize(void) { return m_allocatedSize; };
 	};
 };
 

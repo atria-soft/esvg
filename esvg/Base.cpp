@@ -21,18 +21,18 @@ esvg::Base::Base(PaintState _parentPaintState)
 	m_paint = _parentPaintState;
 }
 
-void esvg::Base::ParseTransform(exml::Element* _element)
+void esvg::Base::parseTransform(exml::Element* _element)
 {
 	if (NULL == _element) {
 		return;
 	}
 	
-	etk::UString inputString = _element->GetAttribute("transform");
-	if (inputString.Size()==0) {
+	etk::UString inputString = _element->getAttribute("transform");
+	if (inputString.size() == 0) {
 		return;
 	}
 	SVG_VERBOSE("find transform : \"" << inputString << "\"");
-	for (int32_t iii=0; iii<inputString.Size(); iii++) {
+	for (int32_t iii=0; iii<inputString.size(); iii++) {
 		if (inputString[iii] == ',') {
 			inputString[iii] = ' ';
 		}
@@ -84,12 +84,12 @@ void esvg::Base::ParseTransform(exml::Element* _element)
 
 
 /**
- * @brief Parse x, y, width, height attribute of the xml node
+ * @brief parse x, y, width, height attribute of the xml node
  * @param[in] _element XML node
  * @param[out] _pos parsed position
  * @param[out] _size parsed dimention
  */
-void esvg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
+void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
 {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
@@ -97,50 +97,50 @@ void esvg::Base::ParsePosition(const exml::Element *_element, etk::Vector2D<floa
 	if (NULL == _element) {
 		return;
 	}
-	etk::UString content = _element->GetAttribute("x");
-	if (content.Size()!=0) {
-		_pos.setX(ParseLength(content));
+	etk::UString content = _element->getAttribute("x");
+	if (content.size()!=0) {
+		_pos.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("y");
-	if (content.Size()!=0) {
-		_pos.setX(ParseLength(content));
+	content = _element->getAttribute("y");
+	if (content.size()!=0) {
+		_pos.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("width");
-	if (content.Size()!=0) {
-		_size.setX(ParseLength(content));
+	content = _element->getAttribute("width");
+	if (content.size()!=0) {
+		_size.setX(parseLength(content));
 	}
-	content = _element->GetAttribute("height");
-	if (content.Size()!=0) {
-		_size.setY(ParseLength(content));
+	content = _element->getAttribute("height");
+	if (content.size()!=0) {
+		_size.setY(parseLength(content));
 	}
 }
 
 
 /**
- * @brief Parse a lenght of the xml element
+ * @brief parse a lenght of the xml element
  * @param[in] _dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-float esvg::Base::ParseLength(const etk::UString& _dataInput)
+float esvg::Base::parseLength(const etk::UString& _dataInput)
 {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
-	float n = _dataInput.ToFloat();
+	float n = _dataInput.toFloat();
 	etk::UString unit;
-	for (int32_t iii=0; iii<_dataInput.Size(); iii++) {
+	for (int32_t iii=0; iii<_dataInput.size(); iii++) {
 		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
 		    || _dataInput[iii]<='+'
 		    || _dataInput[iii]<='-'
 		    || _dataInput[iii]<='.') {
 			continue;
 		}
-		unit = _dataInput.Extract(iii-1);
+		unit = _dataInput.extract(iii-1);
 	}
-	//SVG_INFO("          ==> ?? = " << n );
+	//SVG_INFO("           == > ?? = " << n );
 	float font_size = 20.0f;
 	
 	SVG_VERBOSE(" lenght : '" << n << "' => unit=" << unit);
 	// note : ";" is for the parsing of the style elements ...
-	if(    unit.Size()==0
+	if(    unit.size() == 0
 	    || unit[0] == ';' ) {
 		return n;
 	} else if (unit[0] == '%') {                   // xxx %
@@ -170,7 +170,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 {
 	_outputType = "";
 	_outputData = "";
-	if (_pos==-1) {
+	if (_pos == -1) {
 		return -2;
 	}
 	int32_t typeStart = _pos;
@@ -179,7 +179,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 	int32_t dataStop = _pos;
 	bool processFirst=true;
 	//SVG_DEBUG("parse : '" << _data.Extract(_pos) << "'");
-	for( int32_t iii=_pos; iii<_data.Size(); iii++) {
+	for( int32_t iii=_pos; iii<_data.size(); iii++) {
 		//SVG_DEBUG("   ? '" << _data[iii] << "'");
 		if (_data[iii] == ';') {
 			// end of the element
@@ -202,55 +202,55 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
 }
 
 /**
- * @brief Parse a Painting attribute of a specific node
+ * @brief parse a Painting attribute of a specific node
  * @param[in] _element Basic node of the XML that might be parsed
  */
-void esvg::Base::ParsePaintAttr(const exml::Element *_element)
+void esvg::Base::parsePaintAttr(const exml::Element *_element)
 {
-	if (_element==NULL) {
+	if (_element == NULL) {
 		return;
 	}
 	bool fillNone = false;
 	bool strokeNone = false;
-	etk::UString content = _element->GetAttribute("fill");
-	if (content.Size()!=0) {
-		m_paint.fill = ParseColor(content);
+	etk::UString content = _element->getAttribute("fill");
+	if (content.size()!=0) {
+		m_paint.fill = parseColor(content);
 		if (m_paint.fill.a == 0) {
 			fillNone = true;
 		}
 	}
-	content = _element->GetAttribute("stroke");
-	if (content.Size()!=0) {
-		m_paint.stroke = ParseColor(content);
+	content = _element->getAttribute("stroke");
+	if (content.size()!=0) {
+		m_paint.stroke = parseColor(content);
 		if (m_paint.stroke.a == 0) {
 			strokeNone = true;
 		}
 	}
-	content = _element->GetAttribute("stroke-width");
-	if (content.Size()!=0) {
-		m_paint.strokeWidth = ParseLength(content);
+	content = _element->getAttribute("stroke-width");
+	if (content.size()!=0) {
+		m_paint.strokeWidth = parseLength(content);
 	}
-	content = _element->GetAttribute("opacity");
-	if (content.Size()!=0) {
-		float opacity = ParseLength(content);
+	content = _element->getAttribute("opacity");
+	if (content.size()!=0) {
+		float opacity = parseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.a = opacity*0xFF;
 		m_paint.stroke.a = opacity*0xFF;
 	}
-	content = _element->GetAttribute("fill-opacity");
-	if (content.Size()!=0) {
-		float opacity = ParseLength(content);
+	content = _element->getAttribute("fill-opacity");
+	if (content.size()!=0) {
+		float opacity = parseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.a = opacity*0xFF;
 	}
-	content = _element->GetAttribute("stroke-opacity");
-	if (content.Size()!=0) {
-		float opacity = ParseLength(content);
+	content = _element->getAttribute("stroke-opacity");
+	if (content.size()!=0) {
+		float opacity = parseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.stroke.a = opacity*0xFF;
 	}
-	content = _element->GetAttribute("fill-rule");
-	if (content.Size()!=0) {
+	content = _element->getAttribute("fill-rule");
+	if (content.size()!=0) {
 		if (content == "nonzero") {
 			m_paint.flagEvenOdd = false;
 		} else if (content == "evenodd" ) {
@@ -259,8 +259,8 @@ void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
 		}
 	}
-	content = _element->GetAttribute("stroke-linecap");
-	if (content.Size()!=0) {
+	content = _element->getAttribute("stroke-linecap");
+	if (content.size()!=0) {
 		if (content == "butt" ) {
 			m_paint.lineCap = esvg::LINECAP_BUTT;
 		} else if (content == "round" ) {
@@ -272,8 +272,8 @@ void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
-	content = _element->GetAttribute("stroke-linejoin");
-	if (content.Size()!=0) {
+	content = _element->getAttribute("stroke-linejoin");
+	if (content.size()!=0) {
 		if (content == "miter" ) {
 			m_paint.lineJoin = esvg::LINEJOIN_MITER;
 		} else if (content == "round" ) {
@@ -285,8 +285,8 @@ void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
-	content = _element->GetAttribute("style");
-	if (content.Size()!=0) {
+	content = _element->getAttribute("style");
+	if (content.size()!=0) {
 		etk::UString outputType;
 		etk::UString outputValue;
 		
@@ -295,36 +295,36 @@ void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 		     sss=extractPartOfStyle(content, outputType, outputValue, sss) ) {
 			SVG_VERBOSE(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			if (outputType == "fill") {
-				m_paint.fill = ParseColor(outputValue);
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
+				m_paint.fill = parseColor(outputValue);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 				if (m_paint.fill.a == 0) {
 					fillNone = true;
 				}
 			} else if (outputType == "stroke") {
-				m_paint.stroke = ParseColor(outputValue);
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
+				m_paint.stroke = parseColor(outputValue);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
 				if (m_paint.stroke.a == 0) {
 					strokeNone = true;
 				}
 			} else if (outputType == "stroke-width" ) {
-				m_paint.strokeWidth = ParseLength(outputValue);
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.strokeWidth);
+				m_paint.strokeWidth = parseLength(outputValue);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.strokeWidth);
 			} else if (outputType == "opacity" ) {
-				float opacity = ParseLength(outputValue);
+				float opacity = parseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.a = opacity*0xFF;
 				m_paint.stroke.a = opacity*0xFF;
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "fill-opacity") {
-				float opacity = ParseLength(outputValue);
+				float opacity = parseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.a = opacity*0xFF;
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "stroke-opacity") {
-				float opacity = ParseLength(outputValue);
+				float opacity = parseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.stroke.a = opacity*0xFF;
-				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
 			} else if (outputType == "fill-rule" ) {
 				if (outputValue == "nonzero" ) {
 					m_paint.flagEvenOdd = false;
@@ -372,15 +372,15 @@ void esvg::Base::ParsePaintAttr(const exml::Element *_element)
 }
 
 /**
- * @brief Parse a color specification from the svg file
+ * @brief parse a color specification from the svg file
  * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color esvg::Base::ParseColor(const etk::UString& _inputData)
+draw::Color esvg::Base::parseColor(const etk::UString& _inputData)
 {
 	draw::Color localColor = draw::color::white;
 	
-	if(    _inputData.Size() > 4
+	if(    _inputData.size() > 4
 	    && _inputData[0] == 'u'
 	    && _inputData[1] == 'r'
 	    && _inputData[2] == 'l'
@@ -388,21 +388,21 @@ draw::Color esvg::Base::ParseColor(const etk::UString& _inputData)
 		if (_inputData[4] == '#') {
 			// TODO : parse gradient ...
 		}
-		SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\" ==> url(XXX) is not supported now ...");
+		SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 	} else {
 		localColor = _inputData.c_str();
 	}
-	SVG_VERBOSE("Parse color : \"" << _inputData << "\" ==> " << localColor);
+	SVG_VERBOSE("Parse color : \"" << _inputData << "\"  == > " << localColor);
 	return localColor;
 }
 
 
 /**
- * @brief Parse all the element needed in the basic node
+ * @brief parse all the element needed in the basic node
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool esvg::Base::Parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
+bool esvg::Base::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
