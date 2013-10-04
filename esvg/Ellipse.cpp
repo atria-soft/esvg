@@ -14,18 +14,15 @@
 #undef __class__
 #define __class__	"Ellipse"
 
-esvg::Ellipse::Ellipse(PaintState parentPaintState) : esvg::Base(parentPaintState)
-{
+esvg::Ellipse::Ellipse(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Ellipse::~Ellipse(void)
-{
+esvg::Ellipse::~Ellipse(void) {
 	
 }
 
-bool esvg::Ellipse::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Ellipse::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	if (NULL == _element) {
 		return false;
 	}
@@ -65,14 +62,12 @@ bool esvg::Ellipse::parse(exml::Element * _element, agg::trans_affine& _parentTr
 	return true;
 }
 
-void esvg::Ellipse::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+void esvg::Ellipse::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
 }
 
 
-void esvg::Ellipse::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Ellipse::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
 	agg::ellipse myEllipse(m_c.x(), m_c.y(), m_r.x(), m_r.y(), 0);
@@ -89,7 +84,6 @@ void esvg::Ellipse::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 		_myRenderer.m_rasterizer.add_path(trans);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
-
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// drawing as an outline
@@ -101,7 +95,6 @@ void esvg::Ellipse::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 		_myRenderer.m_rasterizer.add_path(transStroke);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
-
 }
 
 

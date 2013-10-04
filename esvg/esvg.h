@@ -17,10 +17,8 @@
 #include <esvg/Base.h>
 #include <draw/Image.h>
 
-namespace esvg
-{
-	class Document : public esvg::Base
-	{
+namespace esvg {
+	class Document : public esvg::Base {
 		private:
 			etk::UString m_fileName;
 			bool m_loadOK;
@@ -29,17 +27,16 @@ namespace esvg
 			etk::Vector<esvg::Base *> m_subElementList;
 			vec2 m_size;
 			esvg::Renderer* m_renderedElement;
-	
 		public:
 			Document(const etk::UString& _fileName);
 			~Document(void);
 			bool isLoadOk(void) { return m_loadOK; };
-			void DisplayDebug(void);
+			void displayDebug(void);
 			void generateTestFile(void);
 			void generateAnImage(int32_t _sizeX, int32_t _sizeY);
 			void generateAnImage(ivec2 _size, draw::Image& _output);
 			void generateAnImage(draw::Image& _output);
-			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 			uint8_t* getPointerOnData(void);
 			uint32_t getSizeOnData(void);
 			vec2 getDefinedSize(void) { return m_size;};

@@ -15,20 +15,17 @@
 #define __class__	"Rectangle"
 
 
-esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
-{
+esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_position.setValue(0,0);
 	m_size.setValue(0,0);
 	m_roundedCorner.setValue(0,0);
 }
 
-esvg::Rectangle::~Rectangle(void)
-{
+esvg::Rectangle::~Rectangle(void) {
 	
 }
 
-bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	if (NULL == _element) {
 		return false;
 	}
@@ -57,13 +54,11 @@ bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parent
 	return true;
 }
 
-void esvg::Rectangle::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
+void esvg::Rectangle::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
-void esvg::Rectangle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Rectangle::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating a rounded rectangle
 	agg::rounded_rect rect_r(m_position.x(), m_position.y(), m_position.x()+m_size.x(), m_position.y()+m_size.y(), m_roundedCorner.x());

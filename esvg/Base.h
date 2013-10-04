@@ -28,23 +28,21 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-namespace esvg
-{
-	class Base
-	{
+namespace esvg {
+	class Base {
 		protected:
-			PaintState         m_paint;
-			agg::trans_affine  m_transformMatrix; //!< specific render of the curent element
-			const char * SpacingDist(int32_t _spacing);
+			PaintState m_paint;
+			agg::trans_affine m_transformMatrix; //!< specific render of the curent element
+			const char * spacingDist(int32_t _spacing);
 		public:
 			Base(void) {};
 			Base(PaintState _parentPaintState);
 			virtual ~Base(void) { };
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			//specific drawing for AAG librairy ...
-			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
 			
-			virtual void Display(int32_t _spacing) { };
+			virtual void display(int32_t _spacing) { };
 			void parseTransform(exml::Element *_element);
 			void parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size);
 			float parseLength(const etk::UString& _dataInput);

@@ -11,19 +11,17 @@
 
 #include <esvg/Base.h>
 
-namespace esvg
-{
-	class Ellipse : public esvg::Base
-	{
+namespace esvg {
+	class Ellipse : public esvg::Base {
 		private:
-			etk::Vector2D<float> m_c;        //!< Center property of the ellipse
-			etk::Vector2D<float> m_r;        //!< Radius property of the ellipse
+			etk::Vector2D<float> m_c; //!< Center property of the ellipse
+			etk::Vector2D<float> m_r; //!< Radius property of the ellipse
 		public:
 			Ellipse(PaintState _parentPaintState);
 			~Ellipse(void);
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
-			virtual void Display(int32_t _spacing);
-			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void display(int32_t _spacing);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};
 };
 

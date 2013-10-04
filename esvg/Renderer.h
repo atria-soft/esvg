@@ -24,18 +24,17 @@
 #include <agg/agg_color_rgba.h>
 #include <agg/agg_pixfmt_rgba.h>
 
-namespace esvg
-{
-	typedef enum {
-		LINECAP_BUTT,
-		LINECAP_ROUND,
-		LINECAP_SQUARE,
-	} lineCap_te;
-	typedef enum {
-		LINEJOIN_MITER,
-		LINEJOIN_ROUND,
-		LINEJOIN_BEVEL,
-	} lineJoin_te;
+namespace esvg {
+	enum lineCap{
+		lineCapButt,
+		lineCapRound,
+		lineCapSquare
+	};
+	enum lineJoin{
+		lineJoinMiter,
+		lineJoinRound,
+		lineJoinBevel
+	};
 	
 	class PaintState {
 		public:
@@ -43,8 +42,8 @@ namespace esvg
 			draw::Color stroke;
 			float strokeWidth;
 			bool flagEvenOdd;
-			lineCap_te lineCap;
-			lineJoin_te lineJoin;
+			enum esvg::lineCap lineCap;
+			enum esvg::lineJoin lineJoin;
 			etk::Vector2D<float> viewPort;
 	};
 	
@@ -59,7 +58,7 @@ namespace esvg
 		public:
 			Renderer(uint32_t width, uint32_t height);
 			~Renderer(void);
-			void WritePpm(etk::UString fileName);
+			void writePpm(etk::UString fileName);
 			etk::Vector2D<float> m_size;
 			agg::rendering_buffer * m_renderingBuffer;
 			agg::pixfmt_rgba32 * m_pixFrame;

@@ -11,10 +11,8 @@
 
 #include <esvg/Base.h>
 
-namespace esvg
-{
-	class Rectangle : public esvg::Base
-	{
+namespace esvg {
+	class Rectangle : public esvg::Base {
 		private:
 			etk::Vector2D<float> m_position; //!< position of the rectangle
 			etk::Vector2D<float> m_size; //!< size of the rectangle
@@ -23,8 +21,8 @@ namespace esvg
 			Rectangle(PaintState _parentPaintState);
 			~Rectangle(void);
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
-			virtual void Display(int32_t _spacing);
-			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void display(int32_t _spacing);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};
 };
 

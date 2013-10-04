@@ -11,10 +11,8 @@
 
 #include <esvg/Base.h>
 
-namespace esvg
-{
-	class Circle : public esvg::Base
-	{
+namespace esvg {
+	class Circle : public esvg::Base {
 		private:
 			etk::Vector2D<float> m_position; //!< Position of the Circle
 			float m_radius; //!< Radius of the Circle
@@ -22,8 +20,8 @@ namespace esvg
 			Circle(PaintState _parentPaintState);
 			~Circle(void);
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
-			virtual void Display(int32_t _spacing);
-			virtual void AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void display(int32_t _spacing);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};
 };
 

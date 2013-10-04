@@ -14,19 +14,16 @@
 #undef __class__
 #define __class__	"Line"
 
-esvg::Line::Line(PaintState parentPaintState) : esvg::Base(parentPaintState)
-{
+esvg::Line::Line(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_startPos.setValue(0,0);
 	m_stopPos.setValue(0,0);
 }
 
-esvg::Line::~Line(void)
-{
+esvg::Line::~Line(void) {
 	
 }
 
-bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (NULL == _element) {
@@ -59,14 +56,11 @@ bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	return true;
 }
 
-void esvg::Line::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
+void esvg::Line::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
 }
 
-
-void esvg::Line::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Line::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
 	agg::path_storage path;
 	path.start_new_path();
 	path.move_to(m_startPos.x(), m_startPos.y());

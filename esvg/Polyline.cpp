@@ -11,18 +11,15 @@
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>
 
-esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
-{
+esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Polyline::~Polyline(void)
-{
+esvg::Polyline::~Polyline(void) {
 	
 }
 
-bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (NULL == _element) {
@@ -58,14 +55,12 @@ bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentT
 	return true;
 }
 
-void esvg::Polyline::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.size());
+void esvg::Polyline::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.size());
 }
 
 
-void esvg::Polyline::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Polyline::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
 	agg::path_storage path;
 	path.start_new_path();
 	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());

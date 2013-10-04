@@ -32,11 +32,10 @@
 
 
 #undef __class__
-#define __class__	"Document"
+#define __class__ "Document"
 
 
-esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL)
-{
+esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL) {
 	m_fileName = _fileName;
 	m_version = "0.0";
 	m_loadOK = true;
@@ -46,12 +45,12 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 	m_paint.strokeWidth = 1.0;
 	m_paint.viewPort.setValue(255,255);
 	m_paint.flagEvenOdd = false;
-	m_paint.lineJoin = esvg::LINEJOIN_MITER;
-	m_paint.lineCap = esvg::LINECAP_BUTT;
+	m_paint.lineJoin = esvg::lineJoinMiter;
+	m_paint.lineCap = esvg::lineCapButt;
 	m_size.setValue(0,0);
 	
 	exml::Document doc;
-	if (false == doc.Load(m_fileName)) {
+	if (false == doc.load(m_fileName)) {
 		SVG_ERROR("Error occured when loading XML : " << m_fileName);
 		m_loadOK = false;
 		return;
@@ -121,14 +120,14 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 			// Node ignore : generaly inkscape data
 			continue;
 		} else {
-			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
 		if (false == elementParser->parse(child, m_transformMatrix, size)) {
-			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 			delete(elementParser);
 			elementParser = NULL;
 			continue;
@@ -150,8 +149,7 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 	//DisplayDebug();
 }
 
-esvg::Document::~Document(void)
-{
+esvg::Document::~Document(void) {
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
@@ -160,22 +158,21 @@ esvg::Document::~Document(void)
 
 
 
-void esvg::Document::DisplayDebug(void)
-{
+void esvg::Document::displayDebug(void) {
 	SVG_DEBUG("Main SVG node : size=" << m_size);
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->Display(1);
+			m_subElementList[iii]->display(1);
 		}
 	}
 }
 
 
-void esvg::Document::AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+void esvg::Document::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(myRenderer, basicTrans);
+			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans);
 		}
 	}
 }
@@ -184,18 +181,18 @@ void esvg::Document::AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basi
 void esvg::Document::generateTestFile(void)
 {
 	int32_t sizeX = m_size.x();
-	if (SizeX == 0) {
+	if (sizeX == 0) {
 		sizeX = 64;
 	}
 	int32_t sizeY = m_size.y();
-	if (SizeY == 0) {
+	if (sizeY == 0) {
 		sizeY = 64;
 	}
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
 	}
-	m_renderedElement = new esvg::Renderer(SizeX, sizeY);
+	m_renderedElement = new esvg::Renderer(sizeX, sizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
@@ -206,67 +203,67 @@ void esvg::Document::generateTestFile(void)
 	//basicTrans *= agg::trans_affine_translation(width/3, height/3);
 	
 	
-	AggDraw(*m_renderedElement, basicTrans);
+	aggDraw(*m_renderedElement, basicTrans);
 	etk::UString tmpFileOut = "yyy_out_";
 	tmpFileOut += m_fileName;
 	tmpFileOut += ".ppm";
-	m_renderedElement->WritePpm(tmpFileOut);
+	m_renderedElement->writePpm(tmpFileOut);
 	
 }
 
 
 
-void esvg::Document::generateAnImage(int32_t sizeX, int32_t sizeY)
+void esvg::Document::generateAnImage(int32_t _sizeX, int32_t _sizeY)
 {
-	int32_t sizeX = sizeX;
-	if (SizeX == 0) {
+	int32_t sizeX = _sizeX;
+	if (sizeX == 0) {
 		SVG_ERROR("SizeX == 0 ==> set 64");
 		sizeX = 64;
 	}
-	int32_t sizeY = sizeY;
-	if (SizeY == 0) {
+	int32_t sizeY = _sizeY;
+	if (sizeY == 0) {
 		SVG_ERROR("SizeY == 0 ==> set 64");
 		sizeY = 64;
 	}
-	SVG_INFO("Generate size (" << sizeX << "," << SizeY << ")");
+	SVG_INFO("Generate size (" << sizeX << "," << sizeY << ")");
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
 	}
 	
-	m_renderedElement = new esvg::Renderer(SizeX, sizeY);
+	m_renderedElement = new esvg::Renderer(sizeX, sizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x(), sizeY/m_size.y());
+	basicTrans *= agg::trans_affine_scaling(sizeX/m_size.x(), sizeY/m_size.y());
 	//basicTrans *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	//basicTrans *= agg::trans_affine_skewing(2.0, 5.0);
 	//basicTrans *= agg::trans_affine_translation(width*0.3, height/2);
 	//basicTrans *= agg::trans_affine_translation(width/3, height/3);
 	
-	AggDraw(*m_renderedElement, basicTrans);
+	aggDraw(*m_renderedElement, basicTrans);
 	/*
 	etk::UString tmpFileOut = "zzz_out_test.ppm";
 	m_renderedElement->WritePpm(tmpFileOut);
 	*/
 }
 
-void esvg::Document::generateAnImage(draw::Image& output)
+void esvg::Document::generateAnImage(draw::Image& _output)
 {
-	generateAnImage(ivec2(m_size.x(),m_size.y()), output);
+	generateAnImage(ivec2(m_size.x(),m_size.y()), _output);
 }
 
-void esvg::Document::generateAnImage(ivec2 size, draw::Image& output)
+void esvg::Document::generateAnImage(ivec2 _size, draw::Image& _output)
 {
-	generateAnImage(size.x(), size.y());
-	output.Resize(size);
+	generateAnImage(_size.x(), _size.y());
+	_output.resize(_size);
 	draw::Color tmpp(0,0,0,0);
-	output.setFillColor(tmpp);
-	output.clear();
+	_output.setFillColor(tmpp);
+	_output.clear();
 	if(NULL != m_renderedElement) {
 		uint8_t* pointerOnData = m_renderedElement->getDataPointer();
 		int32_t  sizeData = m_renderedElement->getDataSize();
-		uint8_t* tmpOut = (uint8_t*)output.getTextureDataPointer();
+		uint8_t* tmpOut = (uint8_t*)_output.getTextureDataPointer();
 		memcpy(tmpOut, pointerOnData, sizeData);
 	}
 }

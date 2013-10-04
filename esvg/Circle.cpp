@@ -14,18 +14,15 @@
 #undef __class__
 #define __class__	"Circle"
 
-esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
-{
+esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Circle::~Circle(void)
-{
+esvg::Circle::~Circle(void) {
 	
 }
 
-bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
 	if (NULL == _element) {
@@ -52,7 +49,6 @@ bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTra
 		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is not present");
 		return false;
 	}
-
 	if (0 > m_radius) {
 		m_radius = 0;
 		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is negative");
@@ -62,13 +58,13 @@ bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTra
 	return true;
 }
 
-void esvg::Circle::Display(int32_t _spacing)
+void esvg::Circle::display(int32_t _spacing)
 {
-	SVG_DEBUG(SpacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
+	SVG_DEBUG(spacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
 }
 
 
-void esvg::Circle::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Circle::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse

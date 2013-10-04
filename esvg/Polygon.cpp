@@ -14,18 +14,15 @@
 #undef __class__
 #define __class__	"Polygon"
 
-esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState)
-{
+esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState) {
 	
 }
 
-esvg::Polygon::~Polygon(void)
-{
+esvg::Polygon::~Polygon(void) {
 	
 }
 
-bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	if (NULL == _element) {
 		return false;
 	}
@@ -66,13 +63,11 @@ bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTr
 	return true;
 }
 
-void esvg::Polygon::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
+void esvg::Polygon::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
-void esvg::Polygon::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
 	agg::path_storage path;

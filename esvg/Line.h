@@ -11,19 +11,17 @@
 
 #include <esvg/Base.h>
 
-namespace esvg
-{
-	class Line : public esvg::Base
-	{
+namespace esvg {
+	class Line : public esvg::Base {
 		private:
-			etk::Vector2D<float> m_startPos;       //!< Start line position
-			etk::Vector2D<float> m_stopPos;        //!< Stop line position
+			etk::Vector2D<float> m_startPos; //!< Start line position
+			etk::Vector2D<float> m_stopPos; //!< Stop line position
 		public:
-			Line(PaintState parentPaintState);
+			Line(PaintState _parentPaintState);
 			~Line(void);
-			virtual bool parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
-			virtual void Display(int32_t spacing);
-			virtual void AggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual void display(int32_t _spacing);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};
 };
 

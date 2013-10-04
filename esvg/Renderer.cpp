@@ -10,13 +10,12 @@
 #include <esvg/Renderer.h>
 
 // 4 is for the RGBA ...
-#define DATA_ALLOCATION_ELEMENT        (4)
+#define DATA_ALLOCATION_ELEMENT (4)
 
 #undef __class__
-#define __class__	"Renderer"
+#define __class__ "Renderer"
 
-esvg::Renderer::Renderer(uint32_t width, uint32_t height)
-{
+esvg::Renderer::Renderer(uint32_t width, uint32_t height) {
 	m_allocatedSize = 0;
 	m_size.setValue(width, height);
 	
@@ -66,8 +65,7 @@ esvg::Renderer::Renderer(uint32_t width, uint32_t height)
 	//m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
 }
 
-esvg::Renderer::~Renderer(void)
-{
+esvg::Renderer::~Renderer(void) {
 	if (NULL != m_buffer) {
 		delete[] m_buffer;
 		m_buffer = NULL;
@@ -77,8 +75,7 @@ esvg::Renderer::~Renderer(void)
 // Writing the buffer to a .PPM file, assuming it has 
 // RGB-structure, one byte per color component
 //--------------------------------------------------
-void esvg::Renderer::WritePpm(etk::UString fileName)
-{
+void esvg::Renderer::writePpm(etk::UString fileName) {
 	if (NULL == m_buffer) {
 		return;
 	}

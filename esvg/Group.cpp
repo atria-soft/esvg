@@ -23,18 +23,15 @@
 #undef __class__
 #define __class__	"Group"
 
-esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
-{
+esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Group::~Group(void)
-{
+esvg::Group::~Group(void) {
 	
 }
 
-bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	if (NULL == _element) {
 		return false;
 	}
@@ -82,13 +79,13 @@ bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTran
 		} else if (child->getValue() == "text") {
 			elementParser = new esvg::Text(m_paint);
 		} else {
-			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->GetValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (NULL == elementParser) {
-			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" allocation error or not supported ...");
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 		} else {
 			if (false == elementParser->parse(child, m_transformMatrix, tmpPos)) {
-				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->GetValue()<<"\" Sub Parsing ERROR");
+				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
 				elementParser = NULL;
 			} else {
@@ -102,22 +99,21 @@ bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTran
 	return true;
 }
 
-void esvg::Group::Display(int32_t _spacing)
-{
-	SVG_DEBUG(SpacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
+void esvg::Group::display(int32_t _spacing) {
+	SVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->Display(_spacing+1);
+			m_subElementList[iii]->display(_spacing+1);
 		}
 	}
-	SVG_DEBUG(SpacingDist(_spacing) << "Group (STOP)");
+	SVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
 }
 
-void esvg::Group::AggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
+void esvg::Group::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
 {
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(_myRenderer, _basicTrans);
+			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans);
 		}
 	}
 }

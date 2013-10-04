@@ -15,18 +15,15 @@
 #undef __class__
 #define __class__	"Base"
 
-esvg::Base::Base(PaintState _parentPaintState)
-{
+esvg::Base::Base(PaintState _parentPaintState) {
 	// copy the parent painting properties ...
 	m_paint = _parentPaintState;
 }
 
-void esvg::Base::parseTransform(exml::Element* _element)
-{
+void esvg::Base::parseTransform(exml::Element* _element) {
 	if (NULL == _element) {
 		return;
 	}
-	
 	etk::UString inputString = _element->getAttribute("transform");
 	if (inputString.size() == 0) {
 		return;
@@ -89,8 +86,7 @@ void esvg::Base::parseTransform(exml::Element* _element)
  * @param[out] _pos parsed position
  * @param[out] _size parsed dimention
  */
-void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size)
-{
+void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
 	
@@ -121,8 +117,7 @@ void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<floa
  * @param[in] _dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-float esvg::Base::parseLength(const etk::UString& _dataInput)
-{
+float esvg::Base::parseLength(const etk::UString& _dataInput) {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.toFloat();
 	etk::UString unit;
@@ -166,8 +161,7 @@ float esvg::Base::parseLength(const etk::UString& _dataInput)
 }
 
 // return the next char position ... (after ';' or NULL)
-int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType, etk::UString& _outputData, int32_t _pos)
-{
+int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType, etk::UString& _outputData, int32_t _pos) {
 	_outputType = "";
 	_outputData = "";
 	if (_pos == -1) {
@@ -205,8 +199,7 @@ int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType,
  * @brief parse a Painting attribute of a specific node
  * @param[in] _element Basic node of the XML that might be parsed
  */
-void esvg::Base::parsePaintAttr(const exml::Element *_element)
-{
+void esvg::Base::parsePaintAttr(const exml::Element *_element) {
 	if (_element == NULL) {
 		return;
 	}
@@ -262,26 +255,26 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element)
 	content = _element->getAttribute("stroke-linecap");
 	if (content.size()!=0) {
 		if (content == "butt" ) {
-			m_paint.lineCap = esvg::LINECAP_BUTT;
+			m_paint.lineCap = esvg::lineCapButt;
 		} else if (content == "round" ) {
-			m_paint.lineCap = esvg::LINECAP_ROUND;
+			m_paint.lineCap = esvg::lineCapRound;
 		} else if (content == "square" ) {
-			m_paint.lineCap = esvg::LINECAP_SQUARE;
+			m_paint.lineCap = esvg::lineCapSquare;
 		} else {
-			m_paint.lineCap = esvg::LINECAP_BUTT;
+			m_paint.lineCap = esvg::lineCapButt;
 			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
 	content = _element->getAttribute("stroke-linejoin");
 	if (content.size()!=0) {
 		if (content == "miter" ) {
-			m_paint.lineJoin = esvg::LINEJOIN_MITER;
+			m_paint.lineJoin = esvg::lineJoinMiter;
 		} else if (content == "round" ) {
-			m_paint.lineJoin = esvg::LINEJOIN_ROUND;
+			m_paint.lineJoin = esvg::lineJoinRound;
 		} else if (content == "bevel" ) {
-			m_paint.lineJoin = esvg::LINEJOIN_BEVEL;
+			m_paint.lineJoin = esvg::lineJoinBevel;
 		} else {
-			m_paint.lineJoin = esvg::LINEJOIN_MITER;
+			m_paint.lineJoin = esvg::lineJoinMiter;
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
@@ -335,24 +328,24 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element)
 				}
 			} else if (outputType == "stroke-linecap") {
 				if (outputValue == "butt") {
-					m_paint.lineCap = esvg::LINECAP_BUTT;
+					m_paint.lineCap = esvg::lineCapButt;
 				} else if (outputValue == "round") {
-					m_paint.lineCap = esvg::LINECAP_ROUND;
+					m_paint.lineCap = esvg::lineCapRound;
 				} else if (outputValue == "square") {
-					m_paint.lineCap = esvg::LINECAP_SQUARE;
+					m_paint.lineCap = esvg::lineCapSquare;
 				} else {
-					m_paint.lineCap = esvg::LINECAP_BUTT;
+					m_paint.lineCap = esvg::lineCapButt;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [butt,round,square]");
 				}
 			} else if (outputType == "stroke-linejoin") {
 				if (outputValue == "miter") {
-					m_paint.lineJoin = esvg::LINEJOIN_MITER;
+					m_paint.lineJoin = esvg::lineJoinMiter;
 				} else if (outputValue == "round") {
-					m_paint.lineJoin = esvg::LINEJOIN_ROUND;
+					m_paint.lineJoin = esvg::lineJoinRound;
 				} else if (outputValue == "bevel") {
-					m_paint.lineJoin = esvg::LINEJOIN_BEVEL;
+					m_paint.lineJoin = esvg::lineJoinBevel;
 				} else {
-					m_paint.lineJoin = esvg::LINEJOIN_MITER;
+					m_paint.lineJoin = esvg::lineJoinMiter;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
 			} else if (outputType == "marker-start") {
@@ -376,8 +369,7 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element)
  * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color esvg::Base::parseColor(const etk::UString& _inputData)
-{
+draw::Color esvg::Base::parseColor(const etk::UString& _inputData) {
 	draw::Color localColor = draw::color::white;
 	
 	if(    _inputData.size() > 4
@@ -402,16 +394,14 @@ draw::Color esvg::Base::parseColor(const etk::UString& _inputData)
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool esvg::Base::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax)
-{
+bool esvg::Base::parse(exml::Element* _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
 	return false;
 }
 
 
-const char * esvg::Base::SpacingDist(int32_t _spacing)
-{
+const char * esvg::Base::spacingDist(int32_t _spacing) {
 	static const char *tmpValue = "                                                                                ";
 	if (_spacing>20) {
 		_spacing = 20;

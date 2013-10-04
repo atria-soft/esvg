@@ -11,8 +11,7 @@
 
 #include <esvg/Base.h>
 
-namespace esvg
-{
+namespace esvg {
 	
 };
 
