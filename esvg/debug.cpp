@@ -6,6 +6,6 @@
  * @license BSD v3 (see license file)
  */
 
-#include <esvg/Debug.h>
+#include <esvg/debug.h>
 
 const char * esvgLibName = "esvg     ";

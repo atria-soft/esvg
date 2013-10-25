@@ -10,7 +10,7 @@ def Create(target):
 	myModule.AddSrcFile([
 		'esvg/Base.cpp',
 		'esvg/Circle.cpp',
-		'esvg/Debug.cpp',
+		'esvg/debug.cpp',
 		'esvg/Ellipse.cpp',
 		'esvg/Group.cpp',
 		'esvg/Line.cpp',

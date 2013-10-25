@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <esvg/Debug.h>
+#include <esvg/debug.h>
 #include <esvg/Polygon.h>
 #include <agg/agg_conv_stroke.h>
 #include <agg/agg_path_storage.h>

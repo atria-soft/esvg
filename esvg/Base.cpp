@@ -7,7 +7,7 @@
  */
 
 
-#include <esvg/Debug.h>
+#include <esvg/debug.h>
 #include <esvg/Base.h>
 #include <math.h>
 

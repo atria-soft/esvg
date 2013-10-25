@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <esvg/Debug.h>
+#include <esvg/debug.h>
 #include <esvg/Group.h>
 #include <etk/UString.h>
 #include <esvg/Base.h>

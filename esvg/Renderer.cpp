@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <esvg/Debug.h>
+#include <esvg/debug.h>
 #include <esvg/Renderer.h>
 
 // 4 is for the RGBA ...
