@@ -58,7 +58,7 @@ namespace esvg {
 		public:
 			Renderer(uint32_t width, uint32_t height);
 			~Renderer(void);
-			void writePpm(etk::UString fileName);
+			void writePpm(std::string fileName);
 			etk::Vector2D<float> m_size;
 			agg::rendering_buffer * m_renderingBuffer;
 			agg::pixfmt_rgba32 * m_pixFrame;

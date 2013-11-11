@@ -41,7 +41,7 @@ bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parent
 	
 	parsePosition(_element, m_position, m_size);
 	
-	etk::UString content = _element->getAttribute("rx");
+	std::string content = _element->getAttribute("rx");
 	if (content.size()!=0) {
 		m_roundedCorner.setX(parseLength(content));
 	}

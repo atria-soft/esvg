@@ -38,7 +38,7 @@ namespace esvg {
 	};
 	class Path : public esvg::Base {
 		private:
-			etk::Vector<PathBasic> m_listElement;
+			std::vector<PathBasic> m_listElement;
 		public:
 			Path(PaintState _parentPaintState);
 			~Path(void);

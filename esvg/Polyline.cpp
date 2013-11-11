@@ -31,7 +31,7 @@ bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentT
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString sss1 = _element->getAttribute("points");
+	std::string sss1 = _element->getAttribute("points");
 	if (sss1.size() == 0) {
 		SVG_ERROR("(l "<<_element->getPos()<<") polyline: missing points attribute");
 		return false;
@@ -44,7 +44,7 @@ bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentT
 		etk::Vector2D<float> pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.pushBack(pos);
+			m_listPoint.push_back(pos);
 			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
 			                  etk_max(_sizeMax.y(), pos.y()));
 			sss += n;

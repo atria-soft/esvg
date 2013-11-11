@@ -24,7 +24,7 @@ void esvg::Base::parseTransform(exml::Element* _element) {
 	if (NULL == _element) {
 		return;
 	}
-	etk::UString inputString = _element->getAttribute("transform");
+	std::string inputString = _element->getAttribute("transform");
 	if (inputString.size() == 0) {
 		return;
 	}
@@ -93,7 +93,7 @@ void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<floa
 	if (NULL == _element) {
 		return;
 	}
-	etk::UString content = _element->getAttribute("x");
+	std::string content = _element->getAttribute("x");
 	if (content.size()!=0) {
 		_pos.setX(parseLength(content));
 	}
@@ -117,10 +117,10 @@ void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<floa
  * @param[in] _dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-float esvg::Base::parseLength(const etk::UString& _dataInput) {
+float esvg::Base::parseLength(const std::string& _dataInput) {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.toFloat();
-	etk::UString unit;
+	std::string unit;
 	for (int32_t iii=0; iii<_dataInput.size(); iii++) {
 		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
 		    || _dataInput[iii]<='+'
@@ -161,7 +161,7 @@ float esvg::Base::parseLength(const etk::UString& _dataInput) {
 }
 
 // return the next char position ... (after ';' or NULL)
-int32_t extractPartOfStyle(const etk::UString& _data, etk::UString& _outputType, etk::UString& _outputData, int32_t _pos) {
+int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, std::string& _outputData, int32_t _pos) {
 	_outputType = "";
 	_outputData = "";
 	if (_pos == -1) {
@@ -205,7 +205,7 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element) {
 	}
 	bool fillNone = false;
 	bool strokeNone = false;
-	etk::UString content = _element->getAttribute("fill");
+	std::string content = _element->getAttribute("fill");
 	if (content.size()!=0) {
 		m_paint.fill = parseColor(content);
 		if (m_paint.fill.a == 0) {
@@ -280,8 +280,8 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element) {
 	}
 	content = _element->getAttribute("style");
 	if (content.size()!=0) {
-		etk::UString outputType;
-		etk::UString outputValue;
+		std::string outputType;
+		std::string outputValue;
 		
 		for( int32_t sss=extractPartOfStyle(content, outputType, outputValue, 0);
 		     -2 != sss;
@@ -369,7 +369,7 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element) {
  * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color esvg::Base::parseColor(const etk::UString& _inputData) {
+draw::Color esvg::Base::parseColor(const std::string& _inputData) {
 	draw::Color localColor = draw::color::white;
 	
 	if(    _inputData.size() > 4

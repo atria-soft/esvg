@@ -35,7 +35,7 @@
 #define __class__ "Document"
 
 
-esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL) {
+esvg::Document::Document(const std::string& _fileName) : m_renderedElement(NULL) {
 	m_fileName = _fileName;
 	m_version = "0.0";
 	m_loadOK = true;
@@ -139,7 +139,7 @@ esvg::Document::Document(const etk::UString& _fileName) : m_renderedElement(NULL
 			maxSize.setY(size.y());
 		}
 		// add element in the system
-		m_subElementList.pushBack(elementParser);
+		m_subElementList.push_back(elementParser);
 	}
 	if (m_size.x() == 0 || m_size.y()==0) {
 		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
@@ -204,7 +204,7 @@ void esvg::Document::generateTestFile(void)
 	
 	
 	aggDraw(*m_renderedElement, basicTrans);
-	etk::UString tmpFileOut = "yyy_out_";
+	std::string tmpFileOut = "yyy_out_";
 	tmpFileOut += m_fileName;
 	tmpFileOut += ".ppm";
 	m_renderedElement->writePpm(tmpFileOut);
@@ -243,7 +243,7 @@ void esvg::Document::generateAnImage(int32_t _sizeX, int32_t _sizeY)
 	
 	aggDraw(*m_renderedElement, basicTrans);
 	/*
-	etk::UString tmpFileOut = "zzz_out_test.ppm";
+	std::string tmpFileOut = "zzz_out_test.ppm";
 	m_renderedElement->WritePpm(tmpFileOut);
 	*/
 }

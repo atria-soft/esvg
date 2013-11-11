@@ -92,7 +92,7 @@ bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTran
 				_sizeMax.setValue(etk_max(_sizeMax.x(), tmpPos.x()),
 				                  etk_max(_sizeMax.y(), tmpPos.y()));
 				// add element in the system
-				m_subElementList.pushBack(elementParser);
+				m_subElementList.push_back(elementParser);
 			}
 		}
 	}

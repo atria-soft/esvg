@@ -10,7 +10,7 @@
 #define __ESVG_BASE_H__
 
 #include <etk/types.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <etk/math/Vector2D.h>
 #include <draw/Color.h>
 
@@ -45,9 +45,9 @@ namespace esvg {
 			virtual void display(int32_t _spacing) { };
 			void parseTransform(exml::Element *_element);
 			void parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size);
-			float parseLength(const etk::UString& _dataInput);
+			float parseLength(const std::string& _dataInput);
 			void parsePaintAttr(const exml::Element *_element);
-			draw::Color parseColor(const etk::UString& _inputData);
+			draw::Color parseColor(const std::string& _inputData);
 	};
 };
 

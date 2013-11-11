@@ -10,12 +10,12 @@
 #define __ESVG_POLYLINE_H__
 
 #include <esvg/Base.h>
-#include <etk/Vector.h>
+#include <vector>
 
 namespace esvg {
 	class Polyline : public esvg::Base {
 		private:
-			etk::Vector<etk::Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
+			std::vector<etk::Vector2D<float> > m_listPoint;    //!< list of all point of the polyline
 		public:
 			Polyline(PaintState _parentPaintState);
 			~Polyline(void);

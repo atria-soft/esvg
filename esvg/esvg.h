@@ -10,7 +10,7 @@
 #define __ESVG_H__
 
 #include <etk/types.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <etk/math/Vector2D.h>
 #include <etk/os/FSNode.h>
 
@@ -20,15 +20,15 @@
 namespace esvg {
 	class Document : public esvg::Base {
 		private:
-			etk::UString m_fileName;
+			std::string m_fileName;
 			bool m_loadOK;
-			etk::UString m_version;
-			etk::UString m_title;
-			etk::Vector<esvg::Base *> m_subElementList;
+			std::string m_version;
+			std::string m_title;
+			std::vector<esvg::Base *> m_subElementList;
 			vec2 m_size;
 			esvg::Renderer* m_renderedElement;
 		public:
-			Document(const etk::UString& _fileName);
+			Document(const std::string& _fileName);
 			~Document(void);
 			bool isLoadOk(void) { return m_loadOK; };
 			void displayDebug(void);

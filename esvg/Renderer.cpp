@@ -75,7 +75,7 @@ esvg::Renderer::~Renderer(void) {
 // Writing the buffer to a .PPM file, assuming it has 
 // RGB-structure, one byte per color component
 //--------------------------------------------------
-void esvg::Renderer::writePpm(etk::UString fileName) {
+void esvg::Renderer::writePpm(std::string fileName) {
 	if (NULL == m_buffer) {
 		return;
 	}

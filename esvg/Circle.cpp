@@ -34,7 +34,7 @@ bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTra
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString content = _element->getAttribute("cx");
+	std::string content = _element->getAttribute("cx");
 	if (content.size()!=0) {
 		m_position.setX(parseLength(content));
 	}

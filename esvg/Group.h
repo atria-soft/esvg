@@ -10,12 +10,12 @@
 #define __ESVG_GROUP_H__
 
 #include <esvg/Base.h>
-#include <etk/Vector.h>
+#include <vector>
 
 namespace esvg {
 	class Group : public esvg::Base {
 		private:
-			etk::Vector<esvg::Base *> m_subElementList;  //!< group sub elements ...
+			std::vector<esvg::Base *> m_subElementList;  //!< group sub elements ...
 		public:
 			Group(PaintState _parentPaintState);
 			~Group(void);

@@ -10,7 +10,7 @@
 #define __ESVG_POLYGON_H__
 
 #include <esvg/Base.h>
-#include <etk/Vector.h>
+#include <vector>
 
 namespace esvg {
 	enum polygonMode {
@@ -19,7 +19,7 @@ namespace esvg {
 	};
 	class Polygon : public esvg::Base {
 		private:
-			etk::Vector<etk::Vector2D<float> > m_listPoint; //!< list of all point of the polygone
+			std::vector<etk::Vector2D<float> > m_listPoint; //!< list of all point of the polygone
 			enum esvg::polygonMode m_diplayMode; //!< polygone specific display mode
 		public:
 			Polygon(PaintState parentPaintState);

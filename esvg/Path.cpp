@@ -27,7 +27,7 @@ esvg::Path::~Path(void) {
 
 
 // return the next char position ... (after 'X' or NULL)
-const char * extractCmd(const char* _input, char& _cmd, etk::Vector<float>& _outputList) {
+const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _outputList) {
 	if (*_input == '\0') {
 		return NULL;
 	}
@@ -51,7 +51,7 @@ const char * extractCmd(const char* _input, char& _cmd, etk::Vector<float>& _out
 	while(    sscanf(&_input[iii], "%1[, ]%f%n", spacer, &element, &nbElementRead) == 2
 	       || sscanf(&_input[iii], "%f%n", &element, &nbElementRead) == 1) {
 		SVG_VERBOSE("Find element : " << element);
-		_outputList.pushBack(element);
+		_outputList.push_back(element);
 		iii += nbElementRead;
 	}
 	outputPointer = &_input[iii];
@@ -73,7 +73,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	m_transformMatrix *= _parentTrans;
 	
 	
-	etk::UString elementXML1 = _element->getAttribute("d");
+	std::string elementXML1 = _element->getAttribute("d");
 	if (elementXML1.size() == 0) {
 		SVG_ERROR("(l "<<_element->getPos()<<") path: missing 'p' attribute");
 		return false;
@@ -81,7 +81,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	SVG_VERBOSE("Parse Path : \"" << elementXML << "\"");
 	
 	char command;
-	etk::Vector<float> listDot;
+	std::vector<float> listDot;
 	
 	etk::Char plop = elementXML1.c_str();
 	const char* elementXML = plop;
@@ -119,13 +119,13 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 				if (listDot.size() >= 2) {
 					pathElement.m_element[0] = listDot[0];
 					pathElement.m_element[1] = listDot[1];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				pathElement.m_cmd = esvg::pathLineTo;
 				for(int32_t iii=2; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -140,7 +140,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -154,7 +154,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 				pathElement.m_cmd = esvg::pathLineToV;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.m_element[0] = listDot[iii];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -168,7 +168,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 				pathElement.m_cmd = esvg::pathLineToH;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.m_element[0] = listDot[iii];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -185,7 +185,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 					pathElement.m_element[1] = listDot[iii+1];
 					pathElement.m_element[2] = listDot[iii+2];
 					pathElement.m_element[3] = listDot[iii+3];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -200,7 +200,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -219,7 +219,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 					pathElement.m_element[3] = listDot[iii+3];
 					pathElement.m_element[4] = listDot[iii+4];
 					pathElement.m_element[5] = listDot[iii+5];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -236,7 +236,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 					pathElement.m_element[1] = listDot[iii+1];
 					pathElement.m_element[2] = listDot[iii+2];
 					pathElement.m_element[3] = listDot[iii+3];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 				
@@ -256,7 +256,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 					pathElement.m_element[4] = listDot[iii+4];
 					pathElement.m_element[5] = listDot[iii+5];
 					pathElement.m_element[6] = listDot[iii+6];
-					m_listElement.pushBack(pathElement);
+					m_listElement.push_back(pathElement);
 				}
 				break;
 			case 'Z': // closepath (absolute)
@@ -267,7 +267,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 					break;
 				}
 				pathElement.m_cmd = esvg::pathStop;
-				m_listElement.pushBack(pathElement);
+				m_listElement.push_back(pathElement);
 				break;
 			default:
 				SVG_ERROR ("Unknow error : \"" << command << "\"");

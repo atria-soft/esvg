@@ -35,7 +35,7 @@ bool esvg::Ellipse::parse(exml::Element * _element, agg::trans_affine& _parentTr
 	m_c.setValue(0,0);
 	m_r.setValue(0,0);
 	
-	etk::UString content = _element->getAttribute("cx");
+	std::string content = _element->getAttribute("cx");
 	if (content.size()!=0) {
 		m_c.setX(parseLength(content));
 	}

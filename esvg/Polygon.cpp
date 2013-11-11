@@ -36,7 +36,7 @@ bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTr
 	
 	SVG_VERBOSE("parsed P2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
-	const etk::UString sss1 = _element->getAttribute("points");
+	const std::string sss1 = _element->getAttribute("points");
 	if (sss1.size() == 0) {
 		SVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
@@ -49,7 +49,7 @@ bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTr
 		vec2 pos(0,0);
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.pushBack(pos);
+			m_listPoint.push_back(pos);
 			sss += n;
 			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
 			                  etk_max(_sizeMax.y(), pos.y()));

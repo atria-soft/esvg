@@ -35,7 +35,7 @@ bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	etk::UString content = _element->getAttribute("x1");
+	std::string content = _element->getAttribute("x1");
 	if (content.size()!=0) {
 		m_startPos.setX(parseLength(content));
 	}
