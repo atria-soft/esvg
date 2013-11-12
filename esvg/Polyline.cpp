@@ -38,8 +38,7 @@ bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentT
 	}
 	_sizeMax.setValue(0,0);
 	SVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
-	etk::Char sss2 = sss1.c_str();
-	const char* sss = sss2;
+	const char* sss = sss1.c_str();
 	while ('\0' != sss[0]) {
 		etk::Vector2D<float> pos;
 		int32_t n;

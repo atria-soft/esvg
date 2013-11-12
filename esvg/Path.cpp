@@ -34,7 +34,10 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	_outputList.clear();
 	_cmd = '\0';
 	const char * outputPointer = NULL;
-	if (!( (_input[0] <= 'Z' && _input[0] >= 'A') || (_input[0] <= 'z' && _input[0] >= 'a') ) ) {
+	if (!(    (    _input[0] <= 'Z'
+	            && _input[0] >= 'A')
+	       || (    _input[0] <= 'z'
+	            && _input[0] >= 'a') ) ) {
 		SVG_ERROR("Error in the SVG Path : \"" << _input << "\"");
 		return NULL;
 	}
@@ -83,8 +86,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	char command;
 	std::vector<float> listDot;
 	
-	etk::Char plop = elementXML1.c_str();
-	const char* elementXML = plop;
+	const char* elementXML = elementXML1.c_str();
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
 	     NULL != sss;

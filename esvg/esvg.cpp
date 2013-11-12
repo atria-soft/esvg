@@ -35,7 +35,8 @@
 #define __class__ "Document"
 
 
-esvg::Document::Document(const std::string& _fileName) : m_renderedElement(NULL) {
+esvg::Document::Document(const std::string& _fileName) :
+  m_renderedElement(NULL) {
 	m_fileName = _fileName;
 	m_version = "0.0";
 	m_loadOK = true;
@@ -62,7 +63,7 @@ esvg::Document::Document(const std::string& _fileName) : m_renderedElement(NULL)
 		return;
 	}
 	
-	exml::Element* root = (exml::Element*)doc.getNamed( "svg" );
+	exml::Element* root = (exml::Element*)doc.getNamed("svg" );
 	if (NULL == root ) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
 		m_loadOK = false;

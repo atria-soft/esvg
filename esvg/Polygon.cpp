@@ -41,8 +41,7 @@ bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTr
 		SVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
 	}
-	etk::Char sss2 = sss1.c_str();
-	const char * sss = sss2;
+	const char * sss = sss1.c_str();
 	_sizeMax.setValue(0,0);
 	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {

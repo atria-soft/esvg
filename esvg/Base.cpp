@@ -38,8 +38,7 @@ void esvg::Base::parseTransform(exml::Element* _element) {
 	double matrix[6];
 	float angle, xxx, yyy;
 	int32_t n;
-	etk::Char myData = inputString.c_str();
-	const char * pointerOnData = myData;
+	const char * pointerOnData = inputString.c_str();
 	while (*pointerOnData) {
 		if (sscanf(pointerOnData, "matrix (%lf %lf %lf %lf %lf %lf) %n", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5], &n) == 6) {
 			m_transformMatrix.load_from(matrix);
@@ -119,7 +118,7 @@ void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<floa
  */
 float esvg::Base::parseLength(const std::string& _dataInput) {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
-	float n = _dataInput.toFloat();
+	float n = stof(_dataInput);
 	std::string unit;
 	for (int32_t iii=0; iii<_dataInput.size(); iii++) {
 		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
@@ -128,7 +127,7 @@ float esvg::Base::parseLength(const std::string& _dataInput) {
 		    || _dataInput[iii]<='.') {
 			continue;
 		}
-		unit = _dataInput.extract(iii-1);
+		unit = std::string(_dataInput, iii-1);
 	}
 	//SVG_INFO("           == > ?? = " << n );
 	float font_size = 20.0f;
