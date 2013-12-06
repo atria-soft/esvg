@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>esvg Library</title>
+	<link rel="stylesheet" href="base.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1>esvg Library</h1>
+				<li>esvg</li>
+				<ul>
+				<li><a href="esvg__Base.html">Base</a></li>
+				<li><a href="esvg__Circle.html">Circle</a></li>
+				<li><a href="esvg__Document.html">Document</a></li>
+				<li><a href="esvg__Ellipse.html">Ellipse</a></li>
+				<li><a href="esvg__Group.html">Group</a></li>
+				<li><a href="esvg__Line.html">Line</a></li>
+				<li><a href="esvg__PaintState.html">PaintState</a></li>
+				<li><a href="esvg__Path.html">Path</a></li>
+				<li><a href="esvg__PathBasic.html">PathBasic</a></li>
+				<li><a href="esvg__Polygon.html">Polygon</a></li>
+				<li><a href="esvg__Polyline.html">Polyline</a></li>
+				<li><a href="esvg__Rectangle.html">Rectangle</a></li>
+				<li><a href="esvg__Renderer.html">Renderer</a></li>
+				<li><a href="esvg__Text.html">Text</a></li>
+				</ul>
+				<li><a href="esvg__lineCap.html">lineCap</a></li>
+				<li><a href="esvg__lineJoin.html">lineJoin</a></li>
+				<li><a href="esvg__pathProperty.html">pathProperty</a></li>
+				<li><a href="esvg__polygonMode.html">polygonMode</a></li>
+				</ul>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>Class: esvg::Polygon</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Polygon">Polygon</a>  (Pa<span class="code-type">int</span>State <span class="code-argument">parentPaintState</span>);<br>+       ~<a class="code-function" href="#Polygon">Polygon</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>  <a class="code-function" href="#parse">parse</a>    (<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_element</span>,<br/>                   agg::trans_affine & <span class="code-argument">parentTrans</span>,<br/>                   etk::Vector2D<<span class="code-type">float</span>> & <span class="code-argument">sizeMax</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#display">display</a>  (<span class="code-type">int32_t</span> <span class="code-argument">spacing</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#aggDraw">aggDraw</a>  (<a href="esvg__Renderer.html" class="code-type">esvg::Renderer</a> & <span class="code-argument">myRenderer</span>,<br/>                   agg::trans_affine & <span class="code-argument">basicTrans</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="esvg__Base.html">esvg::Base</a>
+    +--> <b>esvg::Polygon</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3>esvg::<a id="Polygon">Polygon</a> ()</h3>
+
+<pre>
+<span class="code-function">Polygon</span>(Pa<span class="code-type">int</span>State <span class="code-argument">parentPaintState</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>esvg::~<a id="Polygon">Polygon</a> ()</h3>
+
+<pre>
+~<span class="code-function">Polygon</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="parse">parse</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">parse</span>(<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_element</span>,
+           agg::trans_affine & <span class="code-argument">parentTrans</span>,
+           etk::Vector2D<<span class="code-type">float</span>> & <span class="code-argument">sizeMax</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="display">display</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">display</span>(<span class="code-type">int32_t</span> <span class="code-argument">spacing</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="aggDraw">aggDraw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">aggDraw</span>(<a href="esvg__Renderer.html" class="code-type">esvg::Renderer</a> & <span class="code-argument">myRenderer</span>,
+             agg::trans_affine & <span class="code-argument">basicTrans</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
+</body>
+</html>
