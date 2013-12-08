@@ -6,7 +6,7 @@ def Create(target):
 	myModule = lutinModule.module(__file__, 'esvg', 'LIBRARY')
 	# enable doculentation :
 	myModule.doc_enable()
-	myModule.documentation.set_website("http://HeeroYui.github.io/esvg/doc/doc/")
+	myModule.documentation.set_website("http://HeeroYui.github.io/esvg/")
 	myModule.documentation.set_path(lutinTools.GetCurrentPath(__file__) + "/esvg/")
 	myModule.documentation.set_external_link(['etk', 'agg', 'exml'])
 	
