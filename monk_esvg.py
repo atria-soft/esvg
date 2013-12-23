@@ -2,6 +2,10 @@
 import monkModule as module
 import monkTools as tools
 
+def get_desc():
+	return "e-svg SVG image parser and generator"
+
+
 def create():
 	# module name is 'edn' and type binary.
 	myModule = module.Module(__file__, 'esvg', 'LIBRARY')
@@ -10,6 +14,3 @@ def create():
 	myModule.set_path(tools.get_current_path(__file__) + "/esvg/")
 	# add the currrent module at the 
 	return myModule
-
-def get_desc():
-	return ""
