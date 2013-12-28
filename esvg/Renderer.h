@@ -9,7 +9,7 @@
 #ifndef __ESVG_RENDERER_H__
 #define __ESVG_RENDERER_H__
 
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/math/Vector2D.h>
 #include <draw/Color.h>
 

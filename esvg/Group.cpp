@@ -8,7 +8,7 @@
 
 #include <esvg/debug.h>
 #include <esvg/Group.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <esvg/Base.h>
 #include <esvg/Circle.h>
 #include <esvg/Ellipse.h>
