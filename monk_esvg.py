@@ -11,6 +11,7 @@ def create():
 	myModule = module.Module(__file__, 'esvg', 'LIBRARY')
 	# enable doculentation :
 	myModule.set_website("http://heeroyui.github.io/esvg/")
+	myModule.set_website_sources("http://github.com/heeroyui/esvg/")
 	myModule.set_path(tools.get_current_path(__file__) + "/esvg/")
 	# add the currrent module at the 
 	return myModule
