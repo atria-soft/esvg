@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>esvg Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">esvg library</a></h1>
+			<h4><a href="http://github.com/heeroyui/esvg/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li><a href="namespace_esvg.html">esvg</a>
+	</li>
+</ul>
+			</div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ewol/index.html">ewol</a></li>
+</ul><ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: esvg::Circle</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                              <a class="code-function" href="#7272">Circle</a>     (PaintState <span class="code-argument">_parentPaintState</span>);<br/>+                              <a class="code-function" href="#7274">~Circle</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                 <a class="code-function" href="#7276">parse</a>      (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                           agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                                           <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                 <a class="code-function" href="#7280">display</a>    (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                 <a class="code-function" href="#7282">aggDraw</a>    (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                           agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_esvg__Base.html">esvg::Base</a><br/>  +--> esvg::Circle<br/></pre>
+<h2>Detail:</h2>
+<a id="7272"/><a id="7274"/><h3>Circle</h3><pre>
++  <span class="code-function">Circle</span> (PaintState <span class="code-argument">_parentPaintState</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="7276"/><h3>~Circle</h3><pre>
++  <span class="code-function">~Circle</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="7280"/><h3>parse</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">parse</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                      agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                      <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="7282"/><h3>display</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">display</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>aggDraw</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">aggDraw</span> (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                        agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

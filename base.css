@@ -56,13 +56,14 @@ body {
 	padding: 10px 20px 10px;
 	margin-left: -20px;
 	overflow:scroll;
+	overflow-y:auto;
 	overflow-x:hidden;
 }
-/*
-.navbar ul {
-	font-size: 15px;
-};
-*/
+.navbar-fixed-top a {
+	text-decoration: none;
+	color: #000000;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	display: block;
 	margin: 10px 0;
@@ -95,7 +96,15 @@ pre {
 	border-radius: 4px;
 }
 
+.enumeration-list td {
+	padding-left:10px;
+	padding-right:10px;
+}
 
+.parameter-list td {
+	padding-left:5px;
+	padding-right:5px;
+}
 
 .code-function {
 	text-decoration:none;
@@ -128,4 +137,67 @@ pre {
 .code-storage-keyword {
 	text-decoration:none;
 	color:#466cb4;
+}
+
+.code-doxygen {
+	text-decoration:none;
+	color:#bf3e00;
+	font-weight:bold;
+}
+
+.code-comment {
+	text-decoration:none;
+	color:#b704b5;
+}
+
+.code-preproc {
+	text-decoration:none;
+	color:#ac0000;
+}
+
+.code-text-quote {
+	text-decoration:none;
+	color:#008e00;
+}
+.code-number {
+	text-decoration:none;
+	color:#007b00;
+}
+.code-member {
+	text-decoration:none;
+	color:#7c5406;
+}
+.code-input-function {
+	text-decoration:none;
+	color:#B80000;
+	font-weight:bold;
+}
+.code-function-name {
+	text-decoration:none;
+	color:#09857e;
+	font-weight:bold;
+}
+.code-function-system {
+	text-decoration:none;
+	color:#acaa00;
+}
+.code-generic-define {
+	text-decoration:none;
+	color:#3c850b;
+}
+.code-macro {
+	text-decoration:none;
+	color:#3c850b;
+}
+.code-operator {
+	text-decoration:none;
+	color:#1633a3;
+}
+.code-keyword {
+	text-decoration:none;
+	color:#466cb4;
+}
+.code-class {
+	text-decoration:none;
+	color:#006cb4;
 }
