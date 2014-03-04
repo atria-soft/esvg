@@ -28,23 +28,45 @@ include_directories(.)
 #Create src file list
 set(src_files
 	esvg/Base.cpp
+	esvg/Base.h
 	esvg/Circle.cpp
+	esvg/Circle.h
 	esvg/debug.cpp
+	esvg/debug.h
 	esvg/Ellipse.cpp
+	esvg/Ellipse.h
 	esvg/Group.cpp
+	esvg/Group.h
 	esvg/Line.cpp
+	esvg/Line.h
 	esvg/esvg.cpp
+	esvg/esvg.h
 	esvg/Path.cpp
+	esvg/Path.h
 	esvg/Polygon.cpp
+	esvg/Polygon.h
 	esvg/Polyline.cpp
+	esvg/Polyline.h
 	esvg/Rectangle.cpp
+	esvg/Rectangle.h
 	esvg/Renderer.cpp
+	esvg/Renderer.h
 	esvg/Stroking.cpp
+	esvg/Stroking.h
 	esvg/Text.cpp
+	esvg/Text.h
 )
 
 add_definitions( -DDEBUG_LEVEL=3 )
 add_definitions( -DDEBUG=1 )
+if (APPLE)
+	add_definitions( -D__TARGET_OS__MacOs )
+elseif (UNIX)
+	add_definitions( -D__TARGET_OS__Linux )
+elseif (WIN32)
+	add_definitions( -D__TARGET_OS__Windows )
+endif ()
+
 
 include_directories(${etk_SOURCE_DIR})
 include_directories(${linearmath_SOURCE_DIR}/bullet/src/)

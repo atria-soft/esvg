@@ -13,14 +13,16 @@
 #include <vector>
 
 namespace esvg {
+	/*
 	enum polygonMode {
 		polygoneModeNonZero,
 		polygoneModeEvenOdd
 	};
+	*/
 	class Polygon : public esvg::Base {
 		private:
 			std::vector<etk::Vector2D<float> > m_listPoint; //!< list of all point of the polygone
-			enum esvg::polygonMode m_diplayMode; //!< polygone specific display mode
+			//enum esvg::polygonMode m_diplayMode; //!< polygone specific display mode
 		public:
 			Polygon(PaintState parentPaintState);
 			~Polygon(void);

@@ -166,10 +166,6 @@ int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, s
 	if (_pos == -1) {
 		return -2;
 	}
-	int32_t typeStart = _pos;
-	int32_t typeStop = _pos;
-	int32_t dataStart = _pos;
-	int32_t dataStop = _pos;
 	bool processFirst=true;
 	//SVG_DEBUG("parse : '" << _data.Extract(_pos) << "'");
 	for( int32_t iii=_pos; iii<_data.size(); iii++) {
