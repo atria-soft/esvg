@@ -9,20 +9,44 @@
 #ifndef __ESVG_DEBUG_H__
 #define __ESVG_DEBUG_H__
 
-#include <etk/types.h>
-#include <etk/debugGeneric.h>
+#include <etk/log.h>
 
-extern const char * esvgLibName;
+namespace esvg {
+	int32_t getLogId(void);
+};
+// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
+#define SVG_BASE(info,data) \
+	do { \
+		if (info <= etk::log::getLevel(esvg::getLogId())) { \
+			std::stringbuf sb; \
+			std::ostream tmpStream(&sb); \
+			tmpStream << data; \
+			etk::log::logStream(esvg::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
+		} \
+	} while(0)
 
-#define SVG_CRITICAL(data)			ETK_CRITICAL(esvgLibName, data)
-#define SVG_WARNING(data)			ETK_WARNING(esvgLibName, data)
-#define SVG_ERROR(data)				ETK_ERROR(esvgLibName, data)
-#define SVG_INFO(data)				ETK_INFO(esvgLibName, data)
-#define SVG_DEBUG(data)				ETK_DEBUG(esvgLibName, data)
-#define SVG_VERBOSE(data)			ETK_VERBOSE(esvgLibName, data)
-#define SVG_ASSERT(cond, data)		ETK_ASSERT(esvgLibName, cond, data)
-#define SVG_CHECK_INOUT(cond)		ETK_CHECK_INOUT(esvgLibName, cond)
-#define SVG_TODO(cond)				ETK_TODO(esvgLibName, cond)
+#define SVG_CRITICAL(data)      SVG_BASE(1, data)
+#define SVG_ERROR(data)         SVG_BASE(2, data)
+#define SVG_WARNING(data)       SVG_BASE(3, data)
+#ifdef DEBUG
+	#define SVG_INFO(data)          SVG_BASE(4, data)
+	#define SVG_DEBUG(data)         SVG_BASE(5, data)
+	#define SVG_VERBOSE(data)       SVG_BASE(6, data)
+	#define SVG_TODO(data)          SVG_BASE(4, "TODO : " << data)
+#else
+	#define SVG_INFO(data)          do { } while(false)
+	#define SVG_DEBUG(data)         do { } while(false)
+	#define SVG_VERBOSE(data)       do { } while(false)
+	#define SVG_TODO(data)          do { } while(false)
+#endif
+
+#define SVG_ASSERT(cond,data) \
+	do { \
+		if (!(cond)) { \
+			SVG_CRITICAL(data); \
+			assert(!#cond); \
+		} \
+	} while (0)
 
 #endif
 

@@ -81,7 +81,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 		SVG_ERROR("(l "<<_element->getPos()<<") path: missing 'p' attribute");
 		return false;
 	}
-	SVG_VERBOSE("Parse Path : \"" << elementXML << "\"");
+	SVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");
 	
 	char command;
 	std::vector<float> listDot;

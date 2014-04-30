@@ -8,4 +8,8 @@
 
 #include <esvg/debug.h>
 
-const char * esvgLibName = "esvg     ";
+int32_t esvg::getLogId(void) {
+	static int32_t g_val = etk::log::registerInstance("esvg");
+	return g_val;
+}
+
