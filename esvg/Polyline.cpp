@@ -15,7 +15,7 @@ esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaint
 	
 }
 
-esvg::Polyline::~Polyline(void) {
+esvg::Polyline::~Polyline() {
 	
 }
 

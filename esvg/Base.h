@@ -35,9 +35,9 @@ namespace esvg {
 			agg::trans_affine m_transformMatrix; //!< specific render of the curent element
 			const char * spacingDist(int32_t _spacing);
 		public:
-			Base(void) {};
+			Base() {};
 			Base(PaintState _parentPaintState);
-			virtual ~Base(void) { };
+			virtual ~Base() { };
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			//specific drawing for AAG librairy ...
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };

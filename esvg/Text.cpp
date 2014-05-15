@@ -16,7 +16,7 @@ esvg::Text::Text(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Text::~Text(void) {
+esvg::Text::~Text() {
 	
 }
 

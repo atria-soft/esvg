@@ -25,7 +25,7 @@ namespace esvg {
 			//enum esvg::polygonMode m_diplayMode; //!< polygone specific display mode
 		public:
 			Polygon(PaintState parentPaintState);
-			~Polygon(void);
+			~Polygon();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void display(int32_t spacing);
 			virtual void aggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);

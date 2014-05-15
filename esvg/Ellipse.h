@@ -18,7 +18,7 @@ namespace esvg {
 			etk::Vector2D<float> m_r; //!< Radius property of the ellipse
 		public:
 			Ellipse(PaintState _parentPaintState);
-			~Ellipse(void);
+			~Ellipse();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);

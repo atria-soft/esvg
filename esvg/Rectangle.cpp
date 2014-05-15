@@ -21,7 +21,7 @@ esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPai
 	m_roundedCorner.setValue(0,0);
 }
 
-esvg::Rectangle::~Rectangle(void) {
+esvg::Rectangle::~Rectangle() {
 	
 }
 

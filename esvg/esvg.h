@@ -29,17 +29,17 @@ namespace esvg {
 			esvg::Renderer* m_renderedElement;
 		public:
 			Document(const std::string& _fileName);
-			~Document(void);
-			bool isLoadOk(void) { return m_loadOK; };
-			void displayDebug(void);
-			void generateTestFile(void);
+			~Document();
+			bool isLoadOk() { return m_loadOK; };
+			void displayDebug();
+			void generateTestFile();
 			void generateAnImage(int32_t _sizeX, int32_t _sizeY);
 			void generateAnImage(ivec2 _size, draw::Image& _output);
 			void generateAnImage(draw::Image& _output);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
-			uint8_t* getPointerOnData(void);
-			uint32_t getSizeOnData(void);
-			vec2 getDefinedSize(void) { return m_size;};
+			uint8_t* getPointerOnData();
+			uint32_t getSizeOnData();
+			vec2 getDefinedSize() { return m_size;};
 	};
 };
 

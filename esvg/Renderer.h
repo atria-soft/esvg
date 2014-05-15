@@ -57,7 +57,7 @@ namespace esvg {
 			uint32_t m_allocatedSize;
 		public:
 			Renderer(uint32_t width, uint32_t height);
-			~Renderer(void);
+			~Renderer();
 			void writePpm(std::string fileName);
 			etk::Vector2D<float> m_size;
 			agg::rendering_buffer * m_renderingBuffer;
@@ -66,8 +66,8 @@ namespace esvg {
 			rendererSolid_t * m_renderArea;
 			agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
 			agg::scanline_p8 m_scanLine;    //!< 
-			uint8_t* getDataPointer(void) { return m_buffer; };
-			uint32_t getDataSize(void) { return m_allocatedSize; };
+			uint8_t* getDataPointer() { return m_buffer; };
+			uint32_t getDataSize() { return m_allocatedSize; };
 	};
 };
 

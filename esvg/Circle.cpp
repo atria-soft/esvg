@@ -18,7 +18,7 @@ esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintStat
 	
 }
 
-esvg::Circle::~Circle(void) {
+esvg::Circle::~Circle() {
 	
 }
 

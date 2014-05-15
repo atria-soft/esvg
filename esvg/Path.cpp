@@ -21,7 +21,7 @@ esvg::Path::Path(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
 
-esvg::Path::~Path(void) {
+esvg::Path::~Path() {
 	
 }
 

@@ -15,7 +15,7 @@ namespace esvg {
 	class Text : public esvg::Base {
 		public:
 			Text(PaintState _parentPaintState);
-			~Text(void);
+			~Text();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t _spacing);
 	};

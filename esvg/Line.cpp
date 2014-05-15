@@ -19,7 +19,7 @@ esvg::Line::Line(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_stopPos.setValue(0,0);
 }
 
-esvg::Line::~Line(void) {
+esvg::Line::~Line() {
 	
 }
 

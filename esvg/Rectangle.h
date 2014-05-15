@@ -19,7 +19,7 @@ namespace esvg {
 			etk::Vector2D<float> m_roundedCorner; //!< property of the rounded corner
 		public:
 			Rectangle(PaintState _parentPaintState);
-			~Rectangle(void);
+			~Rectangle();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);

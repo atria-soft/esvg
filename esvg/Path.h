@@ -27,7 +27,7 @@ namespace esvg {
 	};
 	class PathBasic {
 		public:
-			PathBasic(void) : m_cmd(esvg::pathStop), m_relative(false) {
+			PathBasic() : m_cmd(esvg::pathStop), m_relative(false) {
 				for(int32_t iii=0; iii<7; ++iii) {
 					m_element[iii] = 0;
 				}
@@ -41,7 +41,7 @@ namespace esvg {
 			std::vector<PathBasic> m_listElement;
 		public:
 			Path(PaintState _parentPaintState);
-			~Path(void);
+			~Path();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);

@@ -18,7 +18,7 @@ esvg::Ellipse::Ellipse(PaintState _parentPaintState) : esvg::Base(_parentPaintSt
 	
 }
 
-esvg::Ellipse::~Ellipse(void) {
+esvg::Ellipse::~Ellipse() {
 	
 }
 

@@ -27,7 +27,7 @@ esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState)
 	
 }
 
-esvg::Group::~Group(void) {
+esvg::Group::~Group() {
 	
 }
 

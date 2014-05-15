@@ -150,7 +150,7 @@ esvg::Document::Document(const std::string& _fileName) :
 	//DisplayDebug();
 }
 
-esvg::Document::~Document(void) {
+esvg::Document::~Document() {
 	if(NULL != m_renderedElement) {
 		delete(m_renderedElement);
 		m_renderedElement = NULL;
@@ -159,7 +159,7 @@ esvg::Document::~Document(void) {
 
 
 
-void esvg::Document::displayDebug(void) {
+void esvg::Document::displayDebug() {
 	SVG_DEBUG("Main SVG node : size=" << m_size);
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
@@ -179,7 +179,7 @@ void esvg::Document::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _ba
 }
 
 
-void esvg::Document::generateTestFile(void)
+void esvg::Document::generateTestFile()
 {
 	int32_t sizeX = m_size.x();
 	if (sizeX == 0) {
@@ -269,7 +269,7 @@ void esvg::Document::generateAnImage(ivec2 _size, draw::Image& _output)
 	}
 }
 
-uint8_t* esvg::Document::getPointerOnData(void)
+uint8_t* esvg::Document::getPointerOnData()
 {
 	if(NULL == m_renderedElement) {
 		return NULL;
@@ -277,7 +277,7 @@ uint8_t* esvg::Document::getPointerOnData(void)
 	return m_renderedElement->getDataPointer();
 }
 
-uint32_t esvg::Document::getSizeOnData(void)
+uint32_t esvg::Document::getSizeOnData()
 {
 	if(NULL == m_renderedElement) {
 		return 0;

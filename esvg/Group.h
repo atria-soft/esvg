@@ -18,7 +18,7 @@ namespace esvg {
 			std::vector<esvg::Base *> m_subElementList;  //!< group sub elements ...
 		public:
 			Group(PaintState _parentPaintState);
-			~Group(void);
+			~Group();
 			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);

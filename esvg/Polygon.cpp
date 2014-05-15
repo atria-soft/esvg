@@ -18,7 +18,7 @@ esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintStat
 	
 }
 
-esvg::Polygon::~Polygon(void) {
+esvg::Polygon::~Polygon() {
 	
 }
 

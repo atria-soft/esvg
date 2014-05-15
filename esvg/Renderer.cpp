@@ -65,7 +65,7 @@ esvg::Renderer::Renderer(uint32_t width, uint32_t height) {
 	//m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
 }
 
-esvg::Renderer::~Renderer(void) {
+esvg::Renderer::~Renderer() {
 	if (NULL != m_buffer) {
 		delete[] m_buffer;
 		m_buffer = NULL;
