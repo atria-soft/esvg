@@ -44,8 +44,8 @@ bool esvg::Polyline::parse(exml::Element * _element, agg::trans_affine& _parentT
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.push_back(pos);
-			_sizeMax.setValue(etk_max(_sizeMax.x(), pos.x()),
-			                  etk_max(_sizeMax.y(), pos.y()));
+			_sizeMax.setValue(std::max(_sizeMax.x(), pos.x()),
+			                  std::max(_sizeMax.y(), pos.y()));
 			sss += n;
 		} else {
 			break;

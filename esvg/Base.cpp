@@ -221,20 +221,20 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element) {
 	content = _element->getAttribute("opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		opacity  = std::avg(0.0f, opacity, 1.0f);
 		m_paint.fill.a = opacity*0xFF;
 		m_paint.stroke.a = opacity*0xFF;
 	}
 	content = _element->getAttribute("fill-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		opacity  = std::avg(0.0f, opacity, 1.0f);
 		m_paint.fill.a = opacity*0xFF;
 	}
 	content = _element->getAttribute("stroke-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		opacity  = std::avg(0.0f, opacity, 1.0f);
 		m_paint.stroke.a = opacity*0xFF;
 	}
 	content = _element->getAttribute("fill-rule");
@@ -299,18 +299,18 @@ void esvg::Base::parsePaintAttr(const exml::Element *_element) {
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.strokeWidth);
 			} else if (outputType == "opacity" ) {
 				float opacity = parseLength(outputValue);
-				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				opacity  = std::avg(0.0f, opacity, 1.0f);
 				m_paint.fill.a = opacity*0xFF;
 				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "fill-opacity") {
 				float opacity = parseLength(outputValue);
-				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				opacity  = std::avg(0.0f, opacity, 1.0f);
 				m_paint.fill.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "stroke-opacity") {
 				float opacity = parseLength(outputValue);
-				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				opacity  = std::avg(0.0f, opacity, 1.0f);
 				m_paint.stroke.a = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
 			} else if (outputType == "fill-rule" ) {

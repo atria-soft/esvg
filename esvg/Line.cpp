@@ -51,8 +51,8 @@ bool esvg::Line::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	if (content.size()!=0) {
 		m_stopPos.setY(parseLength(content));
 	}
-	_sizeMax.setValue(etk_max(m_startPos.x(), m_stopPos.x()),
-	                  etk_max(m_startPos.y(), m_stopPos.y()));
+	_sizeMax.setValue(std::max(m_startPos.x(), m_stopPos.x()),
+	                  std::max(m_startPos.y(), m_stopPos.y()));
 	return true;
 }
 
