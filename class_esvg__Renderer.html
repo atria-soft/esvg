@@ -39,82 +39,82 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                               <a class="code-function" href="#7181">Renderer</a>          (<span class="code-type" >uint32_t</span> <span class="code-argument">width</span>,<br/>                                                   <span class="code-type" >uint32_t</span> <span class="code-argument">height</span>);<br/>+                               <a class="code-function" href="#7184">~Renderer</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                               <a class="code-function" href="#5330">Renderer</a>          (<span class="code-type" >uint32_t</span> <span class="code-argument">width</span>,<br/>                                                   <span class="code-type" >uint32_t</span> <span class="code-argument">height</span>);<br/>+                               <a class="code-function" href="#5333">~Renderer</a>         ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-type" >void</span>                          <a class="code-function" href="#7186">writePpm</a>          (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">fileName</span>);<br/>+ <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt;          <a class="code-member" href="#7188">m_size</a>;<br/>+ agg::rendering_buffer*        <a class="code-member" href="#7189">m_renderingBuffer</a>;<br/>+ agg::pixfmt_rgba32*           <a class="code-member" href="#7190">m_pixFrame</a>;<br/>+ rendererBase_t*               <a class="code-member" href="#7191">m_renderBase</a>;<br/>+ rendererSolid_t*              <a class="code-member" href="#7192">m_renderArea</a>;<br/>+ agg::rasterizer_scanline_aa&lt;&gt; <a class="code-member" href="#7193">m_rasterizer</a>;<br/>+ agg::scanline_p8              <a class="code-member" href="#7194">m_scanLine</a>;<br/>+ <span class="code-type" >uint8_t</span>*                      <a class="code-function" href="#7195">getDataPointer</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >uint32_t</span>                      <a class="code-function" href="#7197">getDataSize</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >void</span>                          <a class="code-function" href="#5334">writePpm</a>          (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">fileName</span>);<br/>+ <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt;          <a class="code-member" href="#5336">m_size</a>;<br/>+ agg::rendering_buffer*        <a class="code-member" href="#5337">m_renderingBuffer</a>;<br/>+ agg::pixfmt_rgba32*           <a class="code-member" href="#5338">m_pixFrame</a>;<br/>+ rendererBase_t*               <a class="code-member" href="#5339">m_renderBase</a>;<br/>+ rendererSolid_t*              <a class="code-member" href="#5340">m_renderArea</a>;<br/>+ agg::rasterizer_scanline_aa&lt;&gt; <a class="code-member" href="#5341">m_rasterizer</a>;<br/>+ agg::scanline_p8              <a class="code-member" href="#5342">m_scanLine</a>;<br/>+ <span class="code-type" >uint8_t</span>*                      <a class="code-function" href="#5343">getDataPointer</a>    ();<br/>+ <span class="code-type" >uint32_t</span>                      <a class="code-function" href="#5344">getDataSize</a>       ();<br/></pre>
 <br/>
 <h2>Detail:</h2>
-<a id="7181"/><a id="7184"/><h3>Renderer</h3><pre>
+<a id="5330"/><a id="5333"/><h3>Renderer</h3><pre>
 +  <span class="code-function">Renderer</span> (<span class="code-type" >uint32_t</span> <span class="code-argument">width</span>,<br/>             <span class="code-type" >uint32_t</span> <span class="code-argument">height</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7186"/><h3>~Renderer</h3><pre>
-+  <span class="code-function">~Renderer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5334"/><h3>~Renderer</h3><pre>
++  <span class="code-function">~Renderer</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7188"/><h3>writePpm</h3><pre>
+<a id="5336"/><h3>writePpm</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">writePpm</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">fileName</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7189"/><h3>m_size</h3><pre>
+<a id="5337"/><h3>m_size</h3><pre>
 + <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; <span class="code-member">m_size</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7190"/><h3>m_renderingBuffer</h3><pre>
+<a id="5338"/><h3>m_renderingBuffer</h3><pre>
 + agg::rendering_buffer* <span class="code-member">m_renderingBuffer</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7191"/><h3>m_pixFrame</h3><pre>
+<a id="5339"/><h3>m_pixFrame</h3><pre>
 + agg::pixfmt_rgba32* <span class="code-member">m_pixFrame</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7192"/><h3>m_renderBase</h3><pre>
+<a id="5340"/><h3>m_renderBase</h3><pre>
 + rendererBase_t* <span class="code-member">m_renderBase</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7193"/><h3>m_renderArea</h3><pre>
+<a id="5341"/><h3>m_renderArea</h3><pre>
 + rendererSolid_t* <span class="code-member">m_renderArea</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7194"/><h3>m_rasterizer</h3><pre>
+<a id="5342"/><h3>m_rasterizer</h3><pre>
 + agg::rasterizer_scanline_aa&lt;&gt; <span class="code-member">m_rasterizer</span>;<br/></pre>
 
 AGG renderer system<br/>
 <br/>
 <hr/>
-<a id="7195"/><h3>m_scanLine</h3><pre>
+<a id="5343"/><h3>m_scanLine</h3><pre>
 + agg::scanline_p8 <span class="code-member">m_scanLine</span>;<br/></pre>
 
  
 <br/>
 <br/>
 <hr/>
-<a id="7197"/><h3>getDataPointer</h3><pre>
-+ <span class="code-type" >uint8_t</span>* <span class="code-function">getDataPointer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5344"/><h3>getDataPointer</h3><pre>
++ <span class="code-type" >uint8_t</span>* <span class="code-function">getDataPointer</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
 <h3>getDataSize</h3><pre>
-+ <span class="code-type" >uint32_t</span> <span class="code-function">getDataSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ <span class="code-type" >uint32_t</span> <span class="code-function">getDataSize</span> ();<br/></pre>
 
 <br/>
 <br/>

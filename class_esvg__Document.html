@@ -39,84 +39,84 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                  <a class="code-function" href="#7086">Document</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/>+                                  <a class="code-function" href="#7088">~Document</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                  <a class="code-function" href="#5245">Document</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/>+                                  <a class="code-function" href="#5247">~Document</a>         ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+         <span class="code-type" >bool</span>                     <a class="code-function" href="#7090">isLoadOk</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#7092">displayDebug</a>      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#7094">generateTestFile</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#7096">generateAnImage</a>   (<span class="code-type" >int32_t</span> <span class="code-argument">_sizeX</span>,<br/>                                                      <span class="code-type" >int32_t</span> <span class="code-argument">_sizeY</span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#7099">generateAnImage</a>   (ivec2 <span class="code-argument">_size</span>,<br/>                                                      draw::Image & <span class="code-argument">_output</span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#7102">generateAnImage</a>   (draw::Image & <span class="code-argument">_output</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#7104">aggDraw</a>           (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                                      agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/>+         <span class="code-type" >uint8_t</span>*                 <a class="code-function" href="#7107">getPointerOnData</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >uint32_t</span>                 <a class="code-function" href="#7109">getSizeOnData</a>     (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         vec2                     <a class="code-function" href="#7111">getDefinedSize</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++         <span class="code-type" >bool</span>                     <a class="code-function" href="#5248">isLoadOk</a>          ();<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#5249">displayDebug</a>      ();<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#5250">generateTestFile</a>  ();<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#5251">generateAnImage</a>   (<span class="code-type" >int32_t</span> <span class="code-argument">_sizeX</span>,<br/>                                                      <span class="code-type" >int32_t</span> <span class="code-argument">_sizeY</span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#5254">generateAnImage</a>   (ivec2 <span class="code-argument">_size</span>,<br/>                                                      draw::Image & <span class="code-argument">_output</span>);<br/>+         <span class="code-type" >void</span>                     <a class="code-function" href="#5257">generateAnImage</a>   (draw::Image & <span class="code-argument">_output</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#5259">aggDraw</a>           (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                                      agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/>+         <span class="code-type" >uint8_t</span>*                 <a class="code-function" href="#5262">getPointerOnData</a>  ();<br/>+         <span class="code-type" >uint32_t</span>                 <a class="code-function" href="#5263">getSizeOnData</a>     ();<br/>+         vec2                     <a class="code-function" href="#5264">getDefinedSize</a>    ();<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_esvg__Base.html">esvg::Base</a><br/>  +--> esvg::Document<br/></pre>
 <h2>Detail:</h2>
-<a id="7086"/><a id="7088"/><h3>Document</h3><pre>
+<a id="5245"/><a id="5247"/><h3>Document</h3><pre>
 +  <span class="code-function">Document</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7090"/><h3>~Document</h3><pre>
-+  <span class="code-function">~Document</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5248"/><h3>~Document</h3><pre>
++  <span class="code-function">~Document</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7092"/><h3>isLoadOk</h3><pre>
-+ <span class="code-type" >bool</span> <span class="code-function">isLoadOk</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5249"/><h3>isLoadOk</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">isLoadOk</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7094"/><h3>displayDebug</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">displayDebug</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5250"/><h3>displayDebug</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">displayDebug</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7096"/><h3>generateTestFile</h3><pre>
-+ <span class="code-type" >void</span> <span class="code-function">generateTestFile</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5251"/><h3>generateTestFile</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">generateTestFile</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7099"/><h3>generateAnImage</h3><pre>
+<a id="5254"/><h3>generateAnImage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">generateAnImage</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_sizeX</span>,<br/>                        <span class="code-type" >int32_t</span> <span class="code-argument">_sizeY</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7102"/><h3>generateAnImage</h3><pre>
+<a id="5257"/><h3>generateAnImage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">generateAnImage</span> (ivec2 <span class="code-argument">_size</span>,<br/>                        draw::Image & <span class="code-argument">_output</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7104"/><h3>generateAnImage</h3><pre>
+<a id="5259"/><h3>generateAnImage</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">generateAnImage</span> (draw::Image & <span class="code-argument">_output</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7107"/><h3>aggDraw</h3><pre>
+<a id="5262"/><h3>aggDraw</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">aggDraw</span> (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                        agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7109"/><h3>getPointerOnData</h3><pre>
-+ <span class="code-type" >uint8_t</span>* <span class="code-function">getPointerOnData</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5263"/><h3>getPointerOnData</h3><pre>
++ <span class="code-type" >uint8_t</span>* <span class="code-function">getPointerOnData</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7111"/><h3>getSizeOnData</h3><pre>
-+ <span class="code-type" >uint32_t</span> <span class="code-function">getSizeOnData</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5264"/><h3>getSizeOnData</h3><pre>
++ <span class="code-type" >uint32_t</span> <span class="code-function">getSizeOnData</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
 <h3>getDefinedSize</h3><pre>
-+ vec2 <span class="code-function">getDefinedSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++ vec2 <span class="code-function">getDefinedSize</span> ();<br/></pre>
 
 <br/>
 <br/>

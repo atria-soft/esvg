@@ -39,35 +39,35 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                                  <a class="code-function" href="#7378">Group</a>            (PaintState <span class="code-argument">_parentPaintState</span>);<br/>+                                  <a class="code-function" href="#7380">~Group</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                                  <a class="code-function" href="#5516">Group</a>            (PaintState <span class="code-argument">_parentPaintState</span>);<br/>+                                  <a class="code-function" href="#5518">~Group</a>           ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#7382">parse</a>            (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                                     agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                                                     <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#7386">display</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">spacing</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#7388">aggDraw</a>          (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                                     agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>                     <a class="code-function" href="#5519">parse</a>            (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                                     agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                                                     <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#5523">display</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">spacing</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                     <a class="code-function" href="#5525">aggDraw</a>          (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                                     agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 +<a href="class_esvg__Base.html">esvg::Base</a><br/>  +--> esvg::Group<br/></pre>
 <h2>Detail:</h2>
-<a id="7378"/><a id="7380"/><h3>Group</h3><pre>
+<a id="5516"/><a id="5518"/><h3>Group</h3><pre>
 +  <span class="code-function">Group</span> (PaintState <span class="code-argument">_parentPaintState</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7382"/><h3>~Group</h3><pre>
-+  <span class="code-function">~Group</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5519"/><h3>~Group</h3><pre>
++  <span class="code-function">~Group</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7386"/><h3>parse</h3><pre>
+<a id="5523"/><h3>parse</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">parse</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                      agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                      <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7388"/><h3>display</h3><pre>
+<a id="5525"/><h3>display</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">display</span> (<span class="code-type" >int32_t</span> <span class="code-argument">spacing</span>);<br/></pre>
 
 <br/>

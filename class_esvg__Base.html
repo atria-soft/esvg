@@ -39,89 +39,89 @@
 <br/><br/>
 <h2>Constructor and Destructor:</h2>
 <pre>
-+                           <a class="code-function" href="#7122">Base</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                           <a class="code-function" href="#7124">Base</a>              (PaintState <span class="code-argument">_parentPaintState</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                   <a class="code-function" href="#7126">~Base</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
++                           <a class="code-function" href="#5274">Base</a>              ();<br/>+                           <a class="code-function" href="#5275">Base</a>              (PaintState <span class="code-argument">_parentPaintState</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                   <a class="code-function" href="#5277">~Base</a>             ();<br/></pre>
 <br/>
 <h2>Synopsis:</h2>
 <pre>
-#         PaintState        <a class="code-member" href="#7118">m_paint</a>;<br/>#         agg::trans_affine <a class="code-member" href="#7119">m_transformMatrix</a>;<br/>#         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>*       <a class="code-function" href="#7120">spacingDist</a>       (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>              <a class="code-function" href="#7128">parse</a>             (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                               agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#7132">aggDraw</a>           (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                               agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#7135">display</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#7137">parseTransform</a>    (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#7139">parsePosition</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_pos</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >float</span>             <a class="code-function" href="#7143">parseLength</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_dataInput</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#7145">parsePaintAttr</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/>+         draw::Color       <a class="code-function" href="#7147">parseColor</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_inputData</span>);<br/></pre>
+#         PaintState        <a class="code-member" href="#5270">m_paint</a>;<br/>#         agg::trans_affine <a class="code-member" href="#5271">m_transformMatrix</a>;<br/>#         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>*       <a class="code-function" href="#5272">spacingDist</a>       (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span>              <a class="code-function" href="#5278">parse</a>             (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                               agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#5282">aggDraw</a>           (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                                               agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>              <a class="code-function" href="#5285">display</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#5287">parseTransform</a>    (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#5289">parsePosition</a>     (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_pos</span>,<br/>                                               <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >float</span>             <a class="code-function" href="#5293">parseLength</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_dataInput</span>);<br/>+         <span class="code-type" >void</span>              <a class="code-function" href="#5295">parsePaintAttr</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/>+         draw::Color       <a class="code-function" href="#5297">parseColor</a>        (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_inputData</span>);<br/></pre>
 <br/>
 <h2>Object Hierarchy:<h2>
 <pre>
 esvg::Base<br/>  +--> <a href="class_esvg__Document.html">esvg::Document</a><br/>  +--> <a href="class_esvg__Rectangle.html">esvg::Rectangle</a><br/>  +--> <a href="class_esvg__Polyline.html">esvg::Polyline</a><br/>  +--> <a href="class_esvg__Ellipse.html">esvg::Ellipse</a><br/>  +--> <a href="class_esvg__Text.html">esvg::Text</a><br/>  +--> <a href="class_esvg__Polygon.html">esvg::Polygon</a><br/>  +--> <a href="class_esvg__Circle.html">esvg::Circle</a><br/>  +--> <a href="class_esvg__Line.html">esvg::Line</a><br/>  +--> <a href="class_esvg__Path.html">esvg::Path</a><br/>  +--> <a href="class_esvg__Group.html">esvg::Group</a><br/></pre>
 <h2>Detail:</h2>
-<a id="7118"/><a id="7119"/><h3>m_paint</h3><pre>
+<a id="5270"/><a id="5271"/><h3>m_paint</h3><pre>
 # PaintState <span class="code-member">m_paint</span>;<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7120"/><h3>m_transformMatrix</h3><pre>
+<a id="5272"/><h3>m_transformMatrix</h3><pre>
 # agg::trans_affine <span class="code-member">m_transformMatrix</span>;<br/></pre>
 
 specific render of the curent element<br/>
 <br/>
 <hr/>
-<a id="7122"/><h3>spacingDist</h3><pre>
+<a id="5274"/><h3>spacingDist</h3><pre>
 # <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-function">spacingDist</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7124"/><h3>Base</h3><pre>
-+  <span class="code-function">Base</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5275"/><h3>Base</h3><pre>
++  <span class="code-function">Base</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7126"/><h3>Base</h3><pre>
+<a id="5277"/><h3>Base</h3><pre>
 +  <span class="code-function">Base</span> (PaintState <span class="code-argument">_parentPaintState</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7128"/><h3>~Base</h3><pre>
-+ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Base</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<a id="5278"/><h3>~Base</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Base</span> ();<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7132"/><h3>parse</h3><pre>
+<a id="5282"/><h3>parse</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >bool</span> <span class="code-function">parse</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                      agg::trans_affine & <span class="code-argument">_parentTrans</span>,<br/>                      <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_sizeMax</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7135"/><h3>aggDraw</h3><pre>
+<a id="5285"/><h3>aggDraw</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">aggDraw</span> (<a class="code-type" href="class_esvg__Renderer.html">esvg::Renderer</a> & <span class="code-argument">_myRenderer</span>,<br/>                        agg::trans_affine & <span class="code-argument">_basicTrans</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7137"/><h3>display</h3><pre>
+<a id="5287"/><h3>display</h3><pre>
 + <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">display</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_spacing</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7139"/><h3>parseTransform</h3><pre>
+<a id="5289"/><h3>parseTransform</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">parseTransform</span> (<a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7143"/><h3>parsePosition</h3><pre>
+<a id="5293"/><h3>parsePosition</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">parsePosition</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>,<br/>                      <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_pos</span>,<br/>                      <a class="code-type" href="class_etk__Vector2D.html">etk::Vector2D</a>&lt;float&gt; & <span class="code-argument">_size</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7145"/><h3>parseLength</h3><pre>
+<a id="5295"/><h3>parseLength</h3><pre>
 + <span class="code-type" >float</span> <span class="code-function">parseLength</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_dataInput</span>);<br/></pre>
 
 <br/>
 <br/>
 <hr/>
-<a id="7147"/><h3>parsePaintAttr</h3><pre>
+<a id="5297"/><h3>parsePaintAttr</h3><pre>
 + <span class="code-type" >void</span> <span class="code-function">parsePaintAttr</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_exml__Element.html">exml::Element</a>* <span class="code-argument">_element</span>);<br/></pre>
 
 <br/>
