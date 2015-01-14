@@ -20,8 +20,8 @@ esvg::Base::Base(PaintState _parentPaintState) {
 	m_paint = _parentPaintState;
 }
 
-void esvg::Base::parseTransform(exml::Element* _element) {
-	if (NULL == _element) {
+void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) {
+	if (_element == nullptr) {
 		return;
 	}
 	std::string inputString = _element->getAttribute("transform");
@@ -85,11 +85,11 @@ void esvg::Base::parseTransform(exml::Element* _element) {
  * @param[out] _pos parsed position
  * @param[out] _size parsed dimention
  */
-void esvg::Base::parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size) {
+void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
 	
-	if (NULL == _element) {
+	if (_element == nullptr) {
 		return;
 	}
 	std::string content = _element->getAttribute("x");
@@ -194,8 +194,8 @@ int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, s
  * @brief parse a Painting attribute of a specific node
  * @param[in] _element Basic node of the XML that might be parsed
  */
-void esvg::Base::parsePaintAttr(const exml::Element *_element) {
-	if (_element == NULL) {
+void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _element) {
+	if (_element == nullptr) {
 		return;
 	}
 	bool fillNone = false;
@@ -389,7 +389,7 @@ draw::Color esvg::Base::parseColor(const std::string& _inputData) {
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool esvg::Base::parse(exml::Element* _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Base::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
 	return false;

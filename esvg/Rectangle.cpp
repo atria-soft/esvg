@@ -25,8 +25,8 @@ esvg::Rectangle::~Rectangle() {
 	
 }
 
-bool esvg::Rectangle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
-	if (NULL == _element) {
+bool esvg::Rectangle::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+	if (_element == nullptr) {
 		return false;
 	}
 	m_position.setValue(0,0);

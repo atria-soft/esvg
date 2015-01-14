@@ -26,7 +26,7 @@ namespace esvg {
 		public:
 			Polygon(PaintState parentPaintState);
 			~Polygon();
-			virtual bool parse(exml::Element * _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& parentTrans, etk::Vector2D<float>& sizeMax);
 			virtual void display(int32_t spacing);
 			virtual void aggDraw(esvg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

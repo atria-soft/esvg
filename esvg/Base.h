@@ -38,15 +38,15 @@ namespace esvg {
 			Base() {};
 			Base(PaintState _parentPaintState);
 			virtual ~Base() { };
-			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			//specific drawing for AAG librairy ...
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
 			
 			virtual void display(int32_t _spacing) { };
-			void parseTransform(exml::Element *_element);
-			void parsePosition(const exml::Element *_element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size);
+			void parseTransform(const std::shared_ptr<exml::Element>& _element);
+			void parsePosition(const std::shared_ptr<const exml::Element>& _element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size);
 			float parseLength(const std::string& _dataInput);
-			void parsePaintAttr(const exml::Element *_element);
+			void parsePaintAttr(const std::shared_ptr<const exml::Element>& _element);
 			draw::Color parseColor(const std::string& _inputData);
 	};
 };

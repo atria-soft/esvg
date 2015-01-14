@@ -36,7 +36,7 @@
 
 
 esvg::Document::Document(const std::string& _fileName) :
-  m_renderedElement(NULL) {
+  m_renderedElement(nullptr) {
 	m_fileName = _fileName;
 	m_version = "0.0";
 	m_loadOK = true;
@@ -56,15 +56,13 @@ esvg::Document::Document(const std::string& _fileName) :
 		m_loadOK = false;
 		return;
 	}
-	
 	if (0 == doc.size() ) {
 		SVG_ERROR("(l ?) No nodes in the xml file ... \"" << m_fileName << "\"");
 		m_loadOK = false;
 		return;
 	}
-	
-	exml::Element* root = (exml::Element*)doc.getNamed("svg" );
-	if (NULL == root ) {
+	std::shared_ptr<exml::Element> root = doc.getNamed("svg" );
+	if (root == nullptr) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
 		m_loadOK = false;
 		return;
@@ -81,12 +79,12 @@ esvg::Document::Document(const std::string& _fileName) :
 	vec2 size(0,0);
 	// parse all sub node :
 	for(int32_t iii=0; iii< root->size(); iii++) {
-		exml::Element* child = root->getElement(iii);
-		if (child == NULL) {
+		std::shared_ptr<exml::Element> child = root->getElement(iii);
+		if (child == nullptr) {
 			// comment trsh here...
 			continue;
 		}
-		esvg::Base *elementParser = NULL;
+		esvg::Base *elementParser = nullptr;
 		if (child->getValue() == "g") {
 			elementParser = new esvg::Group(m_paint);
 		} else if (child->getValue() == "a") {

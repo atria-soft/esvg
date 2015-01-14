@@ -22,8 +22,8 @@ esvg::Polygon::~Polygon() {
 	
 }
 
-bool esvg::Polygon::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
-	if (NULL == _element) {
+bool esvg::Polygon::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+	if (_element == nullptr) {
 		return false;
 	}
 	parseTransform(_element);

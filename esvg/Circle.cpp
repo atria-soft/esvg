@@ -22,10 +22,10 @@ esvg::Circle::~Circle() {
 	
 }
 
-bool esvg::Circle::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Circle::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
-	if (NULL == _element) {
+	if (_element == nullptr) {
 		return false;
 	}
 	parseTransform(_element);

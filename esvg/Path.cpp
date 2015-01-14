@@ -29,17 +29,17 @@ esvg::Path::~Path() {
 // return the next char position ... (after 'X' or NULL)
 const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _outputList) {
 	if (*_input == '\0') {
-		return NULL;
+		return nullptr;
 	}
 	_outputList.clear();
 	_cmd = '\0';
-	const char * outputPointer = NULL;
+	const char * outputPointer = nullptr;
 	if (!(    (    _input[0] <= 'Z'
 	            && _input[0] >= 'A')
 	       || (    _input[0] <= 'z'
 	            && _input[0] >= 'a') ) ) {
 		SVG_ERROR("Error in the SVG Path : \"" << _input << "\"");
-		return NULL;
+		return nullptr;
 	}
 	_cmd = _input[0];
 	SVG_VERBOSE("Find command : " << _cmd);
@@ -65,8 +65,8 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	return outputPointer;
 }
 
-bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
-	if (NULL == _element) {
+bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+	if (_element == nullptr) {
 		return false;
 	}
 	parseTransform(_element);
@@ -89,7 +89,7 @@ bool esvg::Path::parse(exml::Element * _element, agg::trans_affine& _parentTrans
 	const char* elementXML = elementXML1.c_str();
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
-	     NULL != sss;
+	     sss != nullptr;
 	     sss=extractCmd(sss, command, listDot) ) {
 		PathBasic pathElement;
 		switch(command) {

@@ -19,7 +19,7 @@ namespace esvg {
 		public:
 			Group(PaintState _parentPaintState);
 			~Group();
-			virtual bool parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
 			virtual void display(int32_t spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
 	};

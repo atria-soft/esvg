@@ -31,8 +31,8 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
-	if (NULL == _element) {
+bool esvg::Group::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+	if (_element == nullptr) {
 		return false;
 	}
 	// parse ...
@@ -52,12 +52,12 @@ bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTran
 	vec2 tmpPos(0,0);
 	// parse all sub node :
 	for(int32_t iii=0; iii<_element->size() ; iii++) {
-		exml::Element* child = _element->getElement(iii);
-		if (NULL == child) {
+		std::shared_ptr<exml::Element> child = _element->getElement(iii);
+		if (child == nullptr) {
 			// can be a comment ...
 			continue;
 		}
-		esvg::Base *elementParser = NULL;
+		esvg::Base *elementParser = nullptr;
 		if (child->getValue() == "g") {
 			elementParser = new esvg::Group(m_paint);
 		} else if (child->getValue() == "a") {
@@ -81,13 +81,13 @@ bool esvg::Group::parse(exml::Element * _element, agg::trans_affine& _parentTran
 		} else {
 			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
-		if (NULL == elementParser) {
+		if (elementParser == nullptr) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 		} else {
 			if (false == elementParser->parse(child, m_transformMatrix, tmpPos)) {
 				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
-				elementParser = NULL;
+				elementParser = nullptr;
 			} else {
 				_sizeMax.setValue(std::max(_sizeMax.x(), tmpPos.x()),
 				                  std::max(_sizeMax.y(), tmpPos.y()));
