@@ -14,16 +14,7 @@
 namespace esvg {
 	int32_t getLogId();
 };
-// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
-#define SVG_BASE(info,data) \
-	do { \
-		if (info <= etk::log::getLevel(esvg::getLogId())) { \
-			std::stringbuf sb; \
-			std::ostream tmpStream(&sb); \
-			tmpStream << data; \
-			etk::log::logStream(esvg::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
-		} \
-	} while(0)
+#define SVG_BASE(info,data)     TK_LOG_BASE(esvg::getLogId(),info,data)
 
 #define SVG_CRITICAL(data)      SVG_BASE(1, data)
 #define SVG_ERROR(data)         SVG_BASE(2, data)
