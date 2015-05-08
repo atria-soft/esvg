@@ -1,16 +1,13 @@
 #!/usr/bin/python
-import lutinModule as module
-import lutinTools as tools
+import lutin.module as module
+import lutin.tools as tools
 
 def get_desc():
 	return "e-svg SVG image parser and generator"
 
-
 def create(target):
 	myModule = module.Module(__file__, 'esvg', 'LIBRARY')
-	
 	myModule.add_module_depend(['etk', 'agg', 'exml'])
-	
 	myModule.add_src_file([
 		'esvg/Base.cpp',
 		'esvg/Circle.cpp',
@@ -26,15 +23,7 @@ def create(target):
 		'esvg/Renderer.cpp',
 		'esvg/Stroking.cpp',
 		'esvg/Text.cpp'])
-	
 	myModule.add_export_path(tools.get_current_path(__file__))
-	
 	# add the currrent module at the 
 	return myModule
-
-
-
-
-
-
 
