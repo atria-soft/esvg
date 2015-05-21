@@ -33,8 +33,8 @@ install:
 
 # build sequence with Lutin :
 script: 
-  - lutin -C -P -c$BUILDER -mdebug -p exml_test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/exml_test/usr/bin/exml_test -l6
+  - lutin -C -P -c$BUILDER -mdebug -p esvg_test
+  - ./out/Linux_x86_64/debug/staging/$BUILDER/esvg_test/usr/bin/esvg_test -l6
 
 #send e-mail on compilation result:
 notifications:
