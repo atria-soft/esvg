@@ -3,6 +3,8 @@ esvg
 
 `esvg` is svg image renderer
 
+[![Build Status](https://travis-ci.org/atria-soft/esvg.svg?branch=master)](https://travis-ci.org/atria-soft/esvg)
+
 Instructions
 ============
 

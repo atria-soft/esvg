@@ -12,11 +12,11 @@ os:
 
 before_script:
   - cd ..
-  - git clone https://github.com/HeeroYui/etk.git
-  - git clone https://github.com/HeeroYui/exml.git
-  - git clone https://github.com/HeeroYui/libagg.git
-  - git clone https://github.com/HeeroYui/gtest.git
-  - git clone https://github.com/HeeroYui/libfreetype.git
+  - git clone https://github.com/atria-soft/etk.git
+  - git clone https://github.com/atria-soft/exml.git
+  - git clone https://github.com/atria-soft/libagg.git
+  - git clone https://github.com/generic-library/gtest-lutin.git --recursive
+  - git clone https://github.com/generic-library/freetype-lutin.git --recursive
   - pwd
   - ls -l
   - if [ "$CXX" == "clang++" ]; then BUILDER=clang; else BUILDER=gcc; fi
