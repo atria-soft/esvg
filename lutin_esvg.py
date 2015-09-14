@@ -22,8 +22,26 @@ def create(target):
 		'esvg/Rectangle.cpp',
 		'esvg/Renderer.cpp',
 		'esvg/Stroking.cpp',
-		'esvg/Text.cpp'])
-	myModule.add_export_path(tools.get_current_path(__file__))
+		'esvg/Text.cpp'
+		])
+	
+	myModule.add_header_file([
+		'esvg/Base.h',
+		'esvg/Circle.h',
+		'esvg/Ellipse.h',
+		'esvg/Group.h',
+		'esvg/Line.h',
+		'esvg/esvg.h',
+		'esvg/Path.h',
+		'esvg/Polygon.h',
+		'esvg/Polyline.h',
+		'esvg/Rectangle.h',
+		'esvg/Renderer.h',
+		'esvg/Stroking.h',
+		'esvg/Text.h'
+		])
+	
+	myModule.add_path(tools.get_current_path(__file__))
 	# add the currrent module at the 
 	return myModule
 
