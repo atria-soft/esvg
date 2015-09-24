@@ -6,9 +6,9 @@ def get_desc():
 	return "e-svg SVG image parser and generator"
 
 def create(target):
-	myModule = module.Module(__file__, 'esvg', 'LIBRARY')
-	myModule.add_module_depend(['etk', 'agg', 'exml'])
-	myModule.add_src_file([
+	my_module = module.Module(__file__, 'esvg', 'LIBRARY')
+	my_module.add_module_depend(['etk', 'agg', 'exml'])
+	my_module.add_src_file([
 		'esvg/Base.cpp',
 		'esvg/Circle.cpp',
 		'esvg/debug.cpp',
@@ -25,7 +25,7 @@ def create(target):
 		'esvg/Text.cpp'
 		])
 	
-	myModule.add_header_file([
+	my_module.add_header_file([
 		'esvg/Base.h',
 		'esvg/Circle.h',
 		'esvg/Ellipse.h',
@@ -41,7 +41,7 @@ def create(target):
 		'esvg/Text.h'
 		])
 	
-	myModule.add_path(tools.get_current_path(__file__))
+	my_module.add_path(tools.get_current_path(__file__))
 	# add the currrent module at the 
-	return myModule
+	return my_module
 
