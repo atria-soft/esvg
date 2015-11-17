@@ -45,16 +45,6 @@ namespace esvg {
 			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
-		private:
-			void abstractMoveTo(esvg::RenderPath& _path, bool _rel, double _x, double _y);
-			void abstractLineTo(esvg::RenderPath& _path, bool _rel, double _x, double _y);
-			void abstractHLineTo(esvg::RenderPath& _path, bool _rel, double _x);
-			void abstractVLineTo(esvg::RenderPath& _path, bool _rel, double _y);
-			void abstractCurve3(esvg::RenderPath& _path, bool _rel, double _x1, double _y1, double _x, double _y);
-			void abstractCurve3(esvg::RenderPath& _path, bool _rel, double _x, double _y);
-			void abstractCurve4(esvg::RenderPath& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y);
-			void abstractCurve4(esvg::RenderPath& _path, bool _rel, double _x2, double _y2, double _x, double _y);
-			void abstractCloseSubpath(esvg::RenderPath& _path);
 	};
 };
 
