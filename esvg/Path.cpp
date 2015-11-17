@@ -8,11 +8,6 @@
 
 #include <esvg/debug.h>
 #include <esvg/Path.h>
-#include <agg/agg_conv_stroke.h>
-#include <agg/agg_conv_dash.h>
-#include <agg/agg_conv_curve.h>
-#include <agg/agg_conv_contour.h>
-#include <agg/agg_conv_smooth_poly1.h>
 
 #undef __class__
 #define __class__	"Path"
@@ -65,7 +60,7 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	return outputPointer;
 }
 
-bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
@@ -117,13 +112,13 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathMoveTo;
+				pathElement.m_cmd = esvg::path_moveTo;
 				if (listDot.size() >= 2) {
 					pathElement.m_element[0] = listDot[0];
 					pathElement.m_element[1] = listDot[1];
 					m_listElement.push_back(pathElement);
 				}
-				pathElement.m_cmd = esvg::pathLineTo;
+				pathElement.m_cmd = esvg::path_lineTo;
 				for(int32_t iii=2; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -138,7 +133,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathLineTo;
+				pathElement.m_cmd = esvg::path_lineTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -153,7 +148,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathLineToV;
+				pathElement.m_cmd = esvg::path_lineToV;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.m_element[0] = listDot[iii];
 					m_listElement.push_back(pathElement);
@@ -167,7 +162,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathLineToH;
+				pathElement.m_cmd = esvg::path_lineToH;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
 					pathElement.m_element[0] = listDot[iii];
 					m_listElement.push_back(pathElement);
@@ -181,7 +176,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathBesizeCurveTo;
+				pathElement.m_cmd = esvg::path_bezierCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -198,7 +193,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathBesizeSmothCurveTo;
+				pathElement.m_cmd = esvg::path_bezierSmothCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -213,7 +208,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathCurveTo;
+				pathElement.m_cmd = path_curveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=6) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -232,7 +227,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathSmothCurveTo;
+				pathElement.m_cmd = esvg::path_smothCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -249,7 +244,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathElliptic;
+				pathElement.m_cmd = esvg::path_elliptic;
 				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
 					pathElement.m_element[0] = listDot[iii];
 					pathElement.m_element[1] = listDot[iii+1];
@@ -268,7 +263,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, agg::tran
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::pathStop;
+				pathElement.m_cmd = esvg::path_stop;
 				m_listElement.push_back(pathElement);
 				break;
 			default:
@@ -283,22 +278,22 @@ void esvg::Path::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Path");
 	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
 		switch (m_listElement[iii].m_cmd) {
-			case esvg::pathStop:
+			case esvg::path_stop:
 				SVG_DEBUG(spacingDist(_spacing+4) << "STOP");
 				break;
-			case esvg::pathMoveTo:
+			case esvg::path_moveTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "MOVETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
 				break;
-			case esvg::pathLineTo:
+			case esvg::path_lineTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
 				break;
-			case esvg::pathLineToH:
+			case esvg::path_lineToH:
 				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO_H (" << m_listElement[iii].m_element[0] << ")" );
 				break;
-			case esvg::pathLineToV:
+			case esvg::path_lineToV:
 				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO_V (" << m_listElement[iii].m_element[0] << ")" );
 				break;
-			case esvg::pathCurveTo:
+			case esvg::path_curveTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "CURVETO (" << m_listElement[iii].m_element[0] << 
 				                                             "," << m_listElement[iii].m_element[1] << 
 				                                             "," << m_listElement[iii].m_element[2] << 
@@ -306,23 +301,29 @@ void esvg::Path::display(int32_t _spacing) {
 				                                             "," << m_listElement[iii].m_element[4] << 
 				                                             "," << m_listElement[iii].m_element[5] << ")" );
 				break;
-			case esvg::pathSmothCurveTo:
+			case esvg::path_smothCurveTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "SMOTH_CURVETO (" << m_listElement[iii].m_element[0] <<
 				                                                   "," << m_listElement[iii].m_element[1] << 
 				                                                   "," << m_listElement[iii].m_element[2] << 
 				                                                   "," << m_listElement[iii].m_element[3] <<  ")" );
 				break;
-			case esvg::pathBesizeCurveTo:
+			case esvg::path_bezierCurveTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "BEZIER_CURVETO (" << m_listElement[iii].m_element[0] << 
 				                                                    "," << m_listElement[iii].m_element[1] << 
 				                                                    "," << m_listElement[iii].m_element[2] << 
 				                                                    "," << m_listElement[iii].m_element[3] << ")" );
 				break;
-			case esvg::pathBesizeSmothCurveTo:
+			case esvg::path_bezierSmothCurveTo:
 				SVG_DEBUG(spacingDist(_spacing+4) << "BEZIER_SMOTH_CURVETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
 				break;
-			case esvg::pathElliptic:
-				SVG_DEBUG(spacingDist(_spacing+4) << "ELLIPTIC (TODO...)" );
+			case esvg::path_elliptic:
+				SVG_DEBUG(spacingDist(_spacing+4) << "ELLIPTIC (" << m_listElement[iii].m_element[0] << 
+				                                              "," << m_listElement[iii].m_element[1] << 
+				                                              "," << m_listElement[iii].m_element[2] << 
+				                                              "," << m_listElement[iii].m_element[3] << 
+				                                              "," << m_listElement[iii].m_element[4] << 
+				                                              "," << m_listElement[iii].m_element[5] << 
+				                                              "," << m_listElement[iii].m_element[6] << ")" );
 				// show explanation at : http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
 				break;
 			default:
@@ -332,70 +333,560 @@ void esvg::Path::display(int32_t _spacing) {
 	}
 }
 
-void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
-	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
-	
-	agg::path_storage path;
-	path.start_new_path();
-	
-	
+class Segment {
+	public:
+		Segment(const vec2& _p0, const vec2& _p1) {
+			// segment register all time the lower at P0n then we need to register the sens of the path
+			if (_p0.y() < _p1.y()) {
+				p0 = _p0;
+				p1 = _p1;
+				direction = 1.0f; // direction like clock
+			} else {
+				p0 = _p1;
+				p1 = _p0;
+				direction = -1.0f; // direction like anti-clock
+			}
+		}
+		vec2 p0;
+		vec2 p1;
+		float direction;
+};
+
+
+class Scanline {
+	private:
+		std::vector<float> m_data;
+	public:
+		// constructor :
+		Scanline(size_t _size=32) {
+			float tmp(0);
+			m_data.resize(_size, tmp);
+		}
+		// destructor
+		~Scanline() { };
+	// -----------------------------------------------
+	// -- basic tools :
+	// -----------------------------------------------
+	public:
+		size_t size() const {
+			return m_data.size();
+		};
+		void clear(float _fill) {
+			for (auto &it : m_data) {
+				it = _fill;
+			}
+		}
+		float get(int32_t _pos) const {
+			if(    _pos>=0
+			    && _pos<m_data.size()) {
+				return m_data[_pos];
+			}
+			return 0;
+		}
+		void set(int32_t _pos, float _newColor) {
+			if(    _pos>=0
+			    && _pos<m_data.size()) {
+				m_data[_pos] = _newColor;
+			}
+		}
+};
+
+class Weighter {
+	private:
+		ivec2 m_size;
+		std::vector<float> m_data;
+	public:
+		// constructor :
+		Weighter(const ivec2& _size=ivec2(32,32)):
+		  m_size(_size) {
+			float tmp(0);
+			m_data.resize(m_size.x()*m_size.y(), tmp);
+			if ((uint32_t)m_size.x()*m_size.y() > m_data.size()) {
+				return;
+			}
+		}
+		// destructor
+		~Weighter() { };
+	// -----------------------------------------------
+	// -- basic tools :
+	// -----------------------------------------------
+	public:
+		const ivec2& getSize() const {
+			return m_size;
+		};
+		int32_t getWidth() const {
+			return m_size.x();
+		};
+		int32_t getHeight() const {
+			return m_size.y();
+		};
+		void clear(float _fill) {
+			for (int32_t iii=0; iii<m_size.x()*m_size.y(); iii++) {
+				m_data[iii] = _fill;
+			}
+		}
+		float get(const ivec2& _pos) const {
+			if (    _pos.x()>0 && _pos.x()<m_size.x()
+			     && _pos.y()>0 && _pos.y()<m_size.y()) {
+				return m_data[_pos.x()+_pos.y()*m_size.x()];
+			}
+			return 0;
+		}
+		void set(const ivec2& _pos, float _newColor) {
+			if (    _pos.x()>=0 && _pos.x()<m_size.x()
+			     && _pos.y()>=0 && _pos.y()<m_size.y()) {
+				m_data[_pos.x()+_pos.y()*m_size.x()] = _newColor;
+			}
+		}
+		void set(int32_t _posY, const Scanline& _data) {
+			if (    _posY>=0
+			     && _posY<m_size.y()) {
+				for (size_t xxx=0; xxx<m_size.x(); ++xxx) {
+					m_data[xxx+_posY*m_size.x()] = _data.get(xxx);
+				}
+			}
+		}
+		void append(int32_t _posY, const Scanline& _data) {
+			if (    _posY>=0
+			     && _posY<m_size.y()) {
+				for (size_t xxx=0; xxx<m_size.x(); ++xxx) {
+					m_data[xxx+_posY*m_size.x()] += _data.get(xxx);
+				}
+			}
+		}
+};
+
+bool sortSegmentFunction(const Segment& _e1, const Segment& _e2) {
+	return _e1.p0.y() < _e2.p0.y();
+}
+
+bool sortXPosFunction(const std::pair<float,float>& _e1, const std::pair<float,float>& _e2) {
+	return _e1.first < _e2.first;
+}
+
+class PointRender {
+	public:
+		enum typePoint {
+			typePoint_single, //!< Point type is single, this mean that it start and stop of a path
+			typePoint_start, //!< Point type is starting of a path
+			typePoint_stop, //!< Point type is stoping of a path
+			typePoint_join, //!< Point type in an user point provided inside a path
+			typePoint_interpolation, //!< This point is dynamicly calculated to create an interpolation
+		};
+	public:
+		vec2 m_pos; //!< position of the point
+		enum typePoint m_type;
+		vec2 m_miterAxe;
+		vec2 m_delta;
+		float m_len;
+		PointRender(const vec2& _pos, enum typePoint _type = PointRender::typePoint_join) :
+		  m_pos(_pos),
+		  m_type(_type) {
+			// nothing to do ...
+		}
+		void normalize(const vec2& _nextPoint) {
+			m_delta = _nextPoint - m_pos;
+			m_len = m_delta.length();
+		}
+};
+
+class Transformation {
+	public:
+		std::vector<PointRender> m_listPoints;
+		std::vector<Segment> m_listSegment;
+		float m_threshold;
+		int32_t m_recursionMax;
+		int32_t m_subSamplingCount;
+	public:
+		Transformation() :
+		  m_threshold(0.25f),
+		  m_recursionMax(10),
+		  m_subSamplingCount(8) {
+			
+		}
+		
+		void addSegment(const PointRender& _pos0, const PointRender& _pos1) {
+			// Skip horizontal Segments
+			if (_pos0.m_pos.y() == _pos1.m_pos.y()) {
+				// remove /0 operation
+				return;
+			}
+			m_listSegment.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
+		}
+		
+		void flattenCubicBez(vec2 _pos1,
+		                     vec2 _pos2,
+		                     vec2 _pos3,
+		                     vec2 _pos4,
+		                     int32_t _level,
+		                     enum PointRender::typePoint _type) {
+			if (_level > m_recursionMax) {
+				return;
+			}
+			vec2 pos12 = (_pos1+_pos2)*0.5f;
+			vec2 pos23 = (_pos2+_pos3)*0.5f;
+			vec2 pos34 = (_pos3+_pos4)*0.5f;
+			
+			vec2 delta = _pos4 - _pos1;
+			float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
+			float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
+			
+			if ((distance2 + distance3)*(distance2 + distance3) < m_threshold * delta.length2()) {
+				m_listPoints.push_back(PointRender(_pos4, _type) );
+				return;
+			}
+			vec2 pos123 = (pos12+pos23)*0.5f;
+			vec2 pos234 = (pos23+pos34)*0.5f;
+			vec2 pos1234 = (pos123+pos234)*0.5f;
+			
+			flattenCubicBez(_pos1, pos12, pos123, pos1234, _level+1, PointRender::typePoint_interpolation);
+			flattenCubicBez(pos1234, pos234, pos34, _pos4, _level+1, _type);
+		}
+		
+		void flattenShape(const esvg::RenderPath& _path, const mat2& _matrix) {
+			// Flatten path
+			m_listPoints.push_back(PointRender(_path.m_points[0], PointRender::typePoint_join));
+			for (int32_t iii=0;
+			     iii<_path.m_points.size()-1;
+			     iii+=3) {
+				flattenCubicBez(_path.m_points[iii+0], _path.m_points[iii+1], _path.m_points[iii+2], _path.m_points[iii+3], 0, PointRender::typePoint_interpolation);
+			}
+			// Close path (all time in a background element)
+			m_listPoints.push_back(PointRender(_path.m_points[0], PointRender::typePoint_join));
+			// Build Segments
+			for (int32_t iii=0, jjj=m_listPoints.size()-1;
+			     iii < m_listPoints.size();
+			     jjj = iii++) {
+				addSegment(m_listPoints[jjj], m_listPoints[iii]);
+			}
+		}
+		
+		void flattenShapeStroke(const esvg::RenderPath& _path, const mat2& _matrix) {
+			// Flatten path
+			m_listPoints.push_back(PointRender(_path.m_points[0], PointRender::typePoint_start));
+			for (int32_t iii=0;
+			     iii<_path.m_points.size()-1;
+			     iii+=3) {
+				flattenCubicBez(_path.m_points[iii+0], _path.m_points[iii+1], _path.m_points[iii+2], _path.m_points[iii+3], 0, PointRender::typePoint_join);
+			}
+			// When we stroke , We need to have a minimum of 2 points:
+			if (_path.m_points.size() < 2) {
+				// no stroke ...
+				return;
+			}
+			// generate for every point all the orthogonal elements
+			//     normal edge             *                 end path                            
+			//                           * | *                      * * * * * * * * * * * * *    
+			//                         *   |<--*----this                            |       *    
+			//                       *     |     *                          this -->|       *    
+			//                     *       *       *                                |       *    
+			//                   *       . | .       *              . . . . . . . . *       *    
+			//                 *       .   |   .       *                            |       *    
+			//               *     A .     |     . B     *                          |       *    
+			//                     .       *       .                                |       *    
+			//                   .       *   *       .              * * * * * * * * * * * * *    
+			//                         *       *                                                 
+			//                       *           *                                               
+			// TODO : Start and stop of the path ...
+			for (int32_t idPevious=-1, idCurrent=0, idNext=1;
+			     idCurrent < m_listPoints.size();
+			     idPevious++, idCurrent++, idNext++) {
+				if (    m_listPoints[idCurrent].m_type == PointRender::typePoint_join
+				     || m_listPoints[idCurrent].m_type == PointRender::typePoint_interpolation) {
+					if (idPevious < 0 ) {
+						SVG_ERROR("an error occure a previous ID is < 0.... ");
+						continue;
+					}
+					if (idNext >= m_listPoints.size()) {
+						SVG_ERROR("an error occure a next ID is >= nbPoint len .... ");
+						continue;
+					}
+					vec2 vecA = m_listPoints[idCurrent].m_pos - m_listPoints[idPevious].m_pos;
+					vecA.safeNormalize();
+					vec2 vecB = m_listPoints[idNext].m_pos - m_listPoints[idCurrent].m_pos;
+					vecB.safeNormalize();
+					vec2 vecC = vecA - vecB;
+					if (vecC == vec2(0,0)) {
+						// special case: 1 line ...
+						m_listPoints[idCurrent].m_miterAxe = vec2(vecA.y(), vecA.x());
+					} else {
+						vecC.safeNormalize();
+						m_listPoints[idCurrent].m_miterAxe = vecC;
+					}
+				} else if (m_listPoints[idCurrent].m_type == PointRender::typePoint_start) {
+					vec2 vecB = m_listPoints[idNext].m_pos - m_listPoints[idCurrent].m_pos;
+					vecB.safeNormalize();
+					m_listPoints[idCurrent].m_miterAxe = vec2(vecB.y(), vecB.x());
+				} else if (m_listPoints[idCurrent].m_type == PointRender::typePoint_stop) {
+					if (idPevious < 0 ) {
+						SVG_ERROR("an error occure a previous ID is < 0.... ");
+						continue;
+					}
+					vec2 vecA = m_listPoints[idCurrent].m_pos - m_listPoints[idPevious].m_pos;
+					vecA.safeNormalize();
+					m_listPoints[idCurrent].m_miterAxe = vec2(vecA.y(), vecA.x());
+				} else {
+					SVG_TODO("lklklklklkl");
+				}
+			}
+			float lineWidth = 5.0f;
+			// create segment list:
+			bool haveStartLine;
+			vec2 leftPoint;
+			vec2 rightPoint;
+			for (int32_t iii=0;
+			     iii < m_listPoints.size();
+			     ++iii) {
+				switch (m_listPoints[iii].m_type) {
+					case PointRender::typePoint_single:
+						// just do nothing ....
+						SVG_VERBOSE("[" << iii << "] Find Single " << m_listPoints[iii].m_pos);
+						break;
+					case PointRender::typePoint_start:
+						{
+							SVG_VERBOSE("[" << iii << "] Find Start " << m_listPoints[iii].m_pos);
+							if (haveStartLine == true) {
+								// close previous :
+								SVG_WARNING(" find a non close path ...");
+								addSegment(leftPoint, rightPoint);
+							}
+							haveStartLine = true;
+							// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
+							leftPoint =   m_listPoints[iii].m_pos
+							            + m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							rightPoint =   m_listPoints[iii].m_pos
+							             - m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							addSegment(leftPoint, rightPoint);
+							SVG_VERBOSE("    segment :" << leftPoint << " -> " << rightPoint);
+						}
+						break;
+					case PointRender::typePoint_stop:
+						{
+							SVG_VERBOSE("[" << iii << "] Find Stop " << m_listPoints[iii].m_pos);
+							if (haveStartLine == true) {
+								SVG_WARNING("find close path without start part ...");
+								break;
+							}
+							haveStartLine = false;
+							// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
+							vec2 left =   m_listPoints[iii].m_pos
+							            + m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							vec2 right =   m_listPoints[iii].m_pos
+							             - m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							//Draw from previous point:
+							addSegment(leftPoint, left);
+							SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+							addSegment(right, rightPoint);
+							SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+							leftPoint = left;
+							rightPoint = right;
+							// end line ...
+							addSegment(rightPoint, leftPoint);
+							SVG_VERBOSE("    segment :" << rightPoint << " -> " << leftPoint);
+						}
+						break;
+					case PointRender::typePoint_interpolation:
+						{
+							SVG_VERBOSE("[" << iii << "] Find interpolation " << m_listPoints[iii].m_pos);
+							// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
+							vec2 left =   m_listPoints[iii].m_pos
+							            + m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							vec2 right =   m_listPoints[iii].m_pos
+							             - m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							//Draw from previous point:
+							addSegment(leftPoint, left);
+							SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+							addSegment(right, rightPoint);
+							SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+							leftPoint = left;
+							rightPoint = right;
+						}
+						break;
+					case PointRender::typePoint_join:
+						{
+							SVG_VERBOSE("[" << iii << "] Find Join " << m_listPoints[iii].m_pos);
+							// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
+							vec2 left =   m_listPoints[iii].m_pos
+							            + m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							vec2 right =   m_listPoints[iii].m_pos
+							             - m_listPoints[iii].m_miterAxe*lineWidth*0.5f;
+							//Draw from previous point:
+							addSegment(leftPoint, left);
+							SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+							addSegment(right, rightPoint);
+							SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+							leftPoint = left;
+							rightPoint = right;
+						}
+						break;
+				}
+			}
+		}
+		
+		void sortSegment() {
+			std::sort(m_listSegment.begin(), m_listSegment.end(), sortSegmentFunction);
+		}
+		Weighter createWeighter(ivec2 _size) {
+			Weighter out(_size);
+			// for each lines:
+			for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
+				// Reduce the number of lines in the subsampling parsing:
+				std::vector<Segment> availlableSegmentPixel;
+				for (auto &it : m_listSegment) {
+					if (    it.p0.y() <= float(yyy+1)
+					     && it.p1.y() >= float(yyy)) {
+						availlableSegmentPixel.push_back(it);
+					}
+				}
+				// This represent the pondaration on the subSampling
+				float deltaSize = 1.0f/m_subSamplingCount;
+				for (int32_t kkk=0; kkk<m_subSamplingCount ; ++kkk) {
+					Scanline scanline(_size.x());
+					//find all the segment that cross the middle of the line of the center of the pixel line:
+					float subSamplingCenterPos = yyy + deltaSize*0.5f + deltaSize*kkk;
+					std::vector<Segment> availlableSegment;
+					// find in the subList ...
+					for (auto &it : availlableSegmentPixel) {
+						if (    it.p0.y() <= subSamplingCenterPos
+						     && it.p1.y() >= subSamplingCenterPos) {
+							availlableSegment.push_back(it);
+						}
+					}
+					// x position, angle
+					std::vector<std::pair<float, float>> listPosition;
+					for (auto &it : availlableSegment) {
+						vec2 delta = it.p0 - it.p1;
+						// x = coefficent*y+bbb;
+						float coefficient = delta.x()/delta.y();
+						float bbb = it.p0.x() - coefficient*it.p0.y();
+						float xpos = coefficient * subSamplingCenterPos + bbb;
+						listPosition.push_back(std::pair<float,float>(xpos, it.direction));
+					}
+					// now we order position of the xPosition:
+					std::sort(listPosition.begin(), listPosition.end(), sortXPosFunction);
+					// move through all element in the point:
+					float lastState = 0.0f;
+					float currentValue = 0.0f;
+					int32_t lastPos = -1;
+					int32_t currentPos = -1;
+					float lastX = 0.0f;
+					// *      |                \---------------/              |
+					// * current pos
+					//                         * pos ...
+					// TODO : Code the Odd/even and non-zero ...
+					for (auto &it : listPosition) {
+						if (currentPos != int32_t(it.first)) {
+							// fill to the new pos -1:
+							float endValue = std::min(1.0f,std::abs(lastState)) * deltaSize;
+							for (int32_t iii=currentPos+1; iii<int32_t(it.first); ++iii) {
+								scanline.set(iii, endValue);
+							}
+							currentPos = int32_t(it.first);
+							currentValue = endValue;
+						}
+						float oldState = lastState;
+						lastState += it.second;
+						if (oldState == 0.0f) {
+							// nothing to draw before ...
+							float ratio = 1.0f - (it.first - float(int32_t(it.first)));
+							currentValue += ratio * deltaSize;
+						} else if (lastState == 0.0f) {
+							// something new to draw ...
+							float ratio = 1.0f - (it.first - float(int32_t(it.first)));
+							currentValue -= ratio * deltaSize;
+						} else {
+							// nothing to do ...
+						}
+						
+						if (currentPos == int32_t(it.first)) {
+							scanline.set(currentPos, currentValue);
+						}
+					}
+					out.append(yyy, scanline);
+				}
+			}
+			return out;
+		}
+};
+
+
+void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
+	esvg::RenderPath path;
+	path.clear();
 	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
 		switch (m_listElement[iii].m_cmd) {
-			case esvg::pathStop:
-				abstractCloseSubpath(path);
+			case esvg::path_stop:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_stop");
+				path.stop();
 				break;
-			case esvg::pathMoveTo:
-				abstractMoveTo(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1] );
+			case esvg::path_moveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_moveTo");
+				path.moveTo(m_listElement[iii].m_relative,
+				            vec2(m_listElement[iii].m_element[0],
+				                 m_listElement[iii].m_element[1]) );
 				break;
-			case esvg::pathLineTo:
-				abstractLineTo(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1] );
+			case esvg::path_lineTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_lineTo");
+				path.lineTo(m_listElement[iii].m_relative,
+				            vec2(m_listElement[iii].m_element[0],
+				                 m_listElement[iii].m_element[1]) );
 				break;
-			case esvg::pathLineToH:
-				abstractHLineTo(path, m_listElement[iii].m_relative,
-				                m_listElement[iii].m_element[0] );
+			case esvg::path_lineToH:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_lineToH");
+				path.lineTo(m_listElement[iii].m_relative,
+				            vec2(m_listElement[iii].m_element[0], 0.0f) );
 				break;
-			case esvg::pathLineToV:
-				abstractVLineTo(path, m_listElement[iii].m_relative,
-				                m_listElement[iii].m_element[0] );
+			case esvg::path_lineToV:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_lineToV");
+				path.lineTo(m_listElement[iii].m_relative,
+				            vec2(0.0f, m_listElement[iii].m_element[0]) );
 				break;
-			case esvg::pathCurveTo:
-				abstractCurve4(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1],
-				               m_listElement[iii].m_element[2],
-				               m_listElement[iii].m_element[3],
-				               m_listElement[iii].m_element[4],
-				               m_listElement[iii].m_element[5] );
-				//SVG_INFO(" draw : esvg::pathCurveTo");
+			case esvg::path_curveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_curveTo");
+				path.curve4To(m_listElement[iii].m_relative,
+				              vec2(m_listElement[iii].m_element[0],
+				                   m_listElement[iii].m_element[1]),
+				              vec2(m_listElement[iii].m_element[2],
+				                   m_listElement[iii].m_element[3]),
+				              vec2(m_listElement[iii].m_element[4],
+				                   m_listElement[iii].m_element[5]) );
 				break;
-			case esvg::pathSmothCurveTo:
-				abstractCurve4(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1],
-				               m_listElement[iii].m_element[2],
-				               m_listElement[iii].m_element[3] );
-				//SVG_INFO(" draw : esvg::pathSmothCurveTo");
+			case esvg::path_smothCurveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_smothCurveTo");
+				path.curve4SmoothTo(m_listElement[iii].m_relative,
+				                    vec2(m_listElement[iii].m_element[0],
+				                         m_listElement[iii].m_element[1]),
+				                    vec2(m_listElement[iii].m_element[2],
+				                         m_listElement[iii].m_element[3]) );
 				break;
-			case esvg::pathBesizeCurveTo:
-				abstractCurve3(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1],
-				               m_listElement[iii].m_element[2],
-				               m_listElement[iii].m_element[3] );
-				//SVG_INFO(" draw : esvg::pathBesizeCurveTo");
+			case esvg::path_bezierCurveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_bezierCurveTo");
+				path.curve3To(m_listElement[iii].m_relative,
+				              vec2(m_listElement[iii].m_element[0],
+				                   m_listElement[iii].m_element[1]),
+				              vec2(m_listElement[iii].m_element[2],
+				                   m_listElement[iii].m_element[3]) );
 				break;
-			case esvg::pathBesizeSmothCurveTo:
-				abstractCurve3(path, m_listElement[iii].m_relative,
-				               m_listElement[iii].m_element[0],
-				               m_listElement[iii].m_element[1] );
-				//SVG_INFO(" draw : esvg::pathBesizeSmothCurveTo");
+			case esvg::path_bezierSmothCurveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_bezierSmothCurveTo");
+				path.curve3SmoothTo(m_listElement[iii].m_relative,
+				                    vec2(m_listElement[iii].m_element[0],
+				                         m_listElement[iii].m_element[1]) );
 				break;
-			case esvg::pathElliptic:
-				SVG_TODO("Elliptic arc is not implemented NOW ...");
+			case esvg::path_elliptic:
+				/*
+				SVG_VERBOSE(spacingDist(_level+1) << "Draw : esvg::path_elliptic");
+				path.ellipticTo(m_listElement[iii].m_relative,
+				                m_listElement[iii].m_element[0],
+				                m_listElement[iii].m_element[1],
+				                m_listElement[iii].m_element[2],
+				                m_listElement[iii].m_element[3],
+				                m_listElement[iii].m_element[4],
+				                m_listElement[iii].m_element[5],
+				                m_listElement[iii].m_element[6] );
+				*/
+				SVG_TODO(spacingDist(_level+1) << "Draw : esvg::path_elliptic");
 				break;
 			default:
 				SVG_ERROR("Unknow PATH commant (internal error)");
@@ -403,102 +894,49 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicT
 		}
 	}
 	
-	agg::trans_affine mtx = m_transformMatrix;
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
-	
-	agg::conv_curve<agg::path_storage> curve(path);
-	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::conv_curve<agg::path_storage>, agg::trans_affine> trans(curve, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	path.display();
+	Weighter tmpFill;
+	Weighter tmpStroke;
+	//agg::conv_curve<esvg::RenderPath> curve(path);
+	// Check if we need to display background
+	if (m_paint.fill.a() != 0x00) {
+		Transformation ttt;
+		ttt.flattenShape(path, mtx);
+		// Rasterize Segments
+		ttt.sortSegment();
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpFill = ttt.createWeighter(ivec2(128,128));
 	}
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// drawing as an outline
-		agg::conv_stroke<agg::conv_curve<agg::path_storage> > myPolygonStroke(curve);
-		myPolygonStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::conv_curve<agg::path_storage> >, agg::trans_affine> transStroke(myPolygonStroke, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	// check if we need to display stroke:
+	if (    m_paint.strokeWidth > 0
+	     && m_paint.stroke.a() != 0x00) {
+		Transformation ttt;
+		ttt.flattenShapeStroke(path, mtx);
+		// Rasterize Segments
+		ttt.sortSegment();
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpStroke = ttt.createWeighter(ivec2(128,128));
 	}
-}
-
-
-void esvg::Path::abstractMoveTo(agg::path_storage& _path, bool _rel, double _x, double _y) {
-	if(true == _rel) {
-		_path.rel_to_abs(&_x, &_y);
-	}
-	_path.move_to(_x, _y);
-}
-
-void esvg::Path::abstractLineTo(agg::path_storage& _path, bool _rel, double _x, double _y) {
-	if(true == _rel) {
-		_path.rel_to_abs(&_x, &_y);
-	}
-	_path.line_to(_x, _y);
-}
-
-void esvg::Path::abstractHLineTo(agg::path_storage& _path, bool _rel, double _x) {
-	double x2 = 0.0;
-	double y2 = 0.0;
-	if(0!=_path.total_vertices()) {
-		_path.vertex(_path.total_vertices() - 1, &x2, &y2);
-		if(true == _rel) {
-			_x += x2;
+	// add on images:
+	for (int32_t yyy=0; yyy<_myRenderer.m_size.y(); ++yyy) {
+		for (int32_t xxx=0; xxx<_myRenderer.m_size.x(); ++xxx) {
+			ivec2 pos(xxx, yyy);
+			float value = tmpFill.get(pos);
+			float valueStroke = tmpStroke.get(pos);
+			if (valueStroke != 0.0f) {
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4    ] = uint8_t(valueStroke*m_paint.stroke.r());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueStroke*m_paint.stroke.g());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueStroke*m_paint.stroke.b());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueStroke*m_paint.stroke.a());
+			} else {
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4    ] = uint8_t(value*m_paint.fill.r());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 1] = uint8_t(value*m_paint.fill.g());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 2] = uint8_t(value*m_paint.fill.b());
+				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 3] = uint8_t(value*m_paint.fill.a());
+			}
 		}
-		_path.line_to(_x, y2);
 	}
 }
 
-void esvg::Path::abstractVLineTo(agg::path_storage& _path, bool _rel, double _y) {
-	double x2 = 0.0;
-	double y2 = 0.0;
-	if(_path.total_vertices()) {
-		_path.vertex(_path.total_vertices() - 1, &x2, &y2);
-		if(true == _rel) {
-			_y += y2;
-		}
-		_path.line_to(x2, _y);
-	}
-}
-
-void esvg::Path::abstractCurve3(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x, double _y) {
-	if(true == _rel) {
-		_path.rel_to_abs(&_x1, &_y1);
-		_path.rel_to_abs(&_x,  &_y);
-	}
-	_path.curve3(_x1, _y1, _x, _y);
-}
-
-void esvg::Path::abstractCurve3(agg::path_storage& _path, bool _rel, double _x, double _y) {
-	if(true == _rel) {
-		_path.curve3_rel(_x, _y);
-	} else {
-		_path.curve3(_x, _y);
-	}
-}
-
-void esvg::Path::abstractCurve4(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y) {
-	if(true == _rel) {
-		_path.rel_to_abs(&_x1, &_y1);
-		_path.rel_to_abs(&_x2, &_y2);
-		_path.rel_to_abs(&_x,  &_y);
-	}
-	_path.curve4(_x1, _y1, _x2, _y2, _x, _y);
-}
-
-void esvg::Path::abstractCurve4(agg::path_storage& _path, bool _rel, double _x2, double _y2, double _x,  double _y) {
-	if(true == _rel) {
-		_path.curve4_rel(_x2, _y2, _x, _y);
-	} else {
-		_path.curve4(_x2, _y2, _x, _y);
-	}
-}
-
-void esvg::Path::abstractCloseSubpath(agg::path_storage& _path) {
-	_path.end_poly(agg::path_flags_close);
-}

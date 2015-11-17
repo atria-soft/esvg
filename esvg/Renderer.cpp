@@ -15,68 +15,138 @@
 #undef __class__
 #define __class__ "Renderer"
 
-esvg::Renderer::Renderer(uint32_t width, uint32_t height) {
-	m_allocatedSize = 0;
-	m_size.setValue(width, height);
-	
-	int32_t dataSize = ((int32_t)width * (int32_t)height * DATA_ALLOCATION_ELEMENT);
-	m_allocatedSize = dataSize;
-	
-	// allocate Data
-	SVG_VERBOSE("Allocate buffer : " << dataSize);
-	
-	m_buffer = new uint8_t[dataSize];
-	if (NULL == m_buffer) {
-		SVG_ERROR("Allocation of the output buffer for SVG drawing error");
-		m_allocatedSize = 0;
-		return;
-	}
-	
-	memset(m_buffer, 0x00, dataSize * sizeof(uint8_t) );
-
-	m_renderingBuffer = new agg::rendering_buffer(m_buffer, m_size.x(), m_size.y(), m_size.x() * DATA_ALLOCATION_ELEMENT);
-	if (NULL == m_renderingBuffer) {
-		SVG_ERROR("Allocation of the m_renderingBuffer for SVG drawing error");
-		return;
-	}
-	
-	m_pixFrame        = new agg::pixfmt_rgba32(*m_renderingBuffer);
-	if (NULL == m_pixFrame) {
-		SVG_ERROR("Allocation of the m_pixFrame for SVG drawing error");
-		return;
-	}
-	
-	m_renderBase      = new rendererBase_t(*m_pixFrame);
-	if (NULL == m_renderBase) {
-		SVG_ERROR("Allocation of the m_renderBase for SVG drawing error");
-		return;
-	}
-	
-	m_renderArea      = new rendererSolid_t(*m_renderBase);
-	if (NULL == m_renderArea) {
-		SVG_ERROR("Allocation of the m_renderArea for SVG drawing error");
-		return;
-	}
-	
-	//m_basicMatrix *= agg::trans_affine_translation(-g_base_dx2, -g_base_dy2);
-	//m_basicMatrix *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
-	//m_basicMatrix *= agg::trans_affine_rotation(g_angle);// + agg::pi);
-	//m_basicMatrix *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	//m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
+esvg::Renderer::Renderer(const ivec2& _size) {
+	m_size = _size;
+	m_stride = DATA_ALLOCATION_ELEMENT;
+	m_scanline.resize(m_size.x() * m_stride, 0);
+	m_buffer.resize(m_size.x() * m_size.y() * m_stride, 0);
 }
 
 esvg::Renderer::~Renderer() {
-	if (NULL != m_buffer) {
-		delete[] m_buffer;
-		m_buffer = NULL;
-	}
+	m_buffer.clear();
+	m_scanline.clear();
+	m_stride = 0;
+	m_size = ivec2(0,0);
 }
+
+/*
+void nsvgRasterize(NSVGrasterizer* rrr, // this
+				   NSVGimage* image, // image definition
+				   float tx, // move x
+				   float ty, // move y
+				   float scale, // scale
+				   unsigned char* dst, //output image data
+				   int w, // output width
+				   int h, // output height
+				   int stride) // pixel stride
+{
+	NSVGshape *shape = NULL;
+	NSVGedge *eee = NULL;
+	NSVGcachedPaint cache;
+	int i;
+
+	rrr->bitmap = dst;
+	rrr->width = w;
+	rrr->height = h;
+	rrr->stride = stride;
+
+	if (w > rrr->cscanline) {
+		rrr->cscanline = w;
+		rrr->scanline = (unsigned char*)realloc(rrr->scanline, w);
+		if (rrr->scanline == NULL) return;
+	}
+
+	for (i = 0; i < h; i++)
+		memset(&dst[i*stride], 0, w*4);
+
+	for (shape = image->shapes;
+	     shape != NULL;
+	     shape = shape->next) {
+		if (!(shape->flags & NSVG_FLAGS_VISIBLE))
+			continue;
+		// ***********************
+		// *** render "fill" *****
+		// ***********************
+		if (shape->fill.type != NSVG_PAINT_NONE) {
+			nsvg__resetPool(rrr);
+			rrr->freelist = NULL;
+			rrr->nedges = 0;
+			nsvg__flattenShape(rrr, shape, scale);
+			// Scale and translate edges
+			for (i = 0; i < r->nedges; i++) {
+				eee = &rrr->edges[i];
+				eee->x0 = tx + eee->x0;
+				eee->y0 = (ty + eee->y0) * NSVG__SUBSAMPLES;
+				eee->x1 = tx + eee->x1;
+				eee->y1 = (ty + eee->y1) * NSVG__SUBSAMPLES;
+			}
+			// Rasterize edges
+			qsort(rrr->edges,
+			      rrr->nedges,
+			      sizeof(NSVGedge),
+			      nsvg__cmpEdge);
+			// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+			nsvg__initPaint(&cache,
+			                &shape->fill,
+			                shape->opacity);
+			nsvg__rasterizeSortedEdges(rrr,
+			                           tx,
+			                           ty,
+			                           scale,
+			                           &cache,
+			                           shape->fillRule);
+		}
+		// *************************
+		// *** render "stroke" *****
+		// *************************
+		if (    shape->stroke.type != NSVG_PAINT_NONE
+		     && (shape->strokeWidth * scale) > 0.01f) {
+			nsvg__resetPool(r);
+			rrr->freelist = NULL;
+			rrr->nedges = 0;
+			nsvg__flattenShapeStroke(rrr, shape, scale);
+//			dumpEdges(r, "edge.svg");
+			// Scale and translate edges
+			for (i = 0; i < rrr->nedges; i++) {
+				eee = &rrr->edges[i];
+				eee->x0 = tx + eee->x0;
+				eee->y0 = (ty + eee->y0) * NSVG__SUBSAMPLES;
+				eee->x1 = tx + eee->x1;
+				eee->y1 = (ty + eee->y1) * NSVG__SUBSAMPLES;
+			}
+			// Rasterize edges
+			qsort(rrr->edges,
+			      rrr->nedges,
+			      sizeof(NSVGedge),
+			      nsvg__cmpEdge);
+			// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+			nsvg__initPaint(&cache,
+			                &shape->stroke,
+			                shape->opacity);
+			nsvg__rasterizeSortedEdges(rrr,
+			                           tx,
+			                           ty,
+			                           scale,
+			                           &cache,
+			                           NSVG_FILLRULE_NONZERO);
+		}
+	}
+	nsvg__unpremultiplyAlpha(dst,
+	                         w,
+	                         h,
+	                         stride);
+	rrr->bitmap = NULL;
+	rrr->width = 0;
+	rrr->height = 0;
+	rrr->stride = 0;
+}
+*/
 
 // Writing the buffer to a .PPM file, assuming it has 
 // RGB-structure, one byte per color component
 //--------------------------------------------------
 void esvg::Renderer::writePpm(std::string fileName) {
-	if (NULL == m_buffer) {
+	if (m_buffer.size() == 0) {
 		return;
 	}
 	FILE* fd = fopen(fileName.c_str(), "wb");
@@ -86,10 +156,12 @@ void esvg::Renderer::writePpm(std::string fileName) {
 		SVG_DEBUG("Generate ppm : " << m_size);
 		fprintf(fd, "P6 %d %d 255 ", sizeX, sizeY);
 		for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
-			fwrite(m_buffer+iii*DATA_ALLOCATION_ELEMENT, 1, 3, fd);
+			fwrite(&m_buffer[iii*DATA_ALLOCATION_ELEMENT], 1, 3, fd);
 		}
 		fclose(fd);
 	}
 }
+
+
 
 

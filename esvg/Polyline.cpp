@@ -8,8 +8,6 @@
 
 #include <esvg/debug.h>
 #include <esvg/Polyline.h>
-#include <agg/agg_conv_stroke.h>
-#include <agg/agg_path_storage.h>
 
 esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
@@ -19,7 +17,7 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Polyline::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element == nullptr) {
@@ -40,7 +38,7 @@ bool esvg::Polyline::parse(const std::shared_ptr<exml::Element>& _element, agg::
 	SVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
 	const char* sss = sss1.c_str();
 	while ('\0' != sss[0]) {
-		etk::Vector2D<float> pos;
+		vec2 pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.push_back(pos);
@@ -59,8 +57,12 @@ void esvg::Polyline::display(int32_t _spacing) {
 }
 
 
-void esvg::Polyline::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
-	agg::path_storage path;
+void esvg::Polyline::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
+	
+	
+	#if 0
+	esvg::RenderPath path;
 	path.start_new_path();
 	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
 	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
@@ -92,20 +94,21 @@ void esvg::Polyline::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _ba
 	}
 	*/
 	
-	agg::trans_affine mtx = m_transformMatrix;
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	if (m_paint.strokeWidth > 0) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// drawing as an outline
-		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
+		agg::conv_stroke<esvg::RenderPath> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
+		agg::conv_transform<agg::conv_stroke<esvg::RenderPath>, mat2> transStroke(myPolygonStroke, mtx);
 		// set the filling mode : 
 		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
 		_myRenderer.m_rasterizer.add_path(transStroke);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
+	#endif
 }
 
 

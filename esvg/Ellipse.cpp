@@ -8,8 +8,6 @@
 
 #include <esvg/debug.h>
 #include <esvg/Ellipse.h>
-#include <agg/agg_conv_stroke.h>
-#include <agg/agg_ellipse.h>
 
 #undef __class__
 #define __class__	"Ellipse"
@@ -22,7 +20,7 @@ esvg::Ellipse::~Ellipse() {
 	
 }
 
-bool esvg::Ellipse::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Ellipse::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
@@ -67,20 +65,22 @@ void esvg::Ellipse::display(int32_t _spacing) {
 }
 
 
-void esvg::Ellipse::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
+void esvg::Ellipse::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
+	/*
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	// Creating an ellipse
 	agg::ellipse myEllipse(m_c.x(), m_c.y(), m_r.x(), m_r.y(), 0);
 	
 	// Calculate transformation matrix ...
-	agg::trans_affine  mtx = m_transformMatrix;
+	mat2  mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	// set the filling mode : 
 	_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 	
 	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
+		agg::conv_transform<agg::ellipse, mat2> trans(myEllipse, mtx);
 		_myRenderer.m_rasterizer.add_path(trans);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
@@ -89,12 +89,13 @@ void esvg::Ellipse::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 		// drawing as an outline
 		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
 		myEllipseStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::ellipse>, agg::trans_affine> transStroke(myEllipseStroke, mtx);
+		agg::conv_transform<agg::conv_stroke<agg::ellipse>, mat2> transStroke(myEllipseStroke, mtx);
 		// set the filling mode : 
 		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
 		_myRenderer.m_rasterizer.add_path(transStroke);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
+	*/
 }
 
 

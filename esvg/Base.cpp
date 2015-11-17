@@ -41,36 +41,36 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 	const char * pointerOnData = inputString.c_str();
 	while (*pointerOnData) {
 		if (sscanf(pointerOnData, "matrix (%lf %lf %lf %lf %lf %lf) %n", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5], &n) == 6) {
-			m_transformMatrix.load_from(matrix);
+			m_transformMatrix = mat2(matrix);
 		} else if (sscanf(pointerOnData, "translate (%f %f) %n", &xxx, &yyy, &n) == 2) {
-			m_transformMatrix *= agg::trans_affine_translation(xxx, yyy);
+			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
 			SVG_VERBOSE("Translate : " << xxx << ", " << yyy);
 		} else if (sscanf(pointerOnData, "translate (%f) %n", &xxx, &n) == 1) {
-			m_transformMatrix *= agg::trans_affine_translation(xxx, 0);
+			m_transformMatrix *= etk::mat2Translate(vec2(xxx, 0));
 			SVG_VERBOSE("Translate : " << xxx << ", " << 0);
 		} else if (sscanf(pointerOnData, "scale (%f %f) %n", &xxx, &yyy, &n) == 2) {
-			m_transformMatrix *= agg::trans_affine_scaling(xxx, yyy);
+			m_transformMatrix *= etk::mat2Scale(vec2(xxx, yyy));
 			SVG_VERBOSE("Scale : " << xxx << ", " << yyy);
 		} else if (sscanf(pointerOnData, "scale (%f) %n", &xxx, &n) == 1) {
-			m_transformMatrix *= agg::trans_affine_scaling(xxx, xxx);
+			m_transformMatrix *= etk::mat2Scale(xxx);
 			SVG_VERBOSE("Scale : " << xxx << ", " << xxx);
 		} else if (sscanf(pointerOnData, "rotate (%f %f %f) %n", &angle, &xxx, &yyy, &n) == 3) {
 			angle = angle / 180 * M_PI;
-			m_transformMatrix *= agg::trans_affine_translation(-xxx, -yyy);
-			m_transformMatrix *= agg::trans_affine_rotation(angle);
-			m_transformMatrix *= agg::trans_affine_translation(xxx, yyy);
+			m_transformMatrix *= etk::mat2Translate(vec2(-xxx, -yyy));
+			m_transformMatrix *= etk::mat2Rotate(angle);
+			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
 		} else if (sscanf(pointerOnData, "rotate (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
 			SVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= agg::trans_affine_rotation(angle);
+			m_transformMatrix *= etk::mat2Rotate(angle);
 		} else if (sscanf(pointerOnData, "skewX (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
 			SVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= agg::trans_affine_skewing(angle, 0.0);
+			m_transformMatrix *= etk::mat2Skew(vec2(angle, 0.0f));
 		} else if (sscanf(pointerOnData, "skewY (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
 			SVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= agg::trans_affine_skewing(0.0, angle);
+			m_transformMatrix *= etk::mat2Skew(vec2(0.0f, angle));
 		} else {
 			break;
 		}
@@ -85,7 +85,7 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
  * @param[out] _pos parsed position
  * @param[out] _size parsed dimention
  */
-void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size) {
+void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
 	
@@ -203,14 +203,14 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	std::string content = _element->getAttribute("fill");
 	if (content.size()!=0) {
 		m_paint.fill = parseColor(content);
-		if (m_paint.fill.a == 0) {
+		if (m_paint.fill.a() == 0) {
 			fillNone = true;
 		}
 	}
 	content = _element->getAttribute("stroke");
 	if (content.size()!=0) {
 		m_paint.stroke = parseColor(content);
-		if (m_paint.stroke.a == 0) {
+		if (m_paint.stroke.a() == 0) {
 			strokeNone = true;
 		}
 	}
@@ -221,21 +221,21 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	content = _element->getAttribute("opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.a = opacity*0xFF;
-		m_paint.stroke.a = opacity*0xFF;
+		opacity = std::avg(0.0f, opacity, 1.0f);
+		m_paint.fill.setA(opacity*0xFF);
+		m_paint.stroke.setA(opacity*0xFF);
 	}
 	content = _element->getAttribute("fill-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
 		opacity  = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.a = opacity*0xFF;
+		m_paint.fill.setA(opacity*0xFF);
 	}
 	content = _element->getAttribute("stroke-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
 		opacity  = std::avg(0.0f, opacity, 1.0f);
-		m_paint.stroke.a = opacity*0xFF;
+		m_paint.stroke.setA(opacity*0xFF);
 	}
 	content = _element->getAttribute("fill-rule");
 	if (content.size()!=0) {
@@ -250,26 +250,26 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	content = _element->getAttribute("stroke-linecap");
 	if (content.size()!=0) {
 		if (content == "butt" ) {
-			m_paint.lineCap = esvg::lineCapButt;
+			m_paint.lineCap = esvg::cap_butt;
 		} else if (content == "round" ) {
-			m_paint.lineCap = esvg::lineCapRound;
+			m_paint.lineCap = esvg::cap_round;
 		} else if (content == "square" ) {
-			m_paint.lineCap = esvg::lineCapSquare;
+			m_paint.lineCap = esvg::cap_square;
 		} else {
-			m_paint.lineCap = esvg::lineCapButt;
+			m_paint.lineCap = esvg::cap_butt;
 			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
 	content = _element->getAttribute("stroke-linejoin");
 	if (content.size()!=0) {
 		if (content == "miter" ) {
-			m_paint.lineJoin = esvg::lineJoinMiter;
+			m_paint.lineJoin = esvg::join_miter;
 		} else if (content == "round" ) {
-			m_paint.lineJoin = esvg::lineJoinRound;
+			m_paint.lineJoin = esvg::join_round;
 		} else if (content == "bevel" ) {
-			m_paint.lineJoin = esvg::lineJoinBevel;
+			m_paint.lineJoin = esvg::join_bevel;
 		} else {
-			m_paint.lineJoin = esvg::lineJoinMiter;
+			m_paint.lineJoin = esvg::join_miter;
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
@@ -285,13 +285,13 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			if (outputType == "fill") {
 				m_paint.fill = parseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
-				if (m_paint.fill.a == 0) {
+				if (m_paint.fill.a() == 0) {
 					fillNone = true;
 				}
 			} else if (outputType == "stroke") {
 				m_paint.stroke = parseColor(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
-				if (m_paint.stroke.a == 0) {
+				if (m_paint.stroke.a() == 0) {
 					strokeNone = true;
 				}
 			} else if (outputType == "stroke-width" ) {
@@ -300,18 +300,18 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			} else if (outputType == "opacity" ) {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.fill.a = opacity*0xFF;
-				m_paint.stroke.a = opacity*0xFF;
+				m_paint.fill.setA(opacity*0xFF);
+				m_paint.stroke.setA(opacity*0xFF);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "fill-opacity") {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.fill.a = opacity*0xFF;
+				m_paint.fill.setA(opacity*0xFF);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "stroke-opacity") {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.stroke.a = opacity*0xFF;
+				m_paint.stroke.setA(opacity*0xFF);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
 			} else if (outputType == "fill-rule" ) {
 				if (outputValue == "nonzero" ) {
@@ -323,24 +323,24 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 				}
 			} else if (outputType == "stroke-linecap") {
 				if (outputValue == "butt") {
-					m_paint.lineCap = esvg::lineCapButt;
+					m_paint.lineCap = esvg::cap_butt;
 				} else if (outputValue == "round") {
-					m_paint.lineCap = esvg::lineCapRound;
+					m_paint.lineCap = esvg::cap_round;
 				} else if (outputValue == "square") {
-					m_paint.lineCap = esvg::lineCapSquare;
+					m_paint.lineCap = esvg::cap_square;
 				} else {
-					m_paint.lineCap = esvg::lineCapButt;
+					m_paint.lineCap = esvg::cap_butt;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [butt,round,square]");
 				}
 			} else if (outputType == "stroke-linejoin") {
 				if (outputValue == "miter") {
-					m_paint.lineJoin = esvg::lineJoinMiter;
+					m_paint.lineJoin = esvg::join_miter;
 				} else if (outputValue == "round") {
-					m_paint.lineJoin = esvg::lineJoinRound;
+					m_paint.lineJoin = esvg::join_round;
 				} else if (outputValue == "bevel") {
-					m_paint.lineJoin = esvg::lineJoinBevel;
+					m_paint.lineJoin = esvg::join_bevel;
 				} else {
-					m_paint.lineJoin = esvg::lineJoinMiter;
+					m_paint.lineJoin = esvg::join_miter;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
 			} else if (outputType == "marker-start") {
@@ -352,10 +352,10 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	}
 	// check if somewere none is set to the filling:
 	if (true == fillNone) {
-		m_paint.fill.a = 0;
+		m_paint.fill.setA(0);
 	}
 	if (true == strokeNone) {
-		m_paint.stroke.a = 0;
+		m_paint.stroke.setA(0);
 	}
 }
 
@@ -364,8 +364,8 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
  * @param[in] _inputData Data C String with the xml definition
  * @return the parsed color
  */
-draw::Color esvg::Base::parseColor(const std::string& _inputData) {
-	draw::Color localColor = draw::color::white;
+etk::Color<uint8_t,4> esvg::Base::parseColor(const std::string& _inputData) {
+	etk::Color<uint8_t,4> localColor = etk::color::white;
 	
 	if(    _inputData.size() > 4
 	    && _inputData[0] == 'u'
@@ -377,7 +377,7 @@ draw::Color esvg::Base::parseColor(const std::string& _inputData) {
 		}
 		SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 	} else {
-		localColor = _inputData.c_str();
+		localColor = etk::Color<uint8_t,4>(_inputData);
 	}
 	SVG_VERBOSE("Parse color : \"" << _inputData << "\"  == > " << localColor);
 	return localColor;
@@ -389,7 +389,7 @@ draw::Color esvg::Base::parseColor(const std::string& _inputData) {
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool esvg::Base::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Base::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
 	return false;
@@ -404,3 +404,6 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 	return tmpValue + 20*4 - _spacing*4;
 }
 
+void esvg::Base::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
+}

@@ -20,7 +20,7 @@ esvg::Text::~Text() {
 	
 }
 
-bool esvg::Text::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Text::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	_sizeMax.setValue(0,0);
 	SVG_ERROR("NOT IMPLEMENTED");
 	return false;

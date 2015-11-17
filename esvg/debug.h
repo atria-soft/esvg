@@ -16,6 +16,7 @@ namespace esvg {
 };
 #define SVG_BASE(info,data)     TK_LOG_BASE(esvg::getLogId(),info,data)
 
+#define SVG_PRINT(data)         SVG_BASE(-1, data)
 #define SVG_CRITICAL(data)      SVG_BASE(1, data)
 #define SVG_ERROR(data)         SVG_BASE(2, data)
 #define SVG_WARNING(data)       SVG_BASE(3, data)

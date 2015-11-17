@@ -12,42 +12,73 @@
 #include <etk/types.h>
 #include <vector>
 #include <etk/math/Vector2D.h>
-#include <draw/Color.h>
+#include <etk/math/Matrix2.h>
+#include <etk/Color.h>
 
 #include <exml/exml.h>
 #include <esvg/Renderer.h>
 
-#include <agg/agg_basics.h>
-#include <agg/agg_rendering_buffer.h>
-#include <agg/agg_rasterizer_scanline_aa.h>
-#include <agg/agg_scanline_p.h>
-#include <agg/agg_renderer_scanline.h>
-#include <agg/agg_path_storage.h>
-#include <agg/agg_conv_transform.h>
-#include <agg/agg_bounding_rect.h>
-#include <agg/agg_color_rgba.h>
-#include <agg/agg_pixfmt_rgba.h>
-
 namespace esvg {
+	/**
+	 * @brief Painting mode of the Object:
+	 */
+	enum paint {
+		paint_none, //!< No painting.
+		paint_color, //!< Painting a color.
+		paint_gradientLinear, //!< Painting a linear gradient.
+		paint_gradientRadial //!< Painting a radial gradient.
+	};
+	/**
+	 * @brief Indicates what happens if the gradient starts or ends inside the bounds of the target rectangle.
+	 */
+	enum spread {
+		spread_pad, //!< 'pad' spread.
+		spread_reflect, //!< 'reflect' spread.
+		spread_repead, //!< 'repead' spread.
+	};
+	
+	enum cap {
+		cap_butt,
+		cap_round,
+		cap_square
+	};
+	
+	enum join {
+		join_miter,
+		join_round,
+		join_bevel
+	};
+	
+	class PaintState {
+		public:
+			etk::Color<uint8_t,4> fill;
+			etk::Color<uint8_t,4> stroke;
+			float strokeWidth;
+			bool flagEvenOdd; //!< Fill rules
+			enum esvg::cap lineCap;
+			enum esvg::join lineJoin;
+			vec2 viewPort;
+	};
+	
 	class Base {
 		protected:
 			PaintState m_paint;
-			agg::trans_affine m_transformMatrix; //!< specific render of the curent element
+			mat2 m_transformMatrix; //!< specific render of the curent element
 			const char * spacingDist(int32_t _spacing);
 		public:
 			Base() {};
 			Base(PaintState _parentPaintState);
 			virtual ~Base() { };
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			//specific drawing for AAG librairy ...
-			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) { };
+			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };
 			void parseTransform(const std::shared_ptr<exml::Element>& _element);
-			void parsePosition(const std::shared_ptr<const exml::Element>& _element, etk::Vector2D<float> &_pos, etk::Vector2D<float> &_size);
+			void parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size);
 			float parseLength(const std::string& _dataInput);
 			void parsePaintAttr(const std::shared_ptr<const exml::Element>& _element);
-			draw::Color parseColor(const std::string& _inputData);
+			etk::Color<uint8_t,4> parseColor(const std::string& _inputData);
 	};
 };
 

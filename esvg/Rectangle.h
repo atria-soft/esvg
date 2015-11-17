@@ -14,15 +14,15 @@
 namespace esvg {
 	class Rectangle : public esvg::Base {
 		private:
-			etk::Vector2D<float> m_position; //!< position of the rectangle
-			etk::Vector2D<float> m_size; //!< size of the rectangle
-			etk::Vector2D<float> m_roundedCorner; //!< property of the rounded corner
+			vec2 m_position; //!< position of the rectangle
+			vec2 m_size; //!< size of the rectangle
+			vec2 m_roundedCorner; //!< property of the rounded corner
 		public:
 			Rectangle(PaintState _parentPaintState);
 			~Rectangle();
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
-			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 	};
 };
 

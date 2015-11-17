@@ -10,24 +10,24 @@
 #define __ESVG_PATH_H__
 
 #include <esvg/Base.h>
-#include <agg/agg_path_storage.h>
+#include <esvg/RenderPath.h>
 
 namespace esvg {
 	enum pathProperty{
-		pathStop,
-		pathMoveTo,
-		pathLineTo,
-		pathLineToH,
-		pathLineToV,
-		pathCurveTo,
-		pathSmothCurveTo,
-		pathBesizeCurveTo,
-		pathBesizeSmothCurveTo,
-		pathElliptic
+		path_stop,
+		path_moveTo,
+		path_lineTo,
+		path_lineToH,
+		path_lineToV,
+		path_curveTo,
+		path_smothCurveTo,
+		path_bezierCurveTo,
+		path_bezierSmothCurveTo,
+		path_elliptic
 	};
 	class PathBasic {
 		public:
-			PathBasic() : m_cmd(esvg::pathStop), m_relative(false) {
+			PathBasic() : m_cmd(esvg::path_stop), m_relative(false) {
 				for(int32_t iii=0; iii<7; ++iii) {
 					m_element[iii] = 0;
 				}
@@ -42,19 +42,19 @@ namespace esvg {
 		public:
 			Path(PaintState _parentPaintState);
 			~Path();
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
-			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 		private:
-			void abstractMoveTo(agg::path_storage& _path, bool _rel, double _x, double _y);
-			void abstractLineTo(agg::path_storage& _path, bool _rel, double _x, double _y);
-			void abstractHLineTo(agg::path_storage& _path, bool _rel, double _x);
-			void abstractVLineTo(agg::path_storage& _path, bool _rel, double _y);
-			void abstractCurve3(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x, double _y);
-			void abstractCurve3(agg::path_storage& _path, bool _rel, double _x, double _y);
-			void abstractCurve4(agg::path_storage& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y);
-			void abstractCurve4(agg::path_storage& _path, bool _rel, double _x2, double _y2, double _x, double _y);
-			void abstractCloseSubpath(agg::path_storage& _path);
+			void abstractMoveTo(esvg::RenderPath& _path, bool _rel, double _x, double _y);
+			void abstractLineTo(esvg::RenderPath& _path, bool _rel, double _x, double _y);
+			void abstractHLineTo(esvg::RenderPath& _path, bool _rel, double _x);
+			void abstractVLineTo(esvg::RenderPath& _path, bool _rel, double _y);
+			void abstractCurve3(esvg::RenderPath& _path, bool _rel, double _x1, double _y1, double _x, double _y);
+			void abstractCurve3(esvg::RenderPath& _path, bool _rel, double _x, double _y);
+			void abstractCurve4(esvg::RenderPath& _path, bool _rel, double _x1, double _y1, double _x2, double _y2, double _x, double _y);
+			void abstractCurve4(esvg::RenderPath& _path, bool _rel, double _x2, double _y2, double _x, double _y);
+			void abstractCloseSubpath(esvg::RenderPath& _path);
 	};
 };
 

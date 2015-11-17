@@ -26,7 +26,7 @@ def get_version():
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
-	my_module.add_module_depend(['etk', 'agg', 'exml'])
+	my_module.add_module_depend(['etk', 'exml'])
 	my_module.add_src_file([
 		'esvg/Base.cpp',
 		'esvg/Circle.cpp',
@@ -40,6 +40,7 @@ def create(target, module_name):
 		'esvg/Polyline.cpp',
 		'esvg/Rectangle.cpp',
 		'esvg/Renderer.cpp',
+		'esvg/RenderPath.cpp',
 		'esvg/Stroking.cpp',
 		'esvg/Text.cpp'
 		])

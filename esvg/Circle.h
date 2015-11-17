@@ -14,14 +14,14 @@
 namespace esvg {
 	class Circle : public esvg::Base {
 		private:
-			etk::Vector2D<float> m_position; //!< Position of the Circle
+			vec2 m_position; //!< Position of the Circle
 			float m_radius; //!< Radius of the Circle
 		public:
 			Circle(PaintState _parentPaintState);
 			~Circle();
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax);
+			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
-			virtual void aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans);
+			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 	};
 };
 

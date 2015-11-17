@@ -31,22 +31,22 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Group::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
 	// parse ...
-	etk::Vector2D<float> pos(0,0);
-	etk::Vector2D<float> size(0,0);
+	vec2 pos(0,0);
+	vec2 size(0,0);
 	parseTransform(_element);
 	parsePosition(_element, pos, size);
 	parsePaintAttr(_element);
-	SVG_VERBOSE("parsed G1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	SVG_VERBOSE("parsed G1.   trans : " << m_transformMatrix);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	SVG_VERBOSE("parsed G2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	SVG_VERBOSE("parsed G2.   trans : " << m_transformMatrix);
 	
 	_sizeMax.setValue(0,0);
 	vec2 tmpPos(0,0);
@@ -109,11 +109,11 @@ void esvg::Group::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
 }
 
-void esvg::Group::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans)
-{
+void esvg::Group::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans);
+			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans, _level+1);
 		}
 	}
 }

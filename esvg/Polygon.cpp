@@ -8,8 +8,6 @@
 
 #include <esvg/debug.h>
 #include <esvg/Polygon.h>
-#include <agg/agg_conv_stroke.h>
-#include <agg/agg_path_storage.h>
 
 #undef __class__
 #define __class__	"Polygon"
@@ -22,19 +20,19 @@ esvg::Polygon::~Polygon() {
 	
 }
 
-bool esvg::Polygon::parse(const std::shared_ptr<exml::Element>& _element, agg::trans_affine& _parentTrans, etk::Vector2D<float>& _sizeMax) {
+bool esvg::Polygon::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
 	parseTransform(_element);
 	parsePaintAttr(_element);
 	
-	SVG_VERBOSE("parsed P1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	SVG_VERBOSE("parsed P1.   trans: " << m_transformMatrix);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	SVG_VERBOSE("parsed P2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	SVG_VERBOSE("parsed P2.   trans: " << m_transformMatrix);
 	
 	const std::string sss1 = _element->getAttribute("points");
 	if (sss1.size() == 0) {
@@ -66,10 +64,13 @@ void esvg::Polygon::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
-void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _basicTrans) {
+void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polygon");
+	
+	#if 0
 	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
 	
-	agg::path_storage path;
+	esvg::RenderPath path;
 	path.start_new_path();
 	
 	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
@@ -78,7 +79,7 @@ void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 	}
 	path.close_polygon();
 	/*
-	// configure the end of the line : 
+	// configure the end of the line:
 	switch (m_paint.lineCap) {
 		case esvg::LINECAP_SQUARE:
 			path.line_cap(agg::square_cap);
@@ -103,11 +104,11 @@ void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 	}
 	*/
 	
-	agg::trans_affine mtx = m_transformMatrix;
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
+		agg::conv_transform<esvg::RenderPath, mat2> trans(path, mtx);
 		// set the filling mode : 
 		_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 		_myRenderer.m_rasterizer.add_path(trans);
@@ -117,13 +118,14 @@ void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, agg::trans_affine& _bas
 	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
 		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
 		// drawing as an outline
-		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
+		agg::conv_stroke<esvg::RenderPath> myPolygonStroke(path);
 		myPolygonStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
+		agg::conv_transform<agg::conv_stroke<esvg::RenderPath>, mat2> transStroke(myPolygonStroke, mtx);
 		// set the filling mode : 
 		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
 		_myRenderer.m_rasterizer.add_path(transStroke);
 		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
 	}
+	#endif
 }
 
