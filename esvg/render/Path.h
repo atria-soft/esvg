@@ -12,6 +12,7 @@
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
 #include <esvg/render/Element.h>
+#include <esvg/render/Point.h>
 
 namespace esvg {
 	namespace render {
@@ -38,6 +39,7 @@ namespace esvg {
 				void bezierSmoothCurveTo(bool _relative, const vec2& _pos);
 				void ellipticTo(bool _relative, float _val0, float _val1, float _val2, float _val3, float _val4, float _val5, float _val6);
 				void display(int32_t _spacing);
+				std::vector<esvg::render::Point> generateListPoints(int32_t _level, int32_t _recurtionMax = 10, float _threshold = 0.25f);
 		};
 	}
 }

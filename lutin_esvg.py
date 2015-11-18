@@ -70,7 +70,6 @@ def create(target, module_name):
 		'esvg/Renderer.h',
 		'esvg/Stroking.h',
 		'esvg/Text.h',
-		'esvg/render/Path.h',
 		'esvg/render/Element.h',
 		'esvg/render/ElementStop.h',
 		'esvg/render/ElementMoveTo.h',
@@ -81,7 +80,9 @@ def create(target, module_name):
 		'esvg/render/ElementSmoothCurveTo.h',
 		'esvg/render/ElementBezierCurveTo.h',
 		'esvg/render/ElementBezierSmoothCurveTo.h',
-		'esvg/render/ElementElliptic.h'
+		'esvg/render/ElementElliptic.h',
+		'esvg/render/Path.h',
+		'esvg/render/Point.h'
 		])
 	
 	my_module.add_path(tools.get_current_path(__file__))

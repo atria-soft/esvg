@@ -377,106 +377,8 @@ bool sortXPosFunction(const std::pair<float,float>& _e1, const std::pair<float,f
 	return _e1.first < _e2.first;
 }
 
-class PointRender {
-	public:
-		enum typePoint {
-			typePoint_single, //!< Point type is single, this mean that it start and stop of a path
-			typePoint_start, //!< Point type is starting of a path
-			typePoint_stop, //!< Point type is stoping of a path
-			typePoint_join, //!< Point type in an user point provided inside a path
-			typePoint_interpolation, //!< This point is dynamicly calculated to create an interpolation
-		};
-	public:
-		vec2 m_pos; //!< position of the point
-		enum typePoint m_type;
-		vec2 m_miterAxe;
-		vec2 m_delta;
-		float m_len;
-		PointRender(const vec2& _pos, enum typePoint _type = PointRender::typePoint_join) :
-		  m_pos(_pos),
-		  m_type(_type) {
-			// nothing to do ...
-		}
-		void setEndPath() {
-			if (m_type == typePoint_interpolation) {
-				SVG_WARNING("Request stop path of an interpolate Point");
-				m_type = typePoint_stop;
-				return;
-			}
-			if (m_type == typePoint_stop) {
-				SVG_WARNING("Request stop path of an STOP Point");
-				return;
-			}
-			if (m_type == typePoint_start) {
-				m_type = typePoint_single;
-				return;
-			}
-			m_type = typePoint_stop;
-		}
-		void normalize(const vec2& _nextPoint) {
-			m_delta = _nextPoint - m_pos;
-			m_len = m_delta.length();
-		}
-};
 
-void diplayRenderPoints(const std::vector<PointRender>& listPoints) {
-	SVG_VERBOSE(" Display list of points : size=" << listPoints.size());
-	for (int32_t iii=0;
-	     iii < listPoints.size();
-	     ++iii) {
-		switch (listPoints[iii].m_type) {
-			case PointRender::typePoint_single:
-				SVG_VERBOSE("    [" << iii << "] Find Single " << listPoints[iii].m_pos);
-				break;
-			case PointRender::typePoint_start:
-				SVG_VERBOSE("    [" << iii << "] Find Start " << listPoints[iii].m_pos);
-				break;
-			case PointRender::typePoint_stop:
-				SVG_VERBOSE("    [" << iii << "] Find Stop " << listPoints[iii].m_pos);
-				break;
-			case PointRender::typePoint_interpolation:
-				SVG_VERBOSE("    [" << iii << "] Find interpolation " << listPoints[iii].m_pos);
-				break;
-			case PointRender::typePoint_join:
-				SVG_VERBOSE("    [" << iii << "] Find Join " << listPoints[iii].m_pos);
-				break;
-		}
-	}
-}
-
-void interpolateCubicBezier(std::vector<PointRender>& _listPoint,
-                            int32_t _recurtionMax,
-                            float _threshold,
-                            vec2 _pos1,
-                            vec2 _pos2,
-                            vec2 _pos3,
-                            vec2 _pos4,
-                            int32_t _level,
-                            enum PointRender::typePoint _type) {
-	if (_level > _recurtionMax) {
-		return;
-	}
-	vec2 pos12 = (_pos1+_pos2)*0.5f;
-	vec2 pos23 = (_pos2+_pos3)*0.5f;
-	vec2 pos34 = (_pos3+_pos4)*0.5f;
-	
-	vec2 delta = _pos4 - _pos1;
-	float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
-	float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
-	
-	if ((distance2 + distance3)*(distance2 + distance3) < _threshold * delta.length2()) {
-		_listPoint.push_back(PointRender(_pos4, _type) );
-		return;
-	}
-	vec2 pos123 = (pos12+pos23)*0.5f;
-	vec2 pos234 = (pos23+pos34)*0.5f;
-	vec2 pos1234 = (pos123+pos234)*0.5f;
-	
-	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, _pos1, pos12, pos123, pos1234, _level+1, PointRender::typePoint_interpolation);
-	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, pos1234, pos234, pos34, _pos4, _level+1, _type);
-}
-
-void addSegment(std::vector<Segment>& _seg, const PointRender& _pos0, const PointRender& _pos1) {
+void addSegment(std::vector<Segment>& _seg, const esvg::render::Point& _pos0, const esvg::render::Point& _pos1) {
 	// Skip horizontal Segments
 	if (_pos0.m_pos.y() == _pos1.m_pos.y()) {
 		// remove /0 operation
@@ -485,7 +387,7 @@ void addSegment(std::vector<Segment>& _seg, const PointRender& _pos0, const Poin
 	_seg.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
-std::vector<Segment> createSegmentList(const std::vector<PointRender>& _listPoint) {
+std::vector<Segment> createSegmentList(const std::vector<esvg::render::Point>& _listPoint) {
 	std::vector<Segment> out;
 	// Build Segments
 	for (int32_t iii=0, jjj=_listPoint.size()-1;
@@ -498,7 +400,7 @@ std::vector<Segment> createSegmentList(const std::vector<PointRender>& _listPoin
 	return out;
 }
 
-std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoint) {
+std::vector<Segment> createSegmentListStroke(std::vector<esvg::render::Point>& _listPoint) {
 	std::vector<Segment> out;
 	
 	// generate for every point all the orthogonal elements
@@ -518,8 +420,8 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 	for (int32_t idPevious=-1, idCurrent=0, idNext=1;
 	     idCurrent < _listPoint.size();
 	     idPevious++, idCurrent++, idNext++) {
-		if (    _listPoint[idCurrent].m_type == PointRender::typePoint_join
-		     || _listPoint[idCurrent].m_type == PointRender::typePoint_interpolation) {
+		if (    _listPoint[idCurrent].m_type == esvg::render::Point::type_join
+		     || _listPoint[idCurrent].m_type == esvg::render::Point::type_interpolation) {
 			if (idPevious < 0 ) {
 				SVG_ERROR("an error occure a previous ID is < 0.... ");
 				continue;
@@ -540,11 +442,11 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 				vecC.safeNormalize();
 				_listPoint[idCurrent].m_miterAxe = vecC;
 			}
-		} else if (_listPoint[idCurrent].m_type == PointRender::typePoint_start) {
+		} else if (_listPoint[idCurrent].m_type == esvg::render::Point::type_start) {
 			vec2 vecB = _listPoint[idNext].m_pos - _listPoint[idCurrent].m_pos;
 			vecB.safeNormalize();
 			_listPoint[idCurrent].m_miterAxe = vec2(vecB.y(), vecB.x());
-		} else if (_listPoint[idCurrent].m_type == PointRender::typePoint_stop) {
+		} else if (_listPoint[idCurrent].m_type == esvg::render::Point::type_stop) {
 			if (idPevious < 0 ) {
 				SVG_ERROR("an error occure a previous ID is < 0.... ");
 				continue;
@@ -565,11 +467,11 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 	     iii < _listPoint.size();
 	     ++iii) {
 		switch (_listPoint[iii].m_type) {
-			case PointRender::typePoint_single:
+			case esvg::render::Point::type_single:
 				// just do nothing ....
 				SVG_VERBOSE("[" << iii << "] Find Single " << _listPoint[iii].m_pos);
 				break;
-			case PointRender::typePoint_start:
+			case esvg::render::Point::type_start:
 				{
 					SVG_VERBOSE("[" << iii << "] Find Start " << _listPoint[iii].m_pos);
 					if (haveStartLine == true) {
@@ -587,7 +489,7 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 					SVG_VERBOSE("    segment :" << leftPoint << " -> " << rightPoint);
 				}
 				break;
-			case PointRender::typePoint_stop:
+			case esvg::render::Point::type_stop:
 				{
 					SVG_VERBOSE("[" << iii << "] Find Stop " << _listPoint[iii].m_pos);
 					if (haveStartLine == true) {
@@ -612,7 +514,7 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 					SVG_VERBOSE("    segment :" << rightPoint << " -> " << leftPoint);
 				}
 				break;
-			case PointRender::typePoint_interpolation:
+			case esvg::render::Point::type_interpolation:
 				{
 					SVG_VERBOSE("[" << iii << "] Find interpolation " << _listPoint[iii].m_pos);
 					// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
@@ -629,7 +531,7 @@ std::vector<Segment> createSegmentListStroke(std::vector<PointRender>& _listPoin
 					rightPoint = right;
 				}
 				break;
-			case PointRender::typePoint_join:
+			case esvg::render::Point::type_join:
 				{
 					SVG_VERBOSE("[" << iii << "] Find Join " << _listPoint[iii].m_pos);
 					// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
@@ -740,159 +642,9 @@ Weighter createWeighter(ivec2 _size, int32_t _subSamplingCount, const std::vecto
 
 void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
-	vec2 lastPosition(0.0f, 0.0f);
-	std::vector<PointRender> listPoints;
-	int32_t lastPointId = -1;
-	bool PathStart = false;
 	int32_t recurtionMax = 10;
 	float threshold = 0.25f;
-	// Foreach element, we move in the path:
-	for(int32_t iii=0; iii<m_listElement.m_listElement.size(); iii++) {
-		switch (m_listElement.m_listElement[iii].getType()) {
-			case esvg::render::path_stop:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_stop");
-				// TODO : Check if the z value mean that the path will cycle ...
-				if (listPoints.size() != 0) {
-					if (PathStart == false) {
-						SVG_WARNING(spacingDist(_level+1) << "[" << iii << "] Request path stop of not starting path ...");
-					} else {
-						listPoints.back().setEndPath();
-						PathStart = false;
-					}
-				}
-				// nothing alse to do ...
-				break;
-			case esvg::render::path_moveTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_moveTo");
-				// stop last path
-				if (listPoints.size() != 0) {
-					if (PathStart == true) {
-						listPoints.back().setEndPath();
-						PathStart = false;
-					}
-				}
-				PathStart = true;
-				// create a new one
-				if (m_listElement.m_listElement[iii].getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
-				}
-				lastPosition += m_listElement.m_listElement[iii].getPos();
-				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
-				break;
-			case esvg::render::path_lineTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineTo");
-				// If no previous point, we need to create the last point has start ...
-				if (PathStart == false) {
-					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
-					PathStart = true;
-				}
-				if (m_listElement.m_listElement[iii].getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
-				}
-				lastPosition += m_listElement.m_listElement[iii].getPos();
-				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
-				break;
-			case esvg::render::path_lineToH:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineToH");
-				// If no previous point, we need to create the last point has start ...
-				if (PathStart == false) {
-					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
-					PathStart = true;
-				}
-				if (m_listElement.m_listElement[iii].getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
-				}
-				lastPosition += m_listElement.m_listElement[iii].getPos();
-				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
-				break;
-			case esvg::render::path_lineToV:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineToV");
-				// If no previous point, we need to create the last point has start ...
-				if (PathStart == false) {
-					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
-					PathStart = true;
-				}
-				if (m_listElement.m_listElement[iii].getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
-				}
-				lastPosition += m_listElement.m_listElement[iii].getPos();
-				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
-				break;
-			case esvg::render::path_curveTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_curveTo");
-				// If no previous point, we need to create the last point has start ...
-				if (PathStart == false) {
-					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
-					PathStart = true;
-				}
-				{
-					vec2 lastPosStore(lastPosition);
-					if (m_listElement.m_listElement[iii].getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
-					}
-					vec2 pos1 = lastPosition + m_listElement.m_listElement[iii].getPos1();;
-					vec2 pos2 = lastPosition + m_listElement.m_listElement[iii].getPos2();;
-					vec2 pos = lastPosition + m_listElement.m_listElement[iii].getPos();;
-					interpolateCubicBezier(listPoints,
-					                       recurtionMax,
-					                       threshold,
-					                       lastPosStore,
-					                       pos1,
-					                       pos2,
-					                       pos,
-					                       0,
-					                       PointRender::typePoint_join);
-					lastPosition = pos;
-				}
-				break;
-			case esvg::render::path_smoothCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_smoothCurveTo");
-				/*
-				path.curve4SmoothTo(m_listElement.m_listElement[iii].getRelative(),
-				                    vec2(m_listElement.m_listElement[iii].m_element[0],
-				                         m_listElement.m_listElement[iii].m_element[1]),
-				                    vec2(m_listElement.m_listElement[iii].m_element[2],
-				                         m_listElement.m_listElement[iii].m_element[3]) );
-				*/
-				break;
-			case esvg::render::path_bezierCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_bezierCurveTo");
-				/*
-				path.curve3To(m_listElement.m_listElement[iii].getRelative(),
-				              vec2(m_listElement.m_listElement[iii].m_element[0],
-				                   m_listElement.m_listElement[iii].m_element[1]),
-				              vec2(m_listElement.m_listElement[iii].m_element[2],
-				                   m_listElement.m_listElement[iii].m_element[3]) );
-				*/
-				break;
-			case esvg::render::path_bezierSmoothCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_bezierSmoothCurveTo");
-				/*
-				path.curve3SmoothTo(m_listElement.m_listElement[iii].getRelative(),
-				                    vec2(m_listElement.m_listElement[iii].m_element[0],
-				                         m_listElement.m_listElement[iii].m_element[1]) );
-				*/
-				break;
-			case esvg::render::path_elliptic:
-				/*
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_elliptic");
-				path.ellipticTo(m_listElement.m_listElement[iii].getRelative(),
-				                m_listElement.m_listElement[iii].m_element[0],
-				                m_listElement.m_listElement[iii].m_element[1],
-				                m_listElement.m_listElement[iii].m_element[2],
-				                m_listElement.m_listElement[iii].m_element[3],
-				                m_listElement.m_listElement[iii].m_element[4],
-				                m_listElement.m_listElement[iii].m_element[5],
-				                m_listElement.m_listElement[iii].m_element[6] );
-				*/
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_elliptic");
-				break;
-			default:
-				SVG_ERROR(spacingDist(_level+1) << "[" << iii << "] Unknow PATH commant (internal error)");
-				break;
-		}
-	}
-	diplayRenderPoints(listPoints);
+	std::vector<esvg::render::Point> listPoints = m_listElement.generateListPoints(_level, recurtionMax, threshold);
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
