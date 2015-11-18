@@ -53,7 +53,12 @@ def create(target, module_name):
 		'esvg/render/ElementSmoothCurveTo.cpp',
 		'esvg/render/ElementBezierCurveTo.cpp',
 		'esvg/render/ElementBezierSmoothCurveTo.cpp',
-		'esvg/render/ElementElliptic.cpp'
+		'esvg/render/ElementElliptic.cpp',
+		'esvg/render/Point.cpp',
+		'esvg/render/Scanline.cpp',
+		'esvg/render/Segment.cpp',
+		'esvg/render/SegmentList.cpp',
+		'esvg/render/Weight.cpp'
 		])
 	
 	my_module.add_header_file([
@@ -82,7 +87,11 @@ def create(target, module_name):
 		'esvg/render/ElementBezierSmoothCurveTo.h',
 		'esvg/render/ElementElliptic.h',
 		'esvg/render/Path.h',
-		'esvg/render/Point.h'
+		'esvg/render/Scanline.h',
+		'esvg/render/Point.h',
+		'esvg/render/Segment.h',
+		'esvg/render/SegmentList.h',
+		'esvg/render/Weight.h'
 		])
 	
 	my_module.add_path(tools.get_current_path(__file__))
