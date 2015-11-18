@@ -56,11 +56,11 @@ void esvg::Document::displayDebug() {
 }
 
 
-void esvg::Document::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans)
+void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans)
 {
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
-			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans);
+			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
 		}
 	}
 }
@@ -89,7 +89,7 @@ void esvg::Document::generateTestFile()
 	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
 	
 	
-	aggDraw(*m_renderedElement, basicTrans);
+	draw(*m_renderedElement, basicTrans);
 	std::string tmpFileOut = "yyy_out_";
 	tmpFileOut += m_fileName;
 	tmpFileOut += ".ppm";
@@ -124,7 +124,7 @@ void esvg::Document::generateAnImage(int32_t _sizeX, int32_t _sizeY) {
 	//basicTrans *= etk::mat2Translate(vec2(width*0.3, height/2));
 	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
 	
-	aggDraw(*m_renderedElement, basicTrans);
+	draw(*m_renderedElement, basicTrans);
 	std::string tmpFileOut = "zzz_out_test.ppm";
 	m_renderedElement->writePpm(tmpFileOut);
 }

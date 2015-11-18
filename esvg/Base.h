@@ -71,7 +71,7 @@ namespace esvg {
 			virtual ~Base() { };
 			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			//specific drawing for AAG librairy ...
-			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
+			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };
 			void parseTransform(const std::shared_ptr<exml::Element>& _element);

@@ -58,7 +58,7 @@ void esvg::Line::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
 }
 
-void esvg::Line::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Line");
 	# if 0
 	esvg::RenderPath path;

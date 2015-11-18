@@ -109,11 +109,11 @@ void esvg::Group::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
 }
 
-void esvg::Group::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->aggDraw(_myRenderer, _basicTrans, _level+1);
+			m_subElementList[iii]->draw(_myRenderer, _basicTrans, _level+1);
 		}
 	}
 }

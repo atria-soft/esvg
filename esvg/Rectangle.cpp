@@ -56,7 +56,7 @@ void esvg::Rectangle::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
-void esvg::Rectangle::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle");
 	
 	#if 0

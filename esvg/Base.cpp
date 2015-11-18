@@ -404,6 +404,6 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 	return tmpValue + 20*4 - _spacing*4;
 }
 
-void esvg::Base::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
 }

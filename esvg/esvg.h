@@ -71,7 +71,7 @@ namespace esvg {
 			void generateAnImage(int32_t _sizeX, int32_t _sizeY);
 			//void generateAnImage(ivec2 _size, draw::Image& _output);
 			//void generateAnImage(draw::Image& _output);
-			virtual void aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans);
+			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans);
 			uint8_t* getPointerOnData();
 			uint32_t getSizeOnData();
 			vec2 getDefinedSize() {

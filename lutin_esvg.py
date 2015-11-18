@@ -40,9 +40,20 @@ def create(target, module_name):
 		'esvg/Polyline.cpp',
 		'esvg/Rectangle.cpp',
 		'esvg/Renderer.cpp',
-		'esvg/RenderPath.cpp',
 		'esvg/Stroking.cpp',
-		'esvg/Text.cpp'
+		'esvg/Text.cpp',
+		'esvg/render/Path.cpp',
+		'esvg/render/Element.cpp',
+		'esvg/render/ElementStop.cpp',
+		'esvg/render/ElementMoveTo.cpp',
+		'esvg/render/ElementLineTo.cpp',
+		'esvg/render/ElementLineToH.cpp',
+		'esvg/render/ElementLineToV.cpp',
+		'esvg/render/ElementCurveTo.cpp',
+		'esvg/render/ElementSmoothCurveTo.cpp',
+		'esvg/render/ElementBezierCurveTo.cpp',
+		'esvg/render/ElementBezierSmoothCurveTo.cpp',
+		'esvg/render/ElementElliptic.cpp'
 		])
 	
 	my_module.add_header_file([
@@ -58,7 +69,19 @@ def create(target, module_name):
 		'esvg/Rectangle.h',
 		'esvg/Renderer.h',
 		'esvg/Stroking.h',
-		'esvg/Text.h'
+		'esvg/Text.h',
+		'esvg/render/Path.h',
+		'esvg/render/Element.h',
+		'esvg/render/ElementStop.h',
+		'esvg/render/ElementMoveTo.h',
+		'esvg/render/ElementLineTo.h',
+		'esvg/render/ElementLineToH.h',
+		'esvg/render/ElementLineToV.h',
+		'esvg/render/ElementCurveTo.h',
+		'esvg/render/ElementSmoothCurveTo.h',
+		'esvg/render/ElementBezierCurveTo.h',
+		'esvg/render/ElementBezierSmoothCurveTo.h',
+		'esvg/render/ElementElliptic.h'
 		])
 	
 	my_module.add_path(tools.get_current_path(__file__))

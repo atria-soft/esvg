@@ -57,7 +57,7 @@ void esvg::Polyline::display(int32_t _spacing) {
 }
 
 
-void esvg::Polyline::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
 	
 	

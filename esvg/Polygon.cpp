@@ -64,7 +64,7 @@ void esvg::Polygon::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
-void esvg::Polygon::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polygon");
 	
 	#if 0

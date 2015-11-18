@@ -86,185 +86,153 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _pa
 	for( const char *sss=extractCmd(elementXML, command, listDot);
 	     sss != nullptr;
 	     sss=extractCmd(sss, command, listDot) ) {
-		PathBasic pathElement;
+		bool relative = false;
 		switch(command) {
-			case 'M': // Move to (absolute)
-			case 'L': // Line to (absolute)
-			case 'V': // Vertical Line to (absolute)
-			case 'H': // Horizantal Line to (absolute)
-			case 'Q': // Quadratic Bezier curve (absolute)
-			case 'T': // smooth quadratic Bezier curve to (absolute)
-			case 'C': // curve to (absolute)
-			case 'S': // smooth curve to (absolute)
-			case 'A': // elliptical Arc (absolute)
-			case 'Z': // closepath (absolute)
-				pathElement.m_relative = false;
-				break;
-			default : // else (relative)
-				pathElement.m_relative = true;
-				break;
-		}
-		switch(command) {
-			case 'M': // Move to (absolute)
 			case 'm': // Move to (relative)
+				relative = true;
+			case 'M': // Move to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_moveTo;
 				if (listDot.size() >= 2) {
-					pathElement.m_element[0] = listDot[0];
-					pathElement.m_element[1] = listDot[1];
-					m_listElement.push_back(pathElement);
+					m_listElement.moveTo(relative,
+					                     vec2(listDot[0], listDot[1]));
 				}
-				pathElement.m_cmd = esvg::path_lineTo;
 				for(int32_t iii=2; iii<listDot.size(); iii+=2) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.push_back(pathElement);
+					m_listElement.lineTo(relative,
+					                     vec2(listDot[iii], listDot[iii+1]));
 				}
 				break;
-				
-			case 'L': // Line to (absolute)
 			case 'l': // Line to (relative)
+				relative = true;
+			case 'L': // Line to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_lineTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.push_back(pathElement);
+					m_listElement.lineTo(relative,
+					                     vec2(listDot[iii], listDot[iii+1]));
 				}
 				break;
 				
-			case 'V': // Vertical Line to (absolute)
 			case 'v': // Vertical Line to (relative)
+				relative = true;
+			case 'V': // Vertical Line to (absolute)
 				// 1 Element ...
 				if(listDot.size() == 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_lineToV;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
-					pathElement.m_element[0] = listDot[iii];
-					m_listElement.push_back(pathElement);
+					m_listElement.lineToV(relative,
+					                      listDot[iii]);
 				}
 				break;
 				
-			case 'H': // Horizantal Line to (absolute)
 			case 'h': // Horizantal Line to (relative)
+				relative = true;
+			case 'H': // Horizantal Line to (absolute)
 				// 1 Element ...
 				if(listDot.size() == 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_lineToH;
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
-					pathElement.m_element[0] = listDot[iii];
-					m_listElement.push_back(pathElement);
+					m_listElement.lineToH(relative,
+					                      listDot[iii]);
 				}
 				break;
 				
-			case 'Q': // Quadratic Bezier curve (absolute)
 			case 'q': // Quadratic Bezier curve (relative)
+				relative = true;
+			case 'Q': // Quadratic Bezier curve (absolute)
 				// 4 Elements ...
 				if(listDot.size()%4 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_bezierCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					pathElement.m_element[2] = listDot[iii+2];
-					pathElement.m_element[3] = listDot[iii+3];
-					m_listElement.push_back(pathElement);
+					m_listElement.bezierCurveTo(relative,
+					                            vec2(listDot[iii],listDot[iii+1]),
+					                            vec2(listDot[iii+2],listDot[iii+3]));
 				}
 				break;
 				
-			case 'T': // smooth quadratic Bezier curve to (absolute)
 			case 't': // smooth quadratic Bezier curve to (relative)
+				relative = true;
+			case 'T': // smooth quadratic Bezier curve to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_bezierSmothCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					m_listElement.push_back(pathElement);
+					m_listElement.bezierSmoothCurveTo(relative,
+					                                  vec2(listDot[iii],listDot[iii+1]));
 				}
 				break;
 				
-			case 'C': // curve to (absolute)
 			case 'c': // curve to (relative)
+				relative = true;
+			case 'C': // curve to (absolute)
 				// 6 Elements ...
 				if(listDot.size()%6 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = path_curveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=6) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					pathElement.m_element[2] = listDot[iii+2];
-					pathElement.m_element[3] = listDot[iii+3];
-					pathElement.m_element[4] = listDot[iii+4];
-					pathElement.m_element[5] = listDot[iii+5];
-					m_listElement.push_back(pathElement);
+					m_listElement.curveTo(relative,
+					                      vec2(listDot[iii],listDot[iii+1]),
+					                      vec2(listDot[iii+2],listDot[iii+3]),
+					                      vec2(listDot[iii+4],listDot[iii+5]));
 				}
 				break;
 				
-			case 'S': // smooth curve to (absolute)
 			case 's': // smooth curve to (relative)
+				relative = true;
+			case 'S': // smooth curve to (absolute)
 				// 4 Elements ...
 				if(listDot.size()%4 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_smothCurveTo;
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					pathElement.m_element[2] = listDot[iii+2];
-					pathElement.m_element[3] = listDot[iii+3];
-					m_listElement.push_back(pathElement);
+					m_listElement.smoothCurveTo(relative, vec2(listDot[iii],listDot[iii+1]), vec2(listDot[iii+2],listDot[iii+3]));
 				}
 				break;
 				
-			case 'A': // elliptical Arc (absolute)
 			case 'a': // elliptical Arc (relative)
+				relative = true;
+			case 'A': // elliptical Arc (absolute)
 				// 7 Elements ...
 				if(listDot.size()%7 != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_elliptic;
 				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
-					pathElement.m_element[0] = listDot[iii];
-					pathElement.m_element[1] = listDot[iii+1];
-					pathElement.m_element[2] = listDot[iii+2];
-					pathElement.m_element[3] = listDot[iii+3];
-					pathElement.m_element[4] = listDot[iii+4];
-					pathElement.m_element[5] = listDot[iii+5];
-					pathElement.m_element[6] = listDot[iii+6];
-					m_listElement.push_back(pathElement);
+					m_listElement.ellipticTo(relative,
+					                         listDot[iii],
+					                         listDot[iii+1],
+					                         listDot[iii+2],
+					                         listDot[iii+3],
+					                         listDot[iii+4],
+					                         listDot[iii+5],
+					                         listDot[iii+6]);
 				}
 				break;
-			case 'Z': // closepath (absolute)
 			case 'z': // closepath (relative)
+				relative = true;
+			case 'Z': // closepath (absolute)
 				// 0 Element ...
 				if(listDot.size() != 0) {
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				pathElement.m_cmd = esvg::path_stop;
-				m_listElement.push_back(pathElement);
+				m_listElement.stop(relative);
 				break;
 			default:
 				SVG_ERROR ("Unknow error : \"" << command << "\"");
@@ -275,62 +243,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _pa
 }
 
 void esvg::Path::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Path");
-	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
-		switch (m_listElement[iii].m_cmd) {
-			case esvg::path_stop:
-				SVG_DEBUG(spacingDist(_spacing+4) << "STOP");
-				break;
-			case esvg::path_moveTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "MOVETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
-				break;
-			case esvg::path_lineTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
-				break;
-			case esvg::path_lineToH:
-				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO_H (" << m_listElement[iii].m_element[0] << ")" );
-				break;
-			case esvg::path_lineToV:
-				SVG_DEBUG(spacingDist(_spacing+4) << "LINETO_V (" << m_listElement[iii].m_element[0] << ")" );
-				break;
-			case esvg::path_curveTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "CURVETO (" << m_listElement[iii].m_element[0] << 
-				                                             "," << m_listElement[iii].m_element[1] << 
-				                                             "," << m_listElement[iii].m_element[2] << 
-				                                             "," << m_listElement[iii].m_element[3] << 
-				                                             "," << m_listElement[iii].m_element[4] << 
-				                                             "," << m_listElement[iii].m_element[5] << ")" );
-				break;
-			case esvg::path_smothCurveTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "SMOTH_CURVETO (" << m_listElement[iii].m_element[0] <<
-				                                                   "," << m_listElement[iii].m_element[1] << 
-				                                                   "," << m_listElement[iii].m_element[2] << 
-				                                                   "," << m_listElement[iii].m_element[3] <<  ")" );
-				break;
-			case esvg::path_bezierCurveTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "BEZIER_CURVETO (" << m_listElement[iii].m_element[0] << 
-				                                                    "," << m_listElement[iii].m_element[1] << 
-				                                                    "," << m_listElement[iii].m_element[2] << 
-				                                                    "," << m_listElement[iii].m_element[3] << ")" );
-				break;
-			case esvg::path_bezierSmothCurveTo:
-				SVG_DEBUG(spacingDist(_spacing+4) << "BEZIER_SMOTH_CURVETO (" << m_listElement[iii].m_element[0] << "," << m_listElement[iii].m_element[1] << ")" );
-				break;
-			case esvg::path_elliptic:
-				SVG_DEBUG(spacingDist(_spacing+4) << "ELLIPTIC (" << m_listElement[iii].m_element[0] << 
-				                                              "," << m_listElement[iii].m_element[1] << 
-				                                              "," << m_listElement[iii].m_element[2] << 
-				                                              "," << m_listElement[iii].m_element[3] << 
-				                                              "," << m_listElement[iii].m_element[4] << 
-				                                              "," << m_listElement[iii].m_element[5] << 
-				                                              "," << m_listElement[iii].m_element[6] << ")" );
-				// show explanation at : http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
-				break;
-			default:
-				SVG_DEBUG(spacingDist(_spacing+4) << "????" );
-				break;
-		}
-	}
+	m_listElement.display(_spacing);
 }
 
 class Segment {
@@ -825,7 +738,7 @@ Weighter createWeighter(ivec2 _size, int32_t _subSamplingCount, const std::vecto
 
 
 
-void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
 	vec2 lastPosition(0.0f, 0.0f);
 	std::vector<PointRender> listPoints;
@@ -834,10 +747,10 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	int32_t recurtionMax = 10;
 	float threshold = 0.25f;
 	// Foreach element, we move in the path:
-	for(int32_t iii=0; iii<m_listElement.size(); iii++) {
-		switch (m_listElement[iii].m_cmd) {
-			case esvg::path_stop:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_stop");
+	for(int32_t iii=0; iii<m_listElement.m_listElement.size(); iii++) {
+		switch (m_listElement.m_listElement[iii].getType()) {
+			case esvg::render::path_stop:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_stop");
 				// TODO : Check if the z value mean that the path will cycle ...
 				if (listPoints.size() != 0) {
 					if (PathStart == false) {
@@ -849,8 +762,8 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 				}
 				// nothing alse to do ...
 				break;
-			case esvg::path_moveTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_moveTo");
+			case esvg::render::path_moveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_moveTo");
 				// stop last path
 				if (listPoints.size() != 0) {
 					if (PathStart == true) {
@@ -860,53 +773,53 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 				}
 				PathStart = true;
 				// create a new one
-				if (m_listElement[iii].m_relative == false) {
+				if (m_listElement.m_listElement[iii].getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
-				lastPosition += vec2(m_listElement[iii].m_element[0], m_listElement[iii].m_element[1]);
+				lastPosition += m_listElement.m_listElement[iii].getPos();
 				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
 				break;
-			case esvg::path_lineTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_lineTo");
+			case esvg::render::path_lineTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineTo");
 				// If no previous point, we need to create the last point has start ...
 				if (PathStart == false) {
 					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
 					PathStart = true;
 				}
-				if (m_listElement[iii].m_relative == false) {
+				if (m_listElement.m_listElement[iii].getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
-				lastPosition += vec2(m_listElement[iii].m_element[0], m_listElement[iii].m_element[1]);
+				lastPosition += m_listElement.m_listElement[iii].getPos();
 				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
 				break;
-			case esvg::path_lineToH:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_lineToH");
+			case esvg::render::path_lineToH:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineToH");
 				// If no previous point, we need to create the last point has start ...
 				if (PathStart == false) {
 					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
 					PathStart = true;
 				}
-				if (m_listElement[iii].m_relative == false) {
+				if (m_listElement.m_listElement[iii].getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
-				lastPosition += vec2(m_listElement[iii].m_element[0], 0.0f);
+				lastPosition += m_listElement.m_listElement[iii].getPos();
 				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
 				break;
-			case esvg::path_lineToV:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_lineToV");
+			case esvg::render::path_lineToV:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_lineToV");
 				// If no previous point, we need to create the last point has start ...
 				if (PathStart == false) {
 					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
 					PathStart = true;
 				}
-				if (m_listElement[iii].m_relative == false) {
+				if (m_listElement.m_listElement[iii].getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
-				lastPosition += vec2(0.0, m_listElement[iii].m_element[1]);
+				lastPosition += m_listElement.m_listElement[iii].getPos();
 				listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_start));
 				break;
-			case esvg::path_curveTo:
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_curveTo");
+			case esvg::render::path_curveTo:
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_curveTo");
 				// If no previous point, we need to create the last point has start ...
 				if (PathStart == false) {
 					listPoints.push_back(PointRender(lastPosition, PointRender::typePoint_join));
@@ -914,12 +827,12 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 				}
 				{
 					vec2 lastPosStore(lastPosition);
-					if (m_listElement[iii].m_relative == false) {
+					if (m_listElement.m_listElement[iii].getRelative() == false) {
 						lastPosition = vec2(0.0f, 0.0f);
 					}
-					vec2 pos1 = lastPosition + vec2(m_listElement[iii].m_element[0], m_listElement[iii].m_element[1]);
-					vec2 pos2 = lastPosition + vec2(m_listElement[iii].m_element[2], m_listElement[iii].m_element[3]);
-					vec2 pos = lastPosition + vec2(m_listElement[iii].m_element[4], m_listElement[iii].m_element[5]);
+					vec2 pos1 = lastPosition + m_listElement.m_listElement[iii].getPos1();;
+					vec2 pos2 = lastPosition + m_listElement.m_listElement[iii].getPos2();;
+					vec2 pos = lastPosition + m_listElement.m_listElement[iii].getPos();;
 					interpolateCubicBezier(listPoints,
 					                       recurtionMax,
 					                       threshold,
@@ -932,47 +845,47 @@ void esvg::Path::aggDraw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 					lastPosition = pos;
 				}
 				break;
-			case esvg::path_smothCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_smothCurveTo");
+			case esvg::render::path_smoothCurveTo:
+				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_smoothCurveTo");
 				/*
-				path.curve4SmoothTo(m_listElement[iii].m_relative,
-				                    vec2(m_listElement[iii].m_element[0],
-				                         m_listElement[iii].m_element[1]),
-				                    vec2(m_listElement[iii].m_element[2],
-				                         m_listElement[iii].m_element[3]) );
+				path.curve4SmoothTo(m_listElement.m_listElement[iii].getRelative(),
+				                    vec2(m_listElement.m_listElement[iii].m_element[0],
+				                         m_listElement.m_listElement[iii].m_element[1]),
+				                    vec2(m_listElement.m_listElement[iii].m_element[2],
+				                         m_listElement.m_listElement[iii].m_element[3]) );
 				*/
 				break;
-			case esvg::path_bezierCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_bezierCurveTo");
+			case esvg::render::path_bezierCurveTo:
+				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_bezierCurveTo");
 				/*
-				path.curve3To(m_listElement[iii].m_relative,
-				              vec2(m_listElement[iii].m_element[0],
-				                   m_listElement[iii].m_element[1]),
-				              vec2(m_listElement[iii].m_element[2],
-				                   m_listElement[iii].m_element[3]) );
+				path.curve3To(m_listElement.m_listElement[iii].getRelative(),
+				              vec2(m_listElement.m_listElement[iii].m_element[0],
+				                   m_listElement.m_listElement[iii].m_element[1]),
+				              vec2(m_listElement.m_listElement[iii].m_element[2],
+				                   m_listElement.m_listElement[iii].m_element[3]) );
 				*/
 				break;
-			case esvg::path_bezierSmothCurveTo:
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_bezierSmothCurveTo");
+			case esvg::render::path_bezierSmoothCurveTo:
+				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_bezierSmoothCurveTo");
 				/*
-				path.curve3SmoothTo(m_listElement[iii].m_relative,
-				                    vec2(m_listElement[iii].m_element[0],
-				                         m_listElement[iii].m_element[1]) );
+				path.curve3SmoothTo(m_listElement.m_listElement[iii].getRelative(),
+				                    vec2(m_listElement.m_listElement[iii].m_element[0],
+				                         m_listElement.m_listElement[iii].m_element[1]) );
 				*/
 				break;
-			case esvg::path_elliptic:
+			case esvg::render::path_elliptic:
 				/*
-				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_elliptic");
-				path.ellipticTo(m_listElement[iii].m_relative,
-				                m_listElement[iii].m_element[0],
-				                m_listElement[iii].m_element[1],
-				                m_listElement[iii].m_element[2],
-				                m_listElement[iii].m_element[3],
-				                m_listElement[iii].m_element[4],
-				                m_listElement[iii].m_element[5],
-				                m_listElement[iii].m_element[6] );
+				SVG_VERBOSE(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_elliptic");
+				path.ellipticTo(m_listElement.m_listElement[iii].getRelative(),
+				                m_listElement.m_listElement[iii].m_element[0],
+				                m_listElement.m_listElement[iii].m_element[1],
+				                m_listElement.m_listElement[iii].m_element[2],
+				                m_listElement.m_listElement[iii].m_element[3],
+				                m_listElement.m_listElement[iii].m_element[4],
+				                m_listElement.m_listElement[iii].m_element[5],
+				                m_listElement.m_listElement[iii].m_element[6] );
 				*/
-				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::path_elliptic");
+				SVG_TODO(spacingDist(_level+1) << "[" << iii << "] Draw : esvg::render::path_elliptic");
 				break;
 			default:
 				SVG_ERROR(spacingDist(_level+1) << "[" << iii << "] Unknow PATH commant (internal error)");
