@@ -28,8 +28,15 @@ def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
 	my_module.add_src_file([
 		'test/main.cpp',
+		'test/testCircle.cpp',
+		'test/testEllipse.cpp',
+		'test/testGroup.cpp',
+		'test/testLine.cpp',
 		'test/testParsingFile.cpp',
 		'test/testPath.cpp',
+		'test/testPolygon.cpp',
+		'test/testPolyline.cpp',
+		'test/testRectangle.cpp'
 		])
 	my_module.add_module_depend(['esvg', 'gtest', 'test-debug'])
 	return my_module

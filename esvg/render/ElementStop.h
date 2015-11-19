@@ -15,12 +15,11 @@
 
 namespace esvg {
 	namespace render {
-		class ElementStop : public Element {
+		class ElementStop : public esvg::render::Element {
 			public:
-				ElementStop(bool _relative=false):
-				  Element(esvg::render::path_stop, _relative) {
-					
-				}
+				ElementStop(bool _relative=false);
+			public:
+				virtual std::string display() const;
 		};
 	}
 }

@@ -12,12 +12,12 @@
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
 #include <etk/Color.h>
+#include <esvg/render/Weight.h>
 
 namespace esvg {
 	
 	class Renderer {
 		public:
-			std::vector<uint8_t> m_scanline;
 			std::vector<uint8_t> m_buffer;
 			ivec2 m_size;
 			int32_t m_stride;
@@ -31,6 +31,10 @@ namespace esvg {
 			uint32_t getDataSize() {
 				return m_buffer.size();
 			};
+			void print(const esvg::render::Weight& _weightFill,
+			           const etk::Color<uint8_t,4>& _colorFill,
+			           const esvg::render::Weight& _weightStroke,
+			           const etk::Color<uint8_t,4>& _colorStroke);
 	};
 };
 

@@ -15,12 +15,11 @@
 
 namespace esvg {
 	namespace render {
-		class ElementBezierSmoothCurveTo : public Element {
+		class ElementBezierSmoothCurveTo : public esvg::render::Element {
 			public:
-				ElementBezierSmoothCurveTo(bool _relative, const vec2& _pos):
-				  Element(esvg::render::path_bezierSmoothCurveTo, _relative) {
-					m_pos = _pos;
-				}
+				ElementBezierSmoothCurveTo(bool _relative, const vec2& _pos);
+			public:
+				virtual std::string display() const;
 		};
 	}
 }

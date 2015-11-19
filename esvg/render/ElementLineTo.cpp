@@ -10,3 +10,13 @@
 #include <esvg/debug.h>
 
 
+
+esvg::render::ElementLineTo::ElementLineTo(bool _relative, const vec2& _pos):
+  Element(esvg::render::path_lineTo, _relative) {
+	m_pos = _pos;
+}
+
+
+std::string esvg::render::ElementLineTo::display() const {
+	return std::string("pos=") + etk::to_string(m_pos);
+}

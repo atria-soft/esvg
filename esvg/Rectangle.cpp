@@ -8,6 +8,8 @@
 
 #include <esvg/debug.h>
 #include <esvg/Rectangle.h>
+#include <esvg/render/Path.h>
+#include <esvg/render/Weight.h>
 
 #undef __class__
 #define __class__	"Rectangle"
@@ -27,9 +29,9 @@ bool esvg::Rectangle::parse(const std::shared_ptr<exml::Element>& _element, mat2
 	if (_element == nullptr) {
 		return false;
 	}
-	m_position.setValue(0,0);
-	m_size.setValue(0,0);
-	m_roundedCorner.setValue(0,0);
+	m_position.setValue(0.0f, 0.0f);
+	m_size.setValue(0.0f, 0.0f);
+	m_roundedCorner.setValue(0.0f, 0.0f);
 	
 	parseTransform(_element);
 	parsePaintAttr(_element);
@@ -57,38 +59,47 @@ void esvg::Rectangle::display(int32_t _spacing) {
 }
 
 void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle");
+	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle : fill=" << m_paint.fill << " stroke=" << m_paint.stroke);
+	// TODO : rounded corner ...
+	esvg::render::Path listElement;
+	listElement.clear();
+	listElement.moveTo(false, m_position);
+	listElement.lineToH(true, m_size.x());
+	listElement.lineToV(true, m_size.y());
+	listElement.lineToH(true, -m_size.x());
+	listElement.lineToV(true, -m_size.y());
+	listElement.stop();
 	
-	#if 0
-	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
-	// Creating a rounded rectangle
-	agg::rounded_rect rect_r(m_position.x(), m_position.y(), m_position.x()+m_size.x(), m_position.y()+m_size.y(), m_roundedCorner.x());
-	rect_r.radius(m_roundedCorner.x(), m_roundedCorner.y());
-	rect_r.normalize_radius();
+	int32_t recurtionMax = 10;
+	float threshold = 0.25f;
 	
-	mat2  mtx = m_transformMatrix;
-	// herited modifications ...
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
-	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::rounded_rect, mat2> trans(rect_r, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	std::vector<esvg::render::Point> listPoints = listElement.generateListPoints(_level, recurtionMax, threshold);
+	
+	esvg::render::Weight tmpFill;
+	esvg::render::Weight tmpStroke;
+	// Check if we need to display background
+	int32_t nbSubScanLine = 8;
+	if (m_paint.fill.a() != 0x00) {
+		esvg::render::SegmentList listSegment;
+		listSegment.createSegmentList(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpFill.generate(ivec2(128,128), nbSubScanLine, listSegment);
 	}
-
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// drawing as an outline
-		agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		rect_p.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::rounded_rect>, mat2> transStroke(rect_p, mtx);
-		_myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	// check if we need to display stroke:
+	if (    m_paint.strokeWidth > 0
+	     && m_paint.stroke.a() != 0x00) {
+		esvg::render::SegmentList listSegment;
+		listSegment.createSegmentListStroke(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpStroke.generate(ivec2(128,128), nbSubScanLine, listSegment);
 	}
-	#endif
+	// add on images:
+	_myRenderer.print(tmpFill,
+	                  m_paint.fill,
+	                  tmpStroke,
+	                  m_paint.stroke);
 }
 

@@ -98,7 +98,7 @@ void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _elem
 	}
 	content = _element->getAttribute("y");
 	if (content.size()!=0) {
-		_pos.setX(parseLength(content));
+		_pos.setY(parseLength(content));
 	}
 	content = _element->getAttribute("width");
 	if (content.size()!=0) {

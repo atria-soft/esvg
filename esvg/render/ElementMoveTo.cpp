@@ -10,3 +10,13 @@
 #include <esvg/debug.h>
 
 
+
+esvg::render::ElementMoveTo::ElementMoveTo(bool _relative, const vec2& _pos):
+  Element(esvg::render::path_moveTo, _relative) {
+	m_pos = _pos;
+}
+
+
+std::string esvg::render::ElementMoveTo::display() const {
+	return std::string("pos=") + etk::to_string(m_pos);
+}

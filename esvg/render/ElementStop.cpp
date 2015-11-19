@@ -10,3 +10,14 @@
 #include <esvg/debug.h>
 
 
+
+esvg::render::ElementStop::ElementStop(bool _relative):
+  Element(esvg::render::path_stop, _relative) {
+	
+}
+
+std::string esvg::render::ElementStop::display() const {
+	return "";
+}
+
+

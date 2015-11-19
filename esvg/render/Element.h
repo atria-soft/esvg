@@ -76,8 +76,18 @@ namespace esvg {
 				void setPos2(const vec2& _val) {
 					m_pos2 = _val;
 				}
+			public:
+				virtual std::string display() const = 0;
 		};
 	}
+	/**
+	 * @brief Debug operator To display the curent element in a Human redeable information
+	 */
+	std::ostream& operator <<(std::ostream& _os, const esvg::render::Element& _obj);
+	/**
+	 * @brief Debug operator To display the curent element in a Human redeable information
+	 */
+	std::ostream& operator <<(std::ostream& _os, enum esvg::render::path _obj);
 }
 
 #endif

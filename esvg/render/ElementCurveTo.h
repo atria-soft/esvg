@@ -15,14 +15,11 @@
 
 namespace esvg {
 	namespace render {
-		class ElementCurveTo : public Element {
+		class ElementCurveTo : public esvg::render::Element {
 			public:
-				ElementCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos):
-				  Element(esvg::render::path_curveTo, _relative) {
-					m_pos = _pos;
-					m_pos1 = _pos1;
-					m_pos2 = _pos2;
-				}
+				ElementCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos);
+			public:
+				virtual std::string display() const;
 		};
 	}
 }

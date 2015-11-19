@@ -10,3 +10,14 @@
 #include <esvg/debug.h>
 
 
+
+esvg::render::ElementSmoothCurveTo::ElementSmoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos):
+  Element(esvg::render::path_smoothCurveTo, _relative) {
+	m_pos = _pos;
+	m_pos2 = _pos2;
+}
+
+
+std::string esvg::render::ElementSmoothCurveTo::display() const {
+	return std::string("pos=") + etk::to_string(m_pos) + " pos2=" + etk::to_string(m_pos2);
+}

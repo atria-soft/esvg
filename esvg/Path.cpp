@@ -215,14 +215,20 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _pa
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
+					bool largeArcFlag = true;
+					bool sweepFlag = true;
+					if (listDot[iii+3] == 0.0f) {
+						largeArcFlag = false;
+					}
+					if (listDot[iii+4] == 0.0f) {
+						sweepFlag = false;
+					}
 					m_listElement.ellipticTo(relative,
-					                         listDot[iii],
-					                         listDot[iii+1],
+					                         vec2(listDot[iii], listDot[iii+1]),
 					                         listDot[iii+2],
-					                         listDot[iii+3],
-					                         listDot[iii+4],
-					                         listDot[iii+5],
-					                         listDot[iii+6]);
+					                         largeArcFlag,
+					                         sweepFlag,
+					                         vec2(listDot[iii+5], listDot[iii+6]) );
 				}
 				break;
 			case 'z': // closepath (relative)
@@ -251,10 +257,12 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
 	int32_t recurtionMax = 10;
 	float threshold = 0.25f;
-	std::vector<esvg::render::Point> listPoints = m_listElement.generateListPoints(_level, recurtionMax, threshold);
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
+	
+	std::vector<esvg::render::Point> listPoints = m_listElement.generateListPoints(_level, recurtionMax, threshold);
+	
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
 	// Check if we need to display background
@@ -274,23 +282,9 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 		tmpStroke.generate(ivec2(128,128), nbSubScanLine, listSegment);
 	}
 	// add on images:
-	for (int32_t yyy=0; yyy<_myRenderer.m_size.y(); ++yyy) {
-		for (int32_t xxx=0; xxx<_myRenderer.m_size.x(); ++xxx) {
-			ivec2 pos(xxx, yyy);
-			float value = tmpFill.get(pos);
-			float valueStroke = tmpStroke.get(pos);
-			if (valueStroke != 0.0f) {
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4    ] = uint8_t(valueStroke*m_paint.stroke.r());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueStroke*m_paint.stroke.g());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueStroke*m_paint.stroke.b());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueStroke*m_paint.stroke.a());
-			} else {
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4    ] = uint8_t(value*m_paint.fill.r());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 1] = uint8_t(value*m_paint.fill.g());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 2] = uint8_t(value*m_paint.fill.b());
-				_myRenderer.m_buffer[(_myRenderer.m_size.x()*yyy + xxx)*4 + 3] = uint8_t(value*m_paint.fill.a());
-			}
-		}
-	}
+	_myRenderer.print(tmpFill,
+	                  m_paint.fill,
+	                  tmpStroke,
+	                  m_paint.stroke);
 }
 

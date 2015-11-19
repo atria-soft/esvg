@@ -15,12 +15,11 @@
 
 namespace esvg {
 	namespace render {
-		class ElementLineToV : public Element {
+		class ElementLineToV : public esvg::render::Element {
 			public:
-				ElementLineToV(bool _relative, float _posY):
-				  Element(esvg::render::path_lineToV, _relative) {
-					m_pos = vec2(0.0f, _posY);
-				}
+				ElementLineToV(bool _relative, float _posY);
+			public:
+				virtual std::string display() const;
 		};
 	}
 }

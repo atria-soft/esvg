@@ -8,25 +8,43 @@
 
 #include <gtest/gtest.h>
 #include <esvg/esvg.h>
+/**
+ * @author Edouard DUPIN
+ * 
+ * @copyright 2014, Edouard DUPIN, all right reserved
+ * 
+ * @license APACHE v2.0 (see license file)
+ */
 
-TEST(TestPath, basicTest) {
+#include <gtest/gtest.h>
+#include <esvg/esvg.h>
+
+TEST(TestPath, fill) {
 	esvg::Document doc;
-	#if 0
 	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
-	           "<svg width='64' height='64'>"
-	           "	<g transform='matrix(1.2,0,0,1.2,-579.7336,-567.9832)'>"
-	           "		<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
-	           "		      style='fill:#F00;fill-rule:evenodd;stroke:#0000' />"
-	           "	</g>"
+	           "<svg height='100' width='100'>"
+	           "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
+	           "	      fill='red' />"
 	           "</svg>");
-	#else
+	doc.generateAnImage(ivec2(100, 100), "TestPath_fill.ppm");
+}
+
+TEST(TestPath, stroke) {
+	esvg::Document doc;
 	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
-	           "<svg width='64' height='64'>"
-	           "	<g transform='matrix(1.2,0,0,1.2,-579.7336,-567.9832)'>"
-	           "		<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
-	           "		      style='fill:#000;stroke:#00F;stroke-width:5;fill-rule:evenodd' />"
-	           "	</g>"
+	           "<svg height='100' width='100'>"
+	           "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
+	           "	      stroke='green' stroke-width='3' />"
 	           "</svg>");
-	#endif
-	doc.generateAnImage(128, 128);
+	doc.generateAnImage(ivec2(100, 100), "TestPath_stroke.ppm");
+}
+
+TEST(TestPath, fill_and_stroke) {
+	esvg::Document doc;
+	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	           "<svg height='100' width='100'>"
+	           "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
+	           "	      stroke='green' stroke-width='3' fill='red' />"
+	           "</svg>");
+	doc.generateAnImage(ivec2(100, 100), "TestPath_fill_and_stroke.ppm");
 }

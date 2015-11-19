@@ -15,12 +15,20 @@
 
 namespace esvg {
 	namespace render {
-		class ElementElliptic : public Element {
+		class ElementElliptic : public esvg::render::Element {
+			private:
+				float m_angle;
+				bool m_largeArcFlag;
+				bool m_sweepFlag;
 			public:
-				ElementElliptic(bool _relative, float _val0, float _val1, float _val2, float _val3, float _val4, float _val5, float _val6):
-				  Element(esvg::render::path_elliptic, _relative) {
-					// TODO ... later ...
-				}
+				ElementElliptic(bool _relative,
+				                const vec2& _radius, // in m_pos1
+				                float _angle,
+				                bool _largeArcFlag,
+				                bool _sweepFlag,
+				                const vec2& _pos);
+			public:
+				virtual std::string display() const;
 		};
 	}
 }

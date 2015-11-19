@@ -28,8 +28,8 @@ esvg::Document::Document() :
 	m_fileName = "";
 	m_version = "0.0";
 	m_loadOK = false;
-	m_paint.fill = etk::color::red;
-	m_paint.stroke = etk::color::white;
+	m_paint.fill = etk::color::none;
+	m_paint.stroke = etk::color::none;
 	
 	m_paint.strokeWidth = 1.0;
 	m_paint.viewPort.setValue(255,255);
@@ -98,14 +98,14 @@ void esvg::Document::generateTestFile()
 }
 
 
-
-void esvg::Document::generateAnImage(int32_t _sizeX, int32_t _sizeY) {
-	int32_t sizeX = _sizeX;
+// FOR TEST only ...
+void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName) {
+	int32_t sizeX = _size.x();
 	if (sizeX == 0) {
 		SVG_ERROR("SizeX == 0 ==> set 64");
 		sizeX = 64;
 	}
-	int32_t sizeY = _sizeY;
+	int32_t sizeY = _size.y();
 	if (sizeY == 0) {
 		SVG_ERROR("SizeY == 0 ==> set 64");
 		sizeY = 64;
@@ -125,8 +125,7 @@ void esvg::Document::generateAnImage(int32_t _sizeX, int32_t _sizeY) {
 	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
 	
 	draw(*m_renderedElement, basicTrans);
-	std::string tmpFileOut = "zzz_out_test.ppm";
-	m_renderedElement->writePpm(tmpFileOut);
+	m_renderedElement->writePpm(_fileName);
 }
 /*
 void esvg::Document::generateAnImage(draw::Image& _output) {
@@ -165,8 +164,8 @@ void esvg::Document::clear() {
 	m_fileName = "";
 	m_version = "0.0";
 	m_loadOK = true;
-	m_paint.fill = etk::color::red;
-	m_paint.stroke = etk::color::white;
+	m_paint.fill = etk::color::none;
+	m_paint.stroke = etk::color::none;
 	
 	m_paint.strokeWidth = 1.0;
 	m_paint.viewPort.setValue(255,255);
