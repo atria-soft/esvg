@@ -46,6 +46,7 @@ void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList&
 void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList& _listPoint) {
 	for (auto &itListPoint : _listPoint.m_data) {
 		// generate for every point all the orthogonal elements
+		//                                                                                   
 		//     normal edge             *                 end path                            
 		//                           * | *                      * * * * * * * * * * * * *    
 		//                         *   |<--*----this                            |       *    
@@ -114,6 +115,20 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		bool haveStartLine;
 		vec2 leftPoint;
 		vec2 rightPoint;
+		if (itListPoint.size() > 0) {
+			if (itListPoint.front().m_type == esvg::render::Point::type_join) {
+				// cyclic path...
+				if (    itListPoint.back().m_type == esvg::render::Point::type_join
+				     || itListPoint.back().m_type == esvg::render::Point::type_interpolation) {
+					leftPoint =   itListPoint.back().m_pos
+					            + itListPoint.back().m_miterAxe*lineWidth*0.5f;
+					rightPoint =   itListPoint.back().m_pos
+					             - itListPoint.back().m_miterAxe*lineWidth*0.5f;
+				} else {
+					SVG_ERROR("Start list point with a join, but last lement is not a join");
+				}
+			}
+		}
 		for (auto &it : itListPoint) {
 			switch (it.m_type) {
 				case esvg::render::Point::type_single:

@@ -149,6 +149,10 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					} else {
 						// find the previous tart of the path ...
 						tmpListPoint.front().m_type = esvg::render::Point::type_join;
+						// Remove the last point if it is the same position...
+						if (tmpListPoint.front().m_pos == tmpListPoint.back().m_pos) {
+							tmpListPoint.pop_back();
+						}
 						out.addList(tmpListPoint);
 						tmpListPoint.clear();
 					}
