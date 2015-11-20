@@ -12,7 +12,7 @@
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
 #include <esvg/render/Element.h>
-#include <esvg/render/Point.h>
+#include <esvg/render/PointList.h>
 #include <memory>
 
 namespace esvg {
@@ -29,7 +29,8 @@ namespace esvg {
 					
 				}
 				void clear();
-				void stop(bool _relative=false);
+				void stop();
+				void close(bool _relative=false);
 				void moveTo(bool _relative, const vec2& _pos);
 				void lineTo(bool _relative, const vec2& _pos);
 				void lineToH(bool _relative, float _posX);
@@ -45,7 +46,7 @@ namespace esvg {
 				                bool _sweepFlag,
 				                const vec2& _pos);
 				void display(int32_t _spacing);
-				std::vector<esvg::render::Point> generateListPoints(int32_t _level, int32_t _recurtionMax = 10, float _threshold = 0.25f);
+				esvg::render::PointList generateListPoints(int32_t _level, int32_t _recurtionMax = 10, float _threshold = 0.25f);
 		};
 	}
 }

@@ -9,6 +9,9 @@
 #include <esvg/render/Weight.h>
 #include <esvg/debug.h>
 
+#undef __class__
+#define __class__	"render::Weight"
+
 
 esvg::render::Weight::Weight() {
 	

@@ -8,10 +8,17 @@
 
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
+
+#undef __class__
+#define __class__	"rerder::Element"
+
 std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::render::path _obj) {
 	switch (_obj) {
 		case esvg::render::path_stop:
 			_os << "path_stop";
+			break;
+		case esvg::render::path_close:
+			_os << "path_close";
 			break;
 		case esvg::render::path_moveTo:
 			_os << "path_moveTo";

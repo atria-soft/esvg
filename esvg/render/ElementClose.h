@@ -6,8 +6,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#ifndef __ESVG_RENDER_ELEMENT_STOP_H__
-#define __ESVG_RENDER_ELEMENT_STOP_H__
+#ifndef __ESVG_RENDER_ELEMENT_CLOSE_H__
+#define __ESVG_RENDER_ELEMENT_CLOSE_H__
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
@@ -15,9 +15,9 @@
 
 namespace esvg {
 	namespace render {
-		class ElementStop : public esvg::render::Element {
+		class ElementClose : public esvg::render::Element {
 			public:
-				ElementStop();
+				ElementClose(bool _relative=false);
 			public:
 				virtual std::string display() const;
 		};

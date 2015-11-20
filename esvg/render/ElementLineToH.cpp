@@ -9,6 +9,8 @@
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
 
+#undef __class__
+#define __class__	"rerder::ElementLineToH"
 
 
 esvg::render::ElementLineToH::ElementLineToH(bool _relative, float _posX):

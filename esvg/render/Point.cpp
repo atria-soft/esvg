@@ -9,6 +9,8 @@
 #include <esvg/render/Point.h>
 #include <esvg/debug.h>
 
+#undef __class__
+#define __class__	"rerder::Point"
 
 void esvg::render::Point::setEndPath() {
 	if (m_type == esvg::render::Point::type_interpolation) {

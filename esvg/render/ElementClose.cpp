@@ -11,14 +11,14 @@
 
 
 #undef __class__
-#define __class__	"rerder::ElementStop"
+#define __class__	"rerder::ElementClose"
 
-esvg::render::ElementStop::ElementStop():
-  Element(esvg::render::path_stop) {
+esvg::render::ElementClose::ElementClose(bool _relative):
+  Element(esvg::render::path_close, _relative) {
 	
 }
 
-std::string esvg::render::ElementStop::display() const {
+std::string esvg::render::ElementClose::display() const {
 	return "";
 }
 

@@ -99,7 +99,7 @@ void esvg::Document::generateTestFile()
 
 
 // FOR TEST only ...
-void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName) {
+void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug) {
 	int32_t sizeX = _size.x();
 	if (sizeX == 0) {
 		SVG_ERROR("SizeX == 0 ==> set 64");
@@ -114,7 +114,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 	delete(m_renderedElement);
 	m_renderedElement = nullptr;
 	
-	m_renderedElement = new esvg::Renderer(ivec2(sizeX, sizeY));
+	m_renderedElement = new esvg::Renderer(ivec2(sizeX, sizeY), _visualDebug);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
 	//basicTrans *= etk::mat2Translate(vec2(-g_base_dx, -g_base_dy));

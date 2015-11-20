@@ -10,6 +10,8 @@
 #include <esvg/debug.h>
 
 
+#undef __class__
+#define __class__	"rerder::ElementElliptic"
 
 esvg::render::ElementElliptic::ElementElliptic(bool _relative,
                                                const vec2& _radius, // in m_vec1

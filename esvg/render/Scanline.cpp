@@ -9,6 +9,9 @@
 #include <esvg/render/Scanline.h>
 #include <esvg/debug.h>
 
+#undef __class__
+#define __class__	"rerder::Scanline"
+
 esvg::render::Scanline::Scanline(size_t _size) {
 	float tmp(0);
 	m_data.resize(_size, tmp);

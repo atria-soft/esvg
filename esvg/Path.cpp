@@ -8,6 +8,7 @@
 
 #include <esvg/debug.h>
 #include <esvg/Path.h>
+#include <esvg/render/PointList.h>
 #include <esvg/render/Weight.h>
 
 #undef __class__
@@ -239,7 +240,7 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _pa
 					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				m_listElement.stop(relative);
+				m_listElement.close(relative);
 				break;
 			default:
 				SVG_ERROR ("Unknow error : \"" << command << "\"");
@@ -255,36 +256,39 @@ void esvg::Path::display(int32_t _spacing) {
 
 void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
-	int32_t recurtionMax = 10;
-	float threshold = 0.25f;
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
-	std::vector<esvg::render::Point> listPoints = m_listElement.generateListPoints(_level, recurtionMax, threshold);
-	
+	esvg::render::PointList listPoints;
+	listPoints = m_listElement.generateListPoints(_level,
+	                                              _myRenderer.getInterpolationRecurtionMax(),
+	                                              _myRenderer.getInterpolationThreshold());
+	esvg::render::SegmentList listSegmentFill;
+	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
 	// Check if we need to display background
-	int32_t nbSubScanLine = 8;
 	if (m_paint.fill.a() != 0x00) {
-		esvg::render::SegmentList listSegment;
-		listSegment.createSegmentList(listPoints);
+		listSegmentFill.createSegmentList(listPoints);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
-		tmpFill.generate(ivec2(128,128), nbSubScanLine, listSegment);
+		tmpFill.generate(_myRenderer.getSize(), _myRenderer.getNumberSubScanLine(), listSegmentFill);
 	}
 	// check if we need to display stroke:
 	if (    m_paint.strokeWidth > 0
 	     && m_paint.stroke.a() != 0x00) {
-		esvg::render::SegmentList listSegment;
-		listSegment.createSegmentListStroke(listPoints);
+		listSegmentStroke.createSegmentListStroke(listPoints);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
-		tmpStroke.generate(ivec2(128,128), nbSubScanLine, listSegment);
+		tmpStroke.generate(_myRenderer.getSize(), _myRenderer.getNumberSubScanLine(), listSegmentStroke);
 	}
 	// add on images:
 	_myRenderer.print(tmpFill,
 	                  m_paint.fill,
 	                  tmpStroke,
 	                  m_paint.stroke);
+	#ifdef DEBUG
+		_myRenderer.addDebugSegment(listSegmentFill);
+		_myRenderer.addDebugSegment(listSegmentStroke);
+	#endif
 }
 

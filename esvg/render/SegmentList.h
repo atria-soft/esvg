@@ -12,7 +12,7 @@
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
 #include <esvg/render/Segment.h>
-#include <esvg/render/Point.h>
+#include <esvg/render/PointList.h>
 
 namespace esvg {
 	namespace render {
@@ -22,8 +22,8 @@ namespace esvg {
 			public:
 				SegmentList();
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1);
-				void createSegmentList(const std::vector<esvg::render::Point>& _listPoint);
-				void createSegmentListStroke(std::vector<esvg::render::Point>& _listPoint);
+				void createSegmentList(const esvg::render::PointList& _listPoint);
+				void createSegmentListStroke(esvg::render::PointList& _listPoint);
 		};
 	}
 }

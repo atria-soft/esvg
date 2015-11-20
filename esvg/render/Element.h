@@ -16,6 +16,7 @@ namespace esvg {
 	namespace render {
 		enum path {
 			path_stop,
+			path_close,
 			path_moveTo,
 			path_lineTo,
 			path_lineToH,
@@ -93,6 +94,7 @@ namespace esvg {
 #endif
 
 #include <esvg/render/ElementStop.h>
+#include <esvg/render/ElementClose.h>
 #include <esvg/render/ElementMoveTo.h>
 #include <esvg/render/ElementLineTo.h>
 #include <esvg/render/ElementLineToH.h>

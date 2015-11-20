@@ -10,6 +10,8 @@
 #include <esvg/debug.h>
 
 
+#undef __class__
+#define __class__	"rerder::ElementLineTo"
 
 esvg::render::ElementLineTo::ElementLineTo(bool _relative, const vec2& _pos):
   Element(esvg::render::path_lineTo, _relative) {

@@ -9,6 +9,8 @@
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
 
+#undef __class__
+#define __class__	"rerder::ElementBezierCurveTo"
 
 
 esvg::render::ElementBezierCurveTo::ElementBezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos):

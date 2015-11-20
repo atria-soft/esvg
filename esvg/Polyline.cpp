@@ -9,6 +9,9 @@
 #include <esvg/debug.h>
 #include <esvg/Polyline.h>
 
+#undef __class__
+#define __class__	"Polyline"
+
 esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }

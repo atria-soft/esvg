@@ -8,6 +8,10 @@
 
 #include <gtest/gtest.h>
 #include <esvg/esvg.h>
+#include "main.h"
+
+#undef __class__
+#define __class__	"TestEllipse"
 
 TEST(TestEllipse, fill) {
 	esvg::Document doc;
@@ -15,7 +19,7 @@ TEST(TestEllipse, fill) {
 	           "<svg height='100' width='100'>"
 	           "	<ellipse cx='50' cy='50' rx='80' ry='30' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill.ppm", g_visualDebug);
 }
 
 TEST(TestEllipse, stroke) {
@@ -24,7 +28,7 @@ TEST(TestEllipse, stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestEllipse_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestEllipse_stroke.ppm", g_visualDebug);
 }
 
 TEST(TestEllipse, fill_and_stroke) {
@@ -33,5 +37,5 @@ TEST(TestEllipse, fill_and_stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill_and_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill_and_stroke.ppm", g_visualDebug);
 }

@@ -9,7 +9,8 @@
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
 
-
+#undef __class__
+#define __class__	"rerder::ElementMoveTo"
 
 esvg::render::ElementMoveTo::ElementMoveTo(bool _relative, const vec2& _pos):
   Element(esvg::render::path_moveTo, _relative) {

@@ -8,6 +8,10 @@
 
 #include <gtest/gtest.h>
 #include <esvg/esvg.h>
+#include "main.h"
+
+#undef __class__
+#define __class__	"TestRectangle"
 
 TEST(TestRectangle, fill) {
 	esvg::Document doc;
@@ -15,7 +19,7 @@ TEST(TestRectangle, fill) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill.ppm", g_visualDebug);
 }
 
 TEST(TestRectangle, stroke) {
@@ -24,7 +28,7 @@ TEST(TestRectangle, stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_stroke.ppm", g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke) {
@@ -33,7 +37,7 @@ TEST(TestRectangle, fill_and_stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.ppm", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill) {
@@ -42,7 +46,7 @@ TEST(TestRectangle, corned_fill) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill.ppm", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_stroke) {
@@ -51,7 +55,7 @@ TEST(TestRectangle, corned_stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_stroke.ppm", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill_and_stroke) {
@@ -60,5 +64,5 @@ TEST(TestRectangle, corned_fill_and_stroke) {
 	           "<svg height='100' width='100'>"
 	           "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' fill='red' />"
 	           "</svg>");
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill_and_stroke.ppm");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill_and_stroke.ppm", g_visualDebug);
 }

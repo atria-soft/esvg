@@ -15,14 +15,22 @@
 #undef __class__
 #define __class__ "Renderer"
 
-esvg::Renderer::Renderer(const ivec2& _size) {
-	m_size = _size;
-	m_buffer.resize(m_size.x() * m_size.y() * DATA_ALLOCATION_ELEMENT, 0);
+esvg::Renderer::Renderer(const ivec2& _size, bool _visualDebug) :
+#ifdef DEBUG
+  m_visualDebug(_visualDebug),
+  m_factor(1),
+#endif
+  m_interpolationRecurtionMax(10),
+  m_interpolationThreshold(0.25f),
+  m_nbSubScanLine(8) {
+	if (m_visualDebug == true) {
+		m_factor = 10;
+	}
+	setSize(_size);
 }
 
 esvg::Renderer::~Renderer() {
 	m_buffer.clear();
-	m_stride = 0;
 	m_size = ivec2(0,0);
 }
 
@@ -30,18 +38,28 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const etk::Color<uint8_t,4>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
                            const etk::Color<uint8_t,4>& _colorStroke) {
+	int32_t sizeX = m_size.x();
+	int32_t sizeY = m_size.y();
+	#if DEBUG
+		sizeX *= m_factor;
+		sizeY *= m_factor;
+	#endif
 	if (_colorFill.a() == 0x00) {
 		if (_colorStroke.a() != 0x00) {
 			// only stroke
-			for (int32_t yyy=0; yyy<m_size.y(); ++yyy) {
-				for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
-					ivec2 pos(xxx, yyy);
+			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
+				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
+					#if DEBUG
+						ivec2 pos(xxx/m_factor, yyy/m_factor);
+					#else
+						ivec2 pos(xxx, yyy);
+					#endif
 					float valueStroke = _weightStroke.get(pos);
 					if (valueStroke != 0.0f) {
-						m_buffer[(m_size.x()*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
+						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
+						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
+						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
+						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
 					}
 				}
 			}
@@ -49,41 +67,93 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 	} else {
 		if (_colorStroke.a() == 0x00) {
 			// only Fill
-			for (int32_t yyy=0; yyy<m_size.y(); ++yyy) {
-				for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
-					ivec2 pos(xxx, yyy);
+			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
+				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
+					#if DEBUG
+						ivec2 pos(xxx/m_factor, yyy/m_factor);
+					#else
+						ivec2 pos(xxx, yyy);
+					#endif
 					float valueFill = _weightFill.get(pos);
 					if (valueFill != 0.0f) {
-						m_buffer[(m_size.x()*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
+						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
+						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
+						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
+						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
 					}
 				}
 			}
 		} else {
 			// all together 
-			for (int32_t yyy=0; yyy<m_size.y(); ++yyy) {
-				for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
-					ivec2 pos(xxx, yyy);
+			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
+				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
+					#if DEBUG
+						ivec2 pos(xxx/m_factor, yyy/m_factor);
+					#else
+						ivec2 pos(xxx, yyy);
+					#endif
 					float valueFill = _weightFill.get(pos);
 					float valueStroke = _weightStroke.get(pos);
 					if (valueStroke != 0.0f) {
-						m_buffer[(m_size.x()*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
+						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
+						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
+						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
+						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
 					} else {
-						m_buffer[(m_size.x()*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
-						m_buffer[(m_size.x()*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
+						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
+						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
+						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
+						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
 					}
 				}
 			}
 		}
 	}
 }
+
+#ifdef DEBUG
+	void esvg::Renderer::addDebugSegment(const esvg::render::SegmentList& _listSegment) {
+		if (m_visualDebug == false) {
+			return;
+		}
+		ivec2 dynamicSize = m_size * m_factor;
+		// for each lines:
+		for (int32_t yyy=0; yyy<dynamicSize.y(); ++yyy) {
+			// Reduce the number of lines in the subsampling parsing:
+			std::vector<esvg::render::Segment> availlableSegmentPixel;
+			for (auto &it : _listSegment.m_data) {
+				if (    it.p0.y() * m_factor <= float(yyy+1)
+				     && it.p1.y() * m_factor >= float(yyy)) {
+					availlableSegmentPixel.push_back(it);
+				}
+			}
+			//find all the segment that cross the middle of the line of the center of the pixel line:
+			float subSamplingCenterPos = yyy + 0.5f;
+			std::vector<esvg::render::Segment> availlableSegment;
+			// find in the subList ...
+			for (auto &it : availlableSegmentPixel) {
+				if (    it.p0.y() * m_factor <= subSamplingCenterPos
+				     && it.p1.y() * m_factor >= subSamplingCenterPos) {
+					availlableSegment.push_back(it);
+				}
+			}
+			// x position, angle
+			std::vector<std::pair<float, float>> listPosition;
+			for (auto &it : availlableSegment) {
+				vec2 delta = it.p0 * m_factor - it.p1 * m_factor;
+				// x = coefficent*y+bbb;
+				float coefficient = delta.x()/delta.y();
+				float bbb = it.p0.x() * m_factor - coefficient*it.p0.y() * m_factor;
+				float xpos = coefficient * subSamplingCenterPos + bbb;
+				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4    ] = 0x00;
+				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 1] = 0x00;
+				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 2] = 0xFF;
+				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 3] = 0xFF;
+			}
+		}
+	}
+#endif
+
 
 // Writing the buffer to a .PPM file, assuming it has 
 // RGB-structure, one byte per color component
@@ -96,7 +166,11 @@ void esvg::Renderer::writePpm(std::string fileName) {
 	if(fd != nullptr) {
 		int32_t sizeX = m_size.x();
 		int32_t sizeY = m_size.y();
-		SVG_DEBUG("Generate ppm : " << m_size);
+		#if DEBUG
+			sizeX *= m_factor;
+			sizeY *= m_factor;
+		#endif
+		SVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
 		fprintf(fd, "P6 %d %d 255 ", sizeX, sizeY);
 		for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
 			fwrite(&m_buffer[iii*DATA_ALLOCATION_ELEMENT], 1, 3, fd);
@@ -106,5 +180,49 @@ void esvg::Renderer::writePpm(std::string fileName) {
 }
 
 
+void esvg::Renderer::setSize(const ivec2& _size) {
+	m_size = _size;
+	m_buffer.resize(m_size.x() * m_size.y()
+	#if DEBUG
+	  * m_factor * m_factor
+	#endif
+	  * DATA_ALLOCATION_ELEMENT, 0);
+}
+
+const ivec2& esvg::Renderer::getSize() const {
+	return m_size;
+}
+
+uint8_t* esvg::Renderer::getDataPointer() {
+	return &m_buffer[0];
+};
+
+uint32_t esvg::Renderer::getDataSize() const {
+	return m_buffer.size();
+};
+
+void esvg::Renderer::setInterpolationRecurtionMax(int32_t _value) {
+	m_interpolationRecurtionMax = std::avg(1, _value, 200);
+}
+
+int32_t esvg::Renderer::getInterpolationRecurtionMax() const {
+	return m_interpolationRecurtionMax;
+}
+
+void esvg::Renderer::setInterpolationThreshold(float _value) {
+	m_interpolationThreshold = std::avg(0.0f, _value, 20000.0f);
+}
+
+float esvg::Renderer::getInterpolationThreshold() const {
+	return m_interpolationThreshold;
+}
+
+void esvg::Renderer::setNumberSubScanLine(int32_t _value) {
+	m_nbSubScanLine = std::avg(1, _value, 200);
+}
+
+int32_t esvg::Renderer::getNumberSubScanLine() const {
+	return m_nbSubScanLine;
+}
 
 

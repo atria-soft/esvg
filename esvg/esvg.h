@@ -68,7 +68,7 @@ namespace esvg {
 			};
 			void displayDebug();
 			void generateTestFile();
-			void generateAnImage(const ivec2& _size, const std::string& _fileName);
+			void generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug=false);
 			//void generateAnImage(ivec2 _size, draw::Image& _output);
 			//void generateAnImage(draw::Image& _output);
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans);

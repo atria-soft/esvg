@@ -10,6 +10,8 @@
 #include <esvg/debug.h>
 
 
+#undef __class__
+#define __class__	"rerder::ElementBezierSmoothCurveTo"
 
 esvg::render::ElementBezierSmoothCurveTo::ElementBezierSmoothCurveTo(bool _relative, const vec2& _pos):
   Element(esvg::render::path_bezierSmoothCurveTo, _relative) {
