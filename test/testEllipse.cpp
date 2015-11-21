@@ -14,28 +14,35 @@
 #define __class__	"TestEllipse"
 
 TEST(TestEllipse, fill) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<ellipse cx='50' cy='50' rx='80' ry='30' fill='red' />"
+	                 "</svg>");
 	esvg::Document doc;
-	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
-	           "<svg height='100' width='100'>"
-	           "	<ellipse cx='50' cy='50' rx='80' ry='30' fill='red' />"
-	           "</svg>");
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestEllipse_fill.svg", data);
 	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill.ppm", g_visualDebug);
 }
 
 TEST(TestEllipse, stroke) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' />"
+	                 "</svg>");
 	esvg::Document doc;
-	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
-	           "<svg height='100' width='100'>"
-	           "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' />"
-	           "</svg>");
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestEllipse_stroke.svg", data);
 	doc.generateAnImage(ivec2(100, 100), "TestEllipse_stroke.ppm", g_visualDebug);
 }
 
 TEST(TestEllipse, fill_and_stroke) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' fill='red' />"
+	                 "</svg>");
 	esvg::Document doc;
-	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
-	           "<svg height='100' width='100'>"
-	           "	<ellipse cx='50' cy='50' rx='80' ry='30' stroke='green' stroke-width='3' fill='red' />"
-	           "</svg>");
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestEllipse_fill_and_stroke.svg", data);
 	doc.generateAnImage(ivec2(100, 100), "TestEllipse_fill_and_stroke.ppm", g_visualDebug);
 }
+

@@ -16,7 +16,7 @@
 #define __class__	"PaintState"
 
 esvg::PaintState::PaintState() :
-  fill(etk::color::none),
+  fill(etk::color::black),
   stroke(etk::color::none),
   strokeWidth(1.0f),
   flagEvenOdd(false),
