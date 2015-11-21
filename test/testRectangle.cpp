@@ -49,6 +49,15 @@ TEST(TestRectangle, fill_and_stroke_blend) {
 	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.ppm", g_visualDebug);
 }
 
+TEST(TestRectangle, fill_and_stroke_opacity) {
+	esvg::Document doc;
+	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	           "<svg height='100' width='100'>"
+	           "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0F' stroke-width='3' fill='#F00F' opacity='0.5' />"
+	           "</svg>");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.ppm", g_visualDebug);
+}
+
 TEST(TestRectangle, corned_fill) {
 	esvg::Document doc;
 	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"

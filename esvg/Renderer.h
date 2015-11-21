@@ -57,7 +57,8 @@ namespace esvg {
 			void print(const esvg::render::Weight& _weightFill,
 			           const etk::Color<float,4>& _colorFill,
 			           const esvg::render::Weight& _weightStroke,
-			           const etk::Color<float,4>& _colorStroke);
+			           const etk::Color<float,4>& _colorStroke,
+			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
 			#endif

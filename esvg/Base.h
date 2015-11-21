@@ -51,6 +51,9 @@ namespace esvg {
 	
 	class PaintState {
 		public:
+			PaintState();
+			void clear();
+		public:
 			etk::Color<uint8_t,4> fill;
 			etk::Color<uint8_t,4> stroke;
 			float strokeWidth;
@@ -58,6 +61,7 @@ namespace esvg {
 			enum esvg::cap lineCap;
 			enum esvg::join lineJoin;
 			vec2 viewPort;
+			float opacity;
 	};
 	
 	class Base {

@@ -101,7 +101,8 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32
 	_myRenderer.print(tmpFill,
 	                  m_paint.fill,
 	                  tmpStroke,
-	                  m_paint.stroke);
+	                  m_paint.stroke,
+	                  m_paint.opacity);
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);

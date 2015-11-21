@@ -28,14 +28,6 @@ esvg::Document::Document() :
 	m_fileName = "";
 	m_version = "0.0";
 	m_loadOK = false;
-	m_paint.fill = etk::color::none;
-	m_paint.stroke = etk::color::none;
-	
-	m_paint.strokeWidth = 1.0;
-	m_paint.viewPort.setValue(255,255);
-	m_paint.flagEvenOdd = false;
-	m_paint.lineJoin = esvg::join_miter;
-	m_paint.lineCap = esvg::cap_butt;
 	m_size.setValue(0,0);
 }
 
@@ -164,14 +156,7 @@ void esvg::Document::clear() {
 	m_fileName = "";
 	m_version = "0.0";
 	m_loadOK = true;
-	m_paint.fill = etk::color::none;
-	m_paint.stroke = etk::color::none;
-	
-	m_paint.strokeWidth = 1.0;
-	m_paint.viewPort.setValue(255,255);
-	m_paint.flagEvenOdd = false;
-	m_paint.lineJoin = esvg::join_miter;
-	m_paint.lineCap = esvg::cap_butt;
+	m_paint.clear();
 	m_size.setValue(0,0);
 }
 

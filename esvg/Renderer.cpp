@@ -53,7 +53,8 @@ etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const 
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const etk::Color<float,4>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
-                           const etk::Color<float,4>& _colorStroke) {
+                           const etk::Color<float,4>& _colorStroke,
+                           float _opacity) {
 	int32_t sizeX = m_size.x();
 	int32_t sizeY = m_size.y();
 	#if DEBUG
@@ -73,7 +74,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					float valueStroke = _weightStroke.get(pos);
 					if (valueStroke != 0.0f) {
 						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorStroke * valueStroke;
+						etk::Color<float,4> tmpColor = _colorStroke * valueStroke * _opacity;
 						// integrate the value at the previous color
 						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
@@ -93,7 +94,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					float valueFill = _weightFill.get(pos);
 					if (valueFill != 0.0f) {
 						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorFill * valueFill;
+						etk::Color<float,4> tmpColor = _colorFill * valueFill * _opacity;
 						// integrate the value at the previous color
 						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
@@ -113,7 +114,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					// calculate merge of stroke and fill value:
 					etk::Color<float,4> intermediateColorFill = _colorFill*valueFill;
 					etk::Color<float,4> intermediateColorStroke = _colorStroke*valueStroke;
-					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
+					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke) * _opacity;
 					m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
 				}
 			}

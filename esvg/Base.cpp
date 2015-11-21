@@ -13,7 +13,35 @@
 
 
 #undef __class__
+#define __class__	"PaintState"
+
+esvg::PaintState::PaintState() :
+  fill(etk::color::none),
+  stroke(etk::color::none),
+  strokeWidth(1.0f),
+  flagEvenOdd(false),
+  lineCap(esvg::cap_butt),
+  lineJoin(esvg::join_miter),
+  viewPort(255,255),
+  opacity(1.0) {
+	
+}
+
+void esvg::PaintState::clear() {
+	fill = etk::color::none;
+	stroke = etk::color::none;
+	strokeWidth = 1.0;
+	viewPort.setValue(255,255);
+	flagEvenOdd = false;
+	lineJoin = esvg::join_miter;
+	lineCap = esvg::cap_butt;
+	opacity = 1.0;
+}
+
+
+#undef __class__
 #define __class__	"Base"
+
 
 esvg::Base::Base(PaintState _parentPaintState) {
 	// copy the parent painting properties ...
@@ -220,10 +248,8 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	}
 	content = _element->getAttribute("opacity");
 	if (content.size()!=0) {
-		float opacity = parseLength(content);
-		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.setA(opacity*0xFF);
-		m_paint.stroke.setA(opacity*0xFF);
+		m_paint.opacity = parseLength(content);
+		m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
 	}
 	content = _element->getAttribute("fill-opacity");
 	if (content.size()!=0) {
@@ -298,11 +324,9 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 				m_paint.strokeWidth = parseLength(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.strokeWidth);
 			} else if (outputType == "opacity" ) {
-				float opacity = parseLength(outputValue);
-				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.fill.setA(opacity*0xFF);
-				m_paint.stroke.setA(opacity*0xFF);
-				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
+				m_paint.opacity = parseLength(content);
+				m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
+				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.opacity);
 			} else if (outputType == "fill-opacity") {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
