@@ -34,10 +34,26 @@ esvg::Renderer::~Renderer() {
 	m_size = ivec2(0,0);
 }
 
+etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration) {
+	if (_integration.a() == 0.0f) {
+		return _base;
+	}
+	etk::Color<float,4> tmpColor(_integration.r()*_integration.a(),
+	                             _integration.g()*_integration.a(),
+	                             _integration.b()*_integration.a(),
+	                             _integration.a());
+	// Blend over
+	float tmpA = std::min(1.0f, (_base.a() + _integration.a()));
+	_base *= (1.0f - _integration.a());
+	_base += tmpColor;
+	_base.setA(tmpA);
+	return _base;
+}
+
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
-                           const etk::Color<uint8_t,4>& _colorFill,
+                           const etk::Color<float,4>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
-                           const etk::Color<uint8_t,4>& _colorStroke) {
+                           const etk::Color<float,4>& _colorStroke) {
 	int32_t sizeX = m_size.x();
 	int32_t sizeY = m_size.y();
 	#if DEBUG
@@ -56,10 +72,10 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					#endif
 					float valueStroke = _weightStroke.get(pos);
 					if (valueStroke != 0.0f) {
-						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
-						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
-						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
-						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
+						// set a ratio of the merging value
+						etk::Color<float,4> tmpColor = _colorStroke * valueStroke;
+						// integrate the value at the previous color
+						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
 				}
 			}
@@ -76,10 +92,10 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					#endif
 					float valueFill = _weightFill.get(pos);
 					if (valueFill != 0.0f) {
-						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
-						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
-						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
-						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
+						// set a ratio of the merging value
+						etk::Color<float,4> tmpColor = _colorFill * valueFill;
+						// integrate the value at the previous color
+						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
 				}
 			}
@@ -94,17 +110,11 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					#endif
 					float valueFill = _weightFill.get(pos);
 					float valueStroke = _weightStroke.get(pos);
-					if (valueStroke != 0.0f) {
-						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueStroke*_colorStroke.r());
-						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueStroke*_colorStroke.g());
-						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueStroke*_colorStroke.b());
-						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueStroke*_colorStroke.a());
-					} else {
-						m_buffer[(sizeX*yyy + xxx)*4    ] = uint8_t(valueFill*_colorFill.r());
-						m_buffer[(sizeX*yyy + xxx)*4 + 1] = uint8_t(valueFill*_colorFill.g());
-						m_buffer[(sizeX*yyy + xxx)*4 + 2] = uint8_t(valueFill*_colorFill.b());
-						m_buffer[(sizeX*yyy + xxx)*4 + 3] = uint8_t(valueFill*_colorFill.a());
-					}
+					// calculate merge of stroke and fill value:
+					etk::Color<float,4> intermediateColorFill = _colorFill*valueFill;
+					etk::Color<float,4> intermediateColorStroke = _colorStroke*valueStroke;
+					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
+					m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
 				}
 			}
 		}
@@ -145,10 +155,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() * m_factor - coefficient*it.p0.y() * m_factor;
 				float xpos = coefficient * subSamplingCenterPos + bbb;
-				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4    ] = 0x00;
-				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 1] = 0x00;
-				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 2] = 0xFF;
-				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))*4 + 3] = 0xFF;
+				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
 			}
 		}
 	}
@@ -173,7 +180,8 @@ void esvg::Renderer::writePpm(std::string fileName) {
 		SVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
 		fprintf(fd, "P6 %d %d 255 ", sizeX, sizeY);
 		for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
-			fwrite(&m_buffer[iii*DATA_ALLOCATION_ELEMENT], 1, 3, fd);
+			etk::Color<uint8_t,3> tmp = m_buffer[iii];
+			fwrite(&tmp, 1, 3, fd);
 		}
 		fclose(fd);
 	}
@@ -186,16 +194,18 @@ void esvg::Renderer::setSize(const ivec2& _size) {
 	#if DEBUG
 	  * m_factor * m_factor
 	#endif
-	  * DATA_ALLOCATION_ELEMENT, 0);
+	  , etk::color::none);
 }
 
 const ivec2& esvg::Renderer::getSize() const {
 	return m_size;
 }
 
+
 uint8_t* esvg::Renderer::getDataPointer() {
-	return &m_buffer[0];
+	return nullptr; //&m_buffer[0];
 };
+
 
 uint32_t esvg::Renderer::getDataSize() const {
 	return m_buffer.size();

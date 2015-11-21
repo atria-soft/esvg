@@ -40,6 +40,15 @@ TEST(TestRectangle, fill_and_stroke) {
 	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.ppm", g_visualDebug);
 }
 
+TEST(TestRectangle, fill_and_stroke_blend) {
+	esvg::Document doc;
+	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	           "<svg height='100' width='100'>"
+	           "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F08' stroke-width='3' fill='#F008' />"
+	           "</svg>");
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.ppm", g_visualDebug);
+}
+
 TEST(TestRectangle, corned_fill) {
 	esvg::Document doc;
 	doc.parse( "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"

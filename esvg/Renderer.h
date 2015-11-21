@@ -30,7 +30,7 @@ namespace esvg {
 			void setSize(const ivec2& _size);
 			const ivec2& getSize() const;
 		protected:
-			std::vector<uint8_t> m_buffer;
+			std::vector<etk::Color<float,4>> m_buffer;
 		public:
 			uint8_t* getDataPointer();
 			uint32_t getDataSize() const;
@@ -51,11 +51,13 @@ namespace esvg {
 			int32_t getNumberSubScanLine() const;
 		public:
 			void writePpm(std::string fileName);
+		protected:
+			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration);
 		public:
 			void print(const esvg::render::Weight& _weightFill,
-			           const etk::Color<uint8_t,4>& _colorFill,
+			           const etk::Color<float,4>& _colorFill,
 			           const esvg::render::Weight& _weightStroke,
-			           const etk::Color<uint8_t,4>& _colorStroke);
+			           const etk::Color<float,4>& _colorStroke);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
 			#endif

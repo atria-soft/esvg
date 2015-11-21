@@ -76,16 +76,16 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					SVG_ERROR("an error occure a next ID is >= nbPoint len .... ");
 					continue;
 				}
-				SVG_DEBUG("JOIN : id : prev/curr/next : " << idPevious << "/" << idCurrent << "/" << idNext);
-				SVG_DEBUG("JOIN : val : prev/curr/next : " << itListPoint[idPevious].m_pos << "/" << itListPoint[idCurrent].m_pos << "/" << itListPoint[idNext].m_pos);
+				//SVG_DEBUG("JOIN : id : prev/curr/next : " << idPevious << "/" << idCurrent << "/" << idNext);
+				//SVG_DEBUG("JOIN : val : prev/curr/next : " << itListPoint[idPevious].m_pos << "/" << itListPoint[idCurrent].m_pos << "/" << itListPoint[idNext].m_pos);
 				vec2 vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
-				SVG_DEBUG("JOIN : vecA : " << vecA);
+				//SVG_DEBUG("JOIN : vecA : " << vecA);
 				vecA.safeNormalize();
 				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
-				SVG_DEBUG("JOIN : vecB : " << vecB);
+				//SVG_DEBUG("JOIN : vecB : " << vecB);
 				vecB.safeNormalize();
 				vec2 vecC = vecA - vecB;
-				SVG_DEBUG("JOIN : vecC : " << vecC);
+				//SVG_DEBUG("JOIN : vecC : " << vecC);
 				if (vecC == vec2(0.0f, 0.0f)) {
 					// special case: 1 line ...
 					itListPoint[idCurrent].m_miterAxe = vec2(vecA.y(), vecA.x());
@@ -93,7 +93,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					vecC.safeNormalize();
 					itListPoint[idCurrent].m_miterAxe = vecC;
 				}
-				SVG_DEBUG("JOIN : miterAxe " << itListPoint[idCurrent].m_miterAxe);
+				//SVG_DEBUG("JOIN : miterAxe " << itListPoint[idCurrent].m_miterAxe);
 			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type_start) {
 				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				vecB.safeNormalize();
