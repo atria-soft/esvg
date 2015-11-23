@@ -8,6 +8,8 @@
 
 #include <esvg/debug.h>
 #include <esvg/Polyline.h>
+#include <esvg/render/Path.h>
+#include <esvg/render/Weight.h>
 
 #undef __class__
 #define __class__	"Polyline"
@@ -63,54 +65,45 @@ void esvg::Polyline::display(int32_t _spacing) {
 void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
 	
-	
-	#if 0
-	esvg::RenderPath path;
-	path.start_new_path();
-	path.move_to(m_listPoint[0].x(), m_listPoint[0].y());
+	esvg::render::Path listElement;
+	listElement.clear();
+	listElement.moveTo(false, m_listPoint[0]);
 	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
-		path.line_to(m_listPoint[iii].x(), m_listPoint[iii].y());
+		listElement.lineTo(false, m_listPoint[iii]);
 	}
-	/*
-	// configure the end of the line : 
-	switch (m_paint.lineCap) {
-		case esvg::LINECAP_SQUARE:
-			path.line_cap(agg::square_cap);
-			break;
-		case esvg::LINECAP_ROUND:
-			path.line_cap(agg::round_cap);
-			break;
-		default: // esvg::LINECAP_BUTT
-			path.line_cap(agg::butt_cap);
-			break;
-	}
-	switch (m_paint.lineJoin) {
-		case esvg::LINEJOIN_BEVEL:
-			path.line_join(agg::bevel_join);
-			break;
-		case esvg::LINEJOIN_ROUND:
-			path.line_join(agg::round_join);
-			break;
-		default: // esvg::LINEJOIN_MITER
-			path.line_join(agg::miter_join);
-			break;
-	}
-	*/
+	listElement.stop();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
-	if (m_paint.strokeWidth > 0) {
-		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// drawing as an outline
-		agg::conv_stroke<esvg::RenderPath> myPolygonStroke(path);
-		myPolygonStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<esvg::RenderPath>, mat2> transStroke(myPolygonStroke, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level,
+	                                            _myRenderer.getInterpolationRecurtionMax(),
+	                                            _myRenderer.getInterpolationThreshold());
+	esvg::render::SegmentList listSegmentFill;
+	esvg::render::SegmentList listSegmentStroke;
+	esvg::render::Weight tmpFill;
+	esvg::render::Weight tmpStroke;
+	// Check if we need to display background
+	// No background ...
+	// check if we need to display stroke:
+	if (    m_paint.strokeWidth > 0
+	     && m_paint.stroke.a() != 0x00) {
+		listSegmentStroke.createSegmentListStroke(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpStroke.generate(_myRenderer.getSize(),
+		                   _myRenderer.getNumberSubScanLine(),
+		                   listSegmentStroke);
 	}
+	// add on images:
+	_myRenderer.print(tmpFill,
+	                  m_paint.fill,
+	                  tmpStroke,
+	                  m_paint.stroke,
+	                  m_paint.opacity);
+	#ifdef DEBUG
+		_myRenderer.addDebugSegment(listSegmentFill);
+		_myRenderer.addDebugSegment(listSegmentStroke);
 	#endif
 }
 
