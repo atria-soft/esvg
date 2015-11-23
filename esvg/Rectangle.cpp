@@ -60,13 +60,34 @@ void esvg::Rectangle::display(int32_t _spacing) {
 
 void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle : fill=" << m_paint.fill << " stroke=" << m_paint.stroke);
-	// TODO : rounded corner ...
 	esvg::render::Path listElement;
 	listElement.clear();
-	listElement.moveTo(false, m_position);
-	listElement.lineToH(true, m_size.x());
-	listElement.lineToV(true, m_size.y());
-	listElement.lineToH(true, -m_size.x());
+	if (    m_roundedCorner.x() == 0.0f
+	     || m_roundedCorner.y() == 0.0f) {
+		listElement.moveTo(false, m_position);
+		listElement.lineToH(true, m_size.x());
+		listElement.lineToV(true, m_size.y());
+		listElement.lineToH(true, -m_size.x());
+	} else {
+		// Rounded rectangle
+		listElement.moveTo(false, m_position + vec2(m_roundedCorner.x(), 0.0f));
+		listElement.lineToH(true, m_size.x()-m_roundedCorner.x()*2.0f);
+		listElement.curveTo(true, vec2(m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                          vec2(m_roundedCorner.x(),               m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                          vec2(m_roundedCorner.x(),               m_roundedCorner.y()) );
+		listElement.lineToV(true, m_size.y()-m_roundedCorner.y()*2.0f);
+		listElement.curveTo(true, vec2(0.0f,                                         m_roundedCorner.y() * esvg::kappa90),
+		                          vec2(-m_roundedCorner.x()* (1.0f - esvg::kappa90), m_roundedCorner.y()),
+		                          vec2(-m_roundedCorner.x(),                         m_roundedCorner.y()) );
+		listElement.lineToH(true, -(m_size.x()-m_roundedCorner.x()*2.0f));
+		listElement.curveTo(true, vec2(-m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                          vec2(-m_roundedCorner.x(),               -m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                          vec2(-m_roundedCorner.x(),               -m_roundedCorner.y()) );
+		listElement.lineToV(true, -(m_size.y()-m_roundedCorner.y()*2.0f));
+		listElement.curveTo(true, vec2(0.0f,                                        -m_roundedCorner.y() * esvg::kappa90),
+		                          vec2(m_roundedCorner.x()* (1.0f - esvg::kappa90), -m_roundedCorner.y()),
+		                          vec2(m_roundedCorner.x(),                         -m_roundedCorner.y()) );
+	}
 	listElement.close();
 	
 	mat2 mtx = m_transformMatrix;

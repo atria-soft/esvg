@@ -216,9 +216,9 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					if (it->getRelative() == false) {
 						lastPosition = vec2(0.0f, 0.0f);
 					}
-					vec2 pos1 = lastPosition + it->getPos1();;
-					vec2 pos2 = lastPosition + it->getPos2();;
-					vec2 pos = lastPosition + it->getPos();;
+					vec2 pos1 = lastPosition + it->getPos1();
+					vec2 pos2 = lastPosition + it->getPos2();
+					vec2 pos = lastPosition + it->getPos();
 					interpolateCubicBezier(tmpListPoint,
 					                       _recurtionMax,
 					                       _threshold,
