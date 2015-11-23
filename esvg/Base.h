@@ -19,6 +19,7 @@
 #include <esvg/Renderer.h>
 
 namespace esvg {
+	extern const float kappa90; //!< proportional lenght to the radius of a bezier handle for 90° arcs.
 	/**
 	 * @brief Painting mode of the Object:
 	 */

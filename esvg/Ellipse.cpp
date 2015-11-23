@@ -8,6 +8,8 @@
 
 #include <esvg/debug.h>
 #include <esvg/Ellipse.h>
+#include <esvg/render/Path.h>
+#include <esvg/render/Weight.h>
 
 #undef __class__
 #define __class__	"Ellipse"
@@ -67,35 +69,70 @@ void esvg::Ellipse::display(int32_t _spacing) {
 
 void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
-	/*
-	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
-	// Creating an ellipse
-	agg::ellipse myEllipse(m_c.x(), m_c.y(), m_r.x(), m_r.y(), 0);
+	if (    m_r.x()<=0.0f
+	     || m_r.y()<=0.0f) {
+		SVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_r);
+		return;
+	}
+	esvg::render::Path listElement;
+	listElement.clear();
+	listElement.moveTo(false, m_c + vec2(m_r.x(), 0.0f));
+	listElement.curveTo(false,
+	                    m_c + vec2(m_r.x(),                m_r.y()*esvg::kappa90),
+	                    m_c + vec2(m_r.x()*esvg::kappa90,  m_r.y()),
+	                    m_c + vec2(0.0f,                   m_r.y()));
+	listElement.curveTo(false,
+	                    m_c + vec2(-m_r.x()*esvg::kappa90, m_r.y()),
+	                    m_c + vec2(-m_r.x(),               m_r.y()*esvg::kappa90),
+	                    m_c + vec2(-m_r.x(),               0.0f));
+	listElement.curveTo(false,
+	                    m_c + vec2(-m_r.x(),               -m_r.y()*esvg::kappa90),
+	                    m_c + vec2(-m_r.x()*esvg::kappa90, -m_r.y()),
+	                    m_c + vec2(0.0f,                   -m_r.y()));
+	listElement.curveTo(false,
+	                    m_c + vec2(m_r.x()*esvg::kappa90,  -m_r.y()),
+	                    m_c + vec2(m_r.x(),                -m_r.y()*esvg::kappa90),
+	                    m_c + vec2(m_r.x(),                0.0f));
+	listElement.close();
 	
-	// Calculate transformation matrix ...
-	mat2  mtx = m_transformMatrix;
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
-	// set the filling mode : 
-	_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-	
-	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::ellipse, mat2> trans(myEllipse, mtx);
-		_myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level,
+	                                            _myRenderer.getInterpolationRecurtionMax(),
+	                                            _myRenderer.getInterpolationThreshold());
+	esvg::render::SegmentList listSegmentFill;
+	esvg::render::SegmentList listSegmentStroke;
+	esvg::render::Weight tmpFill;
+	esvg::render::Weight tmpStroke;
+	// Check if we need to display background
+	if (m_paint.fill.a() != 0x00) {
+		listSegmentFill.createSegmentList(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpFill.generate(_myRenderer.getSize(),
+		                 _myRenderer.getNumberSubScanLine(),
+		                 listSegmentFill);
 	}
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// drawing as an outline
-		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
-		myEllipseStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::ellipse>, mat2> transStroke(myEllipseStroke, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	// check if we need to display stroke:
+	if (    m_paint.strokeWidth > 0
+	     && m_paint.stroke.a() != 0x00) {
+		listSegmentStroke.createSegmentListStroke(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpStroke.generate(_myRenderer.getSize(),
+		                   _myRenderer.getNumberSubScanLine(),
+		                   listSegmentStroke);
 	}
-	*/
+	// add on images:
+	_myRenderer.print(tmpFill,
+	                  m_paint.fill,
+	                  tmpStroke,
+	                  m_paint.stroke,
+	                  m_paint.opacity);
+	#ifdef DEBUG
+		_myRenderer.addDebugSegment(listSegmentFill);
+		_myRenderer.addDebugSegment(listSegmentStroke);
+	#endif
 }
 
 

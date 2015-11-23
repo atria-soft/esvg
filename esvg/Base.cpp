@@ -11,6 +11,7 @@
 #include <esvg/Base.h>
 #include <math.h>
 
+const float esvg::kappa90(0.5522847493f);
 
 #undef __class__
 #define __class__	"PaintState"
