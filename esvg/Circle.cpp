@@ -8,6 +8,8 @@
 
 #include <esvg/debug.h>
 #include <esvg/Circle.h>
+#include <esvg/render/Path.h>
+#include <esvg/render/Weight.h>
 
 #undef __class__
 #define __class__	"Circle"
@@ -63,35 +65,68 @@ void esvg::Circle::display(int32_t _spacing) {
 
 void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Circle");
-	/*
-	_myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.r, m_paint.fill.g, m_paint.fill.b, m_paint.fill.a));
-	// Creating an ellipse
-	agg::ellipse myCircle(m_position.x(), m_position.y(), m_radius, m_radius, 0);
+	if (m_radius <= 0.0f) {
+		SVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_radius);
+		return;
+	}
+	esvg::render::Path listElement;
+	listElement.clear();
+	listElement.moveTo(false, m_position + vec2(m_radius, 0.0f));
+	listElement.curveTo(false,
+	                    m_position + vec2(m_radius,                m_radius*esvg::kappa90),
+	                    m_position + vec2(m_radius*esvg::kappa90,  m_radius),
+	                    m_position + vec2(0.0f,                    m_radius));
+	listElement.curveTo(false,
+	                    m_position + vec2(-m_radius*esvg::kappa90, m_radius),
+	                    m_position + vec2(-m_radius,               m_radius*esvg::kappa90),
+	                    m_position + vec2(-m_radius,               0.0f));
+	listElement.curveTo(false,
+	                    m_position + vec2(-m_radius,               -m_radius*esvg::kappa90),
+	                    m_position + vec2(-m_radius*esvg::kappa90, -m_radius),
+	                    m_position + vec2(0.0f,                    -m_radius));
+	listElement.curveTo(false,
+	                    m_position + vec2(m_radius*esvg::kappa90,  -m_radius),
+	                    m_position + vec2(m_radius,                -m_radius*esvg::kappa90),
+	                    m_position + vec2(m_radius,                0.0f));
+	listElement.close();
 	
-	// Calculate transformation matrix ...
-	mat2  mtx = m_transformMatrix;
+	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
-	// set the filling mode : 
-	_myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-	
-	if (m_paint.fill.a != 0x00) {
-		agg::conv_transform<agg::ellipse, mat2> trans(myCircle, mtx);
-		_myRenderer.m_rasterizer.add_path(trans);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level,
+	                                            _myRenderer.getInterpolationRecurtionMax(),
+	                                            _myRenderer.getInterpolationThreshold());
+	esvg::render::SegmentList listSegmentFill;
+	esvg::render::SegmentList listSegmentStroke;
+	esvg::render::Weight tmpFill;
+	esvg::render::Weight tmpStroke;
+	// Check if we need to display background
+	if (m_paint.fill.a() != 0x00) {
+		listSegmentFill.createSegmentList(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpFill.generate(_myRenderer.getSize(),
+		                 _myRenderer.getNumberSubScanLine(),
+		                 listSegmentFill);
 	}
-	
-	if (m_paint.strokeWidth > 0 && m_paint.stroke.a!=0x00 ) {
-		_myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.r, m_paint.stroke.g, m_paint.stroke.b, m_paint.stroke.a));
-		// drawing as an outline
-		agg::conv_stroke<agg::ellipse> myCircleStroke(myCircle);
-		myCircleStroke.width(m_paint.strokeWidth);
-		agg::conv_transform<agg::conv_stroke<agg::ellipse>, mat2> transStroke(myCircleStroke, mtx);
-		// set the filling mode : 
-		_myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
-		_myRenderer.m_rasterizer.add_path(transStroke);
-		agg::render_scanlines(_myRenderer.m_rasterizer, _myRenderer.m_scanLine, *_myRenderer.m_renderArea);
+	// check if we need to display stroke:
+	if (    m_paint.strokeWidth > 0
+	     && m_paint.stroke.a() != 0x00) {
+		listSegmentStroke.createSegmentListStroke(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpStroke.generate(_myRenderer.getSize(),
+		                   _myRenderer.getNumberSubScanLine(),
+		                   listSegmentStroke);
 	}
-	*/
+	// add on images:
+	_myRenderer.print(tmpFill,
+	                  m_paint.fill,
+	                  tmpStroke,
+	                  m_paint.stroke,
+	                  m_paint.opacity);
+	#ifdef DEBUG
+		_myRenderer.addDebugSegment(listSegmentFill);
+		_myRenderer.addDebugSegment(listSegmentStroke);
+	#endif
 }
 
