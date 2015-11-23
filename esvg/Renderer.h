@@ -50,7 +50,8 @@ namespace esvg {
 			void setNumberSubScanLine(int32_t _value);
 			int32_t getNumberSubScanLine() const;
 		public:
-			void writePpm(std::string fileName);
+			void writePPM(const std::string& _fileName);
+			void writeBMP(const std::string& _fileName);
 		protected:
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration);
 		public:

@@ -21,7 +21,7 @@ TEST(TestPolygon, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolygon_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolygon_fill.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPolygon_fill.bmp", g_visualDebug);
 }
 
 TEST(TestPolygon, stroke) {
@@ -32,7 +32,7 @@ TEST(TestPolygon, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolygon_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolygon_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPolygon_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestPolygon, fill_and_stroke) {
@@ -43,5 +43,5 @@ TEST(TestPolygon, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolygon_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolygon_fill_and_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPolygon_fill_and_stroke.bmp", g_visualDebug);
 }

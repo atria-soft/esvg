@@ -21,7 +21,7 @@ TEST(TestCircle, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCircle_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCircle_fill.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestCircle_fill.bmp", g_visualDebug);
 }
 
 TEST(TestCircle, stroke) {
@@ -32,7 +32,7 @@ TEST(TestCircle, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCircle_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCircle_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestCircle_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestCircle, fill_and_stroke) {
@@ -43,5 +43,5 @@ TEST(TestCircle, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCircle_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCircle_fill_and_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestCircle_fill_and_stroke.bmp", g_visualDebug);
 }

@@ -28,7 +28,7 @@ esvg::PaintState::PaintState() :
 }
 
 void esvg::PaintState::clear() {
-	fill = etk::color::none;
+	fill = etk::color::black;
 	stroke = etk::color::none;
 	strokeWidth = 1.0;
 	viewPort.setValue(255,255);

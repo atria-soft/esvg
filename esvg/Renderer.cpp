@@ -8,6 +8,7 @@
 
 #include <esvg/debug.h>
 #include <esvg/Renderer.h>
+#include <etk/os/FSNode.h>
 
 // 4 is for the RGBA ...
 #define DATA_ALLOCATION_ELEMENT (4)
@@ -163,29 +164,146 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 #endif
 
 
-// Writing the buffer to a .PPM file, assuming it has 
-// RGB-structure, one byte per color component
-//--------------------------------------------------
-void esvg::Renderer::writePpm(std::string fileName) {
+void esvg::Renderer::writePPM(const std::string& _fileName) {
 	if (m_buffer.size() == 0) {
 		return;
 	}
-	FILE* fd = fopen(fileName.c_str(), "wb");
-	if(fd != nullptr) {
-		int32_t sizeX = m_size.x();
-		int32_t sizeY = m_size.y();
-		#if DEBUG
-			sizeX *= m_factor;
-			sizeY *= m_factor;
-		#endif
-		SVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
-		fprintf(fd, "P6 %d %d 255 ", sizeX, sizeY);
-		for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
-			etk::Color<uint8_t,3> tmp = m_buffer[iii];
-			fwrite(&tmp, 1, 3, fd);
-		}
-		fclose(fd);
+	etk::FSNode tmpFile(_fileName);
+	if(tmpFile.fileOpenWrite() == false) {
+		SVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+		return;
 	}
+	int32_t sizeX = m_size.x();
+	int32_t sizeY = m_size.y();
+	#if DEBUG
+		sizeX *= m_factor;
+		sizeY *= m_factor;
+	#endif
+	SVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
+	char tmpValue[1024];
+	sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
+	tmpFile.fileWrite(tmpValue,1,sizeof(tmpValue));
+	for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
+		etk::Color<uint8_t,3> tmp = m_buffer[iii];
+		tmpFile.fileWrite(&tmp, 1, 3);
+	}
+	tmpFile.fileClose();
+}
+#define PLOPPP
+extern "C" {
+	#pragma pack(push,1)
+	struct bitmapFileHeader {
+		int16_t bfType;
+		int32_t bfSize;
+		int32_t bfReserved;
+		int32_t bfOffBits;
+	};
+	struct bitmapInfoHeader {
+		int32_t biSize;
+		int32_t biWidth;
+		int32_t biHeight;
+		int16_t biPlanes;
+		int16_t biBitCount;
+		int32_t biCompression;
+		int32_t biSizeImage;
+		int32_t biXPelsPerMeter;
+		int32_t biYPelsPerMeter;
+		#ifndef PLOPPP
+		int32_t biClrUsed;
+		int32_t biClrImportant;
+		#else
+		// https://en.wikipedia.org/wiki/BMP_file_format / example 2
+		int32_t biPaletteNumber;
+		int32_t biImportantColor;
+		int32_t biBitMaskRed;
+		int32_t biBitMaskGreen;
+		int32_t biBitMaskBlue;
+		int32_t biBitMaskAlpha;
+		int32_t biLCSColorSpace;
+		int32_t biUnused[16];
+		#endif
+	};
+	#pragma pack(pop)
+}
+void esvg::Renderer::writeBMP(const std::string& _fileName) {
+	if (m_buffer.size() == 0) {
+		return;
+	}
+	etk::FSNode tmpFile(_fileName);
+	
+	if(tmpFile.fileOpenWrite() == false) {
+		SVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+		return;
+	}
+	struct bitmapFileHeader fileHeader;
+	struct bitmapInfoHeader infoHeader;
+	
+	int32_t sizeX = m_size.x();
+	int32_t sizeY = m_size.y();
+	#if DEBUG
+		sizeX *= m_factor;
+		sizeY *= m_factor;
+	#endif
+	
+	fileHeader.bfType = 0x4D42;
+	fileHeader.bfSize = sizeof(struct bitmapFileHeader) + sizeof(struct bitmapInfoHeader) + sizeX*sizeY*4;
+	fileHeader.bfReserved = 0;
+	fileHeader.bfOffBits = sizeof(struct bitmapFileHeader) + sizeof(struct bitmapInfoHeader);
+	
+	
+	infoHeader.biSize = sizeof(struct bitmapInfoHeader);
+	infoHeader.biWidth = sizeX;
+	infoHeader.biHeight = sizeY;
+	infoHeader.biPlanes = 1;
+	infoHeader.biBitCount = 32;
+	#ifndef PLOPPP
+	infoHeader.biCompression = 0;
+	#else
+	infoHeader.biCompression = 3;
+	#endif
+	infoHeader.biSizeImage = sizeX*sizeY*4;
+	infoHeader.biXPelsPerMeter = 75;
+	infoHeader.biYPelsPerMeter = 75;
+	#ifndef PLOPPP
+	infoHeader.biClrUsed = 0;
+	infoHeader.biClrImportant = 0;
+	#else
+	infoHeader.biPaletteNumber = 0;
+	infoHeader.biImportantColor = 0;
+	infoHeader.biBitMaskRed = 0xFF000000;
+	infoHeader.biBitMaskGreen = 0x00FF0000;
+	infoHeader.biBitMaskBlue =0x0000FF00;
+	infoHeader.biBitMaskAlpha = 0x000000FF;
+	infoHeader.biLCSColorSpace = 0x73524742; // "???"
+	for (int32_t jjj=0; jjj<16; ++jjj) {
+		infoHeader.biUnused[jjj] = 0;
+	}
+	infoHeader.biUnused[12] = 0x00000002;
+	#endif
+	// get the data : 
+	tmpFile.fileWrite(&fileHeader, sizeof(struct bitmapFileHeader), 1);
+	tmpFile.fileWrite(&infoHeader, sizeof(struct bitmapInfoHeader), 1);
+	
+	uint8_t data[16];
+	for(int32_t yyy=sizeY-1; yyy>=0; --yyy) {
+		for(int32_t xxx=0; xxx<sizeX; ++xxx) {
+			const etk::Color<uint8_t,4>& tmpColor = m_buffer[sizeX*yyy + xxx];
+			uint8_t* pointer = data;
+			#ifndef PLOPPP
+			*pointer++ = tmpColor.a();
+			*pointer++ = tmpColor.r();
+			*pointer++ = tmpColor.g();
+			*pointer++ = tmpColor.b();
+			#else
+			*pointer++ = tmpColor.a();
+			*pointer++ = tmpColor.b();
+			*pointer++ = tmpColor.g();
+			*pointer++ = tmpColor.r();
+			#endif
+			tmpFile.fileWrite(data,1,4);
+		}
+	}
+	tmpFile.fileClose();
 }
 
 

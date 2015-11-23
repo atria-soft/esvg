@@ -21,7 +21,7 @@ TEST(TestLine, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestLine_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestLine_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestLine_stroke.bmp", g_visualDebug);
 }
 
 

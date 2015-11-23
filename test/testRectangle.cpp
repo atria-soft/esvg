@@ -21,7 +21,7 @@ TEST(TestRectangle, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, stroke) {
@@ -32,7 +32,7 @@ TEST(TestRectangle, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke) {
@@ -43,7 +43,7 @@ TEST(TestRectangle, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke_blend) {
@@ -54,7 +54,7 @@ TEST(TestRectangle, fill_and_stroke_blend) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke_blend.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke_opacity) {
@@ -65,7 +65,7 @@ TEST(TestRectangle, fill_and_stroke_opacity) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke_blend.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill) {
@@ -76,7 +76,7 @@ TEST(TestRectangle, corned_fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_stroke) {
@@ -87,7 +87,7 @@ TEST(TestRectangle, corned_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill_and_stroke) {
@@ -98,5 +98,5 @@ TEST(TestRectangle, corned_fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill_and_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill_and_stroke.bmp", g_visualDebug);
 }

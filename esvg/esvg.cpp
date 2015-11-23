@@ -85,7 +85,7 @@ void esvg::Document::generateTestFile()
 	std::string tmpFileOut = "yyy_out_";
 	tmpFileOut += m_fileName;
 	tmpFileOut += ".ppm";
-	m_renderedElement->writePpm(tmpFileOut);
+	m_renderedElement->writePPM(tmpFileOut);
 	
 }
 
@@ -117,7 +117,13 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
 	
 	draw(*m_renderedElement, basicTrans);
-	m_renderedElement->writePpm(_fileName);
+	if (etk::end_with(_fileName, ".ppm") == true) {
+		m_renderedElement->writePPM(_fileName);
+	} else if (etk::end_with(_fileName, ".bmp") == true) {
+		m_renderedElement->writeBMP(_fileName);
+	} else {
+		SVG_ERROR("Can not store with this extention : " << _fileName << " not in .bmp/.ppm");
+	}
 }
 /*
 void esvg::Document::generateAnImage(draw::Image& _output) {

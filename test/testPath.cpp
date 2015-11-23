@@ -22,7 +22,7 @@ TEST(TestPath, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPath_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPath_fill.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPath_fill.bmp", g_visualDebug);
 }
 
 TEST(TestPath, stroke) {
@@ -34,7 +34,7 @@ TEST(TestPath, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPath_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPath_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPath_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestPath, fill_and_stroke) {
@@ -46,5 +46,5 @@ TEST(TestPath, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPath_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPath_fill_and_stroke.ppm", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestPath_fill_and_stroke.bmp", g_visualDebug);
 }
