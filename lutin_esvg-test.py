@@ -36,7 +36,9 @@ def create(target, module_name):
 		'test/testPath.cpp',
 		'test/testPolygon.cpp',
 		'test/testPolyline.cpp',
-		'test/testRectangle.cpp'
+		'test/testRectangle.cpp',
+		'test/testJoin.cpp',
+		'test/testCap.cpp'
 		])
 	my_module.add_module_depend(['esvg', 'gtest', 'test-debug'])
 	return my_module
