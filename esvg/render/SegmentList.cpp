@@ -97,7 +97,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type_start) {
 				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				vecB.safeNormalize();
-				itListPoint[idCurrent].m_miterAxe = vec2(vecB.y(), vecB.x());
+				itListPoint[idCurrent].m_miterAxe = vec2(vecB.y(), -vecB.x());
 			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type_stop) {
 				if (idPevious < 0 ) {
 					SVG_ERROR("an error occure a previous ID is < 0.... ");
@@ -105,7 +105,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				}
 				vec2 vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
 				vecA.safeNormalize();
-				itListPoint[idCurrent].m_miterAxe = vec2(vecA.y(), vecA.x());
+				itListPoint[idCurrent].m_miterAxe = vec2(vecA.y(), -vecA.x());
 			} else {
 				SVG_TODO("lklklklklkl");
 			}
