@@ -13,11 +13,12 @@
 #define __class__	"render::Weight"
 
 
-esvg::render::Weight::Weight() {
+esvg::render::Weight::Weight() :
+  m_size(0,0)  {
 	
 }
 
-esvg::render::Weight::Weight(const ivec2& _size):
+esvg::render::Weight::Weight(const ivec2& _size) :
   m_size(_size) {
 	resize(_size);
 }
