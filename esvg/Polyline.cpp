@@ -85,11 +85,17 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
 	// Check if we need to display background
-	// No background ...
+	if (m_paint.fill.a() != 0x00) {
+		listSegmentFill.createSegmentList(listPoints);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		tmpFill.generate(_myRenderer.getSize(),
+		                 _myRenderer.getNumberSubScanLine(),
+		                 listSegmentFill);
+	}
 	// check if we need to display stroke:
 	if (    m_paint.strokeWidth > 0
 	     && m_paint.stroke.a() != 0x00) {
-		listSegmentStroke.createSegmentListStroke(listPoints);
+		listSegmentStroke.createSegmentListStroke(listPoints, m_paint.strokeWidth);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpStroke.generate(_myRenderer.getSize(),
 		                   _myRenderer.getNumberSubScanLine(),

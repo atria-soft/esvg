@@ -23,7 +23,7 @@ namespace esvg {
 				SegmentList();
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1);
 				void createSegmentList(const esvg::render::PointList& _listPoint);
-				void createSegmentListStroke(esvg::render::PointList& _listPoint);
+				void createSegmentListStroke(esvg::render::PointList& _listPoint, float _width);
 		};
 	}
 }

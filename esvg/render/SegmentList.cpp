@@ -43,7 +43,7 @@ void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList&
 	std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
-void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList& _listPoint) {
+void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList& _listPoint, float _width) {
 	for (auto &itListPoint : _listPoint.m_data) {
 		// generate for every point all the orthogonal elements
 		//                                                                                   
@@ -110,7 +110,6 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				SVG_TODO("lklklklklkl");
 			}
 		}
-		float lineWidth = 5.0f;
 		// create segment list:
 		bool haveStartLine;
 		vec2 leftPoint;
@@ -121,9 +120,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				if (    itListPoint.back().m_type == esvg::render::Point::type_join
 				     || itListPoint.back().m_type == esvg::render::Point::type_interpolation) {
 					leftPoint =   itListPoint.back().m_pos
-					            + itListPoint.back().m_miterAxe*lineWidth*0.5f;
+					            + itListPoint.back().m_miterAxe*_width*0.5f;
 					rightPoint =   itListPoint.back().m_pos
-					             - itListPoint.back().m_miterAxe*lineWidth*0.5f;
+					             - itListPoint.back().m_miterAxe*_width*0.5f;
 				} else {
 					SVG_ERROR("Start list point with a join, but last lement is not a join");
 				}
@@ -146,9 +145,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						haveStartLine = true;
 						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
 						leftPoint =   it.m_pos
-						            + it.m_miterAxe*lineWidth*0.5f;
+						            + it.m_miterAxe*_width*0.5f;
 						rightPoint =   it.m_pos
-						             - it.m_miterAxe*lineWidth*0.5f;
+						             - it.m_miterAxe*_width*0.5f;
 						addSegment(leftPoint, rightPoint);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << rightPoint);
 					}
@@ -163,9 +162,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						haveStartLine = false;
 						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
 						vec2 left =   it.m_pos
-						            + it.m_miterAxe*lineWidth*0.5f;
+						            + it.m_miterAxe*_width*0.5f;
 						vec2 right =   it.m_pos
-						             - it.m_miterAxe*lineWidth*0.5f;
+						             - it.m_miterAxe*_width*0.5f;
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
@@ -183,9 +182,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						SVG_VERBOSE("Find interpolation " << it.m_pos);
 						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
 						vec2 left =   it.m_pos
-						            + it.m_miterAxe*lineWidth*0.5f;
+						            + it.m_miterAxe*_width*0.5f;
 						vec2 right =   it.m_pos
-						             - it.m_miterAxe*lineWidth*0.5f;
+						             - it.m_miterAxe*_width*0.5f;
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
@@ -200,9 +199,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						SVG_VERBOSE("Find Join " << it.m_pos);
 						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
 						vec2 left =   it.m_pos
-						            + it.m_miterAxe*lineWidth*0.5f;
+						            + it.m_miterAxe*_width*0.5f;
 						vec2 right =   it.m_pos
-						             - it.m_miterAxe*lineWidth*0.5f;
+						             - it.m_miterAxe*_width*0.5f;
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
