@@ -145,7 +145,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() * m_factor <= subSamplingCenterPos
-				     && it.p1.y() * m_factor >= subSamplingCenterPos) {
+				     && it.p1.y() * m_factor >= subSamplingCenterPos ) {
 					availlableSegment.push_back(it);
 				}
 			}
@@ -161,7 +161,58 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 				     && xpos < dynamicSize.x()
 				     && yyy >= 0
 				     && yyy < dynamicSize.y() ) {
-					m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
+					if (it.direction == 1.0f) {
+						m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
+					} else {
+						m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::darkRed;
+					}
+				}
+			}
+		}
+		// for each colomn:
+		for (int32_t xxx=0; xxx<dynamicSize.x(); ++xxx) {
+			// Reduce the number of lines in the subsampling parsing:
+			std::vector<esvg::render::Segment> availlableSegmentPixel;
+			for (auto &it : _listSegment.m_data) {
+				if (    (    it.p0.x() * m_factor <= float(xxx+1)
+				          && it.p1.x() * m_factor >= float(xxx) )
+				     || (    it.p0.x() * m_factor >= float(xxx+1)
+				          && it.p1.x() * m_factor <= float(xxx) ) ) {
+					availlableSegmentPixel.push_back(it);
+				}
+			}
+			//find all the segment that cross the middle of the line of the center of the pixel line:
+			float subSamplingCenterPos = xxx + 0.5f;
+			std::vector<esvg::render::Segment> availlableSegment;
+			// find in the subList ...
+			for (auto &it : availlableSegmentPixel) {
+				if (    (    it.p0.x() * m_factor <= subSamplingCenterPos
+				          && it.p1.x() * m_factor >= subSamplingCenterPos)
+				     || (    it.p0.x() * m_factor >= subSamplingCenterPos
+				          && it.p1.x() * m_factor <= subSamplingCenterPos) ) {
+					availlableSegment.push_back(it);
+				}
+			}
+			// x position, angle
+			std::vector<std::pair<float, float>> listPosition;
+			for (auto &it : availlableSegment) {
+				vec2 delta = it.p0 * m_factor - it.p1 * m_factor;
+				// x = coefficent*y+bbb;
+				if (delta.x() == 0) {
+					continue;
+				}
+				float coefficient = delta.y()/delta.x();
+				float bbb = it.p0.y() * m_factor - coefficient*it.p0.x() * m_factor;
+				float ypos = coefficient * subSamplingCenterPos + bbb;
+				if (    ypos >= 0
+				     && ypos < dynamicSize.y()
+				     && xxx >= 0
+				     && xxx < dynamicSize.y() ) {
+					if (it.direction == 1.0f) {
+						m_buffer[(dynamicSize.x()*int32_t(ypos) + xxx)] = etk::color::blue;
+					} else {
+						m_buffer[(dynamicSize.x()*int32_t(ypos) + xxx)] = etk::color::darkRed;
+					}
 				}
 			}
 		}
