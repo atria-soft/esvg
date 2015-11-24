@@ -203,7 +203,9 @@ bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _pa
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
-					m_listElement.smoothCurveTo(relative, vec2(listDot[iii],listDot[iii+1]), vec2(listDot[iii+2],listDot[iii+3]));
+					m_listElement.smoothCurveTo(relative,
+					                            vec2(listDot[iii],listDot[iii+1]),
+					                            vec2(listDot[iii+2],listDot[iii+3]));
 				}
 				break;
 				

@@ -232,29 +232,83 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				}
 				break;
 			case esvg::render::path_smoothCurveTo:
-				/*
-				path.curve4SmoothTo(it->getRelative(),
-				                    vec2(it->m_element[0],
-				                         it->m_element[1]),
-				                    vec2(it->m_element[2],
-				                         it->m_element[3]) );
-				*/
+				// If no previous point, we need to create the last point has start ...
+				if (tmpListPoint.size() == 0) {
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				}
+				{
+					vec2 lastPosStore(lastPosition);
+					if (it->getRelative() == false) {
+						lastPosition = vec2(0.0f, 0.0f);
+					}
+					vec2 pos2 = lastPosition + it->getPos2();
+					vec2 pos = lastPosition + it->getPos();
+					// generate Pos 1
+					vec2 pos1 = pos*2.0f - pos2;
+					interpolateCubicBezier(tmpListPoint,
+					                       _recurtionMax,
+					                       _threshold,
+					                       lastPosStore,
+					                       pos1,
+					                       pos2,
+					                       pos,
+					                       0,
+					                       esvg::render::Point::type_join);
+					lastPosition = pos;
+				}
 				break;
 			case esvg::render::path_bezierCurveTo:
-				/*
-				path.curve3To(it->getRelative(),
-				              vec2(it->m_element[0],
-				                   it->m_element[1]),
-				              vec2(it->m_element[2],
-				                   it->m_element[3]) );
-				*/
+				// If no previous point, we need to create the last point has start ...
+				if (tmpListPoint.size() == 0) {
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				}
+				{
+					vec2 lastPosStore(lastPosition);
+					if (it->getRelative() == false) {
+						lastPosition = vec2(0.0f, 0.0f);
+					}
+					vec2 pos = lastPosition + it->getPos();
+					// generate pos1 and pos2
+					vec2 pos1 = lastPosStore + (it->getPos1() - lastPosStore)*0.666666666f;
+					vec2 pos2 = pos          + (it->getPos1() - pos)*0.666666666f;
+					interpolateCubicBezier(tmpListPoint,
+					                       _recurtionMax,
+					                       _threshold,
+					                       lastPosStore,
+					                       pos1,
+					                       pos2,
+					                       pos,
+					                       0,
+					                       esvg::render::Point::type_join);
+					lastPosition = pos;
+				}
 				break;
 			case esvg::render::path_bezierSmoothCurveTo:
-				/*
-				path.curve3SmoothTo(it->getRelative(),
-				                    vec2(it->m_element[0],
-				                         it->m_element[1]) );
-				*/
+				// If no previous point, we need to create the last point has start ...
+				if (tmpListPoint.size() == 0) {
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				}
+				{
+					vec2 lastPosStore(lastPosition);
+					if (it->getRelative() == false) {
+						lastPosition = vec2(0.0f, 0.0f);
+					}
+					vec2 pos = lastPosition + it->getPos();
+					vec2 delta = lastPosStore*2.0f - pos;
+					// generate pos1 and pos2
+					vec2 pos1 = lastPosStore + (delta - lastPosStore)*0.666666666f;
+					vec2 pos2 = pos          + (delta - pos)*0.66666666f;
+					interpolateCubicBezier(tmpListPoint,
+					                       _recurtionMax,
+					                       _threshold,
+					                       lastPosStore,
+					                       pos1,
+					                       pos2,
+					                       pos,
+					                       0,
+					                       esvg::render::Point::type_join);
+					lastPosition = pos;
+				}
 				break;
 			case esvg::render::path_elliptic:
 				/*

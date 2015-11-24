@@ -102,7 +102,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 		SVG_ERROR("SizeY == 0 ==> set 64");
 		sizeY = 64;
 	}
-	SVG_INFO("Generate size (" << sizeX << "," << sizeY << ")");
+	SVG_DEBUG("Generate size (" << sizeX << "," << sizeY << ")");
 	delete(m_renderedElement);
 	m_renderedElement = nullptr;
 	
