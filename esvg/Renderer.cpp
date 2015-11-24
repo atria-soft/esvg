@@ -157,7 +157,12 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() * m_factor - coefficient*it.p0.y() * m_factor;
 				float xpos = coefficient * subSamplingCenterPos + bbb;
-				m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
+				if (    xpos >= 0
+				     && xpos < dynamicSize.x()
+				     && yyy >= 0
+				     && yyy < dynamicSize.y() ) {
+					m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
+				}
 			}
 		}
 	}
