@@ -117,7 +117,10 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	// check if we need to display stroke:
 	if (    m_paint.strokeWidth > 0
 	     && m_paint.stroke.a() != 0x00) {
-		listSegmentStroke.createSegmentListStroke(listPoints, m_paint.strokeWidth);
+		listSegmentStroke.createSegmentListStroke(listPoints,
+		                                          m_paint.strokeWidth,
+		                                          m_paint.lineCap,
+		                                          m_paint.lineJoin);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpStroke.generate(_myRenderer.getSize(),
 		                   _myRenderer.getNumberSubScanLine(),

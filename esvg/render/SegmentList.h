@@ -11,6 +11,8 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
+#include <esvg/cap.h>
+#include <esvg/join.h>
 #include <esvg/render/Segment.h>
 #include <esvg/render/PointList.h>
 
@@ -23,7 +25,10 @@ namespace esvg {
 				SegmentList();
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1);
 				void createSegmentList(const esvg::render::PointList& _listPoint);
-				void createSegmentListStroke(esvg::render::PointList& _listPoint, float _width);
+				void createSegmentListStroke(esvg::render::PointList& _listPoint,
+				                             float _width,
+				                             enum esvg::cap _cap,
+				                             enum esvg::join _join);
 		};
 	}
 }

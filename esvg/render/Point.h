@@ -28,6 +28,10 @@ namespace esvg {
 				vec2 m_pos; //!< position of the point
 				enum esvg::render::Point::type m_type;
 				vec2 m_miterAxe;
+				vec2 m_orthoAxePrevious;
+				vec2 m_orthoAxeNext;
+				vec2 m_posPrevious;
+				vec2 m_posNext;
 				vec2 m_delta;
 				float m_len;
 				Point(const vec2& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type_join) :
