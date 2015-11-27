@@ -46,3 +46,14 @@ TEST(TestJoin, bevel) {
 	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevel.bmp", g_visualDebug);
 }
 
+
+TEST(TestJoin, bevel2) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<polyline points='80,20 60,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_bevel2.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevel2.bmp", g_visualDebug);
+}

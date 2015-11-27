@@ -15,10 +15,6 @@
 #undef __class__
 #define __class__	"rerder::SegmentList"
 
-bool sortSegmentFunction(const esvg::render::Segment& _e1, const esvg::render::Segment& _e2) {
-	return _e1.p0.y() < _e2.p0.y();
-}
-
 esvg::render::SegmentList::SegmentList() {
 	
 }
@@ -41,8 +37,6 @@ void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList&
 			addSegment(it[jjj], it[iii]);
 		}
 	}
-	// TODO : Check if it is really usefull ... ==> really bad, create parsing bug in weighter ...
-	//std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
 static vec2 getIntersect(const vec2& _point1,
@@ -81,7 +75,6 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		//                   .       *   *       .              * * * * * * * * * * * * *    
 		//                         *       *                                                 
 		//                       *           *                                               
-		// TODO : Start and stop of the path ...
 		for (int32_t idPevious=itListPoint.size()-1, idCurrent=0, idNext=1;
 		     idCurrent < itListPoint.size();
 		     idPevious = idCurrent++, idNext++) {
@@ -194,11 +187,10 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					startStopPoint(leftPoint, rightPoint, it, _cap, _width, false);
 					break;
 				case esvg::render::Point::type_interpolation:
-				case esvg::render::Point::type_join:
 					{
-						SVG_VERBOSE("Find interpolation/join " << it.m_pos);
-						vec2 left  = getIntersect(leftPoint,   it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-						vec2 right = getIntersect(rightPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+						SVG_VERBOSE("Find interpolation " << it.m_pos);
+						vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+						vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
@@ -208,11 +200,58 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						rightPoint = right;
 					}
 					break;
+				case esvg::render::Point::type_join:
+					SVG_VERBOSE("Find join " << it.m_pos);
+					switch (_join) {
+						case esvg::join_miter:
+							{
+								vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								//Draw from previous point:
+								addSegment(leftPoint, left);
+								SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+								addSegment(right, rightPoint);
+								SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+								leftPoint = left;
+								rightPoint = right;
+							}
+							break;
+						case esvg::join_round:
+							{
+								// TODO:
+							}
+							break;
+						case esvg::join_bevel:
+							{
+								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
+								vec2 axeNext = (it.m_posNext - it.m_pos).safeNormalize();
+								// TODO : Add cross at the vector2 ...
+								float cross = axePrevious.x() * axeNext.y() - axeNext.x() * axePrevious.y();
+								if (cross > 0.0f) {
+									SVG_ERROR("    Turn Right");
+								} else {
+									SVG_ERROR("    Turn Left");
+								}
+								/*
+								vec2 left   = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								vec2 right  = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								vec2 left2  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								vec2 right2 = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								//Draw from previous point:
+								addSegment(leftPoint, left);
+								SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+								addSegment(right, rightPoint);
+								SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+								leftPoint = left;
+								rightPoint = right;
+								*/
+							}
+							break;
+					}
+					break;
 			}
 		}
 	}
-	// TODO : Check if it is really usefull ... ==> really bad, create parsing bug in weighter ...
-	//std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
 
@@ -224,7 +263,7 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
                                                float _width,
                                                bool _isStart) {
 	switch (_cap) {
-		case cap_butt:
+		case esvg::cap_butt:
 			{
 				vec2 left =   _point.m_pos
 				            + _point.m_miterAxe*_width*0.5f;
@@ -248,7 +287,7 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 				SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
 			}
 			break;
-		case cap_round:
+		case esvg::cap_round:
 			{
 				if (_isStart == false) {
 					vec2 left =   _point.m_pos
@@ -305,7 +344,7 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 				_rightPoint = storeOld;
 			}
 			break;
-		case cap_square:
+		case esvg::cap_square:
 			{
 				vec2 nextAxe;
 				if (_isStart == true) {
