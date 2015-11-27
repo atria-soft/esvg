@@ -11,7 +11,6 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
-#include <esvg/Base.h>
 #include <esvg/render/Scanline.h>
 #include <esvg/render/SegmentList.h>
 

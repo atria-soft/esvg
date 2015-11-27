@@ -6,6 +6,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
+
+#include <esvg/join.h>
+#include <esvg/cap.h>
+
 #ifndef __ESVG_BASE_H__
 #define __ESVG_BASE_H__
 
@@ -36,18 +40,6 @@ namespace esvg {
 		spread_pad, //!< 'pad' spread.
 		spread_reflect, //!< 'reflect' spread.
 		spread_repead, //!< 'repead' spread.
-	};
-	
-	enum cap {
-		cap_butt,
-		cap_round,
-		cap_square
-	};
-	
-	enum join {
-		join_miter,
-		join_round,
-		join_bevel
 	};
 	
 	class PaintState {

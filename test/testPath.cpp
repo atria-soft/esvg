@@ -94,7 +94,7 @@ TEST(TestPath, bezierCurveTo) {
 TEST(TestPath, bezierSmoothCurveTo) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
-	                 "	<path d='m 50,50 t -20,20 z'"
+	                 "	<path d='m 50,50 t -20,30 t 30,-20 z'"
 	                 "	      fill='red' />"
 	                 "</svg>");
 	esvg::Document doc;

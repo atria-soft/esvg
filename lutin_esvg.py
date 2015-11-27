@@ -77,6 +77,8 @@ def create(target, module_name):
 		'esvg/Renderer.h',
 		'esvg/Stroking.h',
 		'esvg/Text.h',
+		'esvg/cap.h',
+		'esvg/join.h',
 		'esvg/render/Element.h',
 		'esvg/render/ElementStop.h',
 		'esvg/render/ElementClose.h',

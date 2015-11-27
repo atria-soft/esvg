@@ -8,6 +8,8 @@
 
 #include <esvg/render/SegmentList.h>
 #include <esvg/debug.h>
+#include <etk/math/Matrix2.h>
+
 
 
 #undef __class__
@@ -145,9 +147,9 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 			}
 		}
 		// create segment list:
-		bool haveStartLine;
-		vec2 leftPoint;
-		vec2 rightPoint;
+		bool haveStartLine = false;
+		vec2 leftPoint(0,0);
+		vec2 rightPoint(0,0);
 		if (itListPoint.size() > 0) {
 			if (itListPoint.front().m_type == esvg::render::Point::type_join) {
 				// cyclic path...
@@ -173,85 +175,30 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					SVG_VERBOSE("Find Single " << it.m_pos);
 					break;
 				case esvg::render::Point::type_start:
-					{
-						SVG_VERBOSE("Find Start " << it.m_pos);
-						if (haveStartLine == true) {
-							// close previous :
-							SVG_WARNING(" find a non close path ...");
-							addSegment(leftPoint, rightPoint);
-						}
-						haveStartLine = true;
-						leftPoint =   it.m_pos
-						            + it.m_miterAxe*_width*0.5f;
-						rightPoint =   it.m_pos
-						             - it.m_miterAxe*_width*0.5f;
+					SVG_VERBOSE("Find Start " << it.m_pos);
+					if (haveStartLine == true) {
+						// close previous :
+						SVG_WARNING(" find a non close path ...");
 						addSegment(leftPoint, rightPoint);
-						SVG_VERBOSE("    segment :" << leftPoint << " -> " << rightPoint);
 					}
+					haveStartLine = true;
+					startStopPoint(leftPoint, rightPoint, it, _cap, _width, true);
 					break;
 				case esvg::render::Point::type_stop:
-					{
-						SVG_VERBOSE("Find Stop " << it.m_pos);
-						if (haveStartLine == false) {
-							SVG_WARNING("find close path without start part ...");
-							break;
-						}
-						haveStartLine = false;
-						vec2 left =   it.m_pos
-						            + it.m_miterAxe*_width*0.5f;
-						vec2 right =   it.m_pos
-						             - it.m_miterAxe*_width*0.5f;
-						//Draw from previous point:
-						addSegment(leftPoint, left);
-						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
-						addSegment(right, rightPoint);
-						SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
-						leftPoint = left;
-						rightPoint = right;
-						// end line ...
-						if (rightPoint.y() <= leftPoint.y()) {
-							addSegment(leftPoint, rightPoint);
-						} else {
-							addSegment(rightPoint, leftPoint);
-						}
-						SVG_VERBOSE("    segment :" << rightPoint << " -> " << leftPoint);
+					SVG_VERBOSE("Find Stop " << it.m_pos);
+					if (haveStartLine == false) {
+						SVG_WARNING("find close path without start part ...");
+						break;
 					}
+					haveStartLine = false;
+					startStopPoint(leftPoint, rightPoint, it, _cap, _width, false);
 					break;
 				case esvg::render::Point::type_interpolation:
-					{
-						SVG_VERBOSE("Find interpolation " << it.m_pos);
-						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
-						#if 1
-							vec2 left  = getIntersect(leftPoint,   it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-							vec2 right = getIntersect(rightPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-						#else
-						vec2 left =   it.m_pos
-						            + it.m_miterAxe*_width*0.5f;
-						vec2 right =   it.m_pos
-						             - it.m_miterAxe*_width*0.5f;
-						#endif
-						//Draw from previous point:
-						addSegment(leftPoint, left);
-						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
-						addSegment(right, rightPoint);
-						SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
-						leftPoint = left;
-						rightPoint = right;
-					}
-					break;
 				case esvg::render::Point::type_join:
 					{
-						SVG_VERBOSE("Find Join " << it.m_pos);
-						// TODO : Calculate intersection ...  (now we do a simple fast test of path display ...)
-						#if 1
-							vec2 left  = getIntersect(leftPoint,   it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-							vec2 right = getIntersect(rightPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-						#else
-						vec2 left =   it.m_pos
-						            + it.m_miterAxe*_width*0.5f;
-						vec2 right =   it.m_pos
-						             - it.m_miterAxe*_width*0.5f;
-						#endif
+						SVG_VERBOSE("Find interpolation/join " << it.m_pos);
+						vec2 left  = getIntersect(leftPoint,   it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+						vec2 right = getIntersect(rightPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
@@ -268,4 +215,135 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 	std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
+
+
+void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
+                                               vec2& _rightPoint,
+                                               const esvg::render::Point& _point,
+                                               enum esvg::cap _cap,
+                                               float _width,
+                                               bool _isStart) {
+	switch (_cap) {
+		case cap_butt:
+			{
+				vec2 left =   _point.m_pos
+				            + _point.m_miterAxe*_width*0.5f;
+				vec2 right =   _point.m_pos
+				             - _point.m_miterAxe*_width*0.5f;
+				if (_isStart == false) {
+					//Draw from previous point:
+					addSegment(_leftPoint, left);
+					SVG_VERBOSE("    segment :" << _leftPoint << " -> " << left);
+					addSegment(right, _rightPoint);
+					SVG_VERBOSE("    segment :" << right << " -> " << _rightPoint);
+				}
+				_leftPoint = left;
+				_rightPoint = right;
+			}
+			if (_isStart == false) {
+				addSegment(_leftPoint, _rightPoint);
+				SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
+			} else {
+				addSegment(_rightPoint, _leftPoint);
+				SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
+			}
+			break;
+		case cap_round:
+			{
+				if (_isStart == false) {
+					vec2 left =   _point.m_pos
+					            + _point.m_miterAxe*_width*0.5f;
+					vec2 right =   _point.m_pos
+					             - _point.m_miterAxe*_width*0.5f;
+					if (_isStart == false) {
+						//Draw from previous point:
+						addSegment(_leftPoint, left);
+						SVG_VERBOSE("    segment :" << _leftPoint << " -> " << left);
+						addSegment(right, _rightPoint);
+						SVG_VERBOSE("    segment :" << right << " -> " << _rightPoint);
+					}
+					_leftPoint = left;
+					_rightPoint = right;
+				}
+				int32_t nbDot = int32_t(_width);
+				if (nbDot <= 2) {
+					nbDot = 2;
+				}
+				float baseAngle = M_PI/float(nbDot);
+				float iii;
+				_rightPoint =   _point.m_pos
+				              - _point.m_miterAxe*_width*0.5f;
+				vec2 storeOld(_rightPoint);
+				for (iii=baseAngle; iii<M_PI; iii+=baseAngle) {
+					mat2 tmpMat;
+					if (_isStart == true) {
+						tmpMat = etk::mat2Rotate(iii);
+					} else {
+						tmpMat = etk::mat2Rotate(-iii);
+					}
+					vec2 miterRotate = tmpMat * _point.m_miterAxe;
+					_leftPoint =   _point.m_pos
+					             - miterRotate*_width*0.5f;
+					if (_isStart == false) {
+						addSegment(_leftPoint, _rightPoint);
+						SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
+					} else {
+						addSegment(_rightPoint, _leftPoint);
+						SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
+					}
+					_rightPoint = _leftPoint;
+				}
+				_leftPoint =   _point.m_pos
+				             + _point.m_miterAxe*_width*0.5f;
+				if (_isStart == false) {
+					addSegment(_leftPoint, _rightPoint);
+					SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
+				} else {
+					addSegment(_rightPoint, _leftPoint);
+					SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
+				}
+				_rightPoint = storeOld;
+			}
+			break;
+		case cap_square:
+			{
+				vec2 nextAxe;
+				if (_isStart == true) {
+					nextAxe = _point.m_posNext - _point.m_pos;
+				} else {
+					nextAxe = _point.m_posPrevious - _point.m_pos;
+				}
+				vec2 left =   _point.m_pos
+				            + _point.m_miterAxe*_width*0.5f;
+				vec2 right =   _point.m_pos
+				             - _point.m_miterAxe*_width*0.5f;
+				mat2 tmpMat = etk::mat2Translate(nextAxe.safeNormalize()*_width*-0.5f);
+				left = tmpMat*left;
+				right = tmpMat*right;
+				if (_isStart == false) {
+					if (_isStart == false) {
+						//Draw from previous point:
+						addSegment(_leftPoint, left);
+						SVG_VERBOSE("    segment :" << _leftPoint << " -> " << left);
+						addSegment(right, _rightPoint);
+						SVG_VERBOSE("    segment :" << right << " -> " << _rightPoint);
+					}
+				}
+				_leftPoint = left;
+				_rightPoint = right;
+				if (_isStart == false) {
+					addSegment(_leftPoint, _rightPoint);
+					SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
+				} else {
+					addSegment(_rightPoint, _leftPoint);
+					SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
+				}
+				SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
+			}
+			break;
+		default:
+			SVG_ERROR(" Undefined CAP TYPE");
+			break;
+	}
+}
 

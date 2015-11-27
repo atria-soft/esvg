@@ -29,6 +29,13 @@ namespace esvg {
 				                             float _width,
 				                             enum esvg::cap _cap,
 				                             enum esvg::join _join);
+			private:
+				void startStopPoint(vec2& _leftPoint,
+				                    vec2& _rightPoint,
+				                    const esvg::render::Point& _point,
+				                    enum esvg::cap _cap,
+				                    float _width,
+				                    bool _isStart);
 		};
 	}
 }

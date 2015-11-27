@@ -169,6 +169,14 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 					scanline.set(currentPos, currentValue);
 				}
 			}
+			// if the counter is not at 0 ==> fill if to the end with full value ... 2.0
+			if (lastState != 0.0f) {
+				// just past the last state to the end of the image ...
+				SVG_ERROR("end of Path whith no end ... " << currentPos << " -> " << _size.x());
+				for (int32_t xxx=currentPos; xxx<_size.x(); ++xxx) {
+					scanline.set(xxx, 100.0);
+				}
+			}
 			append(yyy, scanline);
 		}
 	}
