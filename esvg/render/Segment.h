@@ -19,7 +19,7 @@ namespace esvg {
 				Segment(const vec2& _p0, const vec2& _p1);
 				vec2 p0;
 				vec2 p1;
-				float direction;
+				int32_t direction;
 		};
 	}
 }

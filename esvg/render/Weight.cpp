@@ -97,17 +97,23 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 	resize(_size);
 	// for each lines:
 	for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
+		SVG_VERBOSE("Weighting ... " << yyy << " / " << _size.y());
 		// Reduce the number of lines in the subsampling parsing:
 		std::vector<Segment> availlableSegmentPixel;
 		for (auto &it : _listSegment.m_data) {
-			if (    it.p0.y() <= float(yyy+1)
-			     && it.p1.y() >= float(yyy)) {
+			if (    it.p0.y() < float(yyy+1)
+			     && it.p1.y() > float(yyy)) {
 				availlableSegmentPixel.push_back(it);
 			}
 		}
+		if (availlableSegmentPixel.size() == 0) {
+			continue;
+		}
+		SVG_VERBOSE("          Find Basic segments " << availlableSegmentPixel.size());
 		// This represent the pondaration on the subSampling
 		float deltaSize = 1.0f/_subSamplingCount;
 		for (int32_t kkk=0; kkk<_subSamplingCount ; ++kkk) {
+			SVG_VERBOSE("    Scanline ... " << kkk << " / " << _subSamplingCount);
 			Scanline scanline(_size.x());
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = yyy + deltaSize*0.5f + deltaSize*kkk;
@@ -116,23 +122,38 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() <= subSamplingCenterPos
 				     && it.p1.y() >= subSamplingCenterPos) {
-					availlableSegment.push_back(it);
+					// check if we not get 2 identical lines:
+					if (    availlableSegment.size() > 0
+					     && availlableSegment.back().p1 == it.p0
+					     && availlableSegment.back().direction == it.direction) {
+						// we not add this point in this case to prevent double count of the same point.
+					} else {
+						availlableSegment.push_back(it);
+					}
 				}
 			}
+			SVG_VERBOSE("        Availlable Segment " << availlableSegment.size());
+			if (availlableSegment.size() == 0) {
+				continue;
+			}
+			for (auto &it : availlableSegment) {
+				SVG_VERBOSE("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
+			}
 			// x position, angle
-			std::vector<std::pair<float, float>> listPosition;
+			std::vector<std::pair<float, int32_t>> listPosition;
 			for (auto &it : availlableSegment) {
 				vec2 delta = it.p0 - it.p1;
 				// x = coefficent*y+bbb;
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() - coefficient*it.p0.y();
 				float xpos = coefficient * subSamplingCenterPos + bbb;
-				listPosition.push_back(std::pair<float,float>(xpos, it.direction));
+				listPosition.push_back(std::pair<float,int32_t>(xpos, it.direction));
 			}
+			SVG_VERBOSE("        List position " << listPosition.size());
 			// now we order position of the xPosition:
 			std::sort(listPosition.begin(), listPosition.end(), sortXPosFunction);
 			// move through all element in the point:
-			float lastState = 0.0f;
+			int32_t lastState = 0;
 			float currentValue = 0.0f;
 			int32_t lastPos = -1;
 			int32_t currentPos = -1;
@@ -144,20 +165,20 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			for (auto &it : listPosition) {
 				if (currentPos != int32_t(it.first)) {
 					// fill to the new pos -1:
-					float endValue = std::min(1.0f,std::abs(lastState)) * deltaSize;
+					float endValue = float(std::min(1,std::abs(lastState))) * deltaSize;
 					for (int32_t iii=currentPos+1; iii<int32_t(it.first); ++iii) {
 						scanline.set(iii, endValue);
 					}
 					currentPos = int32_t(it.first);
 					currentValue = endValue;
 				}
-				float oldState = lastState;
+				int32_t oldState = lastState;
 				lastState += it.second;
-				if (oldState == 0.0f) {
+				if (oldState == 0) {
 					// nothing to draw before ...
 					float ratio = 1.0f - (it.first - float(int32_t(it.first)));
 					currentValue += ratio * deltaSize;
-				} else if (lastState == 0.0f) {
+				} else if (lastState == 0) {
 					// something new to draw ...
 					float ratio = 1.0f - (it.first - float(int32_t(it.first)));
 					currentValue -= ratio * deltaSize;
@@ -170,7 +191,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				}
 			}
 			// if the counter is not at 0 ==> fill if to the end with full value ... 2.0
-			if (lastState != 0.0f) {
+			if (lastState != 0) {
 				// just past the last state to the end of the image ...
 				SVG_ERROR("end of Path whith no end ... " << currentPos << " -> " << _size.x());
 				for (int32_t xxx=currentPos; xxx<_size.x(); ++xxx) {

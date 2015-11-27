@@ -41,8 +41,8 @@ void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList&
 			addSegment(it[jjj], it[iii]);
 		}
 	}
-	// TODO : Check if it is really usefull ...
-	std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
+	// TODO : Check if it is really usefull ... ==> really bad, create parsing bug in weighter ...
+	//std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
 static vec2 getIntersect(const vec2& _point1,
@@ -211,8 +211,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 			}
 		}
 	}
-	// TODO : Check if it is really usefull ...
-	std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
+	// TODO : Check if it is really usefull ... ==> really bad, create parsing bug in weighter ...
+	//std::sort(m_data.begin(), m_data.end(), sortSegmentFunction);
 }
 
 

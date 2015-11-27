@@ -17,11 +17,11 @@ esvg::render::Segment::Segment(const vec2& _p0, const vec2& _p1) {
 	if (_p0.y() < _p1.y()) {
 		p0 = _p0;
 		p1 = _p1;
-		direction = 1.0f; // direction like clock
+		direction = 1; // direction like clock
 	} else {
 		p0 = _p1;
 		p1 = _p0;
-		direction = -1.0f; // direction like anti-clock
+		direction = -1; // direction like anti-clock
 	}
 }
 
