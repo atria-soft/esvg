@@ -217,10 +217,6 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 							}
 							break;
 						case esvg::join_round:
-							{
-								// TODO:
-							}
-							break;
 						case esvg::join_bevel:
 							{
 								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
@@ -228,23 +224,43 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 								// TODO : Add cross at the vector2 ...
 								float cross = axePrevious.x() * axeNext.y() - axeNext.x() * axePrevious.y();
 								if (cross > 0.0f) {
-									SVG_ERROR("    Turn Right");
+									vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									vec2 left1 =   it.m_pos
+									             + it.m_orthoAxePrevious*_width*0.5f;
+									vec2 left2 =   it.m_pos
+									             + it.m_orthoAxeNext*_width*0.5f;
+									//Draw from previous point:
+									addSegment(leftPoint, left1);
+									SVG_VERBOSE("    segment :" << leftPoint << " -> " << left1);
+									if (_join == esvg::join_bevel) {
+										addSegment(left1, left2);
+										SVG_VERBOSE("    segment :" << left1 << " -> " << left2);
+									}else {
+										
+									}
+									addSegment(right, rightPoint);
+									SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+									leftPoint = left2;
+									rightPoint = right;
 								} else {
-									SVG_ERROR("    Turn Left");
+									vec2 left   = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									vec2 right1 =   it.m_pos
+									              - it.m_orthoAxePrevious*_width*0.5f;
+									vec2 right2 =   it.m_pos
+									              - it.m_orthoAxeNext*_width*0.5f;//Draw from previous point:
+									addSegment(leftPoint, left);
+									SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+									addSegment(right1, rightPoint);
+									SVG_VERBOSE("    segment :" << right1 << " -> " << rightPoint);
+									if (_join == esvg::join_bevel) {
+										addSegment(right2, right1);
+										SVG_VERBOSE("    segment :" << right2 << " -> " << right1);
+									} else {
+										
+									}
+									leftPoint = left;
+									rightPoint = right2;
 								}
-								/*
-								vec2 left   = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								vec2 right  = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								vec2 left2  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								vec2 right2 = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								//Draw from previous point:
-								addSegment(leftPoint, left);
-								SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
-								addSegment(right, rightPoint);
-								SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
-								leftPoint = left;
-								rightPoint = right;
-								*/
 							}
 							break;
 					}

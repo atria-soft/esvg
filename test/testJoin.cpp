@@ -24,36 +24,47 @@ TEST(TestJoin, miter) {
 	doc.generateAnImage(ivec2(100, 100), "TestJoin_miter.bmp", g_visualDebug);
 }
 
-TEST(TestJoin, round) {
+TEST(TestJoin, roundRight) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestJoin_round.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_round.bmp", g_visualDebug);
+	etk::FSNodeWriteAllData("TestJoin_roundRight.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundRight.bmp", g_visualDebug);
 }
 
-TEST(TestJoin, bevel) {
+TEST(TestJoin, roundLeft) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_roundLeft.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft.bmp", g_visualDebug);
+}
+
+TEST(TestJoin, bevelRight) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestJoin_bevel.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevel.bmp", g_visualDebug);
+	etk::FSNodeWriteAllData("TestJoin_bevelRight.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelRight.bmp", g_visualDebug);
 }
 
 
-TEST(TestJoin, bevel2) {
+TEST(TestJoin, bevelLeft) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 60,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestJoin_bevel2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevel2.bmp", g_visualDebug);
+	etk::FSNodeWriteAllData("TestJoin_bevelLeft.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft.bmp", g_visualDebug);
 }
