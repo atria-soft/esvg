@@ -383,6 +383,9 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 					m_paint.lineJoin = esvg::join_miter;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
+			} else if (outputType == "stroke-miterlimit") {
+				float tmp = parseLength(outputValue);
+				m_paint.miterLimit = std::max(0.0f, tmp);
 			} else if (outputType == "marker-start") {
 				// TODO : ...
 			} else {

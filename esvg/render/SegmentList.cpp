@@ -275,8 +275,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 							{
 								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
 								vec2 axeNext = (it.m_posNext - it.m_pos).safeNormalize();
-								// TODO : Add cross at the vector2 ...
-								float cross = axePrevious.x() * axeNext.y() - axeNext.x() * axePrevious.y();
+								float cross = axePrevious.cross(axeNext);
 								if (cross > 0.0f) {
 									vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 									vec2 left1 =   it.m_pos
