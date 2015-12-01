@@ -53,6 +53,7 @@ namespace esvg {
 			bool flagEvenOdd; //!< Fill rules
 			enum esvg::cap lineCap;
 			enum esvg::join lineJoin;
+			float miterLimit;
 			vec2 viewPort;
 			float opacity;
 	};

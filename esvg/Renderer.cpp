@@ -24,9 +24,11 @@ esvg::Renderer::Renderer(const ivec2& _size, bool _visualDebug) :
   m_interpolationRecurtionMax(10),
   m_interpolationThreshold(0.25f),
   m_nbSubScanLine(8) {
-	if (m_visualDebug == true) {
-		m_factor = 10;
-	}
+	#ifdef DEBUG
+		if (m_visualDebug == true) {
+			m_factor = 10;
+		}
+	#endif
 	setSize(_size);
 }
 

@@ -23,6 +23,7 @@ esvg::PaintState::PaintState() :
   flagEvenOdd(false),
   lineCap(esvg::cap_butt),
   lineJoin(esvg::join_miter),
+  miterLimit(4.0f),
   viewPort(255,255),
   opacity(1.0) {
 	
@@ -36,6 +37,7 @@ void esvg::PaintState::clear() {
 	flagEvenOdd = false;
 	lineJoin = esvg::join_miter;
 	lineCap = esvg::cap_butt;
+	miterLimit = 4.0f;
 	opacity = 1.0;
 }
 
@@ -168,21 +170,29 @@ float esvg::Base::parseLength(const std::string& _dataInput) {
 		return n;
 	} else if (unit[0] == '%') {                   // xxx %
 		return n / 100.0 * m_paint.viewPort.x();
-	} else if (unit[0] == 'e' && unit[1] == 'm') { // xxx em
+	} else if (    unit[0] == 'e'
+	            && unit[1] == 'm') { // xxx em
 		return n * font_size;
-	} else if (unit[0] == 'e' && unit[1] == 'x') { // xxx ex
+	} else if (    unit[0] == 'e'
+	            && unit[1] == 'x') { // xxx ex
 		return n / 2.0f * font_size;
-	} else if (unit[0] == 'p' && unit[1] == 'x') { // xxx px
+	} else if (    unit[0] == 'p'
+	            && unit[1] == 'x') { // xxx px
 		return n;
-	} else if (unit[0] == 'p' && unit[1] == 't') { // xxx pt
+	} else if (    unit[0] == 'p'
+	            && unit[1] == 't') { // xxx pt
 		return n * 1.25f;
-	} else if (unit[0] == 'p' && unit[1] == 'c') { // xxx pc
+	} else if (    unit[0] == 'p'
+	            && unit[1] == 'c') { // xxx pc
 		return n * 15.0f;
-	} else if (unit[0] == 'm' && unit[1] == 'm') { // xxx mm
+	} else if (    unit[0] == 'm'
+	            && unit[1] == 'm') { // xxx mm
 		return n * 3.543307f;
-	} else if (unit[0] == 'c' && unit[1] == 'm') { // xxx cm
+	} else if (    unit[0] == 'c'
+	            && unit[1] == 'm') { // xxx cm
 		return n * 35.43307f;
-	} else if (unit[0] == 'i' && unit[1] == 'n') { // xxx in
+	} else if (    unit[0] == 'i'
+	            && unit[1] == 'n') { // xxx in
 		return n * 90.0f;
 	}
 	return 0.0f;
@@ -255,13 +265,13 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	content = _element->getAttribute("fill-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = std::avg(0.0f, opacity, 1.0f);
+		opacity = std::avg(0.0f, opacity, 1.0f);
 		m_paint.fill.setA(opacity*0xFF);
 	}
 	content = _element->getAttribute("stroke-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
-		opacity  = std::avg(0.0f, opacity, 1.0f);
+		opacity = std::avg(0.0f, opacity, 1.0f);
 		m_paint.stroke.setA(opacity*0xFF);
 	}
 	content = _element->getAttribute("fill-rule");
@@ -299,6 +309,11 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			m_paint.lineJoin = esvg::join_miter;
 			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
+	}
+	content = _element->getAttribute("stroke-miterlimit");
+	if (content.size()!=0) {
+		float tmp = parseLength(content);
+		m_paint.miterLimit = std::max(0.0f, tmp);
 	}
 	content = _element->getAttribute("style");
 	if (content.size()!=0) {

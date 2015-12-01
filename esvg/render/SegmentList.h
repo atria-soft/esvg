@@ -28,7 +28,8 @@ namespace esvg {
 				void createSegmentListStroke(esvg::render::PointList& _listPoint,
 				                             float _width,
 				                             enum esvg::cap _cap,
-				                             enum esvg::join _join);
+				                             enum esvg::join _join,
+				                             float _miterLimit);
 			private:
 				void startStopPoint(vec2& _leftPoint,
 				                    vec2& _rightPoint,
@@ -36,6 +37,11 @@ namespace esvg {
 				                    enum esvg::cap _cap,
 				                    float _width,
 				                    bool _isStart);
+				void createSegmentListStroke(const vec2& _point1,
+				                             const vec2& _point2,
+				                             const vec2& _center,
+				                             float _width,
+				                             bool _isStart);
 		};
 	}
 }

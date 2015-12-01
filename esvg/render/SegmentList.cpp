@@ -56,10 +56,54 @@ static vec2 getIntersect(const vec2& _point1,
 	return _point2;
 }
 
+void esvg::render::SegmentList::createSegmentListStroke(const vec2& _point1,
+                                                        const vec2& _point2,
+                                                        const vec2& _center,
+                                                        float _width,
+                                                        bool _isStart) {
+	int32_t nbDot = int32_t(_width);
+	if (nbDot <= 2) {
+		nbDot = 2;
+	}
+	float angleToDraw = acos((_point1 - _center).safeNormalize().dot((_point2 - _center).safeNormalize()));
+	float baseAngle = angleToDraw/float(nbDot);
+	float iii;
+	vec2 axe = (_point1 - _center).safeNormalize();
+	vec2 ppp1(_point1);
+	vec2 ppp2(_point2);
+	for (iii=baseAngle; iii<angleToDraw; iii+=baseAngle) {
+		mat2 tmpMat;
+		if (_isStart == true) {
+			tmpMat = etk::mat2Rotate(-iii);
+		} else {
+			tmpMat = etk::mat2Rotate(iii);
+		}
+		vec2 axeRotate = tmpMat * axe;
+		ppp2 =   _center
+		       + axeRotate*_width*0.5f;
+		if (_isStart == true) {
+			addSegment(ppp2, ppp1);
+			SVG_VERBOSE("    segment :" << ppp2 << " -> " << ppp1);
+		} else {
+			addSegment(ppp1, ppp2);
+			SVG_VERBOSE("    segment :" << ppp1 << " -> " << ppp2);
+		}
+		ppp1 = ppp2;
+	}
+	if (_isStart == true) {
+		addSegment(_point2, ppp1);
+		SVG_VERBOSE("    segment :" << _point2 << " -> " << ppp1);
+	} else {
+		addSegment(ppp1, _point2);
+		SVG_VERBOSE("    segment :" << ppp1 << " -> " << _point2);
+	}
+}
+
 void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList& _listPoint,
                                                         float _width,
                                                         enum esvg::cap _cap,
-                                                        enum esvg::join _join) {
+                                                        enum esvg::join _join,
+                                                        float _miterLimit) {
 	for (auto &itListPoint : _listPoint.m_data) {
 		// generate for every point all the orthogonal elements
 		//                                                                                   
@@ -136,7 +180,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				itListPoint[idCurrent].m_orthoAxePrevious = itListPoint[idCurrent].m_miterAxe;
 				itListPoint[idCurrent].m_orthoAxeNext = itListPoint[idCurrent].m_miterAxe;
 			} else {
-				SVG_TODO("lklklklklkl");
+				SVG_TODO("Unsupported type of point ....");
 			}
 		}
 		// create segment list:
@@ -207,15 +251,25 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 							{
 								vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 								vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								//Draw from previous point:
-								addSegment(leftPoint, left);
-								SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
-								addSegment(right, rightPoint);
-								SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
-								leftPoint = left;
-								rightPoint = right;
+								// Check the miter limit:
+								float limitRight = (left - it.m_pos).length() / _width * 2.0f;
+								float limitLeft  = (right - it.m_pos).length() / _width * 2.0f;
+								SVG_VERBOSE("    miter Limit: " << limitRight << " " << limitLeft << " <= " << _miterLimit);
+								if (    limitRight <= _miterLimit
+								     && limitLeft <= _miterLimit) {
+									//Draw from previous point:
+									addSegment(leftPoint, left);
+									SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
+									addSegment(right, rightPoint);
+									SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
+									leftPoint = left;
+									rightPoint = right;
+									break;
+								} else {
+									// We do a bevel join ...
+									SVG_VERBOSE("    Find miter Limit ... ==> create BEVEL");
+								}
 							}
-							break;
 						case esvg::join_round:
 						case esvg::join_bevel:
 							{
@@ -232,11 +286,16 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 									//Draw from previous point:
 									addSegment(leftPoint, left1);
 									SVG_VERBOSE("    segment :" << leftPoint << " -> " << left1);
-									if (_join == esvg::join_bevel) {
+									if (_join != esvg::join_round) {
+										// Miter and bevel:
 										addSegment(left1, left2);
 										SVG_VERBOSE("    segment :" << left1 << " -> " << left2);
 									}else {
-										
+										createSegmentListStroke(left1,
+										                        left2,
+										                        it.m_pos,
+										                        _width,
+										                        false);
 									}
 									addSegment(right, rightPoint);
 									SVG_VERBOSE("    segment :" << right << " -> " << rightPoint);
@@ -252,11 +311,16 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 									SVG_VERBOSE("    segment :" << leftPoint << " -> " << left);
 									addSegment(right1, rightPoint);
 									SVG_VERBOSE("    segment :" << right1 << " -> " << rightPoint);
-									if (_join == esvg::join_bevel) {
+									if (_join != esvg::join_round) {
+										// Miter and bevel:
 										addSegment(right2, right1);
 										SVG_VERBOSE("    segment :" << right2 << " -> " << right1);
 									} else {
-										
+										createSegmentListStroke(right1,
+										                        right2,
+										                        it.m_pos,
+										                        _width,
+										                        true);
 									}
 									leftPoint = left;
 									rightPoint = right2;
@@ -269,8 +333,6 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		}
 	}
 }
-
-
 
 void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
                                                vec2& _rightPoint,
@@ -326,38 +388,15 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 				}
 				float baseAngle = M_PI/float(nbDot);
 				float iii;
-				_rightPoint =   _point.m_pos
-				              - _point.m_miterAxe*_width*0.5f;
-				vec2 storeOld(_rightPoint);
-				for (iii=baseAngle; iii<M_PI; iii+=baseAngle) {
-					mat2 tmpMat;
-					if (_isStart == true) {
-						tmpMat = etk::mat2Rotate(iii);
-					} else {
-						tmpMat = etk::mat2Rotate(-iii);
-					}
-					vec2 miterRotate = tmpMat * _point.m_miterAxe;
-					_leftPoint =   _point.m_pos
-					             - miterRotate*_width*0.5f;
-					if (_isStart == false) {
-						addSegment(_leftPoint, _rightPoint);
-						SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
-					} else {
-						addSegment(_rightPoint, _leftPoint);
-						SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
-					}
-					_rightPoint = _leftPoint;
-				}
 				_leftPoint =   _point.m_pos
 				             + _point.m_miterAxe*_width*0.5f;
-				if (_isStart == false) {
-					addSegment(_leftPoint, _rightPoint);
-					SVG_VERBOSE("    segment :" << _leftPoint << " -> " << _rightPoint);
-				} else {
-					addSegment(_rightPoint, _leftPoint);
-					SVG_VERBOSE("    segment :" << _rightPoint << " -> " << _leftPoint);
-				}
-				_rightPoint = storeOld;
+				_rightPoint =   _point.m_pos
+				              - _point.m_miterAxe*_width*0.5f;
+				createSegmentListStroke(_leftPoint,
+				                        _rightPoint,
+				                        _point.m_pos,
+				                        _width,
+				                        _isStart);
 			}
 			break;
 		case esvg::cap_square:

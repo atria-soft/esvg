@@ -88,7 +88,8 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 		listSegmentStroke.createSegmentListStroke(listPoints,
 		                                          m_paint.strokeWidth,
 		                                          m_paint.lineCap,
-		                                          m_paint.lineJoin);
+		                                          m_paint.lineJoin,
+		                                          m_paint.miterLimit);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpStroke.generate(_myRenderer.getSize(),
 		                   _myRenderer.getNumberSubScanLine(),
