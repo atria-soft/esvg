@@ -36,37 +36,26 @@ esvg::Renderer::~Renderer() {
 	m_buffer.clear();
 	m_size = ivec2(0,0);
 }
-#if 0
-etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration) {
-	if (_integration.a() == 0.0f) {
-		return _base;
-	}
-	if (_base.a() == 0.0f) {
-		return _integration;
-	}
-	etk::Color<float,4> tmpColor(_integration.r()*_integration.a(),
-	                             _integration.g()*_integration.a(),
-	                             _integration.b()*_integration.a(),
-	                             _integration.a());
-	// Blend over
-	float tmpA = std::min(1.0f, (_base.a() + _integration.a()));
-	_base *= (1.0f - _integration.a());
-	_base += tmpColor;
-	_base.setA(tmpA);
-	return _base;
-}
-#else
-etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration) {
+
+etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration) {
 	etk::Color<float,4> result;
-	float a1 = _base.a();
-	float a2 = _integration.a();
-	result.setR(a1 * _base.r() + a2 * (1.0f - a1) * _integration.r());
-	result.setG(a1 * _base.g() + a2 * (1.0f - a1) * _integration.g());
-	result.setB(a1 * _base.b() + a2 * (1.0f - a1) * _integration.b());
-	result.setA(a1 + a2 * (1.0f - a1));
+	if (_base.a() < _integration.a()) {
+		result = _base;
+		_base = _integration;
+		_integration = result;
+	}
+	result.setR(_base.a() * _base.r() + _integration.a() * (1.0f - _base.a()) * _integration.r());
+	result.setG(_base.a() * _base.g() + _integration.a() * (1.0f - _base.a()) * _integration.g());
+	result.setB(_base.a() * _base.b() + _integration.a() * (1.0f - _base.a()) * _integration.b());
+	result.setA(_base.a() + _integration.a() * (1.0f - _base.a()));
+	if (result.a() != 0.0f) {
+		result.setR(result.r()/result.a());
+		result.setG(result.g()/result.a());
+		result.setB(result.b()/result.a());
+	}
 	return result;
 }
-#endif
+
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const etk::Color<float,4>& _colorFill,
                            const esvg::render::Weight& _weightStroke,

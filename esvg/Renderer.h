@@ -53,7 +53,7 @@ namespace esvg {
 			void writePPM(const std::string& _fileName);
 			void writeBMP(const std::string& _fileName);
 		protected:
-			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration);
+			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:
 			void print(const esvg::render::Weight& _weightFill,
 			           const etk::Color<float,4>& _colorFill,
