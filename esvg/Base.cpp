@@ -266,13 +266,13 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
 		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.setA(opacity*0xFF);
+		m_paint.fill.setA(opacity);
 	}
 	content = _element->getAttribute("stroke-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
 		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.stroke.setA(opacity*0xFF);
+		m_paint.stroke.setA(opacity);
 	}
 	content = _element->getAttribute("fill-rule");
 	if (content.size()!=0) {
@@ -346,12 +346,12 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			} else if (outputType == "fill-opacity") {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.fill.setA(opacity*0xFF);
+				m_paint.fill.setA(opacity);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.fill);
 			} else if (outputType == "stroke-opacity") {
 				float opacity = parseLength(outputValue);
 				opacity  = std::avg(0.0f, opacity, 1.0f);
-				m_paint.stroke.setA(opacity*0xFF);
+				m_paint.stroke.setA(opacity);
 				SVG_VERBOSE(" input : \"" << outputValue << "\"  == > " << m_paint.stroke);
 			} else if (outputType == "fill-rule" ) {
 				if (outputValue == "nonzero" ) {

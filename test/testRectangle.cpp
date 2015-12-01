@@ -49,7 +49,7 @@ TEST(TestRectangle, fill_and_stroke) {
 TEST(TestRectangle, fill_and_stroke_blend) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
-	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F08' stroke-width='3' fill='#F008' />"
+	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' />"
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
@@ -60,12 +60,12 @@ TEST(TestRectangle, fill_and_stroke_blend) {
 TEST(TestRectangle, fill_and_stroke_opacity) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
-	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0F' stroke-width='3' fill='#F00F' opacity='0.5' />"
+	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-width='3' fill='#F00' opacity='0.5' />"
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke_blend.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_blend.bmp", g_visualDebug);
+	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke_opacity.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke_opacity.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill) {

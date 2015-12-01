@@ -36,10 +36,13 @@ esvg::Renderer::~Renderer() {
 	m_buffer.clear();
 	m_size = ivec2(0,0);
 }
-
+#if 0
 etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration) {
 	if (_integration.a() == 0.0f) {
 		return _base;
+	}
+	if (_base.a() == 0.0f) {
+		return _integration;
 	}
 	etk::Color<float,4> tmpColor(_integration.r()*_integration.a(),
 	                             _integration.g()*_integration.a(),
@@ -52,7 +55,18 @@ etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const 
 	_base.setA(tmpA);
 	return _base;
 }
-
+#else
+etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, const etk::Color<float,4>& _integration) {
+	etk::Color<float,4> result;
+	float a1 = _base.a();
+	float a2 = _integration.a();
+	result.setR(a1 * _base.r() + a2 * (1.0f - a1) * _integration.r());
+	result.setG(a1 * _base.g() + a2 * (1.0f - a1) * _integration.g());
+	result.setB(a1 * _base.b() + a2 * (1.0f - a1) * _integration.b());
+	result.setA(a1 + a2 * (1.0f - a1));
+	return result;
+}
+#endif
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const etk::Color<float,4>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
@@ -77,7 +91,8 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					float valueStroke = _weightStroke.get(pos);
 					if (valueStroke != 0.0f) {
 						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorStroke * valueStroke * _opacity;
+						etk::Color<float,4> tmpColor = _colorStroke * valueStroke;
+						tmpColor.setA(tmpColor.a() * _opacity);
 						// integrate the value at the previous color
 						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
@@ -97,7 +112,8 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					float valueFill = _weightFill.get(pos);
 					if (valueFill != 0.0f) {
 						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorFill * valueFill * _opacity;
+						etk::Color<float,4> tmpColor = _colorFill * valueFill;
+						tmpColor.setA(tmpColor.a() * _opacity);
 						// integrate the value at the previous color
 						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
 					}
@@ -115,9 +131,12 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 					float valueFill = _weightFill.get(pos);
 					float valueStroke = _weightStroke.get(pos);
 					// calculate merge of stroke and fill value:
-					etk::Color<float,4> intermediateColorFill = _colorFill*valueFill;
-					etk::Color<float,4> intermediateColorStroke = _colorStroke*valueStroke;
-					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke) * _opacity;
+					etk::Color<float,4> intermediateColorFill = _colorFill;
+					intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
+					etk::Color<float,4> intermediateColorStroke = _colorStroke;
+					intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
+					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
+					intermediateColor.setA(intermediateColor.a() * _opacity);
 					m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
 				}
 			}

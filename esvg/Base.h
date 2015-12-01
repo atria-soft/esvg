@@ -47,8 +47,8 @@ namespace esvg {
 			PaintState();
 			void clear();
 		public:
-			etk::Color<uint8_t,4> fill;
-			etk::Color<uint8_t,4> stroke;
+			etk::Color<float,4> fill;
+			etk::Color<float,4> stroke;
 			float strokeWidth;
 			bool flagEvenOdd; //!< Fill rules
 			enum esvg::cap lineCap;
