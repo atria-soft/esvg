@@ -1,11 +1,6 @@
-language:
-  - cpp
+language: cpp
 
 sudo: false
-
-os:
-  - linux
-  - osx
 
 branches:
   only:
@@ -18,33 +13,70 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
+      - expect
+      #- binutils-mingw-w64-x86-64 # 64bit MinGW
+      #- gcc-mingw-w64-x86-64
+      #- g++-mingw-w64-x86-64
+
+matrix:
+  include:
+    - os: linux
+      env: CONF=release BUILDER=gcc TARGET=Linux TAG=Linux COMPILATOR_OPTION="--compilator-version=4.9"
+      compiler: gcc
+    - os: linux
+      env: CONF=debug BUILDER=clang TARGET=Linux
+      compiler: clang
+    #- os: linux
+    #  env: CONF=release BUILDER=gcc TARGET=Windows TAG=Mingw
+    #  compiler: x86_64-w64-mingw32-gcc
+    #- os: linux
+    #  env: CONF=release BUILDER=gcc TARGET=Android TAG=Android DISABLE_PACKAGE=-p
+    #  compiler: gcc
+    - os: osx
+      env: CONF=release BUILDER=clang TARGET=MacOs TAG=MacOs
+      compiler: clang
+    - os: osx
+      env: CONF=release BUILDER=clang TARGET=IOs TAG=IOs
+      compiler: clang
+
 
 install:
+  - cd ..
   - pip install --user lutin
-
-env:
-  - CONF=debug   BOARD=Linux BUILDER=clang GCOV=
-  - CONF=release BOARD=Linux BUILDER=clang GCOV=
-  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=
-  - CONF=release BOARD=Linux BUILDER=gcc   GCOV=
-  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=--gcov
+  - if [ "$TAG" == "Android" ]; then
+        git clone --depth 1 --branch master https://github.com/HeeroYui/android-download-tool;
+        ./android-download-tool/dl-android.sh;
+    fi
+  - git clone --depth 1 --branch master https://github.com/atria-soft/ci.git
+  - cd -
 
 before_script:
   - cd ..
-  - wget http://atria-soft.com/ci/coverage_send.py
-  - wget http://atria-soft.com/ci/test_send.py
-  - wget http://atria-soft.com/ci/warning_send.py
   - git clone https://github.com/atria-soft/etk.git
   - git clone https://github.com/atria-soft/exml.git
-  - git clone https://github.com/atria-soft/libagg.git
   - git clone https://github.com/generic-library/gtest-lutin.git --recursive
-  - git clone https://github.com/generic-library/freetype-lutin.git --recursive
+  - git clone https://github.com/generic-library/z-lutin.git --recursive
   - pwd
   - ls -l
-  - if [ "$BUILDER" == "gcc" ]; then COMPILATOR_OPTION="--compilator-version=4.9"; else COMPILATOR_OPTION=""; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        export PATH=$PATH:/Users/travis/Library/Python/2.7/bin/;
+    fi
+  - ./ci/build_send.py --tag=$TAG --status=START;
 
 script:
-  - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p esvg
+  - lutin -w -j4 -C -P -t$TARGET -c $BUILDER $COMPILATOR_OPTION $BUS -m $CONF $GCOV $DISABLE_PACKAGE esvg-test; STATUS=$?
+  - ./ci/build_send.py --tag=$TAG --status="$STATUS";
+
+after_script:
+  - if [ "$GCOV" != "" ]; then
+        ./ci/warning_send.py --find-path ./out/Linux_x86_64/$CONF/build/$BUILDER/esvg/;
+    fi
+  - ./out/Linux_x86_64/$CONF/staging/$BUILDER/esvg-test/esvg-test.app/bin/esvg-test --etk-log-level=6 | tee out_test.txt
+  - if [ "$GCOV" != "" ]; then
+        ./ci/test_send.py --file=out_test.txt;
+        lutin -C -P $TARGET -c $BUILDER $COMPILATOR_OPTION -m $CONF -p esvg?gcov;
+        ./ci/coverage_send.py --json=out/Linux_x86_64/$CONF/build/$BUILDER/esvg/esvg_coverage.json;
+    fi
 
 notifications:
   email:

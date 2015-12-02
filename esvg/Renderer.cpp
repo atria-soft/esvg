@@ -39,19 +39,22 @@ esvg::Renderer::~Renderer() {
 
 etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration) {
 	etk::Color<float,4> result;
-	if (_base.a() < _integration.a()) {
-		result = _base;
-		_base = _integration;
-		_integration = result;
+	/*
+	if (_integration.a() < _base.a()) {
+		result = _integration;
+		_integration = _base;
+		_base = result;
 	}
-	result.setR(_base.a() * _base.r() + _integration.a() * (1.0f - _base.a()) * _integration.r());
-	result.setG(_base.a() * _base.g() + _integration.a() * (1.0f - _base.a()) * _integration.g());
-	result.setB(_base.a() * _base.b() + _integration.a() * (1.0f - _base.a()) * _integration.b());
-	result.setA(_base.a() + _integration.a() * (1.0f - _base.a()));
+	*/
+	result.setR(_integration.a() * _integration.r() + _base.a() * (1.0f - _integration.a()) * _base.r());
+	result.setG(_integration.a() * _integration.g() + _base.a() * (1.0f - _integration.a()) * _base.g());
+	result.setB(_integration.a() * _integration.b() + _base.a() * (1.0f - _integration.a()) * _base.b());
+	result.setA(_integration.a() + _base.a() * (1.0f - _integration.a()));
 	if (result.a() != 0.0f) {
-		result.setR(result.r()/result.a());
-		result.setG(result.g()/result.a());
-		result.setB(result.b()/result.a());
+		float reverse = 1.0f/result.a();
+		result.setR(result.r()*reverse);
+		result.setG(result.g()*reverse);
+		result.setB(result.b()*reverse);
 	}
 	return result;
 }
