@@ -19,7 +19,7 @@ namespace esvg {
 		public:
 			Ellipse(PaintState _parentPaintState);
 			~Ellipse();
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 	};

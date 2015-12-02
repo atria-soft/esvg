@@ -23,8 +23,7 @@
 #define __class__ "Document"
 
 
-esvg::Document::Document() :
-  m_renderedElement(nullptr) {
+esvg::Document::Document() {
 	m_fileName = "";
 	m_version = "0.0";
 	m_loadOK = false;
@@ -32,8 +31,7 @@ esvg::Document::Document() :
 }
 
 esvg::Document::~Document() {
-	delete(m_renderedElement);
-	m_renderedElement = nullptr;
+	
 }
 
 
@@ -48,8 +46,7 @@ void esvg::Document::displayDebug() {
 }
 
 
-void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans)
-{
+void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
@@ -57,105 +54,83 @@ void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans)
 	}
 }
 
-
-void esvg::Document::generateTestFile()
-{
-	int32_t sizeX = m_size.x();
-	if (sizeX == 0) {
-		sizeX = 64;
-	}
-	int32_t sizeY = m_size.y();
-	if (sizeY == 0) {
-		sizeY = 64;
-	}
-	delete(m_renderedElement);
-	m_renderedElement = nullptr;
-	m_renderedElement = new esvg::Renderer(ivec2(sizeX, sizeY));
-	// create the first element matrix modification ...
-	mat2 basicTrans;
-	//basicTrans *= etk::mat2Translate(vec2(-g_base_dx, -g_base_dy));
-	//basicTrans *= etk::mat2Scale(vec2(2, 2));
-	//basicTrans *= etk::mat2Rotate(vec2(g_angle));
-	//basicTrans *= etk::mat2Skew(vec2(2.0, 5.0));
-	//basicTrans *= etk::mat2Translate(vec2(width*0.3, height/2));
-	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
-	
-	
-	draw(*m_renderedElement, basicTrans);
-	std::string tmpFileOut = "yyy_out_";
-	tmpFileOut += m_fileName;
-	tmpFileOut += ".ppm";
-	m_renderedElement->writePPM(tmpFileOut);
-	
-}
-
-
 // FOR TEST only ...
 void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug) {
-	int32_t sizeX = _size.x();
-	if (sizeX == 0) {
-		SVG_ERROR("SizeX == 0 ==> set 64");
-		sizeX = 64;
+	ivec2 sizeRender = _size;
+	if (sizeRender.x() <= 0) {
+		sizeRender.setX(m_size.x());
 	}
-	int32_t sizeY = _size.y();
-	if (sizeY == 0) {
-		SVG_ERROR("SizeY == 0 ==> set 64");
-		sizeY = 64;
+	if (sizeRender.y() <= 0) {
+		sizeRender.setY(m_size.y());
 	}
-	SVG_DEBUG("Generate size (" << sizeX << "," << sizeY << ")");
-	delete(m_renderedElement);
-	m_renderedElement = nullptr;
+	SVG_DEBUG("Generate size " << sizeRender);
 	
-	m_renderedElement = new esvg::Renderer(ivec2(sizeX, sizeY), _visualDebug);
+	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(sizeRender, _visualDebug);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
-	//basicTrans *= etk::mat2Translate(vec2(-g_base_dx, -g_base_dy));
-	basicTrans *= etk::mat2Scale(vec2(sizeX/m_size.x(), sizeY/m_size.y()));
-	//basicTrans *= etk::mat2Rotate(g_angle);// + agg::pi);
-	//basicTrans *= etk::mat2Skew(vec2(2.0, 5.0));
-	//basicTrans *= etk::mat2Translate(vec2(width*0.3, height/2));
-	//basicTrans *= etk::mat2Translate(vec2(width/3, height/3));
+	basicTrans *= etk::mat2Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
 	
-	draw(*m_renderedElement, basicTrans);
+	draw(*renderedElement, basicTrans);
+	
 	if (etk::end_with(_fileName, ".ppm") == true) {
-		m_renderedElement->writePPM(_fileName);
+		renderedElement->writePPM(_fileName);
 	} else if (etk::end_with(_fileName, ".bmp") == true) {
-		m_renderedElement->writeBMP(_fileName);
+		renderedElement->writeBMP(_fileName);
 	} else {
 		SVG_ERROR("Can not store with this extention : " << _fileName << " not in .bmp/.ppm");
 	}
 }
-/*
-void esvg::Document::generateAnImage(draw::Image& _output) {
-	generateAnImage(ivec2(m_size.x(),m_size.y()), _output);
+
+
+std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _size) {
+	if (_size.x() <= 0) {
+		_size.setX(m_size.x());
+	}
+	if (_size.y() <= 0) {
+		_size.setY(m_size.y());
+	}
+	SVG_DEBUG("Generate size " << _size);
+	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(_size);
+	// create the first element matrix modification ...
+	mat2 basicTrans;
+	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	draw(*renderedElement, basicTrans);
+	
+	// direct return the generated data ...
+	return renderedElement->getData();
 }
 
-void esvg::Document::generateAnImage(ivec2 _size, draw::Image& _output) {
-	generateAnImage(_size.x(), _size.y());
-	_output.resize(_size);
-	draw::Color tmpp(0,0,0,0);
-	_output.setFillColor(tmpp);
-	_output.clear();
-	if(NULL != m_renderedElement) {
-		uint8_t* pointerOnData = m_renderedElement->getDataPointer();
-		int32_t  sizeData = m_renderedElement->getDataSize();
-		uint8_t* tmpOut = (uint8_t*)_output.getTextureDataPointer();
-		memcpy(tmpOut, pointerOnData, sizeData);
+std::vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _size) {
+	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+	// Reduce scope:
+	std::vector<etk::Color<float,3>> out;
+	out.resize(data.size());
+	for (size_t iii=0; iii<data.size(); ++iii) {
+		out[iii] = data[iii];
 	}
-}
-*/
-uint8_t* esvg::Document::getPointerOnData() {
-	if(m_renderedElement == nullptr) {
-		return nullptr;
-	}
-	return m_renderedElement->getDataPointer();
+	return out;
 }
 
-uint32_t esvg::Document::getSizeOnData() {
-	if(m_renderedElement == nullptr) {
-		return 0;
+std::vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _size) {
+	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+	// Reduce scope:
+	std::vector<etk::Color<uint8_t,4>> out;
+	out.resize(data.size());
+	for (size_t iii=0; iii<data.size(); ++iii) {
+		out[iii] = data[iii];
 	}
-	return m_renderedElement->getDataSize();
+	return out;
+}
+
+std::vector<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(ivec2& _size) {
+	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+	// Reduce scope:
+	std::vector<etk::Color<uint8_t,3>> out;
+	out.resize(data.size());
+	for (size_t iii=0; iii<data.size(); ++iii) {
+		out[iii] = data[iii];
+	}
+	return out;
 }
 
 void esvg::Document::clear() {
@@ -208,7 +183,7 @@ bool esvg::Document::load(const std::string& _file) {
 		m_loadOK = false;
 		return m_loadOK;
 	}
-	std::shared_ptr<exml::Element> root = doc.getNamed("svg" );
+	std::shared_ptr<exml::Element> root = doc.getNamed("svg");
 	if (root == nullptr) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
 		m_loadOK = false;
@@ -283,7 +258,7 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
-		if (elementParser->parse(child, m_transformMatrix, size) == false) {
+		if (elementParser->parseXML(child, m_transformMatrix, size) == false) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 			delete(elementParser);
 			elementParser = nullptr;

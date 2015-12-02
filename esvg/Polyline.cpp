@@ -22,7 +22,7 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polyline::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element == nullptr) {

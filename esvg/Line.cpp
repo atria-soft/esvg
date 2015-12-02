@@ -23,7 +23,7 @@ esvg::Line::~Line() {
 	
 }
 
-bool esvg::Line::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Line::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element == nullptr) {

@@ -26,10 +26,8 @@ namespace esvg {
 			std::string m_title;
 			std::vector<esvg::Base*> m_subElementList;
 			vec2 m_size;
-			esvg::Renderer* m_renderedElement;
 		public:
 			Document();
-			Document(const std::string& _fileName);
 			~Document();
 			void clear();
 			/**
@@ -67,13 +65,16 @@ namespace esvg {
 				return m_loadOK;
 			};
 			void displayDebug();
-			void generateTestFile();
 			void generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug=false);
 			//void generateAnImage(ivec2 _size, draw::Image& _output);
 			//void generateAnImage(draw::Image& _output);
-			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans);
-			uint8_t* getPointerOnData();
-			uint32_t getSizeOnData();
+			std::vector<etk::Color<float,4>> renderImageFloatRGBA(ivec2& _size);
+			std::vector<etk::Color<float,3>> renderImageFloatRGB(ivec2& _size);
+			std::vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
+			std::vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
+		protected:
+			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=0);
+		public:
 			vec2 getDefinedSize() {
 				return m_size;
 			};

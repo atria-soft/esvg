@@ -432,7 +432,7 @@ etk::Color<uint8_t,4> esvg::Base::parseColor(const std::string& _inputData) {
  * @param[in] _element standart XML node
  * @return true if no problem arrived
  */
-bool esvg::Base::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Base::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	SVG_ERROR("NOT IMPLEMENTED");
 	_sizeMax.setValue(0,0);
 	return false;

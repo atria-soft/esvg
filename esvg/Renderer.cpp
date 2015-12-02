@@ -389,15 +389,12 @@ const ivec2& esvg::Renderer::getSize() const {
 	return m_size;
 }
 
+std::vector<etk::Color<float,4>> esvg::Renderer::getData() {
+	return m_buffer;
+}
 
-uint8_t* esvg::Renderer::getDataPointer() {
-	return nullptr; //&m_buffer[0];
-};
 
 
-uint32_t esvg::Renderer::getDataSize() const {
-	return m_buffer.size();
-};
 
 void esvg::Renderer::setInterpolationRecurtionMax(int32_t _value) {
 	m_interpolationRecurtionMax = std::avg(1, _value, 200);

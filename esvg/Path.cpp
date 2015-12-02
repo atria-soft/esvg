@@ -62,7 +62,7 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	return outputPointer;
 }
 
-bool esvg::Path::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}

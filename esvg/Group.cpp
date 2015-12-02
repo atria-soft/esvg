@@ -31,7 +31,7 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
@@ -84,7 +84,7 @@ bool esvg::Group::parse(const std::shared_ptr<exml::Element>& _element, mat2& _p
 		if (elementParser == nullptr) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 		} else {
-			if (false == elementParser->parse(child, m_transformMatrix, tmpPos)) {
+			if (false == elementParser->parseXML(child, m_transformMatrix, tmpPos)) {
 				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 				delete(elementParser);
 				elementParser = nullptr;

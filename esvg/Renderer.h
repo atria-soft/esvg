@@ -32,8 +32,7 @@ namespace esvg {
 		protected:
 			std::vector<etk::Color<float,4>> m_buffer;
 		public:
-			uint8_t* getDataPointer();
-			uint32_t getDataSize() const;
+			std::vector<etk::Color<float,4>> getData();
 		protected:
 			int32_t m_interpolationRecurtionMax;
 		public:

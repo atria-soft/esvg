@@ -22,7 +22,7 @@ esvg::Circle::~Circle() {
 	
 }
 
-bool esvg::Circle::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Circle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
 	if (_element == nullptr) {

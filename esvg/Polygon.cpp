@@ -22,7 +22,7 @@ esvg::Polygon::~Polygon() {
 	
 }
 
-bool esvg::Polygon::parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polygon::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
 		return false;
 	}
