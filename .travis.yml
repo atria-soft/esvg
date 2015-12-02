@@ -41,6 +41,7 @@ matrix:
 
 
 install:
+  - printenv
   - cd ..
   - pip install --user lutin
   - if [ "$TAG" == "Android" ]; then
