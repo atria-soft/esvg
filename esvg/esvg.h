@@ -15,7 +15,6 @@
 #include <etk/os/FSNode.h>
 
 #include <esvg/Base.h>
-//#include <draw/Image.h>
 
 namespace esvg {
 	class Document : public esvg::Base {
@@ -24,7 +23,7 @@ namespace esvg {
 			bool m_loadOK;
 			std::string m_version;
 			std::string m_title;
-			std::vector<esvg::Base*> m_subElementList;
+			std::vector<esvg::Base*> m_subElementList; // TODO: LEAK ...
 			vec2 m_size;
 		public:
 			Document();
@@ -59,18 +58,28 @@ namespace esvg {
 			 */
 			bool store(const std::string& _file);
 		protected:
-			bool parseXMLData(const std::shared_ptr<exml::Element>& _root);
+			virtual bool parseXMLData(const std::shared_ptr<exml::Element>& _root);
 		public:
 			bool isLoadOk() {
 				return m_loadOK;
 			};
+			/**
+			 * @brief Display all the node in the svg file.
+			 */
 			void displayDebug();
+			// TODO: remove this fucntion : use generic function ...
 			void generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug=false);
-			//void generateAnImage(ivec2 _size, draw::Image& _output);
-			//void generateAnImage(draw::Image& _output);
+			/**
+			 * @brief Generate Image in a specific format.
+			 * @param[in,out] _size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
+			 * @return Vector of the data used to display (simple vector: generic to transmit)
+			 */
 			std::vector<etk::Color<float,4>> renderImageFloatRGBA(ivec2& _size);
+			//! @previous
 			std::vector<etk::Color<float,3>> renderImageFloatRGB(ivec2& _size);
+			//! @previous
 			std::vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
+			//! @previous
 			std::vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
 		protected:
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=0);

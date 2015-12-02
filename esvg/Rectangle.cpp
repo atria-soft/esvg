@@ -97,6 +97,7 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32
 	listPoints = listElement.generateListPoints(_level,
 	                                            _myRenderer.getInterpolationRecurtionMax(),
 	                                            _myRenderer.getInterpolationThreshold());
+	listPoints.applyMatrix(mtx);
 	esvg::render::SegmentList listSegmentFill;
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;

@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
+#include <etk/math/Matrix2.h>
 #include <esvg/render/Element.h>
 #include <esvg/render/Point.h>
 
@@ -23,6 +24,7 @@ namespace esvg {
 				PointList();
 				void addList(std::vector<esvg::render::Point>& _list);
 				void display();
+				void applyMatrix(const mat2& _transformationMatrix);
 		};
 	}
 }

@@ -25,6 +25,7 @@ namespace esvg {
 					type_interpolation, //!< This point is dynamicly calculated to create an interpolation
 				};
 			public:
+				// TODO : Clean all element here ...
 				vec2 m_pos; //!< position of the point
 				enum esvg::render::Point::type m_type;
 				vec2 m_miterAxe;

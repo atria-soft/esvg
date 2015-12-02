@@ -18,6 +18,14 @@ void esvg::render::PointList::addList(std::vector<esvg::render::Point>& _list) {
 	// TODO : Add a checker of correct list ...
 }
 
+void esvg::render::PointList::applyMatrix(const mat2& _transformationMatrix) {
+	for (auto &it : m_data) {
+		for (auto &val : it) {
+			val.m_pos = _transformationMatrix * val.m_pos;
+		}
+	}
+}
+
 
 void esvg::render::PointList::display() {
 	SVG_VERBOSE(" Display list of points : size=" << m_data.size());
