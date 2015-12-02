@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
+#include <etk/math/Matrix2.h>
 
 namespace esvg {
 	namespace render {
@@ -20,6 +21,8 @@ namespace esvg {
 				vec2 p0;
 				vec2 p1;
 				int32_t direction;
+				void applyMatrix(const mat2& _transformationMatrix);
+				void createDirection();
 		};
 	}
 }

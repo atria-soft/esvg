@@ -101,8 +101,8 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 
 void esvg::Group::display(int32_t _spacing) {
 	SVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (NULL != m_subElementList[iii]) {
+	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
+		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->display(_spacing+1);
 		}
 	}
@@ -111,8 +111,8 @@ void esvg::Group::display(int32_t _spacing) {
 
 void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (NULL != m_subElementList[iii]) {
+	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
+		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans, _level+1);
 		}
 	}

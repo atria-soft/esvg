@@ -83,7 +83,7 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	listPoints = listElement.generateListPoints(_level,
 	                                            _myRenderer.getInterpolationRecurtionMax(),
 	                                            _myRenderer.getInterpolationThreshold());
-	listPoints.applyMatrix(mtx);
+	//listPoints.applyMatrix(mtx);
 	esvg::render::SegmentList listSegmentFill;
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
@@ -91,6 +91,7 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	// Check if we need to display background
 	if (m_paint.fill.a() != 0x00) {
 		listSegmentFill.createSegmentList(listPoints);
+		listSegmentFill.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpFill.generate(_myRenderer.getSize(),
 		                 _myRenderer.getNumberSubScanLine(),
@@ -104,6 +105,7 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 		                                          m_paint.lineCap,
 		                                          m_paint.lineJoin,
 		                                          m_paint.miterLimit);
+		listSegmentStroke.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpStroke.generate(_myRenderer.getSize(),
 		                   _myRenderer.getNumberSubScanLine(),

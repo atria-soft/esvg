@@ -21,7 +21,7 @@ addons:
 matrix:
   include:
     - os: linux
-      env: CONF=release BUILDER=gcc TARGET=Linux TAG=Linux COMPILATOR_OPTION="--compilator-version=4.9"
+      env: CONF=release BUILDER=gcc TARGET=Linux TAG=Linux COMPILATOR_OPTION="--compilator-version=4.9" GCOV=--gcov
       compiler: gcc
     - os: linux
       env: CONF=debug BUILDER=clang TARGET=Linux
@@ -41,7 +41,6 @@ matrix:
 
 
 install:
-  - printenv
   - cd ..
   - pip install --user lutin
   - if [ "$TAG" == "Android" ]; then
@@ -53,8 +52,8 @@ install:
 
 before_script:
   - cd ..
-  - git clone https://github.com/atria-soft/etk.git
-  - git clone https://github.com/atria-soft/exml.git
+  - git clone https://github.com/atria-soft/etk.git -b $TRAVIS_BRANCH
+  - git clone https://github.com/atria-soft/exml.git -b $TRAVIS_BRANCH
   - git clone https://github.com/generic-library/gtest-lutin.git --recursive
   - git clone https://github.com/generic-library/z-lutin.git --recursive
   - pwd
@@ -75,7 +74,7 @@ after_script:
   - ./out/Linux_x86_64/$CONF/staging/$BUILDER/esvg-test/esvg-test.app/bin/esvg-test --etk-log-level=6 | tee out_test.txt
   - if [ "$GCOV" != "" ]; then
         ./ci/test_send.py --file=out_test.txt;
-        lutin -C -P $TARGET -c $BUILDER $COMPILATOR_OPTION -m $CONF -p esvg?gcov;
+        lutin -C -P -t $TARGET -c $BUILDER $COMPILATOR_OPTION $BUS -m $CONF -p esvg?gcov;
         ./ci/coverage_send.py --json=out/Linux_x86_64/$CONF/build/$BUILDER/esvg/esvg_coverage.json;
     fi
 

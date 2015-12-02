@@ -42,6 +42,8 @@ namespace esvg {
 				                             const vec2& _center,
 				                             float _width,
 				                             bool _isStart);
+			public:
+				void applyMatrix(const mat2& _transformationMatrix);
 		};
 	}
 }

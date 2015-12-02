@@ -440,3 +440,9 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 	}
 }
 
+void esvg::render::SegmentList::applyMatrix(const mat2& _transformationMatrix) {
+	for (auto &it : m_data) {
+		it.applyMatrix(_transformationMatrix);
+	}
+}
+

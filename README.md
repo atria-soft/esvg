@@ -50,6 +50,7 @@ download the software:
 	cd WORKING_DIRECTORY
 	git clone https://github.com/atria-soft/etk.git
 	git clone https://github.com/atria-soft/exml.git
+	git clone https://github.com/atria-soft/esvg.git
 	git clone https://github.com/generic-library/gtest-lutin.git --recursive
 	git clone https://github.com/generic-library/z-lutin.git --recursive
 
