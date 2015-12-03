@@ -449,11 +449,11 @@ void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 
 
 
-const std::string& getId() const {
+const std::string& esvg::Base::getId() const {
 	return m_id;
 }
 
-void setId(const std::string& _newId) {
+void esvg::Base::setId(const std::string& _newId) {
 	// TODO : Check if it is UNIQUE ...
 	m_id = _newId;
 }
