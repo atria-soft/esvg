@@ -56,8 +56,8 @@ void esvg::render::Weight::clear(float _fill) {
 }
 
 float esvg::render::Weight::get(const ivec2& _pos) const {
-	if (    _pos.x()>0 && _pos.x()<m_size.x()
-	     && _pos.y()>0 && _pos.y()<m_size.y()) {
+	if (    _pos.x()>=0 && _pos.x()<m_size.x()
+	     && _pos.y()>=0 && _pos.y()<m_size.y()) {
 		return m_data[_pos.x()+_pos.y()*m_size.x()];
 	}
 	return 0;
