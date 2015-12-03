@@ -239,13 +239,8 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	}
 	bool fillNone = false;
 	bool strokeNone = false;
-	std::string content = _element->getAttribute("fill");
-	if (content.size()!=0) {
-		m_paint.fill = parseColor(content);
-		if (m_paint.fill.a() == 0) {
-			fillNone = true;
-		}
-	}
+	std::string content;
+	// ---------------- stroke ----------------
 	content = _element->getAttribute("stroke");
 	if (content.size()!=0) {
 		m_paint.stroke = parseColor(content);
@@ -257,31 +252,19 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	if (content.size()!=0) {
 		m_paint.strokeWidth = parseLength(content);
 	}
-	content = _element->getAttribute("opacity");
-	if (content.size()!=0) {
-		m_paint.opacity = parseLength(content);
-		m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
-	}
-	content = _element->getAttribute("fill-opacity");
-	if (content.size()!=0) {
-		float opacity = parseLength(content);
-		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.setA(opacity);
-	}
 	content = _element->getAttribute("stroke-opacity");
 	if (content.size()!=0) {
 		float opacity = parseLength(content);
 		opacity = std::avg(0.0f, opacity, 1.0f);
 		m_paint.stroke.setA(opacity);
 	}
-	content = _element->getAttribute("fill-rule");
+	
+	content = _element->getAttribute("stroke-dasharray");
 	if (content.size()!=0) {
-		if (content == "nonzero") {
-			m_paint.flagEvenOdd = false;
-		} else if (content == "evenodd" ) {
-			m_paint.flagEvenOdd = true;
+		if (content == "none" ) {
+			// OK, Nothing to do ...
 		} else {
-			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+			SVG_TODO(" 'stroke-dasharray' not implemented ...");
 		}
 	}
 	content = _element->getAttribute("stroke-linecap");
@@ -315,6 +298,37 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 		float tmp = parseLength(content);
 		m_paint.miterLimit = std::max(0.0f, tmp);
 	}
+	// ---------------- FILL ----------------
+	content = _element->getAttribute("fill");
+	if (content.size()!=0) {
+		m_paint.fill = parseColor(content);
+		if (m_paint.fill.a() == 0) {
+			fillNone = true;
+		}
+	}
+	content = _element->getAttribute("fill-opacity");
+	if (content.size()!=0) {
+		float opacity = parseLength(content);
+		opacity = std::avg(0.0f, opacity, 1.0f);
+		m_paint.fill.setA(opacity);
+	}
+	content = _element->getAttribute("fill-rule");
+	if (content.size()!=0) {
+		if (content == "nonzero") {
+			m_paint.flagEvenOdd = false;
+		} else if (content == "evenodd" ) {
+			m_paint.flagEvenOdd = true;
+		} else {
+			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+		}
+	}
+	// ---------------- opacity ----------------
+	content = _element->getAttribute("opacity");
+	if (content.size()!=0) {
+		m_paint.opacity = parseLength(content);
+		m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
+	}
+	// ---------------- STYLE ----------------
 	content = _element->getAttribute("style");
 	if (content.size()!=0) {
 		std::string outputType;
@@ -383,6 +397,12 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 					m_paint.lineJoin = esvg::join_miter;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
+			} else if (outputType == "stroke-dasharray") {
+				if (outputValue == "none") {
+					// OK, Nothing to do ...
+				} else {
+					SVG_TODO(" 'stroke-dasharray' not implemented ...");
+				}
 			} else if (outputType == "stroke-miterlimit") {
 				float tmp = parseLength(outputValue);
 				m_paint.miterLimit = std::max(0.0f, tmp);
@@ -394,11 +414,11 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 		}
 	}
 	// check if somewere none is set to the filling:
-	if (true == fillNone) {
-		m_paint.fill.setA(0);
+	if (fillNone == true) {
+		m_paint.fill.setA(0.0f);
 	}
-	if (true == strokeNone) {
-		m_paint.stroke.setA(0);
+	if (strokeNone == true) {
+		m_paint.stroke.setA(0.0f);
 	}
 }
 

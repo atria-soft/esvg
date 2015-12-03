@@ -107,3 +107,21 @@ TEST(TestPath, arc) {
 	// TODO : ...
 	EXPECT_EQ(1, 2);
 }
+
+
+
+
+TEST(TestPath, end_path_border_case) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "	<path\n"
+	                 "	   style='fill:#9fecff;fill-opacity:1;stroke:#1b57df;stroke-width:8.81125546;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94901961'\n"
+	                 "	   d='M 83.073072,55.099829 C 83.886712,33.687876 60.475404,16.478179 40.263655,23.556532 19.565051,29.111554 9.9926694,56.534855 22.756336,73.74319 c 11.428293,18.124001 40.474216,19.151787 53.156943,1.880953 4.612608,-5.778118 7.177805,-13.13422 7.159793,-20.524314 z'\n"
+	                 "	   id='path3421'\n"
+	                 "	   inkscape:connector-curvature='0' />\n"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestPath_end_path_border_case.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestPath_end_path_border_case.bmp", g_visualDebug);
+}

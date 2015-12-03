@@ -189,17 +189,59 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		vec2 rightPoint(0,0);
 		if (itListPoint.size() > 0) {
 			if (itListPoint.front().m_type == esvg::render::Point::type_join) {
+				const esvg::render::Point& it = itListPoint.back();
+				// Calculate the perpendiculary axis ...
+				leftPoint =   itListPoint.back().m_pos
+				            + itListPoint.back().m_orthoAxePrevious*_width*0.5f;
+				rightPoint =   itListPoint.back().m_pos
+				             - itListPoint.back().m_orthoAxePrevious*_width*0.5f;
 				// cyclic path...
-				if (    itListPoint.back().m_type == esvg::render::Point::type_join
-				     || itListPoint.back().m_type == esvg::render::Point::type_interpolation) {
+				if (it.m_type == esvg::render::Point::type_interpolation) {
+					leftPoint  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+					rightPoint = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+				} else if (it.m_type == esvg::render::Point::type_join) {
 					// Calculate the perpendiculary axis ...
-					leftPoint =   itListPoint.back().m_pos
-					            + itListPoint.back().m_orthoAxePrevious*_width*0.5f;
-					rightPoint =   itListPoint.back().m_pos
-					             - itListPoint.back().m_orthoAxePrevious*_width*0.5f;
+					leftPoint =   it.m_pos
+					            + it.m_orthoAxePrevious*_width*0.5f;
+					rightPoint =   it.m_pos
+					             - it.m_orthoAxePrevious*_width*0.5f;
 					// project on the miter Axis ...
-					leftPoint  = getIntersect(leftPoint,   itListPoint.back().m_pos-itListPoint.back().m_posPrevious, itListPoint.back().m_pos, itListPoint.back().m_miterAxe);
-					rightPoint = getIntersect(rightPoint,  itListPoint.back().m_pos-itListPoint.back().m_posPrevious, itListPoint.back().m_pos, itListPoint.back().m_miterAxe);
+					switch (_join) {
+						case esvg::join_miter:
+							{
+								vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								// Check the miter limit:
+								float limitRight = (left - it.m_pos).length() / _width * 2.0f;
+								float limitLeft  = (right - it.m_pos).length() / _width * 2.0f;
+								SVG_VERBOSE("    miter Limit: " << limitRight << " " << limitLeft << " <= " << _miterLimit);
+								if (    limitRight <= _miterLimit
+								     && limitLeft <= _miterLimit) {
+									leftPoint  = left;
+									rightPoint = right;
+									break;
+								} else {
+									// BEVEL the miter point ...
+								}
+							}
+						case esvg::join_round:
+						case esvg::join_bevel:
+							{
+								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
+								vec2 axeNext = (it.m_posNext - it.m_pos).safeNormalize();
+								float cross = axePrevious.cross(axeNext);
+								if (cross > 0.0f) {
+									rightPoint = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									leftPoint  =   it.m_pos
+									             + it.m_orthoAxeNext*_width*0.5f;
+								} else {
+									leftPoint  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									rightPoint =   it.m_pos
+									             - it.m_orthoAxeNext*_width*0.5f;
+								}
+								break;
+							}
+					}
 				} else {
 					SVG_ERROR("Start list point with a join, but last lement is not a join");
 				}

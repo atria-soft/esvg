@@ -146,6 +146,31 @@ TEST(TestJoin, miterLimit4) {
 	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLimit4.bmp", g_visualDebug);
 }
 
+TEST(TestJoin, miterCornerCasePath) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "    <path"
+	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
+	                 "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_miterCornerCasePath.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterCornerCasePath.bmp", g_visualDebug);
+}
+
+TEST(TestJoin, miterCornerCasePathLimit) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "    <path"
+	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
+	                 "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter' stroke-miterlimit='0.3'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_miterCornerCasePathLimit.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterCornerCasePathLimit.bmp", g_visualDebug);
+}
 
 // ------------------------------------------------------ Round test -----------------------------------------------------
 
@@ -235,6 +260,19 @@ TEST(TestJoin, roundLeft4) {
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundLeft4.svg", data);
 	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft4.bmp", g_visualDebug);
+}
+
+TEST(TestJoin, roundCornerCasePath) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "    <path"
+	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
+	                 "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='round'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_roundCornerCasePath.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundCornerCasePath.bmp", g_visualDebug);
 }
 
 
@@ -328,3 +366,15 @@ TEST(TestJoin, bevelLeft4) {
 	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft4.bmp", g_visualDebug);
 }
 
+TEST(TestJoin, bevelCornerCasePath) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	                 "<svg height='100' width='100'>"
+	                 "    <path"
+	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
+	                 "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='bevel'/>"
+	                 "</svg>");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestJoin_bevelCornerCasePath.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelCornerCasePath.bmp", g_visualDebug);
+}

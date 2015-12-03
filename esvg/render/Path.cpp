@@ -157,8 +157,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// find the previous tart of the path ...
 						tmpListPoint.front().m_type = esvg::render::Point::type_join;
 						// Remove the last point if it is the same position...
-						if (tmpListPoint.front().m_pos == tmpListPoint.back().m_pos) {
+						vec2 delta = (tmpListPoint.front().m_pos - tmpListPoint.back().m_pos).absolute();
+						if (    delta.x() <= 0.00001
+						     && delta.y() <= 0.00001) {
 							tmpListPoint.pop_back();
+							SVG_VERBOSE("        Remove point Z property : " << tmpListPoint.back().m_pos << " with delta=" << delta);
 						}
 						out.addList(tmpListPoint);
 						tmpListPoint.clear();
