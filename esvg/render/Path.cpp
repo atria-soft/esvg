@@ -349,8 +349,10 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				break;
 		}
 	}
+	// special case : No request end of path ==> open path:
 	if (tmpListPoint.size() != 0) {
-		SVG_WARNING("TODO ... check this ...");
+		SVG_VERBOSE("Auto-end PATH");
+		tmpListPoint.back().setEndPath();
 		out.addList(tmpListPoint);
 		tmpListPoint.clear();
 	}

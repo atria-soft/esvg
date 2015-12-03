@@ -75,7 +75,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 	
 	std::string elementXML1 = _element->getAttribute("d");
 	if (elementXML1.size() == 0) {
-		SVG_ERROR("(l "<<_element->getPos()<<") path: missing 'p' attribute");
+		SVG_WARNING("(l "<<_element->getPos()<<") path: missing 'd' attribute or empty");
 		return false;
 	}
 	SVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");
