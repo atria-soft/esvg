@@ -101,8 +101,13 @@ void interpolateCubicBezier(std::vector<esvg::render::Point>& _listPoint,
 	vec2 pos34 = (_pos3+_pos4)*0.5f;
 	
 	vec2 delta = _pos4 - _pos1;
-	float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
-	float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
+	#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
+		float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
+		float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
+	#else
+		float distance2 = fabs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
+		float distance3 = fabs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
+	#endif
 	
 	if ((distance2 + distance3)*(distance2 + distance3) < _threshold * delta.length2()) {
 		_listPoint.push_back(esvg::render::Point(_pos4, _type) );

@@ -71,7 +71,7 @@ after_script:
   - if [ "$GCOV" != "" ]; then
         ./ci/warning_send.py --find-path ./out/Linux_x86_64/$CONF/build/$BUILDER/esvg/;
     fi
-  - ./out/Linux_x86_64/$CONF/staging/$BUILDER/esvg-test/esvg-test.app/bin/esvg-test --etk-log-level=6 | tee out_test.txt
+  - ./out/Linux_x86_64/$CONF/staging/$BUILDER/esvg-test/esvg-test.app/bin/esvg-test --etk-log-level=3 | tee out_test.txt
   - if [ "$GCOV" != "" ]; then
         ./ci/test_send.py --file=out_test.txt;
         lutin -C -P -t $TARGET -c $BUILDER $COMPILATOR_OPTION $BUS -m $CONF -p esvg?gcov;

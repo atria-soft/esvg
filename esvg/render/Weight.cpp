@@ -165,7 +165,11 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			for (auto &it : listPosition) {
 				if (currentPos != int32_t(it.first)) {
 					// fill to the new pos -1:
-					float endValue = float(std::min(1,std::abs(lastState))) * deltaSize;
+					#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
+						float endValue = float(std::min(1,std::abs(lastState))) * deltaSize;
+					#else
+						float endValue = float(std::min(1,abs(lastState))) * deltaSize;
+					#endif
 					for (int32_t iii=currentPos+1; iii<int32_t(it.first); ++iii) {
 						scanline.set(iii, endValue);
 					}
