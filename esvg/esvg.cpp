@@ -243,8 +243,7 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 		} else if (child->getValue() == "text") {
 			elementParser = new esvg::Text(m_paint);
 		} else if (child->getValue() == "defs") {
-			// Node ignore : must implement it later ...
-			continue;
+			SVG_TODO("Need to parse Reference ==> big modification ...");
 		} else if (child->getValue() == "sodipodi:namedview") {
 			// Node ignore : generaly inkscape data
 			continue;

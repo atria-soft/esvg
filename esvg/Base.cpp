@@ -109,13 +109,6 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 	}
 }
 
-
-/**
- * @brief parse x, y, width, height attribute of the xml node
- * @param[in] _element XML node
- * @param[out] _pos parsed position
- * @param[out] _size parsed dimention
- */
 void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
@@ -141,12 +134,6 @@ void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _elem
 	}
 }
 
-
-/**
- * @brief parse a lenght of the xml element
- * @param[in] _dataInput Data C String with the printed lenght
- * @return standart number of pixels
- */
 float esvg::Base::parseLength(const std::string& _dataInput) {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = stof(_dataInput);
@@ -229,10 +216,6 @@ int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, s
 	return -1;
 }
 
-/**
- * @brief parse a Painting attribute of a specific node
- * @param[in] _element Basic node of the XML that might be parsed
- */
 void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _element) {
 	if (_element == nullptr) {
 		return;
@@ -240,6 +223,8 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	bool fillNone = false;
 	bool strokeNone = false;
 	std::string content;
+	// ---------------- get unique ID ----------------
+	m_id = _element->getAttribute("id");
 	// ---------------- stroke ----------------
 	content = _element->getAttribute("stroke");
 	if (content.size()!=0) {
@@ -422,11 +407,6 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	}
 }
 
-/**
- * @brief parse a color specification from the svg file
- * @param[in] _inputData Data C String with the xml definition
- * @return the parsed color
- */
 etk::Color<uint8_t,4> esvg::Base::parseColor(const std::string& _inputData) {
 	etk::Color<uint8_t,4> localColor = etk::color::white;
 	
@@ -446,15 +426,11 @@ etk::Color<uint8_t,4> esvg::Base::parseColor(const std::string& _inputData) {
 	return localColor;
 }
 
-
-/**
- * @brief parse all the element needed in the basic node
- * @param[in] _element standart XML node
- * @return true if no problem arrived
- */
 bool esvg::Base::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	SVG_ERROR("NOT IMPLEMENTED");
-	_sizeMax.setValue(0,0);
+	// TODO : UNDERSTAND why nothing is done here ...
+	// Parse basic elements (ID...):
+	m_id = _element->getAttribute("id");
+	_sizeMax = vec2(0.0f, 0.0f);
 	return false;
 }
 
@@ -470,3 +446,15 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	SVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
 }
+
+
+
+const std::string& getId() const {
+	return m_id;
+}
+
+void setId(const std::string& _newId) {
+	// TODO : Check if it is UNIQUE ...
+	m_id = _newId;
+}
+

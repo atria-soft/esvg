@@ -67,16 +67,54 @@ namespace esvg {
 			Base() {};
 			Base(PaintState _parentPaintState);
 			virtual ~Base() { };
+			/**
+			 * @brief parse all the element needed in the basic node
+			 * @param[in] _element standart XML node
+			 * @return true if no problem arrived
+			 */
 			virtual bool parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };
 			void parseTransform(const std::shared_ptr<exml::Element>& _element);
+			/**
+			 * @brief parse x, y, width, height attribute of the xml node
+			 * @param[in] _element XML node
+			 * @param[out] _pos parsed position
+			 * @param[out] _size parsed dimention
+			 */
 			void parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size);
+			/**
+			 * @brief parse a lenght of the xml element
+			 * @param[in] _dataInput Data C String with the printed lenght
+			 * @return standart number of pixels
+			 */
 			float parseLength(const std::string& _dataInput);
+			/**
+			 * @brief parse a Painting attribute of a specific node
+			 * @param[in] _element Basic node of the XML that might be parsed
+			 */
 			void parsePaintAttr(const std::shared_ptr<const exml::Element>& _element);
+			/**
+			 * @brief parse a color specification from the svg file
+			 * @param[in] _inputData Data C String with the xml definition
+			 * @return the parsed color
+			 */
 			etk::Color<uint8_t,4> parseColor(const std::string& _inputData);
+		protected:
+			std::string m_id; //!< unique ID of the element.
+		public:
+			/**
+			 * @brief Get the ID of the Element
+			 * @return UniqueId in the svg file
+			 */
+			const std::string& getId() const;
+			/**
+			 * @brief Set the ID of the Element
+			 * @param[in] _newId New Id of the element
+			 */
+			void setId(const std::string& _newId);
 	};
 };
 
