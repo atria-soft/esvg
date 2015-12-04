@@ -22,7 +22,7 @@ def get_maintainer():
 	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
 
 def get_version():
-	return [0,6,0]
+	return [0,6,"dev"]
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
