@@ -18,6 +18,8 @@
 #include <esvg/Rectangle.h>
 #include <esvg/Text.h>
 #include <esvg/Group.h>
+#include <esvg/LinearGradient.h>
+#include <esvg/RadialGradient.h>
 
 #undef __class__
 #define __class__ "Document"
@@ -199,22 +201,26 @@ bool esvg::Document::store(const std::string& _file) {
 
 
 
-bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
+bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference) {
 	// get the svg version :
 	m_version = _root->getAttribute("version");
 	// parse ...
 	vec2 pos(0,0);
-	parseTransform(_root);
-	parsePosition(_root, pos, m_size);
-	parsePaintAttr(_root);
-	SVG_VERBOSE("parsed .ROOT trans: " << m_transformMatrix);
+	if (_isReference == false) {
+		parseTransform(_root);
+		parsePosition(_root, pos, m_size);
+		parsePaintAttr(_root);
+		SVG_VERBOSE("parsed .ROOT trans: " << m_transformMatrix);
+	} else {
+		SVG_VERBOSE("Parse Reference section ... (no attibute)");
+	}
 	vec2 maxSize(0,0);
 	vec2 size(0,0);
 	// parse all sub node :
 	for(int32_t iii=0; iii< _root->size(); iii++) {
 		std::shared_ptr<exml::Element> child = _root->getElement(iii);
 		if (child == nullptr) {
-			// comment trsh here...
+			// comment can be here...
 			continue;
 		}
 		std::shared_ptr<esvg::Base> elementParser;
@@ -242,9 +248,29 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 			elementParser = std::make_shared<esvg::Polygon>(m_paint);
 		} else if (child->getValue() == "text") {
 			elementParser = std::make_shared<esvg::Text>(m_paint);
+		} else if (child->getValue() == "radialGradient") {
+			if (_isReference == false) {
+				SVG_ERROR("'" << child->getValue() << "' node must not be defined outside a defs Section");
+				continue;
+			} else {
+				//elementParser = std::make_shared<esvg::RadialGradient>(m_paint);
+			}
+		} else if (child->getValue() == "linearGradient") {
+			if (_isReference == false) {
+				SVG_ERROR("'" << child->getValue() << "' node must not be defined outside a defs Section");
+				continue;
+			} else {
+				elementParser = std::make_shared<esvg::LinearGradient>(m_paint);
+			}
 		} else if (child->getValue() == "defs") {
-			SVG_ERROR("'defs' node must not be defined in a group");
-			continue;
+			if (_isReference == true) {
+				SVG_ERROR("'" << child->getValue() << "' node must not be defined in a defs Section");
+				continue;
+			} else {
+				bool retRefs = parseXMLData(child, true);
+				// TODO : Use retRefs ...
+				continue;
+			}
 		} else if (child->getValue() == "sodipodi:namedview") {
 			// Node ignore : generaly inkscape data
 			continue;
@@ -270,7 +296,11 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 			maxSize.setY(size.y());
 		}
 		// add element in the system
-		m_subElementList.push_back(elementParser);
+		if (_isReference == false) {
+			m_subElementList.push_back(elementParser);
+		} else {
+			m_refList.push_back(elementParser);
+		}
 	}
 	if (m_size.x() == 0 || m_size.y()==0) {
 		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());

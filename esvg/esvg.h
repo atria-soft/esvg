@@ -59,7 +59,7 @@ namespace esvg {
 			 */
 			bool store(const std::string& _file);
 		protected:
-			virtual bool parseXMLData(const std::shared_ptr<exml::Element>& _root);
+			virtual bool parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference = false);
 		public:
 			bool isLoadOk() {
 				return m_loadOK;

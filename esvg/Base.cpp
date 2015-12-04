@@ -186,7 +186,7 @@ float esvg::Base::parseLength(const std::string& _dataInput) {
 }
 
 // return the next char position ... (after ';' or NULL)
-int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, std::string& _outputData, int32_t _pos) {
+int32_t esvg::extractPartOfStyle(const std::string& _data, std::string& _outputType, std::string& _outputData, int32_t _pos) {
 	_outputType = "";
 	_outputData = "";
 	if (_pos == -1) {

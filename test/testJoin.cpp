@@ -11,7 +11,7 @@
 #include "main.h"
 
 #undef __class__
-#define __class__	"TestLine"
+#define __class__	"TestJoin"
 // ------------------------------------------------------ Miter test -----------------------------------------------------
 
 TEST(TestJoin, miterRight1) {

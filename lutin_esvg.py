@@ -60,7 +60,9 @@ def create(target, module_name):
 		'esvg/render/Scanline.cpp',
 		'esvg/render/Segment.cpp',
 		'esvg/render/SegmentList.cpp',
-		'esvg/render/Weight.cpp'
+		'esvg/render/Weight.cpp',
+		'esvg/LinearGradient.cpp',
+		'esvg/RadialGradient.cpp'
 		])
 	
 	my_module.add_header_file([
@@ -97,7 +99,9 @@ def create(target, module_name):
 		'esvg/render/PointList.h',
 		'esvg/render/Segment.h',
 		'esvg/render/SegmentList.h',
-		'esvg/render/Weight.h'
+		'esvg/render/Weight.h',
+		'esvg/LinearGradient.h',
+		'esvg/RadialGradient.h'
 		])
 	
 	my_module.add_path(tools.get_current_path(__file__))

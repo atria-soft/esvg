@@ -50,6 +50,8 @@ namespace esvg {
 			float opacity;
 	};
 	
+	int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, std::string& _outputData, int32_t _pos);
+	
 	class Base {
 		protected:
 			PaintState m_paint;
