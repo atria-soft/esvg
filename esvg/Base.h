@@ -33,14 +33,6 @@ namespace esvg {
 		paint_gradientLinear, //!< Painting a linear gradient.
 		paint_gradientRadial //!< Painting a radial gradient.
 	};
-	/**
-	 * @brief Indicates what happens if the gradient starts or ends inside the bounds of the target rectangle.
-	 */
-	enum spread {
-		spread_pad, //!< 'pad' spread.
-		spread_reflect, //!< 'reflect' spread.
-		spread_repead, //!< 'repead' spread.
-	};
 	
 	class PaintState {
 		public:

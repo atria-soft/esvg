@@ -57,44 +57,43 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 			// can be a comment ...
 			continue;
 		}
-		esvg::Base *elementParser = nullptr;
+		std::shared_ptr<esvg::Base> elementParser;
 		if (child->getValue() == "g") {
-			elementParser = new esvg::Group(m_paint);
+			elementParser = std::make_shared<esvg::Group>(m_paint);
 		} else if (child->getValue() == "a") {
 			// TODO ...
 		} else if (child->getValue() == "path") {
-			elementParser = new esvg::Path(m_paint);
+			elementParser = std::make_shared<esvg::Path>(m_paint);
 		} else if (child->getValue() == "rect") {
-			elementParser = new esvg::Rectangle(m_paint);
+			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
 		} else if (child->getValue() == "circle") {
-			elementParser = new esvg::Circle(m_paint);
+			elementParser = std::make_shared<esvg::Circle>(m_paint);
 		} else if (child->getValue() == "ellipse") {
-			elementParser = new esvg::Ellipse(m_paint);
+			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
 		} else if (child->getValue() == "line") {
-			elementParser = new esvg::Line(m_paint);
+			elementParser = std::make_shared<esvg::Line>(m_paint);
 		} else if (child->getValue() == "polyline") {
-			elementParser = new esvg::Polyline(m_paint);
+			elementParser = std::make_shared<esvg::Polyline>(m_paint);
 		} else if (child->getValue() == "polygon") {
-			elementParser = new esvg::Polygon(m_paint);
+			elementParser = std::make_shared<esvg::Polygon>(m_paint);
 		} else if (child->getValue() == "text") {
-			elementParser = new esvg::Text(m_paint);
+			elementParser = std::make_shared<esvg::Text>(m_paint);
 		} else {
 			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (elementParser == nullptr) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
-		} else {
-			if (false == elementParser->parseXML(child, m_transformMatrix, tmpPos)) {
-				SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
-				delete(elementParser);
-				elementParser = nullptr;
-			} else {
-				_sizeMax.setValue(std::max(_sizeMax.x(), tmpPos.x()),
-				                  std::max(_sizeMax.y(), tmpPos.y()));
-				// add element in the system
-				m_subElementList.push_back(elementParser);
-			}
+			continue;
 		}
+		if (elementParser->parseXML(child, m_transformMatrix, tmpPos) == false) {
+			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
+			elementParser.reset();
+			continue;
+		}
+		_sizeMax.setValue(std::max(_sizeMax.x(), tmpPos.x()),
+		                  std::max(_sizeMax.y(), tmpPos.y()));
+		// add element in the system
+		m_subElementList.push_back(elementParser);
 	}
 	return true;
 }

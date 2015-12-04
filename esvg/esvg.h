@@ -23,7 +23,8 @@ namespace esvg {
 			bool m_loadOK;
 			std::string m_version;
 			std::string m_title;
-			std::vector<esvg::Base*> m_subElementList; // TODO: LEAK ...
+			std::vector<std::shared_ptr<esvg::Base>> m_subElementList; //!< sub-element list
+			std::vector<std::shared_ptr<esvg::Base>> m_refList; //!< reference elements ...
 			vec2 m_size;
 		public:
 			Document();

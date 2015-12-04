@@ -217,33 +217,34 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 			// comment trsh here...
 			continue;
 		}
-		esvg::Base *elementParser = nullptr;
+		std::shared_ptr<esvg::Base> elementParser;
 		if (child->getValue() == "g") {
-			elementParser = new esvg::Group(m_paint);
+			elementParser = std::make_shared<esvg::Group>(m_paint);
 		} else if (child->getValue() == "a") {
 			SVG_INFO("Note : 'a' balise is parsed like a g balise ...");
-			elementParser = new esvg::Group(m_paint);
+			elementParser = std::make_shared<esvg::Group>(m_paint);
 		} else if (child->getValue() == "title") {
 			m_title = "TODO : set the title here ...";
 			continue;
 		} else if (child->getValue() == "path") {
-			elementParser = new esvg::Path(m_paint);
+			elementParser = std::make_shared<esvg::Path>(m_paint);
 		} else if (child->getValue() == "rect") {
-			elementParser = new esvg::Rectangle(m_paint);
+			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
 		} else if (child->getValue() == "circle") {
-			elementParser = new esvg::Circle(m_paint);
+			elementParser = std::make_shared<esvg::Circle>(m_paint);
 		} else if (child->getValue() == "ellipse") {
-			elementParser = new esvg::Ellipse(m_paint);
+			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
 		} else if (child->getValue() == "line") {
-			elementParser = new esvg::Line(m_paint);
+			elementParser = std::make_shared<esvg::Line>(m_paint);
 		} else if (child->getValue() == "polyline") {
-			elementParser = new esvg::Polyline(m_paint);
+			elementParser = std::make_shared<esvg::Polyline>(m_paint);
 		} else if (child->getValue() == "polygon") {
-			elementParser = new esvg::Polygon(m_paint);
+			elementParser = std::make_shared<esvg::Polygon>(m_paint);
 		} else if (child->getValue() == "text") {
-			elementParser = new esvg::Text(m_paint);
+			elementParser = std::make_shared<esvg::Text>(m_paint);
 		} else if (child->getValue() == "defs") {
-			SVG_TODO("Need to parse Reference ==> big modification ...");
+			SVG_ERROR("'defs' node must not be defined in a group");
+			continue;
 		} else if (child->getValue() == "sodipodi:namedview") {
 			// Node ignore : generaly inkscape data
 			continue;
@@ -259,8 +260,7 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root) {
 		}
 		if (elementParser->parseXML(child, m_transformMatrix, size) == false) {
 			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
-			delete(elementParser);
-			elementParser = nullptr;
+			elementParser.reset();
 			continue;
 		}
 		if (maxSize.x()<size.x()) {
