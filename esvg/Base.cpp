@@ -134,53 +134,80 @@ void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _elem
 	}
 }
 
-float esvg::Base::parseLength(const std::string& _dataInput) {
+
+std::pair<float, enum esvg::distance> esvg::Base::parseLength2(const std::string& _dataInput) {
 	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = stof(_dataInput);
 	std::string unit;
-	for (int32_t iii=0; iii<_dataInput.size(); iii++) {
+	for (int32_t iii=0; iii<_dataInput.size(); ++iii) {
 		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
-		    || _dataInput[iii]<='+'
-		    || _dataInput[iii]<='-'
-		    || _dataInput[iii]<='.') {
+		    || _dataInput[iii]=='+'
+		    || _dataInput[iii]=='-'
+		    || _dataInput[iii]=='.') {
 			continue;
 		}
-		unit = std::string(_dataInput, iii-1);
+		unit = std::string(_dataInput, iii);
+		break;
 	}
-	//SVG_INFO("           == > ?? = " << n );
-	float font_size = 20.0f;
-	
 	SVG_VERBOSE(" lenght : '" << n << "' => unit=" << unit);
 	// note : ";" is for the parsing of the style elements ...
 	if(    unit.size() == 0
 	    || unit[0] == ';' ) {
-		return n;
+		return std::make_pair(n, esvg::distance_pixel);
 	} else if (unit[0] == '%') {                   // xxx %
-		return n / 100.0 * m_paint.viewPort.x();
+		return std::make_pair(n, esvg::distance_pourcent);
 	} else if (    unit[0] == 'e'
 	            && unit[1] == 'm') { // xxx em
-		return n * font_size;
+		return std::make_pair(n, esvg::distance_element);
 	} else if (    unit[0] == 'e'
 	            && unit[1] == 'x') { // xxx ex
-		return n / 2.0f * font_size;
+		return std::make_pair(n, esvg::distance_ex);
 	} else if (    unit[0] == 'p'
 	            && unit[1] == 'x') { // xxx px
-		return n;
+		return std::make_pair(n, esvg::distance_pixel);
 	} else if (    unit[0] == 'p'
 	            && unit[1] == 't') { // xxx pt
-		return n * 1.25f;
+		return std::make_pair(n, esvg::distance_point);
 	} else if (    unit[0] == 'p'
 	            && unit[1] == 'c') { // xxx pc
-		return n * 15.0f;
+		return std::make_pair(n, esvg::distance_pc);
 	} else if (    unit[0] == 'm'
 	            && unit[1] == 'm') { // xxx mm
-		return n * 3.543307f;
+		return std::make_pair(n, esvg::distance_millimeter);
 	} else if (    unit[0] == 'c'
 	            && unit[1] == 'm') { // xxx cm
-		return n * 35.43307f;
+		return std::make_pair(n, esvg::distance_centimeter);
 	} else if (    unit[0] == 'i'
 	            && unit[1] == 'n') { // xxx in
-		return n * 90.0f;
+		return std::make_pair(n, esvg::distance_inch);
+	}
+	return std::make_pair(0.0f, esvg::distance_pixel);
+}
+
+
+float esvg::Base::parseLength(const std::string& _dataInput) {
+	std::pair<float, enum esvg::distance> value = parseLength2(_dataInput);
+	SVG_VERBOSE(" lenght : '" << value.first << "' => unit=" << value.second);
+	float font_size = 20.0f;
+	switch (value.second) {
+		case esvg::distance_pourcent:
+			return value.first / 100.0 * m_paint.viewPort.x();
+		case esvg::distance_element:
+			return value.first * font_size;
+		case esvg::distance_ex:
+			return value.first / 2.0f * font_size;
+		case esvg::distance_pixel:
+			return value.first;
+		case esvg::distance_point:
+			return value.first * 1.25f;
+		case esvg::distance_pc:
+			return value.first * 15.0f;
+		case esvg::distance_millimeter:
+			return value.first * 3.543307f;
+		case esvg::distance_centimeter:
+			return value.first * 35.43307f;
+		case esvg::distance_inch:
+			return value.first * 90.0f;
 	}
 	return 0.0f;
 }

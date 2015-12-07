@@ -39,10 +39,17 @@ esvg::Document::~Document() {
 
 
 void esvg::Document::displayDebug() {
-	SVG_DEBUG("Main SVG node : size=" << m_size);
+	SVG_DEBUG("Main SVG: size=" << m_size);
+	SVG_DEBUG("    refs:");
+	for (int32_t iii=0; iii<m_refList.size(); iii++) {
+		if (m_refList[iii] != nullptr) {
+			m_refList[iii]->display(2);
+		}
+	}
+	SVG_DEBUG("    Nodes:");
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
-			m_subElementList[iii]->display(1);
+			m_subElementList[iii]->display(2);
 		}
 	}
 }
@@ -307,7 +314,9 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 	} else {
 		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
 	}
-	displayDebug();
+	if (_isReference == false) {
+		displayDebug();
+	}
 	return true;
 }
 

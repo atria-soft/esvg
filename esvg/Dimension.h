@@ -14,22 +14,25 @@
 #include <etk/math/Vector2D.h>
 
 namespace esvg {
+	enum distance {
+		distance_pourcent=0, //!< "%"
+		distance_pixel, //!< "px"
+		distance_meter, //!< "m"
+		distance_centimeter, //!< "cm"
+		distance_millimeter, //!< "mm"
+		distance_kilometer, //!< "km"
+		distance_inch, //!< "in"
+		distance_foot, //!< "ft"
+		distance_element, //!< "em"
+		distance_ex, //!< "ex"
+		distance_point, //!< "pt"
+		distance_pc //!< "pc"
+	};
 	/**
 	 * @brief in the dimention class we store the data as the more usefull unit (pixel) 
 	 * but one case need to be dynamic the %, then when requested in % the register the % value
 	 */
 	class Dimension {
-		public:
-			enum distance {
-				Pourcent=0,
-				Pixel,
-				Meter,
-				Centimeter,
-				Millimeter,
-				Kilometer,
-				Inch,
-				foot,
-			};
 		private:
 			vec2 m_data;
 			enum distance m_type;
@@ -43,15 +46,25 @@ namespace esvg {
 			 * @param[in] _size Requested dimention
 			 * @param[in] _type Unit of the Dimention
 			 */
-			Dimension(const vec2& _size, enum gale::Dimension::distance _type=gale::Dimension::Pixel);
+			Dimension(const vec2& _size, enum esvg::distance _type=esvg::distance_pixel);
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
 			Dimension(const std::string& _config) :
 			  m_data(0,0),
-			  m_type(gale::Dimension::Pixel) {
+			  m_type(esvg::distance_pixel) {
 				set(_config);
+			};
+			/**
+			 * @brief Constructor
+			 * @param[in] _configX dimension X configuration.
+			 * @param[in] _configY dimension Y configuration.
+			 */
+			Dimension(const std::string& _configX, const std::string& _configY) :
+			  m_data(0,0),
+			  m_type(esvg::distance_pixel) {
+				set(_configX, _configY);
 			};
 			/**
 			 * @brief Destructor
@@ -64,11 +77,19 @@ namespace esvg {
 			operator std::string() const;
 			
 			/**
-			 * @brief get the current dimention in requested type
-			 * @param[in] _type Type of unit requested.
+			 * @brief get the current dimention.
 			 * @return dimention requested.
 			 */
-			vec2 get(enum distance _type) const;
+			const vec2& getValue() const {
+				return m_data;
+			}
+			/**
+			 * @breif get the dimension type
+			 * @return the type
+			 */
+			enum distance getType() const {
+				return m_type;
+			};
 			/**
 			 * @brief set the current dimention in requested type
 			 * @param[in] _size Dimention to set
@@ -82,47 +103,19 @@ namespace esvg {
 			 * @param[in] _config dimension configuration.
 			 */
 			void set(std::string _config);
+			/**
+			 * @brief set the current dimention in requested type
+			 * @param[in] _configX dimension X configuration.
+			 * @param[in] _configY dimension Y configuration.
+			 */
+			void set(std::string _configX, std::string _configY);
 		public:
 			/**
 			 * @brief get the current dimention in pixel
+			 * @param[in] _upperSize Size in pixel of the upper value
 			 * @return dimention in Pixel
 			 */
-			vec2 getPixel() const;
-			/**
-			 * @brief get the current dimention in Pourcent
-			 * @return dimention in Pourcent
-			 */
-			vec2 getPourcent() const;
-			/**
-			 * @brief get the current dimention in Meter
-			 * @return dimention in Meter
-			 */
-			vec2 getMeter() const;
-			/**
-			 * @brief get the current dimention in Centimeter
-			 * @return dimention in Centimeter
-			 */
-			vec2 getCentimeter() const;
-			/**
-			 * @brief get the current dimention in Millimeter
-			 * @return dimention in Millimeter
-			 */
-			vec2 getMillimeter() const;
-			/**
-			 * @brief get the current dimention in Kilometer
-			 * @return dimention in Kilometer
-			 */
-			vec2 getKilometer() const;
-			/**
-			 * @brief get the current dimention in Inch
-			 * @return dimention in Inch
-			 */
-			vec2 getInch() const;
-			/**
-			 * @brief get the current dimention in Foot
-			 * @return dimention in Foot
-			 */
-			vec2 getFoot() const;
+			vec2 getPixel(const vec2& _upperSize) const;
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
@@ -153,49 +146,8 @@ namespace esvg {
 				}
 				return false;
 			}
-			/**
-			 * @breif get the dimension type
-			 * @return the type
-			 */
-			enum distance getType() const {
-				return m_type;
-			};
-		public : // Global static access :
-		/**
-		 * @brief basic init
-		 */
-		static void init();
-		/**
-		 * @brief basic un-init
-		 */
-		static void unInit();
-		/**
-		 * @brief set the Milimeter ratio for calculation
-		 * @param[in] Ratio Milimeter ration for the screen calculation interpolation
-		 * @param[in] type Unit type requested.
-		 * @note: same as @ref setPixelPerInch (internal manage convertion)
-		 */
-		static void setPixelRatio(const vec2& _ratio, enum gale::Dimension::distance _type);
-		/**
-		 * @brief set the current Windows size
-		 * @param[in] size size of the current windows in pixel.
-		 */
-		static void setPixelWindowsSize(const vec2& _size);
-		/**
-		 * @brief get the Windows size in the request unit
-		 * @param[in] type Unit type requested.
-		 * @return the requested size
-		 */
-		static vec2 getWindowsSize(enum gale::Dimension::distance _type);
-		/**
-		 * @brief get the Windows diagonal size in the request unit
-		 * @param[in] type Unit type requested.
-		 * @return the requested size
-		 */
-		static float getWindowsDiag(enum gale::Dimension::distance _type);
-		
 	};
-	std::ostream& operator <<(std::ostream& _os, enum esvg::Dimension::distance _obj);
+	std::ostream& operator <<(std::ostream& _os, enum esvg::distance _obj);
 	std::ostream& operator <<(std::ostream& _os, const esvg::Dimension& _obj);
 };
 

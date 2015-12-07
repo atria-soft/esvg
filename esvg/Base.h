@@ -21,6 +21,7 @@
 
 #include <exml/exml.h>
 #include <esvg/Renderer.h>
+#include <esvg/Dimension.h>
 
 namespace esvg {
 	extern const float kappa90; //!< proportional lenght to the radius of a bezier handle for 90° arcs.
@@ -82,9 +83,10 @@ namespace esvg {
 			/**
 			 * @brief parse a lenght of the xml element
 			 * @param[in] _dataInput Data C String with the printed lenght
-			 * @return standart number of pixels
+			 * @return standard number of pixels
 			 */
 			float parseLength(const std::string& _dataInput);
+			std::pair<float, enum esvg::distance> parseLength2(const std::string& _dataInput);
 			/**
 			 * @brief parse a Painting attribute of a specific node
 			 * @param[in] _element Basic node of the XML that might be parsed
