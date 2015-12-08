@@ -14,8 +14,8 @@
 namespace esvg {
 	class LinearGradient : public esvg::Base {
 		private:
-			vec2 m_pos1; //!< gradient position x1 y1
-			vec2 m_pos2; //!< gradient position x2 y2
+			esvg::Dimension m_pos1; //!< gradient position x1 y1
+			esvg::Dimension m_pos2; //!< gradient position x2 y2
 			std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 		public:
 			LinearGradient(PaintState _parentPaintState);

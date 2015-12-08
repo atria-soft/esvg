@@ -97,7 +97,7 @@ namespace esvg {
 			 */
 			void set(const vec2& _size, enum distance _type);
 			
-		private:
+		public:
 			/**
 			 * @brief set the current dimention in requested type
 			 * @param[in] _config dimension configuration.

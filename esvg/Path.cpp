@@ -271,16 +271,20 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
+	std::shared_ptr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx, m_paint.viewPort);
+	std::shared_ptr<esvg::render::DynamicColor> colorStroke;
+	if (m_paint.strokeWidth > 0.0f) {
+		colorStroke = esvg::render::createColor(m_paint.stroke, mtx, m_paint.viewPort);
+	}
 	// Check if we need to display background
-	if (m_paint.fill.a() != 0x00) {
+	if (colorFill != nullptr) {
 		listSegmentFill.createSegmentList(listPoints);
 		listSegmentFill.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpFill.generate(_myRenderer.getSize(), _myRenderer.getNumberSubScanLine(), listSegmentFill);
 	}
 	// check if we need to display stroke:
-	if (    m_paint.strokeWidth > 0
-	     && m_paint.stroke.a() != 0x00) {
+	if (colorStroke != nullptr) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
 		                                          m_paint.strokeWidth,
 		                                          m_paint.lineCap,
@@ -292,9 +296,9 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	}
 	// add on images:
 	_myRenderer.print(tmpFill,
-	                  m_paint.fill,
+	                  colorFill,
 	                  tmpStroke,
-	                  m_paint.stroke,
+	                  colorStroke,
 	                  m_paint.opacity);
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);

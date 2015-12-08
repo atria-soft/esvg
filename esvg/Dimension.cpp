@@ -75,8 +75,8 @@ void esvg::Dimension::set(std::string _config) {
 	SVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
 }
 
-static enum distance parseType(std::string& _config) {
-	enum distance type = esvg::distance_pixel;
+static enum esvg::distance parseType(std::string& _config) {
+	enum esvg::distance type = esvg::distance_pixel;
 	if (etk::end_with(_config, "%", false) == true) {
 		type = esvg::distance_pourcent;
 		_config.erase(_config.size()-1, 1);
@@ -120,7 +120,7 @@ void esvg::Dimension::set(std::string _configX, std::string _configY) {
 	float valueY = etk::string_to_float(_configY);
 	// TODO : Check difference ...
 	set(vec2(valueX, valueY), typeX);
-	SVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
+	SVG_VERBOSE(" config dimention : '" << _configX << "' '" << _configY << "'  == > " << *this );
 }
 
 

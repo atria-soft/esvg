@@ -13,14 +13,15 @@
 #undef __class__
 #define __class__ "Renderer"
 
-esvg::Renderer::Renderer(const ivec2& _size, bool _visualDebug) :
+esvg::Renderer::Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug) :
 #ifdef DEBUG
   m_visualDebug(_visualDebug),
   m_factor(1),
 #endif
   m_interpolationRecurtionMax(10),
   m_interpolationThreshold(0.25f),
-  m_nbSubScanLine(8) {
+  m_nbSubScanLine(8),
+  m_document(_document) {
 	#ifdef DEBUG
 		if (m_visualDebug == true) {
 			m_factor = 20;
@@ -57,9 +58,9 @@ etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, etk::C
 }
 
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
-                           const etk::Color<float,4>& _colorFill,
+                           const std::shared_ptr<esvg::render::DynamicColor>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
-                           const etk::Color<float,4>& _colorStroke,
+                           const std::shared_ptr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
 	int32_t sizeX = m_size.x();
 	int32_t sizeY = m_size.y();
@@ -67,68 +68,25 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 		sizeX *= m_factor;
 		sizeY *= m_factor;
 	#endif
-	if (_colorFill.a() == 0x00) {
-		if (_colorStroke.a() != 0x00) {
-			// only stroke
-			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
-				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
-					#if DEBUG
-						ivec2 pos(xxx/m_factor, yyy/m_factor);
-					#else
-						ivec2 pos(xxx, yyy);
-					#endif
-					float valueStroke = _weightStroke.get(pos);
-					if (valueStroke != 0.0f) {
-						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorStroke * valueStroke;
-						tmpColor.setA(tmpColor.a() * _opacity);
-						// integrate the value at the previous color
-						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
-					}
-				}
-			}
-		}
-	} else {
-		if (_colorStroke.a() == 0x00) {
-			// only Fill
-			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
-				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
-					#if DEBUG
-						ivec2 pos(xxx/m_factor, yyy/m_factor);
-					#else
-						ivec2 pos(xxx, yyy);
-					#endif
-					float valueFill = _weightFill.get(pos);
-					if (valueFill != 0.0f) {
-						// set a ratio of the merging value
-						etk::Color<float,4> tmpColor = _colorFill * valueFill;
-						tmpColor.setA(tmpColor.a() * _opacity);
-						// integrate the value at the previous color
-						m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], tmpColor);
-					}
-				}
-			}
-		} else {
-			// all together 
-			for (int32_t yyy=0; yyy<sizeY; ++yyy) {
-				for (int32_t xxx=0; xxx<sizeX; ++xxx) {
-					#if DEBUG
-						ivec2 pos(xxx/m_factor, yyy/m_factor);
-					#else
-						ivec2 pos(xxx, yyy);
-					#endif
-					float valueFill = _weightFill.get(pos);
-					float valueStroke = _weightStroke.get(pos);
-					// calculate merge of stroke and fill value:
-					etk::Color<float,4> intermediateColorFill = _colorFill;
-					intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
-					etk::Color<float,4> intermediateColorStroke = _colorStroke;
-					intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
-					etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
-					intermediateColor.setA(intermediateColor.a() * _opacity);
-					m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
-				}
-			}
+	
+	// all together
+	for (int32_t yyy=0; yyy<sizeY; ++yyy) {
+		for (int32_t xxx=0; xxx<sizeX; ++xxx) {
+			#if DEBUG
+				ivec2 pos(xxx/m_factor, yyy/m_factor);
+			#else
+				ivec2 pos(xxx, yyy);
+			#endif
+			float valueFill = _weightFill.get(pos);
+			float valueStroke = _weightStroke.get(pos);
+			// calculate merge of stroke and fill value:
+			etk::Color<float,4> intermediateColorFill = _colorFill->getColor(pos);
+			intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
+			etk::Color<float,4> intermediateColorStroke = _colorStroke->getColor(pos);
+			intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
+			etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
+			intermediateColor.setA(intermediateColor.a() * _opacity);
+			m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
 		}
 	}
 }

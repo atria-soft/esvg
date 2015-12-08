@@ -62,6 +62,7 @@ def create(target, module_name):
 		'esvg/render/Segment.cpp',
 		'esvg/render/SegmentList.cpp',
 		'esvg/render/Weight.cpp',
+		'esvg/render/DynamicColor.cpp',
 		'esvg/LinearGradient.cpp',
 		'esvg/RadialGradient.cpp'
 		])
@@ -102,6 +103,7 @@ def create(target, module_name):
 		'esvg/render/Segment.h',
 		'esvg/render/SegmentList.h',
 		'esvg/render/Weight.h',
+		'esvg/render/DynamicColor.h',
 		'esvg/LinearGradient.h',
 		'esvg/RadialGradient.h'
 		])

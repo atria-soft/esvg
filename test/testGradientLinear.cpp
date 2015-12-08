@@ -27,7 +27,7 @@ TEST(TestGradientLinear, horizontal) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_horizontal.svg", data);
-	//doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_horizontal.bmp", g_visualDebug);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_horizontal.bmp", g_visualDebug);
 }
 
 

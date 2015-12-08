@@ -40,8 +40,8 @@ namespace esvg {
 			PaintState();
 			void clear();
 		public:
-			etk::Color<float,4> fill;
-			etk::Color<float,4> stroke;
+			std::pair<etk::Color<float,4>, std::string> fill;
+			std::pair<etk::Color<float,4>, std::string> stroke;
 			float strokeWidth;
 			bool flagEvenOdd; //!< Fill rules
 			enum esvg::cap lineCap;
@@ -50,8 +50,6 @@ namespace esvg {
 			vec2 viewPort;
 			float opacity;
 	};
-	
-	int32_t extractPartOfStyle(const std::string& _data, std::string& _outputType, std::string& _outputData, int32_t _pos);
 	
 	class Base {
 		protected:
@@ -95,9 +93,9 @@ namespace esvg {
 			/**
 			 * @brief parse a color specification from the svg file
 			 * @param[in] _inputData Data C String with the xml definition
-			 * @return the parsed color
+			 * @return The parsed color (color used and the link if needed)
 			 */
-			etk::Color<uint8_t,4> parseColor(const std::string& _inputData);
+			std::pair<etk::Color<float,4>, std::string> parseColor(const std::string& _inputData);
 		protected:
 			std::string m_id; //!< unique ID of the element.
 		public:

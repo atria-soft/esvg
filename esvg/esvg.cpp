@@ -74,7 +74,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 	}
 	SVG_DEBUG("Generate size " << sizeRender);
 	
-	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(sizeRender, _visualDebug);
+	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(sizeRender, this, _visualDebug);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
 	basicTrans *= etk::mat2Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
@@ -99,7 +99,7 @@ std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _si
 		_size.setY(m_size.y());
 	}
 	SVG_DEBUG("Generate size " << _size);
-	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(_size);
+	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(_size, this);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
 	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
@@ -170,6 +170,7 @@ bool esvg::Document::parse(const std::string& _data) {
 		m_loadOK = false;
 		return m_loadOK;
 	}
+	cleanStyleProperty(root);
 	m_loadOK = parseXMLData(root);
 	return m_loadOK;
 }
@@ -198,6 +199,7 @@ bool esvg::Document::load(const std::string& _file) {
 		m_loadOK = false;
 		return m_loadOK;
 	}
+	cleanStyleProperty(root);
 	m_loadOK = parseXMLData(root);
 	return m_loadOK;
 }
@@ -206,7 +208,36 @@ bool esvg::Document::store(const std::string& _file) {
 	return false;
 }
 
-
+bool esvg::Document::cleanStyleProperty(const std::shared_ptr<exml::Element>& _root) {
+	// for each nodes:
+	for(int32_t iii=0; iii< _root->size(); iii++) {
+		std::shared_ptr<exml::Element> child = _root->getElement(iii);
+		if (child == nullptr) {
+			continue;
+		}
+		// get attribute style:
+		if (child->existAttribute("style") == true) {
+			std::string content = child->getAttribute("style");
+			if (content.size() != 0) {
+				std::vector<std::string> listStyle = etk::split(content, ';');
+				for (auto &it : listStyle) {
+					std::vector<std::string> value = etk::split(it, ':');
+					if (value.size() != 2) {
+						SVG_ERROR("parsing style with a wrong patern : " << it << " missing ':'");
+						continue;
+					}
+					// TODO : Check if the attibute already exist ...
+					child->setAttribute(value[0], value[1]);
+				}
+			}
+			// remove attribute style:
+			child->removeAttribute("style");
+		}
+		// sub-parsing ...
+		cleanStyleProperty(child);
+	}
+	return true;
+}
 
 bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference) {
 	// get the svg version :
@@ -223,7 +254,7 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 	}
 	vec2 maxSize(0,0);
 	vec2 size(0,0);
-	// parse all sub node :
+	// parse all sub node:
 	for(int32_t iii=0; iii< _root->size(); iii++) {
 		std::shared_ptr<exml::Element> child = _root->getElement(iii);
 		if (child == nullptr) {

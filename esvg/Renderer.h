@@ -13,8 +13,10 @@
 #include <etk/math/Vector2D.h>
 #include <etk/Color.h>
 #include <esvg/render/Weight.h>
+#include <esvg/render/DynamicColor.h>
 
 namespace esvg {
+	class Document;
 	class Renderer {
 		#ifdef DEBUG
 		private:
@@ -22,7 +24,7 @@ namespace esvg {
 			int32_t m_factor;
 		#endif
 		public:
-			Renderer(const ivec2& _size, bool _visualDebug=false);
+			Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug=false);
 			~Renderer();
 		protected:
 			ivec2 m_size;
@@ -55,13 +57,19 @@ namespace esvg {
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:
 			void print(const esvg::render::Weight& _weightFill,
-			           const etk::Color<float,4>& _colorFill,
+			           const std::shared_ptr<esvg::render::DynamicColor>& _colorFill,
 			           const esvg::render::Weight& _weightStroke,
-			           const etk::Color<float,4>& _colorStroke,
+			           const std::shared_ptr<esvg::render::DynamicColor>& _colorStroke,
 			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
 			#endif
+		protected:
+			esvg::Document* m_document;
+		public:
+			esvg::Document* getMainDocument() {
+				return m_document;
+			}
 	};
 };
 

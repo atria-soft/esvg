@@ -59,6 +59,10 @@ namespace esvg {
 			 */
 			bool store(const std::string& _file);
 		protected:
+			/**
+			 * @brief change all style in a xml atribute
+			 */
+			virtual bool cleanStyleProperty(const std::shared_ptr<exml::Element>& _root);
 			virtual bool parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference = false);
 		public:
 			bool isLoadOk() {

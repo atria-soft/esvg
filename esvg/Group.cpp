@@ -99,7 +99,9 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 }
 
 void esvg::Group::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke << " stroke-width=" << m_paint.strokeWidth );
+	SVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill.first << "/" << m_paint.fill.second
+	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second
+	                                << " stroke-width=" << m_paint.strokeWidth );
 	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->display(_spacing+1);
