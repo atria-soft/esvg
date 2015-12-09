@@ -61,7 +61,7 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 			if (content.size()!=0) {
 				std::pair<float, enum esvg::distance> tmp = parseLength2(content);
 				if (tmp.second != esvg::distance_pourcent) {
-					SVG_ERROR("offset : " << content << " res=" << tmp.first << "," << tmp.second << " Not support other than pourcent %");
+					ESVG_ERROR("offset : " << content << " res=" << tmp.first << "," << tmp.second << " Not support other than pourcent %");
 				} else {
 					offset = tmp.first;
 				}
@@ -69,32 +69,32 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 			content = child->getAttribute("stop-color");
 			if (content.size()!=0) {
 				stopColor = parseColor(content).first;
-				SVG_VERBOSE(" color : \"" << content << "\"  == > " << stopColor);
+				ESVG_VERBOSE(" color : \"" << content << "\"  == > " << stopColor);
 			}
 			content = child->getAttribute("stop-opacity");
 			if (content.size()!=0) {
 				float opacity = parseLength(content);
 				opacity = std::avg(0.0f, opacity, 1.0f);
 				stopColor.setA(opacity);
-				SVG_VERBOSE(" opacity : \"" << content << "\"  == > " << stopColor);
+				ESVG_VERBOSE(" opacity : \"" << content << "\"  == > " << stopColor);
 			}
 			m_data.push_back(std::pair<float, etk::Color<float,4>>(offset, stopColor));
 		} else {
-			SVG_ERROR("(l " << child->getPos() << ") node not suported : \"" << child->getValue() << "\" must be [stop]");
+			ESVG_ERROR("(l " << child->getPos() << ") node not suported : \"" << child->getValue() << "\" must be [stop]");
 		}
 	}
 	return true;
 }
 
 void esvg::LinearGradient::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "LinearGradient " << m_pos1 << " to " << m_pos2);
+	ESVG_DEBUG(spacingDist(_spacing) << "LinearGradient " << m_pos1 << " to " << m_pos2);
 	for (auto &it : m_data) {
-		SVG_DEBUG(spacingDist(_spacing+1) << "STOP: offset=" << it.first << " color=" << it.second);
+		ESVG_DEBUG(spacingDist(_spacing+1) << "STOP: offset=" << it.first << " color=" << it.second);
 	}
 }
 
 void esvg::LinearGradient::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::LinearGradient");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::LinearGradient");
 }
 
 

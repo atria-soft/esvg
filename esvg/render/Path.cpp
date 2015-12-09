@@ -74,12 +74,12 @@ static const char* spacingDist(int32_t _spacing) {
 }
 
 void esvg::render::Path::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Path");
+	ESVG_DEBUG(spacingDist(_spacing) << "Path");
 	for(auto &it : m_listElement) {
 		if (it == nullptr) {
 			continue;
 		}
-		SVG_DEBUG(spacingDist(_spacing+1) << *it);
+		ESVG_DEBUG(spacingDist(_spacing+1) << *it);
 	}
 }
 
@@ -122,7 +122,7 @@ void interpolateCubicBezier(std::vector<esvg::render::Point>& _listPoint,
 }
 
 esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, int32_t _recurtionMax, float _threshold) {
-	SVG_VERBOSE(spacingDist(_level) << "Generate List Points ... from a path");
+	ESVG_VERBOSE(spacingDist(_level) << "Generate List Points ... from a path");
 	esvg::render::PointList out;
 	std::vector<esvg::render::Point> tmpListPoint;
 	vec2 lastPosition(0.0f, 0.0f);
@@ -134,12 +134,12 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 		if (it == nullptr) {
 			continue;
 		}
-		SVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
+		ESVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
 		switch (it->getType()) {
 			case esvg::render::path_stop:
 				if (tmpListPoint.size() != 0) {
 					if (tmpListPoint.size() == 0) {
-						SVG_WARNING(spacingDist(_level+1) << " Request path stop of not starting path ...");
+						ESVG_WARNING(spacingDist(_level+1) << " Request path stop of not starting path ...");
 					} else {
 						tmpListPoint.back().setEndPath();
 						out.addList(tmpListPoint);
@@ -152,7 +152,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 			case esvg::render::path_close:
 				if (tmpListPoint.size() != 0) {
 					if (tmpListPoint.size() == 0) {
-						SVG_WARNING(spacingDist(_level+1) << " Request path close of not starting path ...");
+						ESVG_WARNING(spacingDist(_level+1) << " Request path close of not starting path ...");
 					} else {
 						// find the previous tart of the path ...
 						tmpListPoint.front().m_type = esvg::render::Point::type_join;
@@ -161,7 +161,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						if (    delta.x() <= 0.00001
 						     && delta.y() <= 0.00001) {
 							tmpListPoint.pop_back();
-							SVG_VERBOSE("        Remove point Z property : " << tmpListPoint.back().m_pos << " with delta=" << delta);
+							ESVG_VERBOSE("        Remove point Z property : " << tmpListPoint.back().m_pos << " with delta=" << delta);
 						}
 						out.addList(tmpListPoint);
 						tmpListPoint.clear();
@@ -331,9 +331,9 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				}
 				break;
 			case esvg::render::path_elliptic:
-				SVG_TODO(spacingDist(_level+1) << " Elliptic arc not supported now ...");
+				ESVG_TODO(spacingDist(_level+1) << " Elliptic arc not supported now ...");
 				/*
-				SVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
+				ESVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
 				path.ellipticTo(it->getRelative(),
 				                it->m_element[0],
 				                it->m_element[1],
@@ -345,13 +345,13 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				*/
 				break;
 			default:
-				SVG_ERROR(spacingDist(_level+1) << " Unknow PATH commant (internal error)");
+				ESVG_ERROR(spacingDist(_level+1) << " Unknow PATH commant (internal error)");
 				break;
 		}
 	}
 	// special case : No request end of path ==> open path:
 	if (tmpListPoint.size() != 0) {
-		SVG_VERBOSE("Auto-end PATH");
+		ESVG_VERBOSE("Auto-end PATH");
 		tmpListPoint.back().setEndPath();
 		out.addList(tmpListPoint);
 		tmpListPoint.clear();

@@ -25,20 +25,20 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 
 void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	if (_document == nullptr) {
-		SVG_ERROR("Get nullptr input for document");
+		ESVG_ERROR("Get nullptr input for document");
 		return;
 	}
 	std::shared_ptr<esvg::Base> base = _document->getReference(m_colorName);
 	if (base == nullptr) {
-		SVG_ERROR("Can not get base : '" << m_colorName << "'");
+		ESVG_ERROR("Can not get base : '" << m_colorName << "'");
 		return;
 	}
 	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
 	if (gradient == nullptr) {
-		SVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
+		ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
 		return;
 	}
-	SVG_INFO("get for color linear:");
+	ESVG_INFO("get for color linear:");
 	gradient->display(2);
 }
 

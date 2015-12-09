@@ -28,27 +28,27 @@ void esvg::render::PointList::applyMatrix(const mat2& _transformationMatrix) {
 
 
 void esvg::render::PointList::display() {
-	SVG_VERBOSE(" Display list of points : size=" << m_data.size());
+	ESVG_VERBOSE(" Display list of points : size=" << m_data.size());
 	for (auto &it : m_data) {
-		SVG_VERBOSE("    Find List " << it.size() << " members");
+		ESVG_VERBOSE("    Find List " << it.size() << " members");
 		for (int32_t iii=0;
 		     iii < it.size();
 		     ++iii) {
 			switch (it[iii].m_type) {
 				case esvg::render::Point::type_single:
-					SVG_VERBOSE("        [" << iii << "] Find Single " << it[iii].m_pos);
+					ESVG_VERBOSE("        [" << iii << "] Find Single " << it[iii].m_pos);
 					break;
 				case esvg::render::Point::type_start:
-					SVG_VERBOSE("        [" << iii << "] Find Start " << it[iii].m_pos);
+					ESVG_VERBOSE("        [" << iii << "] Find Start " << it[iii].m_pos);
 					break;
 				case esvg::render::Point::type_stop:
-					SVG_VERBOSE("        [" << iii << "] Find Stop " << it[iii].m_pos);
+					ESVG_VERBOSE("        [" << iii << "] Find Stop " << it[iii].m_pos);
 					break;
 				case esvg::render::Point::type_interpolation:
-					SVG_VERBOSE("        [" << iii << "] Find interpolation " << it[iii].m_pos);
+					ESVG_VERBOSE("        [" << iii << "] Find interpolation " << it[iii].m_pos);
 					break;
 				case esvg::render::Point::type_join:
-					SVG_VERBOSE("        [" << iii << "] Find Join " << it[iii].m_pos);
+					ESVG_VERBOSE("        [" << iii << "] Find Join " << it[iii].m_pos);
 					break;
 			}
 		}

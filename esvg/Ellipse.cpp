@@ -47,14 +47,14 @@ bool esvg::Ellipse::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 	if (content.size()!=0) {
 		m_r.setX(parseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"rx\" is not present");
+		ESVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
 	content = _element->getAttribute("ry");
 	if (content.size()!=0) {
 		m_r.setY(parseLength(content));
 	} else {
-		SVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"ry\" is not present");
+		ESVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
 	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
@@ -63,15 +63,15 @@ bool esvg::Ellipse::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 }
 
 void esvg::Ellipse::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+	ESVG_DEBUG(spacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
 }
 
 
 void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
 	if (    m_r.x()<=0.0f
 	     || m_r.y()<=0.0f) {
-		SVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_r);
+		ESVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_r);
 		return;
 	}
 	esvg::render::Path listElement;

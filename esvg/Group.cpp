@@ -41,12 +41,12 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 	parseTransform(_element);
 	parsePosition(_element, pos, size);
 	parsePaintAttr(_element);
-	SVG_VERBOSE("parsed G1.   trans : " << m_transformMatrix);
+	ESVG_VERBOSE("parsed G1.   trans : " << m_transformMatrix);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	SVG_VERBOSE("parsed G2.   trans : " << m_transformMatrix);
+	ESVG_VERBOSE("parsed G2.   trans : " << m_transformMatrix);
 	
 	_sizeMax.setValue(0,0);
 	vec2 tmpPos(0,0);
@@ -79,14 +79,14 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 		} else if (child->getValue() == "text") {
 			elementParser = std::make_shared<esvg::Text>(m_paint);
 		} else {
-			SVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+			ESVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (elementParser == nullptr) {
-			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
+			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
 			continue;
 		}
 		if (elementParser->parseXML(child, m_transformMatrix, tmpPos) == false) {
-			SVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
+			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
 			elementParser.reset();
 			continue;
 		}
@@ -99,7 +99,7 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 }
 
 void esvg::Group::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill.first << "/" << m_paint.fill.second
+	ESVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill.first << "/" << m_paint.fill.second
 	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second
 	                                << " stroke-width=" << m_paint.strokeWidth );
 	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
@@ -107,11 +107,11 @@ void esvg::Group::display(int32_t _spacing) {
 			m_subElementList[iii]->display(_spacing+1);
 		}
 	}
-	SVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
+	ESVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
 }
 
 void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
 	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans, _level+1);

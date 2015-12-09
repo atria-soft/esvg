@@ -14,12 +14,12 @@
 
 void esvg::render::Point::setEndPath() {
 	if (m_type == esvg::render::Point::type_interpolation) {
-		SVG_WARNING("Request stop path of an interpolate Point");
+		ESVG_WARNING("Request stop path of an interpolate Point");
 		m_type = esvg::render::Point::type_stop;
 		return;
 	}
 	if (m_type == esvg::render::Point::type_stop) {
-		SVG_WARNING("Request stop path of an STOP Point");
+		ESVG_WARNING("Request stop path of an STOP Point");
 		return;
 	}
 	if (m_type == esvg::render::Point::type_start) {

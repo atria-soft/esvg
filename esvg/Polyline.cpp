@@ -36,11 +36,11 @@ bool esvg::Polyline::parseXML(const std::shared_ptr<exml::Element>& _element, ma
 	
 	std::string sss1 = _element->getAttribute("points");
 	if (sss1.size() == 0) {
-		SVG_ERROR("(l "<<_element->getPos()<<") polyline: missing points attribute");
+		ESVG_ERROR("(l "<<_element->getPos()<<") polyline: missing points attribute");
 		return false;
 	}
 	_sizeMax.setValue(0,0);
-	SVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
+	ESVG_VERBOSE("Parse polyline : \"" << sss1 << "\"");
 	const char* sss = sss1.c_str();
 	while ('\0' != sss[0]) {
 		vec2 pos;
@@ -58,12 +58,12 @@ bool esvg::Polyline::parseXML(const std::shared_ptr<exml::Element>& _element, ma
 }
 
 void esvg::Polyline::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.size());
+	ESVG_DEBUG(spacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.size());
 }
 
 
 void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
 	
 	esvg::render::Path listElement;
 	listElement.clear();

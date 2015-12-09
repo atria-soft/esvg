@@ -206,7 +206,7 @@ void esvg::Renderer::writePPM(const std::string& _fileName) {
 	}
 	etk::FSNode tmpFile(_fileName);
 	if(tmpFile.fileOpenWrite() == false) {
-		SVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+		ESVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
 		return;
 	}
 	int32_t sizeX = m_size.x();
@@ -215,7 +215,7 @@ void esvg::Renderer::writePPM(const std::string& _fileName) {
 		sizeX *= m_factor;
 		sizeY *= m_factor;
 	#endif
-	SVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
+	ESVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
 	char tmpValue[1024];
 	sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
 	tmpFile.fileWrite(tmpValue,1,sizeof(tmpValue));
@@ -268,7 +268,7 @@ void esvg::Renderer::writeBMP(const std::string& _fileName) {
 	etk::FSNode tmpFile(_fileName);
 	
 	if(tmpFile.fileOpenWrite() == false) {
-		SVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+		ESVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
 		return;
 	}
 	struct bitmapFileHeader fileHeader;

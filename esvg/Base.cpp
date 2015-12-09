@@ -59,13 +59,13 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 	if (inputString.size() == 0) {
 		return;
 	}
-	SVG_VERBOSE("find transform : \"" << inputString << "\"");
+	ESVG_VERBOSE("find transform : \"" << inputString << "\"");
 	for (int32_t iii=0; iii<inputString.size(); iii++) {
 		if (inputString[iii] == ',') {
 			inputString[iii] = ' ';
 		}
 	}
-	SVG_VERBOSE("find transform : \"" << inputString << "\"");
+	ESVG_VERBOSE("find transform : \"" << inputString << "\"");
 	double matrix[6];
 	float angle, xxx, yyy;
 	int32_t n;
@@ -75,16 +75,16 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 			m_transformMatrix = mat2(matrix);
 		} else if (sscanf(pointerOnData, "translate (%f %f) %n", &xxx, &yyy, &n) == 2) {
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
-			SVG_VERBOSE("Translate : " << xxx << ", " << yyy);
+			ESVG_VERBOSE("Translate : " << xxx << ", " << yyy);
 		} else if (sscanf(pointerOnData, "translate (%f) %n", &xxx, &n) == 1) {
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, 0));
-			SVG_VERBOSE("Translate : " << xxx << ", " << 0);
+			ESVG_VERBOSE("Translate : " << xxx << ", " << 0);
 		} else if (sscanf(pointerOnData, "scale (%f %f) %n", &xxx, &yyy, &n) == 2) {
 			m_transformMatrix *= etk::mat2Scale(vec2(xxx, yyy));
-			SVG_VERBOSE("Scale : " << xxx << ", " << yyy);
+			ESVG_VERBOSE("Scale : " << xxx << ", " << yyy);
 		} else if (sscanf(pointerOnData, "scale (%f) %n", &xxx, &n) == 1) {
 			m_transformMatrix *= etk::mat2Scale(xxx);
-			SVG_VERBOSE("Scale : " << xxx << ", " << xxx);
+			ESVG_VERBOSE("Scale : " << xxx << ", " << xxx);
 		} else if (sscanf(pointerOnData, "rotate (%f %f %f) %n", &angle, &xxx, &yyy, &n) == 3) {
 			angle = angle / 180 * M_PI;
 			m_transformMatrix *= etk::mat2Translate(vec2(-xxx, -yyy));
@@ -92,15 +92,15 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
 		} else if (sscanf(pointerOnData, "rotate (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			SVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
+			ESVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Rotate(angle);
 		} else if (sscanf(pointerOnData, "skewX (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			SVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
+			ESVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Skew(vec2(angle, 0.0f));
 		} else if (sscanf(pointerOnData, "skewY (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			SVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
+			ESVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Skew(vec2(0.0f, angle));
 		} else {
 			break;
@@ -136,7 +136,7 @@ void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _elem
 
 
 std::pair<float, enum esvg::distance> esvg::Base::parseLength2(const std::string& _dataInput) {
-	SVG_VERBOSE(" lenght : '" << _dataInput << "'");
+	ESVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = stof(_dataInput);
 	std::string unit;
 	for (int32_t iii=0; iii<_dataInput.size(); ++iii) {
@@ -149,7 +149,7 @@ std::pair<float, enum esvg::distance> esvg::Base::parseLength2(const std::string
 		unit = std::string(_dataInput, iii);
 		break;
 	}
-	SVG_VERBOSE(" lenght : '" << n << "' => unit=" << unit);
+	ESVG_VERBOSE(" lenght : '" << n << "' => unit=" << unit);
 	// note : ";" is for the parsing of the style elements ...
 	if(unit.size() == 0) {
 		return std::make_pair(n, esvg::distance_pixel);
@@ -186,7 +186,7 @@ std::pair<float, enum esvg::distance> esvg::Base::parseLength2(const std::string
 
 float esvg::Base::parseLength(const std::string& _dataInput) {
 	std::pair<float, enum esvg::distance> value = parseLength2(_dataInput);
-	SVG_VERBOSE(" lenght : '" << value.first << "' => unit=" << value.second);
+	ESVG_VERBOSE(" lenght : '" << value.first << "' => unit=" << value.second);
 	float font_size = 20.0f;
 	switch (value.second) {
 		case esvg::distance_pourcent:
@@ -248,7 +248,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 		if (content == "none" ) {
 			// OK, Nothing to do ...
 		} else {
-			SVG_TODO(" 'stroke-dasharray' not implemented ...");
+			ESVG_TODO(" 'stroke-dasharray' not implemented ...");
 		}
 	}
 	content = _element->getAttribute("stroke-linecap");
@@ -261,7 +261,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			m_paint.lineCap = esvg::cap_square;
 		} else {
 			m_paint.lineCap = esvg::cap_butt;
-			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
+			ESVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 		}
 	}
 	content = _element->getAttribute("stroke-linejoin");
@@ -274,7 +274,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			m_paint.lineJoin = esvg::join_bevel;
 		} else {
 			m_paint.lineJoin = esvg::join_miter;
-			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
+			ESVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 		}
 	}
 	content = _element->getAttribute("stroke-miterlimit");
@@ -305,7 +305,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 		} else if (content == "evenodd" ) {
 			m_paint.flagEvenOdd = true;
 		} else {
-			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+			ESVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
 		}
 	}
 	// ---------------- opacity ----------------
@@ -338,12 +338,12 @@ std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::st
 			std::string color(_inputData.begin() + 5, _inputData.end()-1);
 			localColor = std::pair<etk::Color<float,4>, std::string>(etk::color::none, color);
 		} else {
-			SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
+			ESVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 		}
 	} else {
 		localColor = std::pair<etk::Color<float,4>, std::string>(_inputData, "");
 	}
-	SVG_VERBOSE("Parse color : \"" << _inputData << "\"  == > " << localColor.first << " " << localColor.second);
+	ESVG_VERBOSE("Parse color : \"" << _inputData << "\"  == > " << localColor.first << " " << localColor.second);
 	return localColor;
 }
 
@@ -365,7 +365,7 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 }
 
 void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
+	ESVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
 }
 
 

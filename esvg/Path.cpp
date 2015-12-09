@@ -35,11 +35,11 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	            && _input[0] >= 'A')
 	       || (    _input[0] <= 'z'
 	            && _input[0] >= 'a') ) ) {
-		SVG_ERROR("Error in the SVG Path : \"" << _input << "\"");
+		ESVG_ERROR("Error in the SVG Path : \"" << _input << "\"");
 		return nullptr;
 	}
 	_cmd = _input[0];
-	SVG_VERBOSE("Find command : " << _cmd);
+	ESVG_VERBOSE("Find command : " << _cmd);
 	if (_input[1] == '\0') {
 		return &_input[1];
 	}
@@ -50,7 +50,7 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	int32_t nbElementRead;
 	while(    sscanf(&_input[iii], "%1[, ]%f%n", spacer, &element, &nbElementRead) == 2
 	       || sscanf(&_input[iii], "%f%n", &element, &nbElementRead) == 1) {
-		SVG_VERBOSE("Find element : " << element);
+		ESVG_VERBOSE("Find element : " << element);
 		_outputList.push_back(element);
 		iii += nbElementRead;
 	}
@@ -75,10 +75,10 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 	
 	std::string elementXML1 = _element->getAttribute("d");
 	if (elementXML1.size() == 0) {
-		SVG_WARNING("(l "<<_element->getPos()<<") path: missing 'd' attribute or empty");
+		ESVG_WARNING("(l "<<_element->getPos()<<") path: missing 'd' attribute or empty");
 		return false;
 	}
-	SVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");
+	ESVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");
 	
 	char command;
 	std::vector<float> listDot;
@@ -95,7 +95,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'M': // Move to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				if (listDot.size() >= 2) {
@@ -112,7 +112,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'L': // Line to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
@@ -126,7 +126,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'V': // Vertical Line to (absolute)
 				// 1 Element ...
 				if(listDot.size() == 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
@@ -140,7 +140,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'H': // Horizantal Line to (absolute)
 				// 1 Element ...
 				if(listDot.size() == 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
@@ -154,7 +154,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'Q': // Quadratic Bezier curve (absolute)
 				// 4 Elements ...
 				if(listDot.size()%4 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
@@ -169,7 +169,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'T': // smooth quadratic Bezier curve to (absolute)
 				// 2 Elements ...
 				if(listDot.size()%2 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
@@ -183,7 +183,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'C': // curve to (absolute)
 				// 6 Elements ...
 				if(listDot.size()%6 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=6) {
@@ -199,7 +199,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'S': // smooth curve to (absolute)
 				// 4 Elements ...
 				if(listDot.size()%4 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
@@ -214,7 +214,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'A': // elliptical Arc (absolute)
 				// 7 Elements ...
 				if(listDot.size()%7 != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
@@ -239,13 +239,13 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 			case 'Z': // closepath (absolute)
 				// 0 Element ...
 				if(listDot.size() != 0) {
-					SVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
+					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
 				m_listElement.close(relative);
 				break;
 			default:
-				SVG_ERROR ("Unknow error : \"" << command << "\"");
+				ESVG_ERROR ("Unknow error : \"" << command << "\"");
 		}
 	}
 	
@@ -257,7 +257,7 @@ void esvg::Path::display(int32_t _spacing) {
 }
 
 void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;

@@ -57,11 +57,11 @@ bool esvg::Line::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 }
 
 void esvg::Line::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
+	ESVG_DEBUG(spacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
 }
 
 void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Line");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Line");
 	
 	esvg::render::Path listElement;
 	listElement.clear();

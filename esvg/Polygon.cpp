@@ -29,21 +29,21 @@ bool esvg::Polygon::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 	parseTransform(_element);
 	parsePaintAttr(_element);
 	
-	SVG_VERBOSE("parsed P1.   trans: " << m_transformMatrix);
+	ESVG_VERBOSE("parsed P1.   trans: " << m_transformMatrix);
 	
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	SVG_VERBOSE("parsed P2.   trans: " << m_transformMatrix);
+	ESVG_VERBOSE("parsed P2.   trans: " << m_transformMatrix);
 	
 	const std::string sss1 = _element->getAttribute("points");
 	if (sss1.size() == 0) {
-		SVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
+		ESVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
 	}
 	const char * sss = sss1.c_str();
 	_sizeMax.setValue(0,0);
-	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
+	ESVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
 		vec2 pos(0,0);
 		int32_t n;
@@ -63,11 +63,11 @@ bool esvg::Polygon::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 }
 
 void esvg::Polygon::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
+	ESVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
 void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polygon");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polygon");
 	
 	esvg::render::Path listElement;
 	listElement.moveTo(false, m_listPoint[0]);

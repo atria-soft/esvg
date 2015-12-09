@@ -46,12 +46,12 @@ bool esvg::Circle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2
 	if (content.size()!=0) {
 		m_radius = parseLength(content);
 	} else {
-		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is not present");
+		ESVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is not present");
 		return false;
 	}
 	if (0 > m_radius) {
 		m_radius = 0;
-		SVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is negative");
+		ESVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is negative");
 		return false;
 	}
 	_sizeMax.setValue(m_position.x() + m_radius, m_position.y() + m_radius);
@@ -59,14 +59,14 @@ bool esvg::Circle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2
 }
 
 void esvg::Circle::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
+	ESVG_DEBUG(spacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
 }
 
 
 void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Circle");
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Circle");
 	if (m_radius <= 0.0f) {
-		SVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_radius);
+		ESVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_radius);
 		return;
 	}
 	esvg::render::Path listElement;

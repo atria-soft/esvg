@@ -67,12 +67,12 @@ void esvg::Dimension::set(std::string _config) {
 		type = esvg::distance_meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
-		SVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
 		return;
 	}
 	vec2 tmp = _config;
 	set(tmp, type);
-	SVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
+	ESVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
 }
 
 static enum esvg::distance parseType(std::string& _config) {
@@ -102,7 +102,7 @@ static enum esvg::distance parseType(std::string& _config) {
 		type = esvg::distance_meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
-		SVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
 	}
 	return type;
 }
@@ -120,7 +120,7 @@ void esvg::Dimension::set(std::string _configX, std::string _configY) {
 	float valueY = etk::string_to_float(_configY);
 	// TODO : Check difference ...
 	set(vec2(valueX, valueY), typeX);
-	SVG_VERBOSE(" config dimention : '" << _configX << "' '" << _configY << "'  == > " << *this );
+	ESVG_VERBOSE(" config dimention : '" << _configX << "' '" << _configY << "'  == > " << *this );
 }
 
 
@@ -190,7 +190,7 @@ void esvg::Dimension::set(const vec2& _size, enum esvg::distance _type) {
 		case esvg::distance_ex:
 		case esvg::distance_point:
 		case esvg::distance_pc:
-			SVG_ERROR("Does not support other than Px and % type of dimention : " << _type << " automaticly convert with {72,72} pixel/inch");
+			ESVG_ERROR("Does not support other than Px and % type of dimention : " << _type << " automaticly convert with {72,72} pixel/inch");
 			break;
 	}
 }

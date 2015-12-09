@@ -55,12 +55,12 @@ bool esvg::Rectangle::parseXML(const std::shared_ptr<exml::Element>& _element, m
 }
 
 void esvg::Rectangle::display(int32_t _spacing) {
-	SVG_DEBUG(spacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
+	ESVG_DEBUG(spacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
 void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
-	SVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle: fill=" << m_paint.fill.first << "/" << m_paint.fill.second
-	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second);
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle: fill=" << m_paint.fill.first << "/" << m_paint.fill.second
+	                                 << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second);
 	esvg::render::Path listElement;
 	listElement.clear();
 	if (    m_roundedCorner.x() == 0.0f

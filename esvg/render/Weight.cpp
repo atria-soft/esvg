@@ -32,7 +32,7 @@ void esvg::render::Weight::resize(const ivec2& _size) {
 	float tmp(0);
 	m_data.resize(m_size.x()*m_size.y(), tmp);
 	if ((uint32_t)m_size.x()*m_size.y() > m_data.size()) {
-		SVG_WARNING("Wrong weigth buffer size ...");
+		ESVG_WARNING("Wrong weigth buffer size ...");
 		return;
 	}
 }
@@ -97,7 +97,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 	resize(_size);
 	// for each lines:
 	for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
-		SVG_VERBOSE("Weighting ... " << yyy << " / " << _size.y());
+		ESVG_VERBOSE("Weighting ... " << yyy << " / " << _size.y());
 		// Reduce the number of lines in the subsampling parsing:
 		std::vector<Segment> availlableSegmentPixel;
 		for (auto &it : _listSegment.m_data) {
@@ -109,11 +109,11 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 		if (availlableSegmentPixel.size() == 0) {
 			continue;
 		}
-		SVG_VERBOSE("          Find Basic segments " << availlableSegmentPixel.size());
+		ESVG_VERBOSE("          Find Basic segments " << availlableSegmentPixel.size());
 		// This represent the pondaration on the subSampling
 		float deltaSize = 1.0f/_subSamplingCount;
 		for (int32_t kkk=0; kkk<_subSamplingCount ; ++kkk) {
-			SVG_VERBOSE("    Scanline ... " << kkk << " / " << _subSamplingCount);
+			ESVG_VERBOSE("    Scanline ... " << kkk << " / " << _subSamplingCount);
 			Scanline scanline(_size.x());
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = yyy + deltaSize*0.5f + deltaSize*kkk;
@@ -132,12 +132,12 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 					}
 				}
 			}
-			SVG_VERBOSE("        Availlable Segment " << availlableSegment.size());
+			ESVG_VERBOSE("        Availlable Segment " << availlableSegment.size());
 			if (availlableSegment.size() == 0) {
 				continue;
 			}
 			for (auto &it : availlableSegment) {
-				SVG_VERBOSE("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
+				ESVG_VERBOSE("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
 			}
 			// x position, angle
 			std::vector<std::pair<float, int32_t>> listPosition;
@@ -149,7 +149,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				float xpos = coefficient * subSamplingCenterPos + bbb;
 				listPosition.push_back(std::pair<float,int32_t>(xpos, it.direction));
 			}
-			SVG_VERBOSE("        List position " << listPosition.size());
+			ESVG_VERBOSE("        List position " << listPosition.size());
 			// now we order position of the xPosition:
 			std::sort(listPosition.begin(), listPosition.end(), sortXPosFunction);
 			// move through all element in the point:
@@ -197,7 +197,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			// if the counter is not at 0 ==> fill if to the end with full value ... 2.0
 			if (lastState != 0) {
 				// just past the last state to the end of the image ...
-				SVG_ERROR("end of Path whith no end ... " << currentPos << " -> " << _size.x());
+				ESVG_ERROR("end of Path whith no end ... " << currentPos << " -> " << _size.x());
 				for (int32_t xxx=currentPos; xxx<_size.x(); ++xxx) {
 					scanline.set(xxx, 100.0);
 				}
