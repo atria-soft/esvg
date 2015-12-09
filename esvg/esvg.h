@@ -92,6 +92,7 @@ namespace esvg {
 			vec2 getDefinedSize() {
 				return m_size;
 			};
+			std::shared_ptr<esvg::Base> getReference(const std::string& _name);
 	};
 };
 

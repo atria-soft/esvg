@@ -8,15 +8,38 @@
 
 #include <esvg/debug.h>
 #include <esvg/render/DynamicColor.h>
+#include <esvg/LinearGradient.h>
+#include <esvg/esvg.h>
 
-esvg::render::DynamicColorLinear::DynamicColorLinear(const std::string& _link, const mat2& _mtx, const vec2 _objectSize, const vec2 _objectPos)
-   {
+esvg::render::DynamicColorLinear::DynamicColorLinear(const std::string& _link, const mat2& _mtx, const vec2 _size) :
+  m_colorName(_link),
+  m_matrix(_mtx),
+  m_size(_size) {
 	
 }
 
 
 etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos) {
 	return etk::color::purple;
+}
+
+void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
+	if (_document == nullptr) {
+		SVG_ERROR("Get nullptr input for document");
+		return;
+	}
+	std::shared_ptr<esvg::Base> base = _document->getReference(m_colorName);
+	if (base == nullptr) {
+		SVG_ERROR("Can not get base : '" << m_colorName << "'");
+		return;
+	}
+	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
+	if (gradient == nullptr) {
+		SVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
+		return;
+	}
+	SVG_INFO("get for color linear:");
+	gradient->display(2);
 }
 
 

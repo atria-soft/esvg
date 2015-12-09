@@ -352,3 +352,22 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 }
 
 
+
+std::shared_ptr<esvg::Base> esvg::Document::getReference(const std::string& _name) {
+	if (_name == "") {
+		SVG_ERROR("request a reference with no name ... ");
+		return nullptr;
+	}
+	for (auto &it : m_refList) {
+		if (it == nullptr) {
+			continue;
+		}
+		if (it->getId() == _name) {
+			return it;
+		}
+	}
+	SVG_ERROR("Can not find reference name : '" << _name << "'");
+	return nullptr;
+}
+
+

@@ -64,6 +64,12 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            float _opacity) {
 	int32_t sizeX = m_size.x();
 	int32_t sizeY = m_size.y();
+	if (_colorFill != nullptr) {
+		_colorFill->generate(m_document);
+	}
+	if (_colorStroke != nullptr) {
+		_colorStroke->generate(m_document);
+	}
 	#if DEBUG
 		sizeX *= m_factor;
 		sizeY *= m_factor;
@@ -80,10 +86,16 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			float valueFill = _weightFill.get(pos);
 			float valueStroke = _weightStroke.get(pos);
 			// calculate merge of stroke and fill value:
-			etk::Color<float,4> intermediateColorFill = _colorFill->getColor(pos);
-			intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
-			etk::Color<float,4> intermediateColorStroke = _colorStroke->getColor(pos);
-			intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
+			etk::Color<float,4> intermediateColorFill(etk::color::none);
+			etk::Color<float,4> intermediateColorStroke(etk::color::none);
+			if (_colorFill != nullptr) {
+				intermediateColorFill = _colorFill->getColor(pos);
+				intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
+			}
+			if (_colorStroke != nullptr) {
+				intermediateColorStroke = _colorStroke->getColor(pos);
+				intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
+			}
 			etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
 			intermediateColor.setA(intermediateColor.a() * _opacity);
 			m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);

@@ -335,7 +335,8 @@ std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::st
 	    && _inputData[2] == 'l'
 	    && _inputData[3] == '(') {
 		if (_inputData[4] == '#') {
-			localColor = std::pair<etk::Color<float,4>, std::string>(etk::color::none, &(_inputData[5]));
+			std::string color(_inputData.begin() + 5, _inputData.end()-1);
+			localColor = std::pair<etk::Color<float,4>, std::string>(etk::color::none, color);
 		} else {
 			SVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 		}
