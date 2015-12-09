@@ -22,7 +22,7 @@ TEST(TestGradientLinear, horizontal) {
 	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
-	                 "	<ellipse cx='200' cy='70' rx='85' ry='55' fill='url(#grad1)' />\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
@@ -40,7 +40,7 @@ TEST(TestGradientLinear, vertical) {
 	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
-	                 "	<ellipse cx='200' cy='70' rx='85' ry='55' fill='url(#grad2)' />\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);

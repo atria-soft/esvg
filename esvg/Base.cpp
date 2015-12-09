@@ -24,7 +24,7 @@ esvg::PaintState::PaintState() :
   lineCap(esvg::cap_butt),
   lineJoin(esvg::join_miter),
   miterLimit(4.0f),
-  viewPort(255,255),
+  viewPort(vec2(0.0f,0.0f), vec2(0.0f,0.0f)),
   opacity(1.0) {
 	
 }
@@ -33,7 +33,8 @@ void esvg::PaintState::clear() {
 	fill = std::pair<etk::Color<float,4>, std::string>(etk::color::black, "");
 	stroke = std::pair<etk::Color<float,4>, std::string>(etk::color::none, "");
 	strokeWidth = 1.0;
-	viewPort.setValue(255,255);
+	viewPort.first.setValue(0.0f,0.0f);
+	viewPort.first.setValue(0.0f,0.0f);
 	flagEvenOdd = false;
 	lineJoin = esvg::join_miter;
 	lineCap = esvg::cap_butt;
@@ -190,7 +191,7 @@ float esvg::Base::parseLength(const std::string& _dataInput) {
 	float font_size = 20.0f;
 	switch (value.second) {
 		case esvg::distance_pourcent:
-			return value.first / 100.0 * m_paint.viewPort.x();
+			return value.first;// / 100.0 * m_paint.viewPort.x();
 		case esvg::distance_element:
 			return value.first * font_size;
 		case esvg::distance_ex:

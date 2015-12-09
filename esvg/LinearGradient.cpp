@@ -97,4 +97,17 @@ void esvg::LinearGradient::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, 
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::LinearGradient");
 }
 
+const esvg::Dimension& esvg::LinearGradient::getPosition1() {
+	return m_pos1;
+}
+
+const esvg::Dimension& esvg::LinearGradient::getPosition2() {
+	return m_pos2;
+}
+
+const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors() {
+	return m_data;
+}
+
+
 

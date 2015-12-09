@@ -23,6 +23,10 @@ namespace esvg {
 			virtual bool parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
+		public:
+			const esvg::Dimension& getPosition1();
+			const esvg::Dimension& getPosition2();
+			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors();
 	};
 };
 

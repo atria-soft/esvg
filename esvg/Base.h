@@ -47,7 +47,7 @@ namespace esvg {
 			enum esvg::cap lineCap;
 			enum esvg::join lineJoin;
 			float miterLimit;
-			vec2 viewPort;
+			std::pair<vec2, vec2> viewPort; //!< min pos, max pos
 			float opacity;
 	};
 	

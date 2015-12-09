@@ -40,6 +40,12 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	}
 	ESVG_INFO("get for color linear:");
 	gradient->display(2);
+	
+	esvg::Dimension pos1 = gradient->getPosition1();
+	esvg::Dimension pos2 = gradient->getPosition2();
+	std::vector<std::pair<float, etk::Color<float,4>>> data = gradient->getColors();
+	// ROTATE and many things ...
+	
 }
 
 
