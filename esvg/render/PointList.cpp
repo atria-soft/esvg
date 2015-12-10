@@ -26,6 +26,16 @@ void esvg::render::PointList::applyMatrix(const mat2& _transformationMatrix) {
 	}
 }
 
+std::pair<vec2, vec2> esvg::render::PointList::getViewPort() {
+	std::pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
+	for (auto &it : m_data) {
+		for (auto &it2 : it) {
+			out.first.setMin(it2.m_pos);
+			out.second.setMax(it2.m_pos);
+		}
+	}
+	return out;
+}
 
 void esvg::render::PointList::display() {
 	ESVG_VERBOSE(" Display list of points : size=" << m_data.size());

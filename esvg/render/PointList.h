@@ -25,6 +25,7 @@ namespace esvg {
 				void addList(std::vector<esvg::render::Point>& _list);
 				void display();
 				void applyMatrix(const mat2& _transformationMatrix);
+				std::pair<vec2, vec2> getViewPort();
 		};
 	}
 }

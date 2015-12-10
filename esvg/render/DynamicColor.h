@@ -26,6 +26,7 @@ namespace esvg {
 				virtual ~DynamicColor() {};
 				virtual etk::Color<float,4> getColor(const ivec2& _pos) = 0;
 				virtual void generate(esvg::Document* _document) = 0;
+				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort) = 0;
 		};
 		class DynamicColorUni : public esvg::render::DynamicColor {
 			public:
@@ -41,19 +42,26 @@ namespace esvg {
 				virtual void generate(esvg::Document* _document) {
 					// nothing to do ...
 				}
+				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort) {
+					// nothing to do ...
+				};
 		};
 		class DynamicColorLinear : public esvg::render::DynamicColor {
 			public:
 				std::string m_colorName;
 				mat2 m_matrix;
-				vec2 m_size;
+				std::pair<vec2, vec2> m_viewPort;
+				vec2 m_pos1;
+				vec2 m_pos2;
+				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
-				DynamicColorLinear(const std::string& _link, const mat2& _mtx, const vec2 _size);
+				DynamicColorLinear(const std::string& _link, const mat2& _mtx);
 				virtual etk::Color<float,4> getColor(const ivec2& _pos);
 				virtual void generate(esvg::Document* _document);
+				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort);
 		};
 		
-		std::shared_ptr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx, const vec2 _size);
+		std::shared_ptr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx);
 	}
 }
 

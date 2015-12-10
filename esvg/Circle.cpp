@@ -102,14 +102,15 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
-	std::shared_ptr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx, m_paint.viewPort);
+	std::shared_ptr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
 	std::shared_ptr<esvg::render::DynamicColor> colorStroke;
 	if (m_paint.strokeWidth > 0.0f) {
-		colorStroke = esvg::render::createColor(m_paint.stroke, mtx, m_paint.viewPort);
+		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
 	}
 	// Check if we need to display background
 	if (colorFill != nullptr) {
 		listSegmentFill.createSegmentList(listPoints);
+		colorFill->setViewPort(listSegmentFill.getViewPort());
 		listSegmentFill.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpFill.generate(_myRenderer.getSize(),
@@ -123,6 +124,7 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 		                                          m_paint.lineCap,
 		                                          m_paint.lineJoin,
 		                                          m_paint.miterLimit);
+		colorStroke->setViewPort(listSegmentStroke.getViewPort());
 		listSegmentStroke.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
 		tmpStroke.generate(_myRenderer.getSize(),

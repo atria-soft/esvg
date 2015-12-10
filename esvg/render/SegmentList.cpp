@@ -28,6 +28,16 @@ void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, con
 	m_data.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
+std::pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
+	std::pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
+	for (auto &it : m_data) {
+		out.first.setMin(it.p0);
+		out.second.setMax(it.p0);
+		out.first.setMin(it.p1);
+		out.second.setMax(it.p1);
+	}
+	return out;
+}
 void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList& _listPoint) {
 	for (auto &it : _listPoint.m_data) {
 		// Build Segments
