@@ -18,8 +18,10 @@ TEST(TestGradientLinear, horizontal) {
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='0%'>\n"
-	                 "			<stop offset='0%' style='stop-color:rgb(255,255,0);stop-opacity:1' />\n"
-	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
 	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
@@ -36,8 +38,10 @@ TEST(TestGradientLinear, vertical) {
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='0%' x2='0%' y2='100%'>\n"
-	                 "			<stop offset='0%' style='stop-color:rgb(255,255,0);stop-opacity:1' />\n"
-	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
 	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
@@ -53,8 +57,10 @@ TEST(TestGradientLinear, diag1) {
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'>\n"
-	                 "			<stop offset='0%' style='stop-color:rgb(255,255,0);stop-opacity:1' />\n"
-	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
 	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
@@ -70,8 +76,10 @@ TEST(TestGradientLinear, diag2) {
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
-	                 "			<stop offset='0%' style='stop-color:rgb(255,255,0);stop-opacity:1' />\n"
-	                 "			<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
 	                 "		</linearGradient>\n"
 	                 "	</defs>\n"
 	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
@@ -83,3 +91,79 @@ TEST(TestGradientLinear, diag2) {
 }
 
 
+
+TEST(TestGradientLinear, diag2Rotate0) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2' x1='0%' y1='50%' x2='100%' y2='50%'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse transform='rotate (30 50 50)' cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate0.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate0.bmp", g_visualDebug);
+}
+
+TEST(TestGradientLinear, diag2Rotate1) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse transform='rotate (45 50 50)' cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate1.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate1.bmp", g_visualDebug);
+}
+
+TEST(TestGradientLinear, diag2Rotate2) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse transform='rotate (-45 50 50)' cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate2.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate2.bmp", g_visualDebug);
+}
+
+TEST(TestGradientLinear, diag2scale) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse transform='scale (0.5 2.0) translate (10,-25)' cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_diag2scale.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2scale.bmp", g_visualDebug);
+}

@@ -65,9 +65,11 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 	int32_t sizeX = m_size.x();
 	int32_t sizeY = m_size.y();
 	if (_colorFill != nullptr) {
+		//_colorFill->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorFill->generate(m_document);
 	}
 	if (_colorStroke != nullptr) {
+		//_colorStroke->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorStroke->generate(m_document);
 	}
 	#if DEBUG
@@ -88,11 +90,13 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			// calculate merge of stroke and fill value:
 			etk::Color<float,4> intermediateColorFill(etk::color::none);
 			etk::Color<float,4> intermediateColorStroke(etk::color::none);
-			if (_colorFill != nullptr) {
+			if (    _colorFill != nullptr
+			     && valueFill != 0.0f) {
 				intermediateColorFill = _colorFill->getColor(pos);
 				intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
 			}
-			if (_colorStroke != nullptr) {
+			if (    _colorStroke != nullptr
+			     && valueStroke != 0.0f) {
 				intermediateColorStroke = _colorStroke->getColor(pos);
 				intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
 			}
@@ -101,6 +105,38 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
 		}
 	}
+	#ifdef DEBUG
+		// display the gradient position:
+		std::shared_ptr<esvg::render::DynamicColorLinear> tmpColor = std::dynamic_pointer_cast<esvg::render::DynamicColorLinear>(_colorFill);
+		if (tmpColor != nullptr) {
+			esvg::render::SegmentList listSegment;
+			// Display bounding box
+			listSegment.addSegment(esvg::render::Point(tmpColor->m_viewPort.first),
+			                       esvg::render::Point(vec2(tmpColor->m_viewPort.first.x(), tmpColor->m_viewPort.second.y()) ),
+			                       false);
+			listSegment.addSegment(esvg::render::Point(vec2(tmpColor->m_viewPort.first.x(), tmpColor->m_viewPort.second.y()) ),
+			                       esvg::render::Point(tmpColor->m_viewPort.second),
+			                       false);
+			listSegment.addSegment(esvg::render::Point(tmpColor->m_viewPort.second),
+			                       esvg::render::Point(vec2(tmpColor->m_viewPort.second.x(), tmpColor->m_viewPort.first.y()) ),
+			                       false);
+			listSegment.addSegment(esvg::render::Point(vec2(tmpColor->m_viewPort.second.x(), tmpColor->m_viewPort.first.y()) ),
+			                       esvg::render::Point(tmpColor->m_viewPort.first),
+			                       false);
+			listSegment.applyMatrix(tmpColor->m_matrix);
+			// display the gradient axis
+			listSegment.addSegment(esvg::render::Point(tmpColor->m_pos1),
+			                       esvg::render::Point(tmpColor->m_pos2),
+			                       false);
+			/*
+				mat2 m_matrix;
+				std::pair<vec2, vec2> m_viewPort;
+				vec2 m_pos1;
+				vec2 m_pos2;
+			*/
+			addDebugSegment(listSegment);
+		}
+	#endif
 }
 
 #ifdef DEBUG

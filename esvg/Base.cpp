@@ -52,6 +52,40 @@ esvg::Base::Base(PaintState _parentPaintState) {
 	m_paint = _parentPaintState;
 }
 
+std::string extractTransformData(const std::string& _value, const std::string& _base) {
+	size_t posStart = _value.find(_base);
+	if (posStart == std::string::npos) {
+		// Not find element is a normal case ...
+		return "";
+	}
+	posStart += _base.size();
+	if (_value.size() < posStart+2) {
+		ESVG_ERROR("Not enought spece in the String to have transform value for ' (' or '()' in '" << _value << "'");
+		return "";
+	}
+	if (_value[posStart] == '(') {
+		// normal SVG does not support this case ...
+		posStart++;
+	} else if (    _value[posStart] == ' '
+	            && _value[posStart+1] == '(') {
+		posStart+=2;
+	} else {
+		ESVG_ERROR("Can not find ' (' or '(' in '" << &_value[posStart] << "' for '" << _value << "'");
+		return "";
+	}
+	if (_value.size() < posStart+1) {
+		ESVG_ERROR("Not enought spece in the String to have transform value for ')' in '" << _value << "'");
+		return "";
+	}
+	size_t posEnd = _value.find(')', posStart);
+	if (posEnd == std::string::npos) {
+		ESVG_ERROR("Missing element ')' in '" << _value << "' for " << _base);
+		return "";
+	}
+	ESVG_VERBOSE("Find : '" << std::string(_value.begin()+posStart, _value.begin()+posEnd) << "' for " << _base);
+	return std::string(_value.begin()+posStart, _value.begin()+posEnd);
+}
+
 void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) {
 	if (_element == nullptr) {
 		return;
@@ -67,46 +101,81 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 		}
 	}
 	ESVG_VERBOSE("find transform : \"" << inputString << "\"");
-	double matrix[6];
-	float angle, xxx, yyy;
-	int32_t n;
-	const char * pointerOnData = inputString.c_str();
-	while (*pointerOnData) {
-		if (sscanf(pointerOnData, "matrix (%lf %lf %lf %lf %lf %lf) %n", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5], &n) == 6) {
+	// need to find elements in order ...
+	std::string data = extractTransformData(inputString, "matrix");
+	if (data.size() != 0) {
+		double matrix[6];
+		if (sscanf(data.c_str(), "%lf %lf %lf %lf %lf %lf", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5]) == 6) {
 			m_transformMatrix = mat2(matrix);
-		} else if (sscanf(pointerOnData, "translate (%f %f) %n", &xxx, &yyy, &n) == 2) {
+			// find a matrix : simply exit ...
+			return;
+		} else {
+			ESVG_ERROR("Parsing matrix() with wrong data ... '" << data << "'");
+		}
+	}
+	data = extractTransformData(inputString, "translate");
+	if (data.size() != 0) {
+		float xxx, yyy;
+		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
 			ESVG_VERBOSE("Translate : " << xxx << ", " << yyy);
-		} else if (sscanf(pointerOnData, "translate (%f) %n", &xxx, &n) == 1) {
+		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, 0));
 			ESVG_VERBOSE("Translate : " << xxx << ", " << 0);
-		} else if (sscanf(pointerOnData, "scale (%f %f) %n", &xxx, &yyy, &n) == 2) {
+		} else {
+			ESVG_ERROR("Parsing translate() with wrong data ... '" << data << "'");
+		}
+	}
+	data = extractTransformData(inputString, "scale");
+	if (data.size() != 0) {
+		float xxx, yyy;
+		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
 			m_transformMatrix *= etk::mat2Scale(vec2(xxx, yyy));
 			ESVG_VERBOSE("Scale : " << xxx << ", " << yyy);
-		} else if (sscanf(pointerOnData, "scale (%f) %n", &xxx, &n) == 1) {
+		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
 			m_transformMatrix *= etk::mat2Scale(xxx);
 			ESVG_VERBOSE("Scale : " << xxx << ", " << xxx);
-		} else if (sscanf(pointerOnData, "rotate (%f %f %f) %n", &angle, &xxx, &yyy, &n) == 3) {
+		} else {
+			ESVG_ERROR("Parsing scale() with wrong data ... '" << data << "'");
+		}
+	}
+	data = extractTransformData(inputString, "rotate");
+	if (data.size() != 0) {
+		float angle, xxx, yyy;
+		if (sscanf(data.c_str(), "%f %f %f", &angle, &xxx, &yyy) == 3) {
 			angle = angle / 180 * M_PI;
 			m_transformMatrix *= etk::mat2Translate(vec2(-xxx, -yyy));
 			m_transformMatrix *= etk::mat2Rotate(angle);
 			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
-		} else if (sscanf(pointerOnData, "rotate (%f) %n", &angle, &n) == 1) {
+		} else if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Rotate(angle);
-		} else if (sscanf(pointerOnData, "skewX (%f) %n", &angle, &n) == 1) {
+		} else {
+			ESVG_ERROR("Parsing rotate() with wrong data ... '" << data << "'");
+		}
+	}
+	data = extractTransformData(inputString, "skewX");
+	if (data.size() != 0) {
+		float angle;
+		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Skew(vec2(angle, 0.0f));
-		} else if (sscanf(pointerOnData, "skewY (%f) %n", &angle, &n) == 1) {
+		} else {
+			ESVG_ERROR("Parsing skewX() with wrong data ... '" << data << "'");
+		}
+	}
+	data = extractTransformData(inputString, "skewY");
+	if (data.size() != 0) {
+		float angle;
+		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
 			m_transformMatrix *= etk::mat2Skew(vec2(0.0f, angle));
 		} else {
-			break;
+			ESVG_ERROR("Parsing skewY() with wrong data ... '" << data << "'");
 		}
-		pointerOnData += n;
 	}
 }
 

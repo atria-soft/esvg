@@ -11,6 +11,9 @@
 #include <esvg/LinearGradient.h>
 #include <esvg/esvg.h>
 
+#undef __class__
+#define __class__	"render:DynamicColorLinear"
+
 esvg::render::DynamicColorLinear::DynamicColorLinear(const std::string& _link, const mat2& _mtx) :
   m_colorName(_link),
   m_matrix(_mtx),
@@ -45,19 +48,46 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 	if (m_data.size() < 2) {
 		return etk::color::purple;
 	}
-	vec2 vectorBase = m_pos2 - m_pos1;
-	vec2 vectorOrtho(vectorBase.y(), -vectorBase.x());
-	vec2 intersec = getIntersect(m_pos1,                   vectorBase,
-	                             vec2(_pos.x(), _pos.y()), vectorOrtho);
-	float baseSize = vectorBase.length();
-	float baseDraw = (m_pos1 - intersec).length();
-	float ratio = baseDraw / baseSize;
+	#if 0
+		vec2 vectorBase = m_pos2 - m_pos1;
+		vec2 vectorOrtho(vectorBase.y(), -vectorBase.x());
+		vec2 intersec = getIntersect(m_pos1,                   vectorBase,
+		                             vec2(_pos.x(), _pos.y()), vectorOrtho);
+		float baseSize = vectorBase.length();
+		float baseDraw = (m_pos1 - intersec).length();
+		float ratio = baseDraw / baseSize;
+	#else
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+		vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
+		                              vec2(_pos.x(), _pos.y()), m_axeY);
+		vec2 intersecY = getIntersect(m_pos1,                   m_axeY,
+		                              vec2(_pos.x(), _pos.y()), m_axeX);
+		float baseDrawX = (m_pos1 - intersecX).length();
+		float baseDrawY = (m_pos1 - intersecY).length();
+		float ratio = 0.0f;
+		if (m_baseSize.x() != 0.0f) {
+			if (m_baseSize.y() != 0.0f) {
+				ratio += baseDrawX/m_baseSize.x() * 0.5f;
+			} else {
+				ratio += baseDrawX/m_baseSize.x();
+			}
+		}
+		if (m_baseSize.y() != 0.0f) {
+			if (m_baseSize.x() != 0.0f) {
+				ratio += baseDrawY/m_baseSize.y() * 0.5f;
+			} else {
+				ratio += baseDrawY/m_baseSize.y();
+			}
+		}
+	#endif
+	//ESVG_DEBUG("plop " << ratio);
 	if (ratio <= m_data[0].first*0.01f) {
 		return m_data[0].second;
 	}
 	if (ratio >= m_data.back().first*0.01f) {
 		return m_data.back().second;
 	}
+	
 	for (size_t iii=1; iii<m_data.size(); ++iii) {
 		if (ratio <= m_data[iii].first*0.01f) {
 			float localRatio = ratio - m_data[iii-1].first*0.01f;
@@ -104,9 +134,23 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	// Move the positions ...
 	m_pos1 = m_matrix * m_pos1;
 	m_pos2 = m_matrix * m_pos2;
+	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+	m_axeX = m_matrix.applyScaleRotation(vec2(1.0f, 0.0f));
+	m_axeY = m_matrix.applyScaleRotation(vec2(0.0f, 1.0f));
+	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+	vec2 intersecX = getIntersect(m_pos1, m_axeX,
+	                              m_pos2, m_axeY);
+	vec2 intersecY = getIntersect(m_pos1, m_axeY,
+	                              m_pos2, m_axeX);
+	m_baseSize = vec2((m_pos1 - intersecX).length(),
+	                  (m_pos1 - intersecY).length());
+	// get all the colors
 	m_data = gradient->getColors();
 }
 
+
+#undef __class__
+#define __class__	"render:DynamicColor"
 
 std::shared_ptr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx) {
 	// Check if need to create a color:

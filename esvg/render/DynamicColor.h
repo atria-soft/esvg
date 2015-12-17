@@ -53,6 +53,9 @@ namespace esvg {
 				std::pair<vec2, vec2> m_viewPort;
 				vec2 m_pos1;
 				vec2 m_pos2;
+				vec2 m_axeX;
+				vec2 m_axeY;
+				vec2 m_baseSize;
 				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
 				DynamicColorLinear(const std::string& _link, const mat2& _mtx);

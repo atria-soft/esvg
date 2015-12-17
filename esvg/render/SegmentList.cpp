@@ -28,6 +28,16 @@ void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, con
 	m_data.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
+void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1, bool _disableHorizontal) {
+	// Skip horizontal Segments
+	if (    _disableHorizontal == true
+	     && _pos0.m_pos.y() == _pos1.m_pos.y()) {
+		// remove /0 operation
+		return;
+	}
+	m_data.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
+}
+
 std::pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
 	std::pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
 	for (auto &it : m_data) {
