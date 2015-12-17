@@ -145,7 +145,7 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	m_baseSize = vec2((m_pos1 - intersecX).length(),
 	                  (m_pos1 - intersecY).length());
 	// get all the colors
-	m_data = gradient->getColors();
+	m_data = gradient->getColors(_document);
 }
 
 

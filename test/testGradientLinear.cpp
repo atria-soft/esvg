@@ -167,3 +167,23 @@ TEST(TestGradientLinear, diag2scale) {
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2scale.svg", data);
 	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2scale.bmp", g_visualDebug);
 }
+
+TEST(TestGradientLinear, internalHref) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2Values'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%' xlink:href='#grad2Values' />\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_internalHref.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_internalHref.bmp", g_visualDebug);
+}

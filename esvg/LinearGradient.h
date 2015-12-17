@@ -12,11 +12,13 @@
 #include <esvg/Base.h>
 
 namespace esvg {
+	class Document;
 	class LinearGradient : public esvg::Base {
 		private:
 			esvg::Dimension m_pos1; //!< gradient position x1 y1
 			esvg::Dimension m_pos2; //!< gradient position x2 y2
-			std::vector<std::pair<float, etk::Color<float,4>>> m_data;
+			std::string m_href; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
+			std::vector<std::pair<float, etk::Color<float,4>>> m_data; //!< incompatible with href
 		public:
 			LinearGradient(PaintState _parentPaintState);
 			~LinearGradient();
@@ -26,7 +28,7 @@ namespace esvg {
 		public:
 			const esvg::Dimension& getPosition1();
 			const esvg::Dimension& getPosition2();
-			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors();
+			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors(esvg::Document* _document);
 	};
 };
 

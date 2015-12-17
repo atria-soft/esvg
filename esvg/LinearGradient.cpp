@@ -10,6 +10,7 @@
 #include <esvg/LinearGradient.h>
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
+#include <esvg/esvg.h>
 
 #undef __class__
 #define __class__	"LinearGradient"
@@ -42,11 +43,21 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 	
 	std::string contentX = _element->getAttribute("x1");
 	std::string contentY = _element->getAttribute("y1");
-	m_pos1.set(contentX, contentY);
+	if (    contentX != ""
+	     && contentY != "") {
+		m_pos1.set(contentX, contentY);
+	}
 	contentX = _element->getAttribute("x2");
 	contentY = _element->getAttribute("y2");
-	m_pos2.set(contentX, contentY);
-	
+	if (    contentX != ""
+	     && contentY != "") {
+		m_pos2.set(contentX, contentY);
+	}
+	// note: xlink:href is incompatible with subNode "stop"
+	m_href = _element->getAttribute("xlink:href");
+	if (m_href.size() != 0) {
+		m_href = std::string(m_href.begin()+1, m_href.end());
+	}
 	// parse all sub node :
 	for(int32_t iii=0; iii<_element->size() ; iii++) {
 		std::shared_ptr<exml::Element> child = _element->getElement(iii);
@@ -83,6 +94,12 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 			ESVG_ERROR("(l " << child->getPos() << ") node not suported : \"" << child->getValue() << "\" must be [stop]");
 		}
 	}
+	if (m_data.size() != 0) {
+		if (m_href != "") {
+			ESVG_ERROR("(l " << _element->getPos() << ") node can not have an xlink:href element with sub node named: stop ==> removing href");
+			m_href = "";
+		}
+	}
 	return true;
 }
 
@@ -105,8 +122,25 @@ const esvg::Dimension& esvg::LinearGradient::getPosition2() {
 	return m_pos2;
 }
 
-const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors() {
-	return m_data;
+const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors(esvg::Document* _document) {
+	if (m_href == "") {
+		return m_data;
+	}
+	if (_document == nullptr) {
+		ESVG_ERROR("Get nullptr input for document");
+		return m_data;
+	}
+	std::shared_ptr<esvg::Base> base = _document->getReference(m_href);
+	if (base == nullptr) {
+		ESVG_ERROR("Can not get base : '" << m_href << "'");
+		return m_data;
+	}
+	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
+	if (gradient == nullptr) {
+		ESVG_ERROR("Can not cast in a linear gradient: '" << m_href << "' ==> wrong type");
+		return m_data;
+	}
+	return gradient->getColors(_document);
 }
 
 
