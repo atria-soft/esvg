@@ -12,7 +12,7 @@
 static const char* values[] = {
 	"pad",
 	"reflect",
-	"repeate"
+	"repeat"
 };
 
 std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::spreadMethod _obj) {

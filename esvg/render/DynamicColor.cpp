@@ -58,9 +58,27 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		vec2 vectorBaseDraw = intersec - m_pos1;
 		float baseDraw = vectorBaseDraw.length();
 		ratio = baseDraw / baseSize;
-		//ratio -= float(int32_t(ratio));
-		if (vectorBase.dot(vectorBaseDraw) < 0) {
-			ratio *= -1.0;
+		switch(m_spread) {
+			case spreadMethod_pad:
+				if (vectorBase.dot(vectorBaseDraw) < 0) {
+					ratio *= -1.0;
+				}
+				break;
+			case spreadMethod_reflect:
+				ratio -= float((int32_t(ratio)>>1)<<1);
+				if (ratio > 1.0f) {
+					ratio = 2.0f-ratio;
+				}
+				break;
+			case spreadMethod_repeat:
+				if (vectorBase.dot(vectorBaseDraw) < 0) {
+					ratio *= -1.0;
+				}
+				ratio -= float(int32_t(ratio));
+				if (ratio <0.0f) {
+					ratio = 1.0f-std::abs(ratio);
+				}
+				break;
 		}
 	} else {
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
@@ -72,25 +90,60 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		vec2 vectorBaseDrawY = intersecY - m_pos1;
 		float baseDrawX = vectorBaseDrawX.length();
 		float baseDrawY = vectorBaseDrawY.length();
-		if (m_baseSize.x() != 0.0f) {
-			float val = baseDrawX/m_baseSize.x();
+		#if 1
 			if (m_axeX.dot(vectorBaseDrawX) < 0) {
-				val *= -1.0;
+				baseDrawX *= -1.0f;
 			}
-			if (m_baseSize.y() == 0.0f) {
-				val *= 0.5f;
-			}
-			ratio += val;
-		}
-		if (m_baseSize.y() != 0.0f) {
-			float val = baseDrawY/m_baseSize.y();
 			if (m_axeY.dot(vectorBaseDrawY) < 0) {
-				val *= -1.0;
+				baseDrawY *= -1.0f;
 			}
-			if (m_baseSize.x() == 0.0f) {
-				val *= 0.5f;
+			if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+				if (    m_baseSize.x() != 0.0f
+				     && m_baseSize.y() != 0.0f) {
+					ratio = (baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
+				} else if (m_baseSize.x() != 0.0f) {
+					ratio = baseDrawX/m_baseSize.x();
+				} else {
+					ratio = baseDrawY/m_baseSize.y();
+				}
+			} else {
+				ratio = 1.0f;
 			}
-			ratio += val;
+		#else
+			bool dotX = m_axeX.dot(vectorBaseDrawX) < 0;
+			bool dotY = m_axeY.dot(vectorBaseDrawY) < 0;
+			if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+				if (dotX != dotY) {
+					if (dotX == false) {
+						ratio = (-baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
+					} else {
+						ratio = (baseDrawX*m_baseSize.y() - baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
+					}
+					if (ratio < 0.0f) {
+						ratio *= -1;
+					}
+				} else {
+					ratio = (baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
+				}
+			}
+		#endif
+		switch(m_spread) {
+			case spreadMethod_pad:
+				// nothing to do ...
+				break;
+			case spreadMethod_reflect:
+				ratio = std::abs(ratio);
+				ratio -= float((int32_t(ratio)>>1)<<1);
+				if (ratio > 1.0f) {
+					ratio = 2.0f-ratio;
+				}
+				break;
+			case spreadMethod_repeat:
+				ratio -= float(int32_t(ratio));
+				if (ratio <0.0f) {
+					ratio = 1.0f-std::abs(ratio);
+				}
+				break;
 		}
 	}
 	if (ratio <= m_data[0].first*0.01f) {
@@ -148,8 +201,19 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	m_pos1 = m_matrix * m_pos1;
 	m_pos2 = m_matrix * m_pos2;
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-	m_axeX = m_matrix.applyScaleRotation(vec2(1.0f, 0.0f));
-	m_axeY = m_matrix.applyScaleRotation(vec2(0.0f, 1.0f));
+	vec2 delta = m_pos2 - m_pos1;
+	if (delta.x() < 0.0f) {
+		m_axeX = vec2(-1.0f, 0.0f);
+	} else {
+		m_axeX = vec2(1.0f, 0.0f);
+	}
+	if (delta.y() < 0.0f) {
+		m_axeY = vec2(0.0f, -1.0f);
+	} else {
+		m_axeY = vec2(0.0f, 1.0f);
+	}
+	m_axeX = m_matrix.applyScaleRotation(m_axeX);
+	m_axeY = m_matrix.applyScaleRotation(m_axeY);
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
 	vec2 intersecX = getIntersect(m_pos1, m_axeX,
 	                              m_pos2, m_axeY);

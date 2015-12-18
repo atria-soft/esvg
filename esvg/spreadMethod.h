@@ -15,7 +15,7 @@ namespace esvg {
 	enum spreadMethod {
 		spreadMethod_pad,
 		spreadMethod_reflect,
-		spreadMethod_repeate
+		spreadMethod_repeat
 	};
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information

@@ -56,24 +56,22 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 	contentX = _element->getAttribute("gradientUnits");
 	if (contentX == "userSpaceOnUse") {
 		m_unit = gradientUnits_userSpaceOnUse;
-	} else if (contentX == "objectBoundingBox") {
-		m_unit = gradientUnits_objectBoundingBox;
 	} else {
-		// by default we will use "objectBoundingBox"
 		m_unit = gradientUnits_objectBoundingBox;
-		if (contentX.size() != 0) {
+		if (    contentX.size() != 0
+		     && contentX != "objectBoundingBox") {
 			ESVG_ERROR("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
 		}
 	}
 	contentX = _element->getAttribute("spreadMethod");
 	if (contentX == "reflect") {
 		m_spread = spreadMethod_reflect;
-	} else if (contentX == "repeate") {
-		m_spread = spreadMethod_repeate;
+	} else if (contentX == "repeat") {
+		m_spread = spreadMethod_repeat;
 	} else {
-		// by default we will use "none"
 		m_spread = spreadMethod_pad;
-		if (contentX.size() != 0) {
+		if (    contentX.size() != 0
+		     && contentX != "pad") {
 			ESVG_ERROR("Parsing error of 'spreadMethod' ==> not suported value: '" << contentX << "' not in : {reflect/repeate/pad} use pad");
 		}
 	}
