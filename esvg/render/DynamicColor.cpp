@@ -48,15 +48,16 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 	if (m_data.size() < 2) {
 		return etk::color::purple;
 	}
-	#if 0
+	float ratio = 0.0f;
+	if (m_boundingBoxMode == false) {
 		vec2 vectorBase = m_pos2 - m_pos1;
 		vec2 vectorOrtho(vectorBase.y(), -vectorBase.x());
 		vec2 intersec = getIntersect(m_pos1,                   vectorBase,
 		                             vec2(_pos.x(), _pos.y()), vectorOrtho);
 		float baseSize = vectorBase.length();
 		float baseDraw = (m_pos1 - intersec).length();
-		float ratio = baseDraw / baseSize;
-	#else
+		ratio = baseDraw / baseSize;
+	} else {
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
 		vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
 		                              vec2(_pos.x(), _pos.y()), m_axeY);
@@ -64,7 +65,6 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		                              vec2(_pos.x(), _pos.y()), m_axeX);
 		float baseDrawX = (m_pos1 - intersecX).length();
 		float baseDrawY = (m_pos1 - intersecY).length();
-		float ratio = 0.0f;
 		if (m_baseSize.x() != 0.0f) {
 			if (m_baseSize.y() != 0.0f) {
 				ratio += baseDrawX/m_baseSize.x() * 0.5f;
@@ -79,7 +79,7 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 				ratio += baseDrawY/m_baseSize.y();
 			}
 		}
-	#endif
+	}
 	//ESVG_DEBUG("plop " << ratio);
 	if (ratio <= m_data[0].first*0.01f) {
 		return m_data[0].second;
@@ -87,7 +87,6 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 	if (ratio >= m_data.back().first*0.01f) {
 		return m_data.back().second;
 	}
-	
 	for (size_t iii=1; iii<m_data.size(); ++iii) {
 		if (ratio <= m_data[iii].first*0.01f) {
 			float localRatio = ratio - m_data[iii-1].first*0.01f;
@@ -118,6 +117,7 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	}
 	ESVG_INFO("get for color linear:");
 	gradient->display(2);
+	m_boundingBoxMode = gradient->m_unit == esvg::gradientUnits_objectBoundingBox;
 	ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
 	vec2 size = m_viewPort.second - m_viewPort.first;
 	

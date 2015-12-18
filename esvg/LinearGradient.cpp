@@ -53,6 +53,18 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 	     && contentY != "") {
 		m_pos2.set(contentX, contentY);
 	}
+	contentX = _element->getAttribute("gradientUnits");
+	if (contentX == "userSpaceOnUse") {
+		m_unit = gradientUnits_userSpaceOnUse;
+	} else if (contentX == "objectBoundingBox") {
+		m_unit = gradientUnits_objectBoundingBox;
+	} else {
+		// by default we will use "objectBoundingBox"
+		m_unit = gradientUnits_objectBoundingBox;
+		if (contentX.size() != 0) {
+			ESVG_ERROR("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox}");
+		}
+	}
 	// note: xlink:href is incompatible with subNode "stop"
 	m_href = _element->getAttribute("xlink:href");
 	if (m_href.size() != 0) {
@@ -71,7 +83,10 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 			std::string content = child->getAttribute("offset");
 			if (content.size()!=0) {
 				std::pair<float, enum esvg::distance> tmp = parseLength2(content);
-				if (tmp.second != esvg::distance_pourcent) {
+				if (tmp.second == esvg::distance_pixel) {
+					// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
+					offset = tmp.first*100.0f;
+				} else if (tmp.second != esvg::distance_pourcent) {
 					ESVG_ERROR("offset : " << content << " res=" << tmp.first << "," << tmp.second << " Not support other than pourcent %");
 				} else {
 					offset = tmp.first;

@@ -48,6 +48,7 @@ namespace esvg {
 		};
 		class DynamicColorLinear : public esvg::render::DynamicColor {
 			public:
+				bool m_boundingBoxMode;
 				std::string m_colorName;
 				mat2 m_matrix;
 				std::pair<vec2, vec2> m_viewPort;

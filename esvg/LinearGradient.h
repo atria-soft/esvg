@@ -13,10 +13,17 @@
 
 namespace esvg {
 	class Document;
+	enum gradientUnits {
+		gradientUnits_userSpaceOnUse,
+		gradientUnits_objectBoundingBox
+	};
 	class LinearGradient : public esvg::Base {
 		private:
 			esvg::Dimension m_pos1; //!< gradient position x1 y1
 			esvg::Dimension m_pos2; //!< gradient position x2 y2
+		public:
+			enum gradientUnits m_unit;
+		private:
 			std::string m_href; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
 			std::vector<std::pair<float, etk::Color<float,4>>> m_data; //!< incompatible with href
 		public:

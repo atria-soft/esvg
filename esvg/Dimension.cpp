@@ -102,7 +102,8 @@ static enum esvg::distance parseType(std::string& _config) {
 		type = esvg::distance_meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
-		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		type = esvg::distance_pixel;
+		ESVG_VERBOSE("default dimention type for: '" << _config << "' ==> pixel");
 	}
 	return type;
 }
