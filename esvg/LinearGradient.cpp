@@ -62,7 +62,19 @@ bool esvg::LinearGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 		// by default we will use "objectBoundingBox"
 		m_unit = gradientUnits_objectBoundingBox;
 		if (contentX.size() != 0) {
-			ESVG_ERROR("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox}");
+			ESVG_ERROR("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
+		}
+	}
+	contentX = _element->getAttribute("spreadMethod");
+	if (contentX == "reflect") {
+		m_spread = spreadMethod_reflect;
+	} else if (contentX == "repeate") {
+		m_spread = spreadMethod_repeate;
+	} else {
+		// by default we will use "none"
+		m_spread = spreadMethod_pad;
+		if (contentX.size() != 0) {
+			ESVG_ERROR("Parsing error of 'spreadMethod' ==> not suported value: '" << contentX << "' not in : {reflect/repeate/pad} use pad");
 		}
 	}
 	// note: xlink:href is incompatible with subNode "stop"

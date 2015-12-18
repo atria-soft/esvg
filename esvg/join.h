@@ -17,6 +17,10 @@ namespace esvg {
 		join_round,
 		join_bevel
 	};
+	/**
+	 * @brief Debug operator To display the curent element in a Human redeable information
+	 */
+	std::ostream& operator <<(std::ostream& _os, enum esvg::join _obj);
 }
 
 #endif

@@ -14,6 +14,8 @@
 #include <etk/Color.h>
 #include <etk/math/Vector2D.h>
 #include <etk/math/Matrix2.h>
+#include <esvg/gradientUnits.h>
+#include <esvg/spreadMethod.h>
 
 namespace esvg {
 	class Document;
@@ -48,7 +50,8 @@ namespace esvg {
 		};
 		class DynamicColorLinear : public esvg::render::DynamicColor {
 			public:
-				bool m_boundingBoxMode;
+				esvg::spreadMethod m_spread;
+				esvg::gradientUnits m_unit;
 				std::string m_colorName;
 				mat2 m_matrix;
 				std::pair<vec2, vec2> m_viewPort;

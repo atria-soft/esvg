@@ -49,7 +49,7 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		return etk::color::purple;
 	}
 	float ratio = 0.0f;
-	if (m_boundingBoxMode == false) {
+	if (m_unit == gradientUnits_userSpaceOnUse) {
 		vec2 vectorBase = m_pos2 - m_pos1;
 		vec2 vectorOrtho(vectorBase.y(), -vectorBase.x());
 		vec2 intersec = getIntersect(m_pos1,                   vectorBase,
@@ -129,7 +129,8 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	}
 	ESVG_INFO("get for color linear:");
 	gradient->display(2);
-	m_boundingBoxMode = gradient->m_unit == esvg::gradientUnits_objectBoundingBox;
+	m_unit = gradient->m_unit;
+	m_spread = gradient->m_spread;
 	ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
 	vec2 size = m_viewPort.second - m_viewPort.first;
 	
