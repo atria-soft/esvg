@@ -62,8 +62,6 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const esvg::render::Weight& _weightStroke,
                            const std::shared_ptr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
-	int32_t sizeX = m_size.x();
-	int32_t sizeY = m_size.y();
 	if (_colorFill != nullptr) {
 		//_colorFill->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorFill->generate(m_document);
@@ -72,19 +70,10 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 		//_colorStroke->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorStroke->generate(m_document);
 	}
-	#if DEBUG
-		sizeX *= m_factor;
-		sizeY *= m_factor;
-	#endif
-	
 	// all together
-	for (int32_t yyy=0; yyy<sizeY; ++yyy) {
-		for (int32_t xxx=0; xxx<sizeX; ++xxx) {
-			#if DEBUG
-				ivec2 pos(xxx/m_factor, yyy/m_factor);
-			#else
-				ivec2 pos(xxx, yyy);
-			#endif
+	for (int32_t yyy=0; yyy<m_size.y(); ++yyy) {
+		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
+			ivec2 pos(xxx, yyy);
 			float valueFill = _weightFill.get(pos);
 			float valueStroke = _weightStroke.get(pos);
 			// calculate merge of stroke and fill value:
@@ -102,7 +91,15 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			}
 			etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
 			intermediateColor.setA(intermediateColor.a() * _opacity);
-			m_buffer[sizeX*yyy + xxx] = mergeColor(m_buffer[sizeX*yyy + xxx], intermediateColor);
+			#if DEBUG
+				for (int32_t deltaY=0; deltaY<m_factor; ++deltaY) {
+					for (int32_t deltaX=0; deltaX<m_factor; ++deltaX) {
+						m_buffer[m_size.x()*m_factor*(yyy+deltaY) + (xxx+deltaX)] = mergeColor(m_buffer[m_size.x()*m_factor*(yyy+deltaY) + (xxx+deltaX)], intermediateColor);;
+					}
+				}
+			#else
+				m_buffer[m_size.x()*yyy + xxx] = mergeColor(m_buffer[m_size.x()*yyy + xxx], intermediateColor);
+			#endif
 		}
 	}
 	#ifdef DEBUG
