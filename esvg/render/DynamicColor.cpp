@@ -55,32 +55,44 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		vec2 intersec = getIntersect(m_pos1,                   vectorBase,
 		                             vec2(_pos.x(), _pos.y()), vectorOrtho);
 		float baseSize = vectorBase.length();
-		float baseDraw = (m_pos1 - intersec).length();
+		vec2 vectorBaseDraw = intersec - m_pos1;
+		float baseDraw = vectorBaseDraw.length();
 		ratio = baseDraw / baseSize;
+		//ratio -= float(int32_t(ratio));
+		if (vectorBase.dot(vectorBaseDraw) < 0) {
+			ratio *= -1.0;
+		}
 	} else {
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
 		vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
 		                              vec2(_pos.x(), _pos.y()), m_axeY);
 		vec2 intersecY = getIntersect(m_pos1,                   m_axeY,
 		                              vec2(_pos.x(), _pos.y()), m_axeX);
-		float baseDrawX = (m_pos1 - intersecX).length();
-		float baseDrawY = (m_pos1 - intersecY).length();
+		vec2 vectorBaseDrawX = intersecX - m_pos1;
+		vec2 vectorBaseDrawY = intersecY - m_pos1;
+		float baseDrawX = vectorBaseDrawX.length();
+		float baseDrawY = vectorBaseDrawY.length();
 		if (m_baseSize.x() != 0.0f) {
-			if (m_baseSize.y() != 0.0f) {
-				ratio += baseDrawX/m_baseSize.x() * 0.5f;
-			} else {
-				ratio += baseDrawX/m_baseSize.x();
+			float val = baseDrawX/m_baseSize.x();
+			if (m_axeX.dot(vectorBaseDrawX) < 0) {
+				val *= -1.0;
 			}
+			if (m_baseSize.y() == 0.0f) {
+				val *= 0.5f;
+			}
+			ratio += val;
 		}
 		if (m_baseSize.y() != 0.0f) {
-			if (m_baseSize.x() != 0.0f) {
-				ratio += baseDrawY/m_baseSize.y() * 0.5f;
-			} else {
-				ratio += baseDrawY/m_baseSize.y();
+			float val = baseDrawY/m_baseSize.y();
+			if (m_axeY.dot(vectorBaseDrawY) < 0) {
+				val *= -1.0;
 			}
+			if (m_baseSize.x() == 0.0f) {
+				val *= 0.5f;
+			}
+			ratio += val;
 		}
 	}
-	//ESVG_DEBUG("plop " << ratio);
 	if (ratio <= m_data[0].first*0.01f) {
 		return m_data[0].second;
 	}

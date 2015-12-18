@@ -71,6 +71,23 @@ TEST(TestGradientLinear, diag1) {
 	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag1.bmp", g_visualDebug);
 }
 
+TEST(TestGradientLinear, diag1Partiel) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='70%' y2='70%'>\n"
+	                 "			<stop offset='0%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+	                 "		</linearGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientLinear_diag1Partiel.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag1Partiel.bmp", g_visualDebug);
+}
+
 TEST(TestGradientLinear, diag2) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
