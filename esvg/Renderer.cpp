@@ -94,7 +94,8 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			#if DEBUG
 				for (int32_t deltaY=0; deltaY<m_factor; ++deltaY) {
 					for (int32_t deltaX=0; deltaX<m_factor; ++deltaX) {
-						m_buffer[m_size.x()*m_factor*(yyy+deltaY) + (xxx+deltaX)] = mergeColor(m_buffer[m_size.x()*m_factor*(yyy+deltaY) + (xxx+deltaX)], intermediateColor);;
+						int32_t id = m_size.x()*m_factor*(yyy*m_factor+deltaY) + (xxx*m_factor+deltaX);
+						m_buffer[id] = mergeColor(m_buffer[id], intermediateColor);
 					}
 				}
 			#else
