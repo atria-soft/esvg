@@ -8,6 +8,7 @@
 
 #include <esvg/debug.h>
 #include <esvg/LinearGradient.h>
+#include <esvg/RadialGradient.h>
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 #include <esvg/esvg.h>
@@ -15,9 +16,13 @@
 #undef __class__
 #define __class__	"LinearGradient"
 
-esvg::LinearGradient::LinearGradient(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
-	m_pos1.set(vec2(0,0), esvg::distance_pixel);
-	m_pos2.set(vec2(0,0), esvg::distance_pixel);
+esvg::LinearGradient::LinearGradient(PaintState _parentPaintState) :
+  esvg::Base(_parentPaintState),
+  m_pos1(vec2(50,50), esvg::distance_pourcent),
+  m_pos2(vec2(50,50), esvg::distance_pourcent),
+  m_unit(gradientUnits_objectBoundingBox),
+  m_spread(spreadMethod_pad) {
+	
 }
 
 esvg::LinearGradient::~LinearGradient() {
@@ -160,12 +165,16 @@ const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::LinearGradient::
 		ESVG_ERROR("Can not get base : '" << m_href << "'");
 		return m_data;
 	}
-	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
-	if (gradient == nullptr) {
-		ESVG_ERROR("Can not cast in a linear gradient: '" << m_href << "' ==> wrong type");
-		return m_data;
+	std::shared_ptr<esvg::RadialGradient> gradientR = std::dynamic_pointer_cast<esvg::RadialGradient>(base);
+	if (gradientR == nullptr) {
+		std::shared_ptr<esvg::LinearGradient> gradientL = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
+		if (gradientL == nullptr) {
+			ESVG_ERROR("Can not cast in a linear/radial gradient: '" << m_href << "' ==> wrong type");
+			return m_data;
+		}
+		return gradientL->getColors(_document);
 	}
-	return gradient->getColors(_document);
+	return gradientR->getColors(_document);
 }
 
 

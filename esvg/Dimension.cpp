@@ -280,3 +280,174 @@ namespace etk {
 		return from_string(_variableRet, etk::to_string(_value));
 	}
 };
+
+
+#undef __class__
+#define __class__	"Dimension1D"
+
+esvg::Dimension1D::Dimension1D() :
+  m_data(0.0f),
+  m_type(esvg::distance_pixel) {
+	// notinh to do ...
+}
+
+esvg::Dimension1D::Dimension1D(float _size, enum esvg::distance _type) :
+  m_data(0.0f),
+  m_type(esvg::distance_pixel) {
+	set(_size, _type);
+}
+
+void esvg::Dimension1D::set(std::string _config) {
+	m_data = 0;
+	m_type = esvg::distance_pixel;
+	enum distance type = esvg::distance_pixel;
+	if (etk::end_with(_config, "%", false) == true) {
+		type = esvg::distance_pourcent;
+		_config.erase(_config.size()-1, 1);
+	} else if (etk::end_with(_config, "px",false) == true) {
+		type = esvg::distance_pixel;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "ft",false) == true) {
+		type = esvg::distance_foot;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "in",false) == true) {
+		type = esvg::distance_inch;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "km",false) == true) {
+		type = esvg::distance_kilometer;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "mm",false) == true) {
+		type = esvg::distance_millimeter;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "cm",false) == true) {
+		type = esvg::distance_centimeter;
+		_config.erase(_config.size()-2, 2);
+	} else if (etk::end_with(_config, "m",false) == true) {
+		type = esvg::distance_meter;
+		_config.erase(_config.size()-1, 1);
+	} else {
+		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		return;
+	}
+	float tmp = etk::string_to_float(_config);
+	set(tmp, type);
+	ESVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
+}
+
+esvg::Dimension1D::~Dimension1D() {
+	// nothing to do ...
+}
+
+esvg::Dimension1D::operator std::string() const {
+	std::string str;
+	str = getValue();
+	switch(getType()) {
+		case esvg::distance_pourcent:
+			str += "%";
+			break;
+		case esvg::distance_pixel:
+			str += "px";
+			break;
+		case esvg::distance_meter:
+			str += "m";
+			break;
+		case esvg::distance_centimeter:
+			str += "cm";
+			break;
+		case esvg::distance_millimeter:
+			str += "mm";
+			break;
+		case esvg::distance_kilometer:
+			str += "km";
+			break;
+		case esvg::distance_inch:
+			str += "in";
+			break;
+		case esvg::distance_foot:
+			str += "ft";
+			break;
+		case esvg::distance_element:
+			str += "em";
+			break;
+		case esvg::distance_ex:
+			str += "ex";
+			break;
+		case esvg::distance_point:
+			str += "pt";
+			break;
+		case esvg::distance_pc:
+			str += "pc";
+			break;
+	}
+	return str;
+}
+
+void esvg::Dimension1D::set(float _size, enum esvg::distance _type) {
+	m_data = _size;
+	m_type = _type;
+	switch(_type) {
+		case esvg::distance_pourcent:
+		case esvg::distance_pixel:
+			// nothing to do: Supported ...
+			break;
+		case esvg::distance_meter:
+		case esvg::distance_centimeter:
+		case esvg::distance_millimeter:
+		case esvg::distance_kilometer:
+		case esvg::distance_inch:
+		case esvg::distance_foot:
+		case esvg::distance_element:
+		case esvg::distance_ex:
+		case esvg::distance_point:
+		case esvg::distance_pc:
+			ESVG_ERROR("Does not support other than Px and % type of dimention1D : " << _type << " automaticly convert with {72,72} pixel/inch");
+			break;
+	}
+}
+
+float esvg::Dimension1D::getPixel(float _upperSize) const {
+	switch(m_type) {
+		case esvg::distance_pourcent:
+			return _upperSize*m_data*0.01f;
+		case esvg::distance_pixel:
+			return m_data;
+		case esvg::distance_meter:
+			return m_data*meterToMillimeter*basicRatio;
+		case esvg::distance_centimeter:
+			return m_data*centimeterToMillimeter*basicRatio;
+		case esvg::distance_millimeter:
+			return m_data*basicRatio;
+		case esvg::distance_kilometer:
+			return m_data*kilometerToMillimeter*basicRatio;
+		case esvg::distance_inch:
+			return m_data*inchToMillimeter*basicRatio;
+		case esvg::distance_foot:
+			return m_data*footToMillimeter*basicRatio;
+	}
+	return 128.0f;
+}
+
+std::ostream& esvg::operator <<(std::ostream& _os, const esvg::Dimension1D& _obj) {
+	_os << _obj.getValue() << _obj.getType();
+	return _os;
+}
+
+namespace etk {
+	template<> std::string to_string<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
+		return _obj;
+	}
+	template<> std::u32string to_u32string<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
+		return etk::to_u32string(etk::to_string(_obj));
+	}
+	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const std::string& _value) {
+		_variableRet = esvg::Dimension1D(_value);
+		return true;
+	}
+	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const std::u32string& _value) {
+		return from_string(_variableRet, etk::to_string(_value));
+	}
+};
+
+
+
+

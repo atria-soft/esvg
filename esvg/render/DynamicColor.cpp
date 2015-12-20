@@ -43,7 +43,7 @@ static vec2 getIntersect(const vec2& _point1,
 	return _point2;
 }
 
-// TODO : This can optimize ... really slow ...
+// TODO : This can optimize ... really slow ... and not linear
 etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos) {
 	if (m_data.size() < 2) {
 		return etk::color::purple;
@@ -90,43 +90,24 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 		vec2 vectorBaseDrawY = intersecY - m_pos1;
 		float baseDrawX = vectorBaseDrawX.length();
 		float baseDrawY = vectorBaseDrawY.length();
-		#if 1
-			if (m_axeX.dot(vectorBaseDrawX) < 0) {
-				baseDrawX *= -1.0f;
-			}
-			if (m_axeY.dot(vectorBaseDrawY) < 0) {
-				baseDrawY *= -1.0f;
-			}
-			if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
-				if (    m_baseSize.x() != 0.0f
-				     && m_baseSize.y() != 0.0f) {
-					ratio = (baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
-				} else if (m_baseSize.x() != 0.0f) {
-					ratio = baseDrawX/m_baseSize.x();
-				} else {
-					ratio = baseDrawY/m_baseSize.y();
-				}
+		if (m_axeX.dot(vectorBaseDrawX) < 0) {
+			baseDrawX *= -1.0f;
+		}
+		if (m_axeY.dot(vectorBaseDrawY) < 0) {
+			baseDrawY *= -1.0f;
+		}
+		if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+			if (    m_baseSize.x() != 0.0f
+			     && m_baseSize.y() != 0.0f) {
+				ratio = (baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
+			} else if (m_baseSize.x() != 0.0f) {
+				ratio = baseDrawX/m_baseSize.x();
 			} else {
-				ratio = 1.0f;
+				ratio = baseDrawY/m_baseSize.y();
 			}
-		#else
-			bool dotX = m_axeX.dot(vectorBaseDrawX) < 0;
-			bool dotY = m_axeY.dot(vectorBaseDrawY) < 0;
-			if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
-				if (dotX != dotY) {
-					if (dotX == false) {
-						ratio = (-baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
-					} else {
-						ratio = (baseDrawX*m_baseSize.y() - baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
-					}
-					if (ratio < 0.0f) {
-						ratio *= -1;
-					}
-				} else {
-					ratio = (baseDrawX*m_baseSize.y() + baseDrawY*m_baseSize.x())/(m_baseSize.x()*m_baseSize.y()*2.0f);
-				}
-			}
-		#endif
+		} else {
+			ratio = 1.0f;
+		}
 		switch(m_spread) {
 			case spreadMethod_pad:
 				// nothing to do ...
@@ -197,9 +178,6 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	if (dimPos2.getType() == esvg::distance_pourcent) {
 		m_pos2 += m_viewPort.first;
 	}
-	// Move the positions ...
-	m_pos1 = m_matrix * m_pos1;
-	m_pos2 = m_matrix * m_pos2;
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
 	vec2 delta = m_pos2 - m_pos1;
 	if (delta.x() < 0.0f) {
@@ -212,6 +190,9 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 	} else {
 		m_axeY = vec2(0.0f, 1.0f);
 	}
+	// Move the positions ...
+	m_pos1 = m_matrix * m_pos1;
+	m_pos2 = m_matrix * m_pos2;
 	m_axeX = m_matrix.applyScaleRotation(m_axeX);
 	m_axeY = m_matrix.applyScaleRotation(m_axeY);
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..

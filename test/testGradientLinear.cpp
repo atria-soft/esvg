@@ -205,24 +205,6 @@ TEST(TestGradientLinear, internalHref) {
 	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_internalHref.bmp", g_visualDebug);
 }
 
-TEST(TestGradientLinear, inkscape) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
-	                 "<svg height='100' width='100'>\n"
-	                 "	<defs>\n"
-	                 "		<linearGradient id='grad2Values'>\n"
-	                 "			<stop offset='0' style='stop-color:#ba4f4f;stop-opacity:1' />\n"
-	                 "			<stop offset='1' style='stop-color:#57ba4f;stop-opacity:1' />\n"
-	                 "		</linearGradient>\n"
-	                 "		<linearGradient id='grad2' x1='40.653418' y1='63.601116' x2='71.911972' y2='47.372902' gradientUnits='userSpaceOnUse' xlink:href='#grad2Values' />\n"
-	                 "	</defs>\n"
-	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
-	                 "</svg>\n");
-	esvg::Document doc;
-	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_inkscape.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_inkscape.bmp", g_visualDebug);
-}
-
 
 TEST(TestGradientLinear, unitBox_spreadNone) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"

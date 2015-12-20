@@ -149,6 +149,110 @@ namespace esvg {
 	};
 	std::ostream& operator <<(std::ostream& _os, enum esvg::distance _obj);
 	std::ostream& operator <<(std::ostream& _os, const esvg::Dimension& _obj);
+	/**
+	 * @brief in the dimention class we store the data as the more usefull unit (pixel) 
+	 * but one case need to be dynamic the %, then when requested in % the register the % value
+	 */
+	class Dimension1D {
+		private:
+			float m_data;
+			enum distance m_type;
+		public:
+			/**
+			 * @brief Constructor (default :0,0 mode pixel)
+			 */
+			Dimension1D();
+			/**
+			 * @brief Constructor
+			 * @param[in] _size Requested dimention
+			 * @param[in] _type Unit of the Dimention
+			 */
+			Dimension1D(float _size, enum esvg::distance _type=esvg::distance_pixel);
+			/**
+			 * @brief Constructor
+			 * @param[in] _config dimension configuration.
+			 */
+			Dimension1D(const std::string& _config) :
+			  m_data(0.0f),
+			  m_type(esvg::distance_pixel) {
+				set(_config);
+			};
+			/**
+			 * @brief Destructor
+			 */
+			~Dimension1D();
+			
+			/**
+			 * @brief string cast :
+			 */
+			operator std::string() const;
+			
+			/**
+			 * @brief get the current dimention.
+			 * @return dimention requested.
+			 */
+			const float& getValue() const {
+				return m_data;
+			}
+			/**
+			 * @breif get the dimension type
+			 * @return the type
+			 */
+			enum distance getType() const {
+				return m_type;
+			};
+			/**
+			 * @brief set the current dimention in requested type
+			 * @param[in] _size Dimention to set
+			 * @param[in] _type Type of unit requested.
+			 */
+			void set(float _size, enum distance _type);
+			
+		public:
+			/**
+			 * @brief set the current dimention in requested type
+			 * @param[in] _config dimension configuration.
+			 */
+			void set(std::string _config);
+		public:
+			/**
+			 * @brief get the current dimention in pixel
+			 * @param[in] _upperSize Size in pixel of the upper value
+			 * @return dimention in Pixel
+			 */
+			float getPixel(float _upperSize) const;
+			/*****************************************************
+			 *    = assigment
+			 *****************************************************/
+			const Dimension1D& operator= (const Dimension1D& _obj ) {
+				if (this!=&_obj) {
+					m_data = _obj.m_data;
+					m_type = _obj.m_type;
+				}
+				return *this;
+			}
+			/*****************************************************
+			 *    == operator
+			 *****************************************************/
+			bool operator ==  (const Dimension1D& _obj) const {
+				if(    m_data == _obj.m_data
+				    && m_type == _obj.m_type) {
+					return true;
+				}
+				return false;
+			}
+			/*****************************************************
+			 *    != operator
+			 *****************************************************/
+			bool operator!= (const Dimension1D& _obj) const {
+				if(    m_data != _obj.m_data
+				    || m_type != _obj.m_type) {
+					return true;
+				}
+				return false;
+			}
+	};
+	std::ostream& operator <<(std::ostream& _os, const esvg::Dimension1D& _obj);
 };
 
 #endif
