@@ -67,7 +67,8 @@ void esvg::Dimension::set(std::string _config) {
 		type = esvg::distance_meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
-		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		type = esvg::distance_pixel;
+		ESVG_VERBOSE("default dimention type for: '" << _config << "' ==> pixel");
 		return;
 	}
 	vec2 tmp = _config;
@@ -326,8 +327,8 @@ void esvg::Dimension1D::set(std::string _config) {
 		type = esvg::distance_meter;
 		_config.erase(_config.size()-1, 1);
 	} else {
-		ESVG_CRITICAL("Can not parse dimention : \"" << _config << "\"");
-		return;
+		type = esvg::distance_pixel;
+		ESVG_VERBOSE("default dimention type for: '" << _config << "' ==> pixel");
 	}
 	float tmp = etk::string_to_float(_config);
 	set(tmp, type);

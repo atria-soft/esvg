@@ -291,7 +291,7 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 				ESVG_ERROR("'" << child->getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
-				//elementParser = std::make_shared<esvg::RadialGradient>(m_paint);
+				elementParser = std::make_shared<esvg::RadialGradient>(m_paint);
 			}
 		} else if (child->getValue() == "linearGradient") {
 			if (_isReference == false) {

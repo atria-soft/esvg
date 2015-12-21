@@ -48,22 +48,28 @@ namespace esvg {
 					// nothing to do ...
 				};
 		};
-		class DynamicColorLinear : public esvg::render::DynamicColor {
+		class DynamicColorSpecial : public esvg::render::DynamicColor {
 			public:
+				bool m_linear;
 				esvg::spreadMethod m_spread;
 				esvg::gradientUnits m_unit;
 				std::string m_colorName;
 				mat2 m_matrix;
 				std::pair<vec2, vec2> m_viewPort;
-				vec2 m_pos1;
-				vec2 m_pos2;
+				vec2 m_pos1; // in radius ==> center
+				vec2 m_pos2; // in radius ==> radius end position
+				vec2 m_focal; // Specific radius
 				vec2 m_axeX;
 				vec2 m_axeY;
 				vec2 m_baseSize;
 				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
-				DynamicColorLinear(const std::string& _link, const mat2& _mtx);
+				DynamicColorSpecial(const std::string& _link, const mat2& _mtx);
 				virtual etk::Color<float,4> getColor(const ivec2& _pos);
+			private:
+				etk::Color<float,4> getColorLinear(const ivec2& _pos);
+				etk::Color<float,4> getColorRadial(const ivec2& _pos);
+			public:
 				virtual void generate(esvg::Document* _document);
 				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort);
 		};

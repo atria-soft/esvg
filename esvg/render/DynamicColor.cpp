@@ -9,19 +9,21 @@
 #include <esvg/debug.h>
 #include <esvg/render/DynamicColor.h>
 #include <esvg/LinearGradient.h>
+#include <esvg/RadialGradient.h>
 #include <esvg/esvg.h>
 
 #undef __class__
-#define __class__	"render:DynamicColorLinear"
+#define __class__	"render:DynamicColorSpecial"
 
-esvg::render::DynamicColorLinear::DynamicColorLinear(const std::string& _link, const mat2& _mtx) :
+esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2& _mtx) :
+  m_linear(true),
   m_colorName(_link),
   m_matrix(_mtx),
   m_viewPort(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0)) {
 	
 }
 
-void esvg::render::DynamicColorLinear::setViewPort(const std::pair<vec2, vec2>& _viewPort) {
+void esvg::render::DynamicColorSpecial::setViewPort(const std::pair<vec2, vec2>& _viewPort) {
 	m_viewPort = _viewPort;
 }
 
@@ -43,11 +45,19 @@ static vec2 getIntersect(const vec2& _point1,
 	return _point2;
 }
 
-// TODO : This can optimize ... really slow ... and not linear
-etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos) {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _pos) {
 	if (m_data.size() < 2) {
 		return etk::color::purple;
 	}
+	if (m_linear == true) {
+		return getColorLinear(_pos);
+	} else {
+		return getColorRadial(_pos);
+	}
+	return etk::color::purple;
+}
+
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec2& _pos) {
 	float ratio = 0.0f;
 	if (m_unit == gradientUnits_userSpaceOnUse) {
 		vec2 vectorBase = m_pos2 - m_pos1;
@@ -146,7 +156,73 @@ etk::Color<float,4> esvg::render::DynamicColorLinear::getColor(const ivec2& _pos
 	return etk::color::green;
 }
 
-void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) {
+	float ratio = 0.0f;
+	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+	vec2 intersecX = getIntersect(m_pos1,                 m_axeX,
+	                              vec2(_pos.x(), _pos.y()), m_axeY);
+	vec2 intersecY = getIntersect(m_pos1,                 m_axeY,
+	                              vec2(_pos.x(), _pos.y()), m_axeX);
+	vec2 vectorBaseDrawX = intersecX - m_pos1;
+	vec2 vectorBaseDrawY = intersecY - m_pos1;
+	float baseDrawX = vectorBaseDrawX.length();
+	float baseDrawY = vectorBaseDrawY.length();
+	ratio = vec2(baseDrawX, baseDrawY).length();
+	if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+		ratio /= 100.0f;//(m_baseSize.x()*m_baseSize.y());
+	} else {
+		ratio = 1.0f;
+	}
+	if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+		if (    m_baseSize.x() != 0.0f
+		     && m_baseSize.y() != 0.0f) {
+			ratio = vec2(baseDrawX/m_baseSize.x(), baseDrawY/m_baseSize.y()).length();
+		} else if (m_baseSize.x() != 0.0f) {
+			ratio = baseDrawX/m_baseSize.x();
+		} else {
+			ratio = baseDrawY/m_baseSize.y();
+		}
+	} else {
+		ratio = 1.0f;
+	}
+	switch(m_spread) {
+		case spreadMethod_pad:
+			// nothing to do ...
+			break;
+		case spreadMethod_reflect:
+			ratio -= float((int32_t(ratio)>>1)<<1);
+			if (ratio > 1.0f) {
+				ratio = 2.0f-ratio;
+			}
+			break;
+		case spreadMethod_repeat:
+			ratio -= float(int32_t(ratio));
+			if (ratio <0.0f) {
+				ratio = 1.0f-std::abs(ratio);
+			}
+			break;
+	}
+	if (ratio <= m_data[0].first*0.01f) {
+		return m_data[0].second;
+	}
+	if (ratio >= m_data.back().first*0.01f) {
+		return m_data.back().second;
+	}
+	for (size_t iii=1; iii<m_data.size(); ++iii) {
+		if (ratio <= m_data[iii].first*0.01f) {
+			float localRatio = ratio - m_data[iii-1].first*0.01f;
+			localRatio = localRatio / ((m_data[iii].first - m_data[iii-1].first) * 0.01f);
+			return etk::Color<float,4>(m_data[iii-1].second.r() * (1.0-localRatio) + m_data[iii].second.r() * localRatio,
+			                           m_data[iii-1].second.g() * (1.0-localRatio) + m_data[iii].second.g() * localRatio,
+			                           m_data[iii-1].second.b() * (1.0-localRatio) + m_data[iii].second.b() * localRatio,
+			                           m_data[iii-1].second.a() * (1.0-localRatio) + m_data[iii].second.a() * localRatio);
+		}
+	}
+	return etk::color::green;
+}
+
+
+void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	if (_document == nullptr) {
 		ESVG_ERROR("Get nullptr input for document");
 		return;
@@ -156,56 +232,116 @@ void esvg::render::DynamicColorLinear::generate(esvg::Document* _document) {
 		ESVG_ERROR("Can not get base : '" << m_colorName << "'");
 		return;
 	}
+	// Now we can know if we use linear or radial gradient ...
 	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
-	if (gradient == nullptr) {
-		ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
-		return;
-	}
-	ESVG_INFO("get for color linear:");
-	gradient->display(2);
-	m_unit = gradient->m_unit;
-	m_spread = gradient->m_spread;
-	ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
-	vec2 size = m_viewPort.second - m_viewPort.first;
-	
-	esvg::Dimension dimPos1 = gradient->getPosition1();
-	m_pos1 = dimPos1.getPixel(size);
-	if (dimPos1.getType() == esvg::distance_pourcent) {
-		m_pos1 += m_viewPort.first;
-	}
-	esvg::Dimension dimPos2 = gradient->getPosition2();
-	m_pos2 = dimPos2.getPixel(size);
-	if (dimPos2.getType() == esvg::distance_pourcent) {
-		m_pos2 += m_viewPort.first;
-	}
-	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-	vec2 delta = m_pos2 - m_pos1;
-	if (delta.x() < 0.0f) {
-		m_axeX = vec2(-1.0f, 0.0f);
+	if (gradient != nullptr) {
+		m_linear = true;
+		ESVG_INFO("get for color linear:");
+		gradient->display(2);
+		m_unit = gradient->m_unit;
+		m_spread = gradient->m_spread;
+		ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
+		vec2 size = m_viewPort.second - m_viewPort.first;
+		
+		esvg::Dimension dimPos1 = gradient->getPosition1();
+		m_pos1 = dimPos1.getPixel(size);
+		if (dimPos1.getType() == esvg::distance_pourcent) {
+			m_pos1 += m_viewPort.first;
+		}
+		esvg::Dimension dimPos2 = gradient->getPosition2();
+		m_pos2 = dimPos2.getPixel(size);
+		if (dimPos2.getType() == esvg::distance_pourcent) {
+			m_pos2 += m_viewPort.first;
+		}
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+		vec2 delta = m_pos2 - m_pos1;
+		if (delta.x() < 0.0f) {
+			m_axeX = vec2(-1.0f, 0.0f);
+		} else {
+			m_axeX = vec2(1.0f, 0.0f);
+		}
+		if (delta.y() < 0.0f) {
+			m_axeY = vec2(0.0f, -1.0f);
+		} else {
+			m_axeY = vec2(0.0f, 1.0f);
+		}
+		// Move the positions ...
+		m_pos1 = m_matrix * m_pos1;
+		m_pos2 = m_matrix * m_pos2;
+		m_axeX = m_matrix.applyScaleRotation(m_axeX);
+		m_axeY = m_matrix.applyScaleRotation(m_axeY);
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+		vec2 intersecX = getIntersect(m_pos1, m_axeX,
+		                              m_pos2, m_axeY);
+		vec2 intersecY = getIntersect(m_pos1, m_axeY,
+		                              m_pos2, m_axeX);
+		m_baseSize = vec2((m_pos1 - intersecX).length(),
+		                  (m_pos1 - intersecY).length());
+		// get all the colors
+		m_data = gradient->getColors(_document);
 	} else {
-		m_axeX = vec2(1.0f, 0.0f);
+		m_linear = false;
+		std::shared_ptr<esvg::RadialGradient> gradient = std::dynamic_pointer_cast<esvg::RadialGradient>(base);
+		if (gradient == nullptr) {
+			ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
+			return;
+		}
+		ESVG_INFO("get for color Radial:");
+		gradient->display(2);
+		m_unit = gradient->m_unit;
+		m_spread = gradient->m_spread;
+		ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
+		vec2 size = m_viewPort.second - m_viewPort.first;
+		
+		esvg::Dimension dimCenter = gradient->getCenter();
+		m_pos1 = dimCenter.getPixel(size);
+		if (dimCenter.getType() == esvg::distance_pourcent) {
+			m_pos1 += m_viewPort.first;
+		}
+		esvg::Dimension dimFocal = gradient->getFocal();
+		m_focal = dimFocal.getPixel(size);
+		if (dimFocal.getType() == esvg::distance_pourcent) {
+			m_focal += m_viewPort.first;
+		}
+		esvg::Dimension1D dimRadius = gradient->getRadius();
+		m_pos2.setX(dimRadius.getPixel(size.x()));
+		m_pos2.setY(dimRadius.getPixel(size.y()));
+		m_pos2 += m_pos1;
+		/*
+		if (dimRadius.getType() == esvg::distance_pourcent) {
+			m_pos2 += m_viewPort.first;
+		}
+		*/
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+		vec2 delta = m_pos1 - m_pos2;
+		if (delta.x() < 0.0f) {
+			m_axeX = vec2(-1.0f, 0.0f);
+		} else {
+			m_axeX = vec2(1.0f, 0.0f);
+		}
+		if (delta.y() < 0.0f) {
+			m_axeY = vec2(0.0f, -1.0f);
+		} else {
+			m_axeY = vec2(0.0f, 1.0f);
+		}
+		// Move the positions ...
+		m_pos1 = m_matrix * m_pos1;
+		m_focal = m_matrix * m_focal;
+		m_pos2 = m_matrix * m_pos2;
+		m_axeX = m_matrix.applyScaleRotation(m_axeX);
+		m_axeY = m_matrix.applyScaleRotation(m_axeY);
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
+		vec2 intersecX = getIntersect(m_pos1, m_axeX,
+		                              m_pos2, m_axeY);
+		vec2 intersecY = getIntersect(m_pos1, m_axeY,
+		                              m_pos2, m_axeX);
+		m_baseSize = vec2((m_pos1 - intersecX).length(),
+		                  (m_pos1 - intersecY).length());
+		ESVG_VERBOSE("baseSize=" << m_baseSize << " m_pos1=" << m_pos1 << " dim=" << dimCenter << " m_focal=" << m_focal << " m_pos2=" << m_pos2 << " dim=" << dimRadius);
+		// get all the colors
+		m_data = gradient->getColors(_document);
 	}
-	if (delta.y() < 0.0f) {
-		m_axeY = vec2(0.0f, -1.0f);
-	} else {
-		m_axeY = vec2(0.0f, 1.0f);
-	}
-	// Move the positions ...
-	m_pos1 = m_matrix * m_pos1;
-	m_pos2 = m_matrix * m_pos2;
-	m_axeX = m_matrix.applyScaleRotation(m_axeX);
-	m_axeY = m_matrix.applyScaleRotation(m_axeY);
-	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-	vec2 intersecX = getIntersect(m_pos1, m_axeX,
-	                              m_pos2, m_axeY);
-	vec2 intersecY = getIntersect(m_pos1, m_axeY,
-	                              m_pos2, m_axeX);
-	m_baseSize = vec2((m_pos1 - intersecX).length(),
-	                  (m_pos1 - intersecY).length());
-	// get all the colors
-	m_data = gradient->getColors(_document);
 }
-
 
 #undef __class__
 #define __class__	"render:DynamicColor"
@@ -217,7 +353,7 @@ std::shared_ptr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<
 	     return nullptr;
 	}
 	if (_color.second != "") {
-		return std::make_shared<esvg::render::DynamicColorLinear>(_color.second, _mtx);
+		return std::make_shared<esvg::render::DynamicColorSpecial>(_color.second, _mtx);
 	}
 	return std::make_shared<esvg::render::DynamicColorUni>(_color.first);
 }

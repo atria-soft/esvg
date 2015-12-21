@@ -259,7 +259,7 @@ TEST(TestGradientLinear, unitBox_spreadReflect) {
 }
 
 
-TEST(TestGradientLinear, unitBox_spreadRepeate) {
+TEST(TestGradientLinear, unitBox_spreadRepeat) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
@@ -272,8 +272,8 @@ TEST(TestGradientLinear, unitBox_spreadRepeate) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadRepeate.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadRepeate.bmp", g_visualDebug);
+	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadRepeat.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadRepeat.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitUser_spreadNone) {

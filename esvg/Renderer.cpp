@@ -105,7 +105,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 	}
 	#ifdef DEBUG
 		// display the gradient position:
-		std::shared_ptr<esvg::render::DynamicColorLinear> tmpColor = std::dynamic_pointer_cast<esvg::render::DynamicColorLinear>(_colorFill);
+		std::shared_ptr<esvg::render::DynamicColorSpecial> tmpColor = std::dynamic_pointer_cast<esvg::render::DynamicColorSpecial>(_colorFill);
 		if (tmpColor != nullptr) {
 			esvg::render::SegmentList listSegment;
 			// Display bounding box
