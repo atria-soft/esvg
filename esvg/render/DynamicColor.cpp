@@ -13,7 +13,7 @@
 #include <esvg/esvg.h>
 
 #undef __class__
-#define __class__	"render:DynamicColorSpecial"
+#define __class__	"render::DynamicColorSpecial"
 
 esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2& _mtx) :
   m_linear(true),
@@ -155,35 +155,98 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 	}
 	return etk::color::green;
 }
+static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
+                                                  const vec2& _pos2,
+                                                  const vec2& _center = vec2(0.0f, 0.0f),
+                                                  float _radius = 1.0f) {
+	vec2 v1;
+	vec2 v2;
+	//vector2D from point 1 to point 2
+	v1 = _pos2 - _pos1;
+	//vector2D from point 1 to the circle's center
+	v2 = _center - _pos1;
+	
+	float dot = v1.dot(v2);
+	vec2 proj1 = vec2(((dot / (v1.length2())) * v1.x()),
+	                  ((dot / (v1.length2())) * v1.y()));
+	vec2 midpt = _pos1 + proj1;
+	
+	float distToCenter = (midpt - _center).length2();
+	if (distToCenter > _radius * _radius) {
+		return std::pair<vec2,vec2>(vec2(0.0,0.0), vec2(0.0,0.0));
+	}
+	if (distToCenter == _radius * _radius) {
+		return std::pair<vec2,vec2>(midpt, midpt);
+	}
+	float distToIntersection;
+	if (distToCenter == 0.0f) {
+		distToIntersection = _radius;
+	} else {
+		distToCenter = std::sqrt(distToCenter);
+		distToIntersection = std::sqrt(_radius * _radius - distToCenter * distToCenter);
+	}
+	// normalize...
+	v1.safeNormalize();
+	v1 *= distToIntersection;
+	return std::pair<vec2,vec2>(midpt + v1, midpt - v1);
+}
 
 etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) {
 	float ratio = 0.0f;
-	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-	vec2 intersecX = getIntersect(m_pos1,                 m_axeX,
+	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object)..
+	vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
 	                              vec2(_pos.x(), _pos.y()), m_axeY);
-	vec2 intersecY = getIntersect(m_pos1,                 m_axeY,
+	vec2 intersecY = getIntersect(m_pos1,                   m_axeY,
 	                              vec2(_pos.x(), _pos.y()), m_axeX);
 	vec2 vectorBaseDrawX = intersecX - m_pos1;
 	vec2 vectorBaseDrawY = intersecY - m_pos1;
 	float baseDrawX = vectorBaseDrawX.length();
 	float baseDrawY = vectorBaseDrawY.length();
-	ratio = vec2(baseDrawX, baseDrawY).length();
-	if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
-		ratio /= 100.0f;//(m_baseSize.x()*m_baseSize.y());
-	} else {
-		ratio = 1.0f;
-	}
-	if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
-		if (    m_baseSize.x() != 0.0f
-		     && m_baseSize.y() != 0.0f) {
-			ratio = vec2(baseDrawX/m_baseSize.x(), baseDrawY/m_baseSize.y()).length();
-		} else if (m_baseSize.x() != 0.0f) {
-			ratio = baseDrawX/m_baseSize.x();
+	// specal case when focal == center (this is faster ...)
+	if (m_centerIsFocal == true) {
+		ratio = vec2(baseDrawX, baseDrawY).length();
+		if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
+			if (    m_baseSize.x() != 0.0f
+			     && m_baseSize.y() != 0.0f) {
+				ratio = vec2(baseDrawX/m_baseSize.x(), baseDrawY/m_baseSize.y()).length();
+			} else if (m_baseSize.x() != 0.0f) {
+				ratio = baseDrawX/m_baseSize.x();
+			} else {
+				ratio = baseDrawY/m_baseSize.y();
+			}
 		} else {
-			ratio = baseDrawY/m_baseSize.y();
+			ratio = 1.0f;
 		}
 	} else {
-		ratio = 1.0f;
+		// set the sense of the elements:
+		if (m_axeX.dot(vectorBaseDrawX) < 0) {
+			baseDrawX *= -1.0f;
+		}
+		if (m_axeY.dot(vectorBaseDrawY) < 0) {
+			baseDrawY *= -1.0f;
+		}
+		if (m_baseSize.y() != 0.0f) {
+			baseDrawY /= m_baseSize.y();
+		}
+		// normalize to 1.0f
+		baseDrawX /= m_baseSize.x();
+		if (    m_clipOut == true
+		     && baseDrawX <= -1.0f) {
+			ratio = 1.0f;
+		} else {
+			float tmpLength = -m_focalLength/m_baseSize.x();
+			vec2 focalCenter = vec2(tmpLength, 0.0f);
+			vec2 currentPoint = vec2(baseDrawX, baseDrawY);
+			if (focalCenter == currentPoint) {
+				ratio = 0.0f;
+			} else {
+				std::pair<vec2,vec2> positions = intersectLineToCircle(focalCenter, currentPoint);
+				float lenghtBase = (currentPoint - focalCenter).length();
+				float lenghtBorder1 = (positions.first - focalCenter).length();
+				float lenghtBorder2 = (positions.second - focalCenter).length();
+				ratio = lenghtBase/lenghtBorder1;
+			}
+		}
 	}
 	switch(m_spread) {
 		case spreadMethod_pad:
@@ -236,11 +299,11 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
 	if (gradient != nullptr) {
 		m_linear = true;
-		ESVG_INFO("get for color linear:");
+		ESVG_VERBOSE("get for color linear:");
 		gradient->display(2);
 		m_unit = gradient->m_unit;
 		m_spread = gradient->m_spread;
-		ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
+		ESVG_VERBOSE("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
 		vec2 size = m_viewPort.second - m_viewPort.first;
 		
 		esvg::Dimension dimPos1 = gradient->getPosition1();
@@ -286,47 +349,54 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 			ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
 			return;
 		}
-		ESVG_INFO("get for color Radial:");
+		ESVG_VERBOSE("get for color Radial:");
 		gradient->display(2);
 		m_unit = gradient->m_unit;
 		m_spread = gradient->m_spread;
-		ESVG_INFO("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
+		ESVG_VERBOSE("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
 		vec2 size = m_viewPort.second - m_viewPort.first;
 		
 		esvg::Dimension dimCenter = gradient->getCenter();
-		m_pos1 = dimCenter.getPixel(size);
+		vec2 center = dimCenter.getPixel(size);
 		if (dimCenter.getType() == esvg::distance_pourcent) {
-			m_pos1 += m_viewPort.first;
+			center += m_viewPort.first;
 		}
 		esvg::Dimension dimFocal = gradient->getFocal();
-		m_focal = dimFocal.getPixel(size);
+		vec2 focal = dimFocal.getPixel(size);
 		if (dimFocal.getType() == esvg::distance_pourcent) {
-			m_focal += m_viewPort.first;
+			focal += m_viewPort.first;
 		}
 		esvg::Dimension1D dimRadius = gradient->getRadius();
-		m_pos2.setX(dimRadius.getPixel(size.x()));
-		m_pos2.setY(dimRadius.getPixel(size.y()));
-		m_pos2 += m_pos1;
-		/*
-		if (dimRadius.getType() == esvg::distance_pourcent) {
-			m_pos2 += m_viewPort.first;
-		}
-		*/
-		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-		vec2 delta = m_pos1 - m_pos2;
-		if (delta.x() < 0.0f) {
-			m_axeX = vec2(-1.0f, 0.0f);
+		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object)..
+		if (center == focal) {
+			m_centerIsFocal = true;
+			m_pos2.setX(dimRadius.getPixel(size.x()));
+			m_pos2.setY(dimRadius.getPixel(size.y()));
+			m_pos2 += center;
+			vec2 delta = center - m_pos2;
+			if (delta.x() < 0.0f) {
+				m_axeX = vec2(-1.0f, 0.0f);
+			} else {
+				m_axeX = vec2(1.0f, 0.0f);
+			}
+			if (delta.y() < 0.0f) {
+				m_axeY = vec2(0.0f, -1.0f);
+			} else {
+				m_axeY = vec2(0.0f, 1.0f);
+			}
+			m_pos1 = center;
 		} else {
-			m_axeX = vec2(1.0f, 0.0f);
-		}
-		if (delta.y() < 0.0f) {
-			m_axeY = vec2(0.0f, -1.0f);
-		} else {
-			m_axeY = vec2(0.0f, 1.0f);
+			m_centerIsFocal = false;
+			m_axeX = (center - focal).safeNormalize();
+			m_axeY = vec2(m_axeX.y(), -m_axeX.x());
+			
+			m_pos2 = m_axeX * dimRadius.getPixel(size.x()) + m_axeY * dimRadius.getPixel(size.y());
+			m_pos2 += center;
+			m_pos1 = center;
 		}
 		// Move the positions ...
 		m_pos1 = m_matrix * m_pos1;
-		m_focal = m_matrix * m_focal;
+		center = m_matrix * center;
 		m_pos2 = m_matrix * m_pos2;
 		m_axeX = m_matrix.applyScaleRotation(m_axeX);
 		m_axeY = m_matrix.applyScaleRotation(m_axeY);
@@ -335,8 +405,18 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		                              m_pos2, m_axeY);
 		vec2 intersecY = getIntersect(m_pos1, m_axeY,
 		                              m_pos2, m_axeX);
-		m_baseSize = vec2((m_pos1 - intersecX).length(),
-		                  (m_pos1 - intersecY).length());
+		m_baseSize = vec2((intersecX - m_pos1).length(),
+		                  (intersecY - m_pos1).length());
+		if (m_centerIsFocal == false) {
+			m_focalLength = (center - m_matrix * focal).length();
+			if (m_focalLength >= m_baseSize.x()) {
+				ESVG_DEBUG("Change position of the Focal ... ==> set it inside the circle");
+				m_focalLength = m_baseSize.x()*0.999998f;
+				m_clipOut = true;
+			} else {
+				m_clipOut = false;
+			}
+		}
 		ESVG_VERBOSE("baseSize=" << m_baseSize << " m_pos1=" << m_pos1 << " dim=" << dimCenter << " m_focal=" << m_focal << " m_pos2=" << m_pos2 << " dim=" << dimRadius);
 		// get all the colors
 		m_data = gradient->getColors(_document);

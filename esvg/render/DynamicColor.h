@@ -62,6 +62,9 @@ namespace esvg {
 				vec2 m_axeX;
 				vec2 m_axeY;
 				vec2 m_baseSize;
+				float m_focalLength;
+				bool m_clipOut;
+				bool m_centerIsFocal;
 				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
 				DynamicColorSpecial(const std::string& _link, const mat2& _mtx);

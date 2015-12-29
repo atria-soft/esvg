@@ -227,4 +227,98 @@ TEST(TestGradientRadial, unitUser_spreadRepeat) {
 	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadRepeat.bmp", g_visualDebug);
 }
 
+TEST(TestGradientRadial, unitUser_spreadPad_unCenter) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='pad' gradientUnits='userSpaceOnUse' >\n"
+	                 "			<stop offset='0%' style='stop-color:orange;stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:red;stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:blue;stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:green;stop-opacity:1' />\n"
+	                 "		</radialGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientRadial_unitUser_spreadPad_unCenter.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadPad_unCenter.bmp", g_visualDebug);
+}
 
+TEST(TestGradientRadial, unitUser_spreadReflect_unCenter) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
+	                 "			<stop offset='0%' style='stop-color:orange;stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:red;stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:blue;stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:green;stop-opacity:1' />\n"
+	                 "		</radialGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientRadial_unitUser_spreadReflect_unCenter.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadReflect_unCenter.bmp", g_visualDebug);
+}
+
+TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"
+	                 "			<stop offset='0%' style='stop-color:orange;stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:red;stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:blue;stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:green;stop-opacity:1' />\n"
+	                 "		</radialGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientRadial_unitUser_spreadRepeat_unCenter.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadRepeat_unCenter.bmp", g_visualDebug);
+}
+
+TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter2) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='60' fy='60' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"
+	                 "			<stop offset='0%' style='stop-color:orange;stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:red;stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:blue;stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:green;stop-opacity:1' />\n"
+	                 "		</radialGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientRadial_unitUser_spreadRepeat_unCenter2.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadRepeat_unCenter2.bmp", g_visualDebug);
+}
+
+
+TEST(TestGradientRadial, unitUser_spreadRepeat_out) {
+	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	                 "<svg height='100' width='100'>\n"
+	                 "	<defs>\n"
+	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='20' fy='40' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
+	                 "			<stop offset='0%' style='stop-color:orange;stop-opacity:1' />\n"
+	                 "			<stop offset='45%' style='stop-color:red;stop-opacity:1' />\n"
+	                 "			<stop offset='55%' style='stop-color:blue;stop-opacity:1' />\n"
+	                 "			<stop offset='100%' style='stop-color:green;stop-opacity:1' />\n"
+	                 "		</radialGradient>\n"
+	                 "	</defs>\n"
+	                 "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+	                 "</svg>\n");
+	esvg::Document doc;
+	doc.parse(data);
+	etk::FSNodeWriteAllData("TestGradientRadial_unitUser_spreadRepeat_out.svg", data);
+	doc.generateAnImage(ivec2(100, 100), "TestGradientRadial_unitUser_spreadRepeat_out.bmp", g_visualDebug);
+}
