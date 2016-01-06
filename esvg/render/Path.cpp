@@ -121,6 +121,12 @@ void interpolateCubicBezier(std::vector<esvg::render::Point>& _listPoint,
 	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, pos1234, pos234, pos34, _pos4, _level+1, _type);
 }
 
+static float vectorAngle(vec2 _uuu, vec2 _vvv) {
+	_uuu.safeNormalize();
+	_vvv.safeNormalize();
+	return atan2(_uuu.cross(_vvv), _uuu.dot(_vvv));
+}
+
 esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, int32_t _recurtionMax, float _threshold) {
 	ESVG_VERBOSE(spacingDist(_level) << "Generate List Points ... from a path");
 	esvg::render::PointList out;
@@ -331,18 +337,148 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				}
 				break;
 			case esvg::render::path_elliptic:
-				ESVG_TODO(spacingDist(_level+1) << " Elliptic arc not supported now ...");
-				/*
-				ESVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
-				path.ellipticTo(it->getRelative(),
-				                it->m_element[0],
-				                it->m_element[1],
-				                it->m_element[2],
-				                it->m_element[3],
-				                it->m_element[4],
-				                it->m_element[5],
-				                it->m_element[6] );
-				*/
+				// If no previous point, we need to create the last point has start ...
+				if (tmpListPoint.size() == 0) {
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				}
+				{
+					std::shared_ptr<esvg::render::ElementElliptic> tmpIt(std::dynamic_pointer_cast<esvg::render::ElementElliptic>(it));
+					float angle = tmpIt->m_angle * (M_PI / 180.0);
+					ESVG_TODO(spacingDist(_level+1) << " Elliptic arc: radius=" << tmpIt->getPos1());
+					ESVG_TODO(spacingDist(_level+1) << "               angle=" << tmpIt->m_angle);
+					ESVG_TODO(spacingDist(_level+1) << "               m_largeArcFlag=" << tmpIt->m_largeArcFlag);
+					ESVG_TODO(spacingDist(_level+1) << "               m_sweepFlag=" << tmpIt->m_sweepFlag);
+					
+					
+					vec2 lastPosStore(lastPosition);
+					if (it->getRelative() == false) {
+						lastPosition = vec2(0.0f, 0.0f);
+					}
+					vec2 pos = lastPosition + it->getPos();
+					float rotationX = tmpIt->m_angle * (M_PI / 180.0);
+					vec2 radius = tmpIt->getPos1();
+					
+					#ifdef DEBUG
+						m_debugInformation.addSegment(lastPosStore, pos);
+					#endif
+					vec2 delta = lastPosStore - pos;
+					float ddd = delta.length();
+					if (    ddd < 1e-6f
+					     || radius.x() < 1e-6f
+					     || radius.y() < 1e-6f) {
+						ESVG_WARNING("Degenerate arc in Line");
+						if (tmpListPoint.size() == 0) {
+							tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+						}
+						tmpListPoint.push_back(esvg::render::Point(pos, esvg::render::Point::type_join));
+					} else {
+						// Convert to center point parameterization.
+						// http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes
+						// procedure describe here : http://www.w3.org/TR/SVG11/implnote.html#ArcConversionCenterToEndpoint
+						// Compute delta'
+						mat2 matrixRotationCenter = etk::mat2Rotate(-rotationX);
+						vec2 deltaPrim = matrixRotationCenter * (delta*0.5f);
+						ddd =   (deltaPrim.x()*deltaPrim.x())/(radius.x()*radius.x())
+						      + (deltaPrim.y()*deltaPrim.y())/(radius.y()*radius.y());
+						if (ddd > 1.0f) {
+							ddd = std::sqrt(ddd);
+							radius *= ddd;
+						}
+						// Compute center'
+						float sss = 0.0f;
+						float ssa =   radius.x()*radius.x()*radius.y()*radius.y()
+						            - radius.x()*radius.x()*deltaPrim.y()*deltaPrim.y()
+						            - radius.y()*radius.y()*deltaPrim.x()*deltaPrim.x();
+						float ssb =   radius.x()*radius.x()*deltaPrim.y()*deltaPrim.y()
+						            + radius.y()*radius.y()*deltaPrim.x()*deltaPrim.x();
+						if (ssa < 0.0f) {
+							ssa = 0.0f;
+						}
+						if (ssb > 0.0f) {
+							sss = std::sqrt(ssa / ssb);
+						}
+						if (tmpIt->m_largeArcFlag == tmpIt->m_sweepFlag) {
+							sss *= -1.0f;
+						}
+						vec2 centerPrime(sss * radius.x() * deltaPrim.y() / radius.y(),
+						                 sss * -radius.y() * deltaPrim.x() / radius.x());
+						// Compute center from center'
+						mat2 matrix = etk::mat2Rotate(rotationX);
+						vec2 center = (lastPosStore + pos)*0.5f + matrix*centerPrime;
+						#ifdef DEBUG
+							m_debugInformation.addSegment(center-vec2(3.0,3.0), center+vec2(3.0,3.0));
+							m_debugInformation.addSegment(center-vec2(3.0,-3.0), center+vec2(3.0,-3.0));
+						#endif
+						// Calculate theta1, and delta theta.
+						vec2 vectorA = (deltaPrim - centerPrime) / radius;
+						vec2 vectorB = (deltaPrim + centerPrime) / radius * -1.0f;
+						#ifdef DEBUG
+							m_debugInformation.addSegment(center, center+vectorA*radius.x());
+							m_debugInformation.addSegment(center, center+vectorB*radius.y());
+						#endif
+						// Initial angle
+						float theta1 = vectorAngle(vec2(1.0f,0.0f), vectorA);
+						// Delta angle
+						float deltaTheta = vectorAngle(vectorA, vectorB);
+						// special case of invert angle...
+						if (    (    deltaTheta == float(M_PI)
+						          || deltaTheta == -float(M_PI))
+						     && tmpIt->m_sweepFlag == false) {
+							deltaTheta *= -1.0f;
+						}
+						if (tmpIt->m_largeArcFlag == true) {
+							// Choose large arc
+							if (deltaTheta > 0.0f) {
+								deltaTheta -= 2.0f*M_PI;
+							} else {
+								deltaTheta += 2.0f*M_PI;
+							}
+						}
+						// Approximate the arc using cubic spline segments.
+						matrix.translate(center);
+						// Split arc into max 90 degree segments.
+						// The loop assumes an iteration per end point (including start and end), this +1.
+						int32_t ndivs = int32_t(std::abs(deltaTheta) / (M_PI*0.5f)) + 1;
+						float hda = (deltaTheta / float(ndivs)) * 0.5f;
+						float kappa = std::abs(4.0f / 3.0f * (1.0f - std::cos(hda)) / std::sin(hda));
+						if (deltaTheta < 0.0f) {
+							kappa = -kappa;
+						}
+						vec2 pointPosPrevious(0.0,0.0);
+						vec2 tangentPrevious(0.0,0.0);
+						for (int32_t iii=0; iii<=ndivs; ++iii) {
+							float a = theta1 + deltaTheta * (float(iii)/(float)ndivs);
+							delta = vec2(std::cos(a), std::sin(a));
+							// position
+							vec2 pointPos = matrix * vec2(delta.x()*radius.x(), delta.y()*radius.y());
+							// tangent
+							vec2 tangent = matrix.applyScaleRotation(vec2(-delta.y()*radius.x() * kappa, delta.x()*radius.y() * kappa));
+							if (iii > 0) {
+								vec2 zlastPosStore(lastPosition);
+								if (it->getRelative() == false) {
+									lastPosition = vec2(0.0f, 0.0f);
+								}
+								vec2 zpos1 = pointPosPrevious + tangentPrevious;
+								vec2 zpos2 = pointPos - tangent;
+								vec2 zpos = pointPos;
+								interpolateCubicBezier(tmpListPoint,
+								                       _recurtionMax,
+								                       _threshold,
+								                       zlastPosStore,
+								                       zpos1,
+								                       zpos2,
+								                       zpos,
+								                       0,
+								                       esvg::render::Point::type_join);
+								lastPosition = zpos;
+								lastAngle = zpos2;
+							}
+							pointPosPrevious = pointPos;
+							tangentPrevious = tangent;
+						}
+					}
+					lastPosition = pos;
+				}
 				break;
 			default:
 				ESVG_ERROR(spacingDist(_level+1) << " Unknow PATH commant (internal error)");
@@ -359,3 +495,4 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 	out.display();
 	return out;
 }
+

@@ -16,7 +16,7 @@
 namespace esvg {
 	namespace render {
 		class ElementElliptic : public esvg::render::Element {
-			private:
+			public:
 				float m_angle;
 				bool m_largeArcFlag;
 				bool m_sweepFlag;
@@ -34,4 +34,3 @@ namespace esvg {
 }
 
 #endif
-

@@ -14,12 +14,18 @@
 #include <esvg/render/Element.h>
 #include <esvg/render/PointList.h>
 #include <memory>
+#ifdef DEBUG
+	#include <esvg/render/SegmentList.h>
+#endif
 
 namespace esvg {
 	namespace render {
 		class Path {
 			public:
 				std::vector<std::shared_ptr<esvg::render::Element>> m_listElement;
+				#ifdef DEBUG
+					esvg::render::SegmentList m_debugInformation;
+				#endif
 			public:
 				Path() {
 					

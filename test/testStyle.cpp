@@ -174,7 +174,7 @@ TEST(TestExtern, worddown) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestExtern_worddown.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestExtern_worddown.bmp", g_visualDebug);
+	doc.generateAnImage("TestExtern_worddown.bmp", g_visualDebug);
 }
 
 

@@ -21,7 +21,7 @@ TEST(TestRectangle, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_fill.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, stroke) {
@@ -32,7 +32,7 @@ TEST(TestRectangle, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke) {
@@ -43,7 +43,7 @@ TEST(TestRectangle, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_fill_and_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_fill_and_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill) {
@@ -54,7 +54,7 @@ TEST(TestRectangle, corned_fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_corned_fill.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_stroke) {
@@ -65,7 +65,7 @@ TEST(TestRectangle, corned_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_corned_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill_and_stroke) {
@@ -76,5 +76,5 @@ TEST(TestRectangle, corned_fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestRectangle_corned_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestRectangle_corned_fill_and_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestRectangle_corned_fill_and_stroke.bmp", g_visualDebug);
 }

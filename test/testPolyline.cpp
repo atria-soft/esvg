@@ -21,7 +21,7 @@ TEST(TestPolyLine, fill) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolyLine_fill.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolyLine_fill.bmp", g_visualDebug);
+	doc.generateAnImage("TestPolyLine_fill.bmp", g_visualDebug);
 }
 
 TEST(TestPolyLine, stroke) {
@@ -32,7 +32,7 @@ TEST(TestPolyLine, stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolyLine_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolyLine_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestPolyLine_stroke.bmp", g_visualDebug);
 }
 
 TEST(TestPolyLine, fill_and_stroke) {
@@ -43,7 +43,7 @@ TEST(TestPolyLine, fill_and_stroke) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestPolyLine_fill_and_stroke.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestPolyLine_fill_and_stroke.bmp", g_visualDebug);
+	doc.generateAnImage("TestPolyLine_fill_and_stroke.bmp", g_visualDebug);
 }
 
 

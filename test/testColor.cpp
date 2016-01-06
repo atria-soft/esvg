@@ -21,7 +21,7 @@ TEST(TestColor, blending) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestColor_blending.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestColor_blending.bmp", g_visualDebug);
+	doc.generateAnImage("TestColor_blending.bmp", g_visualDebug);
 }
 
 TEST(TestColor, opacity) {
@@ -32,7 +32,7 @@ TEST(TestColor, opacity) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestColor_opacity.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestColor_opacity.bmp", g_visualDebug);
+	doc.generateAnImage("TestColor_opacity.bmp", g_visualDebug);
 }
 
 TEST(TestColor, blending_and_opacity) {
@@ -43,7 +43,7 @@ TEST(TestColor, blending_and_opacity) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestColor_blending_and_opacity.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestColor_blending_and_opacity.bmp", g_visualDebug);
+	doc.generateAnImage("TestColor_blending_and_opacity.bmp", g_visualDebug);
 }
 
 TEST(TestColor, multiple_layer) {
@@ -56,5 +56,5 @@ TEST(TestColor, multiple_layer) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestColor_multiple_layer.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestColor_multiple_layer.bmp", g_visualDebug);
+	doc.generateAnImage("TestColor_multiple_layer.bmp", g_visualDebug);
 }

@@ -64,6 +64,9 @@ void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_
 }
 
 // FOR TEST only ...
+void esvg::Document::generateAnImage(const std::string& _fileName, bool _visualDebug) {
+	generateAnImage(m_size, _fileName, _visualDebug);
+}
 void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug) {
 	ivec2 sizeRender = _size;
 	if (sizeRender.x() <= 0) {

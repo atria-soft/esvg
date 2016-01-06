@@ -22,7 +22,7 @@ TEST(TestJoin, miterRight1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterRight1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterRight1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterRight1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterRight2) {
@@ -33,7 +33,7 @@ TEST(TestJoin, miterRight2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterRight2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterRight2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterRight2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterRight3) {
@@ -44,7 +44,7 @@ TEST(TestJoin, miterRight3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterRight3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterRight3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterRight3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterRight4) {
@@ -55,7 +55,7 @@ TEST(TestJoin, miterRight4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterRight4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterRight4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterRight4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLeft1) {
@@ -66,7 +66,7 @@ TEST(TestJoin, miterLeft1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLeft1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLeft1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLeft1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLeft2) {
@@ -77,7 +77,7 @@ TEST(TestJoin, miterLeft2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLeft2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLeft2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLeft2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLeft3) {
@@ -88,7 +88,7 @@ TEST(TestJoin, miterLeft3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLeft3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLeft3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLeft3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLeft4) {
@@ -99,7 +99,7 @@ TEST(TestJoin, miterLeft4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLeft4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLeft4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLeft4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLimit1) {
@@ -110,7 +110,7 @@ TEST(TestJoin, miterLimit1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLimit1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLimit1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLimit1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLimit2) {
@@ -121,7 +121,7 @@ TEST(TestJoin, miterLimit2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLimit2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLimit2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLimit2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLimit3) {
@@ -132,7 +132,7 @@ TEST(TestJoin, miterLimit3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLimit3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLimit3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLimit3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterLimit4) {
@@ -143,7 +143,7 @@ TEST(TestJoin, miterLimit4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterLimit4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterLimit4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterLimit4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterCornerCasePath) {
@@ -156,7 +156,7 @@ TEST(TestJoin, miterCornerCasePath) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterCornerCasePath.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterCornerCasePath.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterCornerCasePath.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, miterCornerCasePathLimit) {
@@ -169,7 +169,7 @@ TEST(TestJoin, miterCornerCasePathLimit) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_miterCornerCasePathLimit.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_miterCornerCasePathLimit.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_miterCornerCasePathLimit.bmp", g_visualDebug);
 }
 
 // ------------------------------------------------------ Round test -----------------------------------------------------
@@ -182,7 +182,7 @@ TEST(TestJoin, roundRight1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundRight1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundRight1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundRight1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundRight2) {
@@ -193,7 +193,7 @@ TEST(TestJoin, roundRight2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundRight2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundRight2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundRight2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundRight3) {
@@ -204,7 +204,7 @@ TEST(TestJoin, roundRight3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundRight3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundRight3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundRight3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundRight4) {
@@ -215,7 +215,7 @@ TEST(TestJoin, roundRight4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundRight4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundRight4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundRight4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundLeft1) {
@@ -226,7 +226,7 @@ TEST(TestJoin, roundLeft1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundLeft1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundLeft1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundLeft2) {
@@ -237,7 +237,7 @@ TEST(TestJoin, roundLeft2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundLeft2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundLeft2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundLeft3) {
@@ -248,7 +248,7 @@ TEST(TestJoin, roundLeft3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundLeft3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundLeft3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundLeft4) {
@@ -259,7 +259,7 @@ TEST(TestJoin, roundLeft4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundLeft4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundLeft4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundLeft4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, roundCornerCasePath) {
@@ -272,7 +272,7 @@ TEST(TestJoin, roundCornerCasePath) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_roundCornerCasePath.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_roundCornerCasePath.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_roundCornerCasePath.bmp", g_visualDebug);
 }
 
 
@@ -286,7 +286,7 @@ TEST(TestJoin, bevelRight1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelRight1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelRight1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelRight1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelRight2) {
@@ -297,7 +297,7 @@ TEST(TestJoin, bevelRight2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelRight2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelRight2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelRight2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelRight3) {
@@ -308,7 +308,7 @@ TEST(TestJoin, bevelRight3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelRight3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelRight3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelRight3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelRight4) {
@@ -319,7 +319,7 @@ TEST(TestJoin, bevelRight4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelRight4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelRight4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelRight4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelLeft1) {
@@ -330,7 +330,7 @@ TEST(TestJoin, bevelLeft1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelLeft1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft1.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelLeft1.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelLeft2) {
@@ -341,7 +341,7 @@ TEST(TestJoin, bevelLeft2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelLeft2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft2.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelLeft2.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelLeft3) {
@@ -352,7 +352,7 @@ TEST(TestJoin, bevelLeft3) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelLeft3.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft3.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelLeft3.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelLeft4) {
@@ -363,7 +363,7 @@ TEST(TestJoin, bevelLeft4) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelLeft4.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelLeft4.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelLeft4.bmp", g_visualDebug);
 }
 
 TEST(TestJoin, bevelCornerCasePath) {
@@ -376,5 +376,5 @@ TEST(TestJoin, bevelCornerCasePath) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestJoin_bevelCornerCasePath.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestJoin_bevelCornerCasePath.bmp", g_visualDebug);
+	doc.generateAnImage("TestJoin_bevelCornerCasePath.bmp", g_visualDebug);
 }

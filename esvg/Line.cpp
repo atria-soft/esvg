@@ -111,6 +111,7 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
+		_myRenderer.addDebugSegment(listElement.m_debugInformation);
 	#endif
 }
 

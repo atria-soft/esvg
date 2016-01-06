@@ -22,7 +22,7 @@ TEST(TestCap, butt) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_butt.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_butt.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_butt.bmp", g_visualDebug);
 }
 
 TEST(TestCap, round) {
@@ -34,7 +34,7 @@ TEST(TestCap, round) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_round.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_round.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_round.bmp", g_visualDebug);
 }
 
 TEST(TestCap, square) {
@@ -46,7 +46,7 @@ TEST(TestCap, square) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_square.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_square.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_square.bmp", g_visualDebug);
 }
 
 
@@ -59,7 +59,7 @@ TEST(TestCap, buttVert) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_buttVert.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_buttVert.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_buttVert.bmp", g_visualDebug);
 }
 
 TEST(TestCap, roundVert) {
@@ -71,7 +71,7 @@ TEST(TestCap, roundVert) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_roundVert.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_roundVert.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_roundVert.bmp", g_visualDebug);
 }
 
 TEST(TestCap, squareVert) {
@@ -83,7 +83,7 @@ TEST(TestCap, squareVert) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_squareVert.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_squareVert.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_squareVert.bmp", g_visualDebug);
 }
 
 
@@ -97,7 +97,7 @@ TEST(TestCap, buttDiag1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_buttDiag1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_buttDiag1.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_buttDiag1.bmp", g_visualDebug);
 }
 
 TEST(TestCap, roundDiag1) {
@@ -109,7 +109,7 @@ TEST(TestCap, roundDiag1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_roundDiag1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_roundDiag1.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_roundDiag1.bmp", g_visualDebug);
 }
 
 TEST(TestCap, squareDiag1) {
@@ -121,7 +121,7 @@ TEST(TestCap, squareDiag1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_squareDiag1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_squareDiag1.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_squareDiag1.bmp", g_visualDebug);
 }
 
 
@@ -134,7 +134,7 @@ TEST(TestCap, buttDiag2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_buttDiag2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_buttDiag2.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_buttDiag2.bmp", g_visualDebug);
 }
 
 TEST(TestCap, roundDiag2) {
@@ -146,7 +146,7 @@ TEST(TestCap, roundDiag2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_roundDiag2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_roundDiag2.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_roundDiag2.bmp", g_visualDebug);
 }
 
 TEST(TestCap, squareDiag2) {
@@ -158,6 +158,6 @@ TEST(TestCap, squareDiag2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestCap_squareDiag2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestCap_squareDiag2.bmp", g_visualDebug);
+	doc.generateAnImage("TestCap_squareDiag2.bmp", g_visualDebug);
 }
 

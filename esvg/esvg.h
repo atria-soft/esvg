@@ -73,6 +73,7 @@ namespace esvg {
 			 */
 			void displayDebug();
 			// TODO: remove this fucntion : use generic function ...
+			void generateAnImage(const std::string& _fileName, bool _visualDebug=false);
 			void generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug=false);
 			/**
 			 * @brief Generate Image in a specific format.

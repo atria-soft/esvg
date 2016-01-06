@@ -63,6 +63,7 @@ namespace esvg {
 			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
+			void addDebug(const std::vector<std::pair<vec2,vec2>>& _info);
 			#endif
 		protected:
 			esvg::Document* m_document;

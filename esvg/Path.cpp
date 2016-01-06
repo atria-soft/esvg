@@ -61,6 +61,25 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	//outputPointer++;
 	return outputPointer;
 }
+std::string cleanBadSpaces(const std::string& _input) {
+	std::string out;
+	bool haveSpace = false;
+	for (auto &it : _input) {
+		if (    it == ' '
+		     || it == '\t'
+		     || it == '\t'
+		     || it == '\r') {
+			haveSpace = true;
+		} else {
+			if (haveSpace == true) {
+				haveSpace = false;
+				out += ' ';
+			}
+			out += it;
+		}
+	}
+	return out;
+}
 
 bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	if (_element == nullptr) {
@@ -82,7 +101,7 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 	
 	char command;
 	std::vector<float> listDot;
-	
+	elementXML1 = cleanBadSpaces(elementXML1);
 	const char* elementXML = elementXML1.c_str();
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
@@ -305,6 +324,8 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
+		m_listElement.m_debugInformation.applyMatrix(mtx);
+		_myRenderer.addDebugSegment(m_listElement.m_debugInformation);
 	#endif
 }
 

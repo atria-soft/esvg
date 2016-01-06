@@ -29,7 +29,7 @@ TEST(TestGradientLinear, horizontal) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_horizontal.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_horizontal.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_horizontal.bmp", g_visualDebug);
 }
 
 
@@ -49,7 +49,7 @@ TEST(TestGradientLinear, vertical) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_vertical.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_vertical.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_vertical.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag1) {
@@ -68,7 +68,7 @@ TEST(TestGradientLinear, diag1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag1.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag1.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag1Partiel) {
@@ -85,7 +85,7 @@ TEST(TestGradientLinear, diag1Partiel) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag1Partiel.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag1Partiel.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag1Partiel.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2) {
@@ -104,7 +104,7 @@ TEST(TestGradientLinear, diag2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag2.bmp", g_visualDebug);
 }
 
 
@@ -125,7 +125,7 @@ TEST(TestGradientLinear, diag2Rotate0) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate0.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate0.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag2Rotate0.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2Rotate1) {
@@ -144,7 +144,7 @@ TEST(TestGradientLinear, diag2Rotate1) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate1.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate1.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag2Rotate1.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2Rotate2) {
@@ -163,7 +163,7 @@ TEST(TestGradientLinear, diag2Rotate2) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate2.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2Rotate2.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag2Rotate2.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2scale) {
@@ -182,7 +182,7 @@ TEST(TestGradientLinear, diag2scale) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_diag2scale.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_diag2scale.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_diag2scale.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, internalHref) {
@@ -202,7 +202,7 @@ TEST(TestGradientLinear, internalHref) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_internalHref.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_internalHref.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_internalHref.bmp", g_visualDebug);
 }
 
 
@@ -220,7 +220,7 @@ TEST(TestGradientLinear, unitBox_spreadNone) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadNone.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadNone.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitBox_spreadNone.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitBox_spreadPad) {
@@ -237,7 +237,7 @@ TEST(TestGradientLinear, unitBox_spreadPad) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadPad.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadPad.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitBox_spreadPad.bmp", g_visualDebug);
 }
 
 
@@ -255,7 +255,7 @@ TEST(TestGradientLinear, unitBox_spreadReflect) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadReflect.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadReflect.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitBox_spreadReflect.bmp", g_visualDebug);
 }
 
 
@@ -273,7 +273,7 @@ TEST(TestGradientLinear, unitBox_spreadRepeat) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadRepeat.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitBox_spreadRepeat.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitBox_spreadRepeat.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitUser_spreadNone) {
@@ -290,7 +290,7 @@ TEST(TestGradientLinear, unitUser_spreadNone) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadNone.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitUser_spreadNone.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitUser_spreadNone.bmp", g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitUser_spreadPad) {
@@ -307,7 +307,7 @@ TEST(TestGradientLinear, unitUser_spreadPad) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadPad.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitUser_spreadPad.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitUser_spreadPad.bmp", g_visualDebug);
 }
 
 
@@ -325,7 +325,7 @@ TEST(TestGradientLinear, unitUser_spreadReflect) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadReflect.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitUser_spreadReflect.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitUser_spreadReflect.bmp", g_visualDebug);
 }
 
 
@@ -343,6 +343,6 @@ TEST(TestGradientLinear, unitUser_spreadRepeate) {
 	esvg::Document doc;
 	doc.parse(data);
 	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadRepeate.svg", data);
-	doc.generateAnImage(ivec2(100, 100), "TestGradientLinear_unitUser_spreadRepeate.bmp", g_visualDebug);
+	doc.generateAnImage("TestGradientLinear_unitUser_spreadRepeate.bmp", g_visualDebug);
 }
 

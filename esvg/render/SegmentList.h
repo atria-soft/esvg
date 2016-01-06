@@ -23,6 +23,9 @@ namespace esvg {
 				std::vector<esvg::render::Segment> m_data;
 			public:
 				SegmentList();
+				#ifdef DEBUG
+					void addSegment(const vec2& _pos0, const vec2& _pos1);
+				#endif
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1);
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1, bool _disableHorizontal);
 				void createSegmentList(const esvg::render::PointList& _listPoint);
