@@ -18,10 +18,11 @@
 esvg::render::SegmentList::SegmentList() {
 	
 }
-
-void esvg::render::SegmentList::addSegment(const vec2& _pos0, const vec2& _pos1) {
-	m_data.push_back(Segment(_pos0, _pos1));
-}
+#ifdef DEBUG
+	void esvg::render::SegmentList::addSegment(const vec2& _pos0, const vec2& _pos1) {
+		m_data.push_back(Segment(_pos0, _pos1));
+	}
+#endif
 
 void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1) {
 	// Skip horizontal Segments
