@@ -14,9 +14,9 @@ addons:
     packages:
       - g++-4.9
       - expect
-      #- binutils-mingw-w64-x86-64 # 64bit MinGW
-      #- gcc-mingw-w64-x86-64
-      #- g++-mingw-w64-x86-64
+      - binutils-mingw-w64-x86-64 # 64bit MinGW
+      - gcc-mingw-w64-x86-64
+      - g++-mingw-w64-x86-64
 
 matrix:
   include:
@@ -26,9 +26,9 @@ matrix:
     - os: linux
       env: CONF=debug BUILDER=clang TARGET=Linux
       compiler: clang
-    #- os: linux
-    #  env: CONF=release BUILDER=gcc TARGET=Windows TAG=Mingw
-    #  compiler: x86_64-w64-mingw32-gcc
+    - os: linux
+      env: CONF=release BUILDER=gcc TARGET=Windows TAG=Mingw
+      compiler: x86_64-w64-mingw32-gcc
     #- os: linux
     #  env: CONF=release BUILDER=gcc TARGET=Android TAG=Android DISABLE_PACKAGE=-p
     #  compiler: gcc
