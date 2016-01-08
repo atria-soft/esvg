@@ -86,7 +86,11 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 				}
 				ratio -= float(int32_t(ratio));
 				if (ratio <0.0f) {
-					ratio = 1.0f-std::abs(ratio);
+					#ifndef __STDCPP_LLVM__
+						ratio = 1.0f-std::abs(ratio);
+					#else
+						ratio = 1.0f-abs(ratio);
+					#endif
 				}
 				break;
 		}
@@ -123,7 +127,11 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 				// nothing to do ...
 				break;
 			case spreadMethod_reflect:
-				ratio = std::abs(ratio);
+				#ifndef __STDCPP_LLVM__
+					ratio = std::abs(ratio);
+				#else
+					ratio = abs(ratio);
+				#endif
 				ratio -= float((int32_t(ratio)>>1)<<1);
 				if (ratio > 1.0f) {
 					ratio = 2.0f-ratio;
@@ -132,7 +140,11 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 			case spreadMethod_repeat:
 				ratio -= float(int32_t(ratio));
 				if (ratio <0.0f) {
-					ratio = 1.0f-std::abs(ratio);
+					#ifndef __STDCPP_LLVM__
+						ratio = 1.0f-std::abs(ratio);
+					#else
+						ratio = 1.0f-abs(ratio);
+					#endif
 				}
 				break;
 		}
@@ -182,8 +194,13 @@ static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 	if (distToCenter == 0.0f) {
 		distToIntersection = _radius;
 	} else {
-		distToCenter = std::sqrt(distToCenter);
-		distToIntersection = std::sqrt(_radius * _radius - distToCenter * distToCenter);
+		#ifndef __STDCPP_LLVM__
+			distToCenter = std::sqrt(distToCenter);
+			distToIntersection = std::sqrt(_radius * _radius - distToCenter * distToCenter);
+		#else
+			distToCenter = sqrtf(distToCenter);
+			distToIntersection = sqrtf(_radius * _radius - distToCenter * distToCenter);
+		#endif
 	}
 	// normalize...
 	v1.safeNormalize();
@@ -261,7 +278,11 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec
 		case spreadMethod_repeat:
 			ratio -= float(int32_t(ratio));
 			if (ratio <0.0f) {
-				ratio = 1.0f-std::abs(ratio);
+				#ifndef __STDCPP_LLVM__
+					ratio = 1.0f-std::abs(ratio);
+				#else
+					ratio = 1.0f-abs(ratio);
+				#endif
 			}
 			break;
 	}

@@ -101,7 +101,7 @@ void interpolateCubicBezier(std::vector<esvg::render::Point>& _listPoint,
 	vec2 pos34 = (_pos3+_pos4)*0.5f;
 	
 	vec2 delta = _pos4 - _pos1;
-	#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
+	#ifndef __STDCPP_LLVM__
 		float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
 		float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
 	#else
@@ -381,7 +381,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						ddd =   (deltaPrim.x()*deltaPrim.x())/(radius.x()*radius.x())
 						      + (deltaPrim.y()*deltaPrim.y())/(radius.y()*radius.y());
 						if (ddd > 1.0f) {
-							ddd = std::sqrt(ddd);
+							#ifndef __STDCPP_LLVM__
+								ddd = std::sqrt(ddd);
+							#else
+								ddd = sqrtf(ddd);
+							#endif
 							radius *= ddd;
 						}
 						// Compute center'
@@ -395,7 +399,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 							ssa = 0.0f;
 						}
 						if (ssb > 0.0f) {
-							sss = std::sqrt(ssa / ssb);
+							#ifndef __STDCPP_LLVM__
+								sss = std::sqrt(ssa / ssb);
+							#else
+								sss = sqrtf(ssa / ssb);
+							#endif
 						}
 						if (tmpIt->m_largeArcFlag == tmpIt->m_sweepFlag) {
 							sss *= -1.0f;
@@ -438,9 +446,17 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						matrix.translate(center);
 						// Split arc into max 90 degree segments.
 						// The loop assumes an iteration per end point (including start and end), this +1.
-						int32_t ndivs = int32_t(std::abs(deltaTheta) / (M_PI*0.5f)) + 1;
+						#ifndef __STDCPP_LLVM__
+							int32_t ndivs = int32_t(std::abs(deltaTheta) / (M_PI*0.5f)) + 1;
+						#else
+							int32_t ndivs = int32_t(fabs(deltaTheta) / (M_PI*0.5f)) + 1;
+						#endif
 						float hda = (deltaTheta / float(ndivs)) * 0.5f;
-						float kappa = std::abs(4.0f / 3.0f * (1.0f - std::cos(hda)) / std::sin(hda));
+						#ifndef __STDCPP_LLVM__
+							float kappa = std::abs(4.0f / 3.0f * (1.0f - std::cos(hda)) / std::sin(hda));
+						#else
+							float kappa = fabs(4.0f / 3.0f * (1.0f - cosf(hda)) / sinf(hda));
+						#endif
 						if (deltaTheta < 0.0f) {
 							kappa = -kappa;
 						}
@@ -448,7 +464,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						vec2 tangentPrevious(0.0,0.0);
 						for (int32_t iii=0; iii<=ndivs; ++iii) {
 							float a = theta1 + deltaTheta * (float(iii)/(float)ndivs);
-							delta = vec2(std::cos(a), std::sin(a));
+							#ifndef __STDCPP_LLVM__
+								delta = vec2(std::cos(a), std::sin(a));
+							#else
+								delta = vec2(cosf(a), sinf(a));
+							#endif
 							// position
 							vec2 pointPos = matrix * vec2(delta.x()*radius.x(), delta.y()*radius.y());
 							// tangent
