@@ -294,106 +294,94 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	m_id = _element->getAttribute("id");
 	// ---------------- stroke ----------------
 	content = _element->getAttribute("stroke");
-	if (content.size()!=0) {
-		m_paint.stroke = parseColor(content);
-		/*
-		if (m_paint.stroke.first.a() == 0) {
-			strokeNone = true;
+	if (content == "none") {
+		m_paint.stroke = std::pair<etk::Color<float,4>, std::string>(etk::color::none, "");
+	} else {
+		if (content.size()!=0) {
+			m_paint.stroke = parseColor(content);
 		}
-		*/
-	}
-	content = _element->getAttribute("stroke-width");
-	if (content.size()!=0) {
-		m_paint.strokeWidth = parseLength(content);
-	}
-	content = _element->getAttribute("stroke-opacity");
-	if (content.size()!=0) {
-		float opacity = parseLength(content);
-		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.stroke.first.setA(opacity);
-	}
-	
-	content = _element->getAttribute("stroke-dasharray");
-	if (content.size()!=0) {
-		if (content == "none" ) {
-			// OK, Nothing to do ...
-		} else {
-			ESVG_TODO(" 'stroke-dasharray' not implemented ...");
+		content = _element->getAttribute("stroke-width");
+		if (content.size()!=0) {
+			m_paint.strokeWidth = parseLength(content);
 		}
-	}
-	content = _element->getAttribute("stroke-linecap");
-	if (content.size()!=0) {
-		if (content == "butt" ) {
-			m_paint.lineCap = esvg::cap_butt;
-		} else if (content == "round" ) {
-			m_paint.lineCap = esvg::cap_round;
-		} else if (content == "square" ) {
-			m_paint.lineCap = esvg::cap_square;
-		} else {
-			m_paint.lineCap = esvg::cap_butt;
-			ESVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
+		content = _element->getAttribute("stroke-opacity");
+		if (content.size()!=0) {
+			float opacity = parseLength(content);
+			opacity = std::avg(0.0f, opacity, 1.0f);
+			m_paint.stroke.first.setA(opacity);
 		}
-	}
-	content = _element->getAttribute("stroke-linejoin");
-	if (content.size()!=0) {
-		if (content == "miter" ) {
-			m_paint.lineJoin = esvg::join_miter;
-		} else if (content == "round" ) {
-			m_paint.lineJoin = esvg::join_round;
-		} else if (content == "bevel" ) {
-			m_paint.lineJoin = esvg::join_bevel;
-		} else {
-			m_paint.lineJoin = esvg::join_miter;
-			ESVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
+		
+		content = _element->getAttribute("stroke-dasharray");
+		if (content.size()!=0) {
+			if (content == "none" ) {
+				// OK, Nothing to do ...
+			} else {
+				ESVG_TODO(" 'stroke-dasharray' not implemented ...");
+			}
 		}
-	}
-	content = _element->getAttribute("stroke-miterlimit");
-	if (content.size()!=0) {
-		float tmp = parseLength(content);
-		m_paint.miterLimit = std::max(0.0f, tmp);
+		content = _element->getAttribute("stroke-linecap");
+		if (content.size()!=0) {
+			if (content == "butt" ) {
+				m_paint.lineCap = esvg::cap_butt;
+			} else if (content == "round" ) {
+				m_paint.lineCap = esvg::cap_round;
+			} else if (content == "square" ) {
+				m_paint.lineCap = esvg::cap_square;
+			} else {
+				m_paint.lineCap = esvg::cap_butt;
+				ESVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
+			}
+		}
+		content = _element->getAttribute("stroke-linejoin");
+		if (content.size()!=0) {
+			if (content == "miter" ) {
+				m_paint.lineJoin = esvg::join_miter;
+			} else if (content == "round" ) {
+				m_paint.lineJoin = esvg::join_round;
+			} else if (content == "bevel" ) {
+				m_paint.lineJoin = esvg::join_bevel;
+			} else {
+				m_paint.lineJoin = esvg::join_miter;
+				ESVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
+			}
+		}
+		content = _element->getAttribute("stroke-miterlimit");
+		if (content.size()!=0) {
+			float tmp = parseLength(content);
+			m_paint.miterLimit = std::max(0.0f, tmp);
+		}
 	}
 	// ---------------- FILL ----------------
 	content = _element->getAttribute("fill");
-	if (content.size()!=0) {
-		m_paint.fill = parseColor(content);
-		/*
-		if (m_paint.fill.a() == 0) {
-			fillNone = true;
+	if (content == "none") {
+		m_paint.fill = std::pair<etk::Color<float,4>, std::string>(etk::color::none, "");
+	} else {
+		if (content.size()!=0) {
+			m_paint.fill = parseColor(content);
 		}
-		*/
-	}
-	content = _element->getAttribute("fill-opacity");
-	if (content.size()!=0) {
-		float opacity = parseLength(content);
-		opacity = std::avg(0.0f, opacity, 1.0f);
-		m_paint.fill.first.setA(opacity);
-	}
-	content = _element->getAttribute("fill-rule");
-	if (content.size()!=0) {
-		if (content == "nonzero") {
-			m_paint.flagEvenOdd = false;
-		} else if (content == "evenodd" ) {
-			m_paint.flagEvenOdd = true;
-		} else {
-			ESVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+		content = _element->getAttribute("fill-opacity");
+		if (content.size()!=0) {
+			float opacity = parseLength(content);
+			opacity = std::avg(0.0f, opacity, 1.0f);
+			m_paint.fill.first.setA(opacity);
+		}
+		content = _element->getAttribute("fill-rule");
+		if (content.size()!=0) {
+			if (content == "nonzero") {
+				m_paint.flagEvenOdd = false;
+			} else if (content == "evenodd" ) {
+				m_paint.flagEvenOdd = true;
+			} else {
+				ESVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+			}
+		}
+		// ---------------- opacity ----------------
+		content = _element->getAttribute("opacity");
+		if (content.size()!=0) {
+			m_paint.opacity = parseLength(content);
+			m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
 		}
 	}
-	// ---------------- opacity ----------------
-	content = _element->getAttribute("opacity");
-	if (content.size()!=0) {
-		m_paint.opacity = parseLength(content);
-		m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
-	}
-	// Note : No parsing of 'style' it is already converted in attribute before...
-	// check if somewere none is set to the filling:
-	/*
-	if (fillNone == true) {
-		m_paint.fill.setA(0.0f);
-	}
-	if (strokeNone == true) {
-		m_paint.stroke.setA(0.0f);
-	}
-	*/
 }
 
 std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::string& _inputData) {
@@ -408,7 +396,7 @@ std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::st
 			std::string color(_inputData.begin() + 5, _inputData.end()-1);
 			localColor = std::pair<etk::Color<float,4>, std::string>(etk::color::none, color);
 		} else {
-			ESVG_ERROR(" pb in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
+			ESVG_ERROR("Problem in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 		}
 	} else {
 		localColor = std::pair<etk::Color<float,4>, std::string>(_inputData, "");
