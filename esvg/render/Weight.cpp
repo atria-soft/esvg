@@ -121,7 +121,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() <= subSamplingCenterPos
-				     && it.p1.y() >= subSamplingCenterPos) {
+				     && it.p1.y() > subSamplingCenterPos) {
 					// check if we not get 2 identical lines:
 					if (    availlableSegment.size() > 0
 					     && availlableSegment.back().p1 == it.p0
