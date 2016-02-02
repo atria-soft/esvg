@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_RENDER_ELEMENT_H__
-#define __ESVG_RENDER_ELEMENT_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
@@ -90,8 +88,6 @@ namespace esvg {
 	 */
 	std::ostream& operator <<(std::ostream& _os, enum esvg::render::path _obj);
 }
-
-#endif
 
 #include <esvg/render/ElementStop.h>
 #include <esvg/render/ElementClose.h>

@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_JOIN_H__
-#define __ESVG_JOIN_H__
+#pragma once
 
 #include <etk/types.h>
 
@@ -23,5 +21,4 @@ namespace esvg {
 	std::ostream& operator <<(std::ostream& _os, enum esvg::join _obj);
 }
 
-#endif
 

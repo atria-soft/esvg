@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_RADIAL_GRANDIENT_H__
-#define __ESVG_RADIAL_GRANDIENT_H__
+#pragma once
 
 #include <esvg/Base.h>
 #include <esvg/gradientUnits.h>
@@ -38,6 +36,5 @@ namespace esvg {
 			const esvg::Dimension1D& getRadius();
 			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors(esvg::Document* _document);
 	};
-};
+}
 
-#endif

@@ -10,8 +10,7 @@
 #include <esvg/join.h>
 #include <esvg/cap.h>
 
-#ifndef __ESVG_BASE_H__
-#define __ESVG_BASE_H__
+#pragma once
 
 #include <etk/types.h>
 #include <vector>
@@ -111,6 +110,3 @@ namespace esvg {
 			void setId(const std::string& _newId);
 	};
 };
-
-#endif
-

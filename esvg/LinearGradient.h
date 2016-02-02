@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_LINEAR_GRANDIENT_H__
-#define __ESVG_LINEAR_GRANDIENT_H__
+#pragma once
 
 #include <esvg/Base.h>
 #include <esvg/gradientUnits.h>
@@ -36,7 +34,5 @@ namespace esvg {
 			const esvg::Dimension& getPosition2();
 			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors(esvg::Document* _document);
 	};
-};
-
-#endif
+}
 

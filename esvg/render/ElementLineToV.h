@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_RENDER_ELEMENT_LINE_TO_V_H__
-#define __ESVG_RENDER_ELEMENT_LINE_TO_V_H__
+#pragma once
 
 #include <etk/types.h>
 #include <etk/math/Vector2D.h>
@@ -24,5 +22,4 @@ namespace esvg {
 	}
 }
 
-#endif
 

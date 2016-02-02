@@ -8,10 +8,6 @@
 
 #include <etk/types.h>
 
-#ifndef __ESVG_TEST_MAIN_H__
-#define __ESVG_TEST_MAIN_H__
+#pragma once
 
 extern bool g_visualDebug;
-
-
-#endif

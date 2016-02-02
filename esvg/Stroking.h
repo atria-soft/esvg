@@ -5,15 +5,11 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_STROKING_H__
-#define __ESVG_STROKING_H__
+#pragma once
 
 #include <esvg/Base.h>
 
 namespace esvg {
 	
 };
-
-#endif
 

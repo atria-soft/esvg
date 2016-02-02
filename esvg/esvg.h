@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_H__
-#define __ESVG_H__
+#pragma once
 
 #include <etk/types.h>
 #include <vector>
@@ -95,7 +93,5 @@ namespace esvg {
 			};
 			std::shared_ptr<esvg::Base> getReference(const std::string& _name);
 	};
-};
-
-#endif
+}
 

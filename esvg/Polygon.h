@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_POLYGON_H__
-#define __ESVG_POLYGON_H__
+#pragma once
 
 #include <esvg/Base.h>
 #include <vector>
@@ -30,7 +28,5 @@ namespace esvg {
 			virtual void display(int32_t _spacing);
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 	};
-};
-
-#endif
+}
 

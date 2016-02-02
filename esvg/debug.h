@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_DEBUG_H__
-#define __ESVG_DEBUG_H__
+#pragma once
 
 #include <etk/log.h>
 
@@ -40,5 +38,4 @@ namespace esvg {
 		} \
 	} while (0)
 
-#endif
 

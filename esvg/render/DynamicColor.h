@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ESVG_RENDER_DYNAMIC_COLOR_H__
-#define __ESVG_RENDER_DYNAMIC_COLOR_H__
+#pragma once
 
 #include <memory>
 #include <etk/types.h>
@@ -80,6 +78,4 @@ namespace esvg {
 		std::shared_ptr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx);
 	}
 }
-
-#endif
 
