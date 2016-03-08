@@ -7,12 +7,12 @@
  */
 #pragma once
 
-#include <etk/log.h>
+#include <elog/log.h>
 
 namespace esvg {
 	int32_t getLogId();
 };
-#define ESVG_BASE(info,data)     TK_LOG_BASE(esvg::getLogId(),info,data)
+#define ESVG_BASE(info,data)     ELOG_BASE(esvg::getLogId(),info,data)
 
 #define ESVG_PRINT(data)         ESVG_BASE(-1, data)
 #define ESVG_CRITICAL(data)      ESVG_BASE(1, data)
