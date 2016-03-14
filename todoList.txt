@@ -1,0 +1,21 @@
+Stroking
+	- activate stroking
+	- 
+
+Color
+	- Single color export
+	- Export in float and U8*4 value
+	- Gradient color
+
+Tools
+	- Id in the list of path
+	- Layers
+	- Id in gradiant
+	
+
+Doc:
+	- write doxygen
+	- write tutorials
+
+Test-unit
+	- writer corner case test
