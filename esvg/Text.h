@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -14,7 +14,7 @@ namespace esvg {
 		public:
 			Text(PaintState _parentPaintState);
 			~Text();
-			virtual bool parse(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parse(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
 	};
 }

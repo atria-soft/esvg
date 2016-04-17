@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -26,7 +26,7 @@ namespace esvg {
 		public:
 			LinearGradient(PaintState _parentPaintState);
 			~LinearGradient();
-			virtual bool parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
 		public:

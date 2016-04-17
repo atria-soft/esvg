@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2014, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <vector>
 #include <gtest/gtest.h>
 #include <etk/etk.h>
-
-#undef __class__
-#define __class__ "esvg::test"
 
 bool g_visualDebug = false;
 

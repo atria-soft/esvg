@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/LinearGradient.h>
 #include <esvg/RadialGradient.h>
 #include <esvg/esvg.h>
-
-#undef __class__
-#define __class__	"render::DynamicColorSpecial"
 
 esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2& _mtx) :
   m_linear(true),
@@ -443,9 +440,6 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_data = gradient->getColors(_document);
 	}
 }
-
-#undef __class__
-#define __class__	"render:DynamicColor"
 
 std::shared_ptr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx) {
 	// Check if need to create a color:

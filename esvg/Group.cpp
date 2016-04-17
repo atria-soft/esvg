@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -20,9 +20,6 @@
 #include <esvg/Text.h>
 #include <esvg/Group.h>
 
-#undef __class__
-#define __class__	"Group"
-
 esvg::Group::Group(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
@@ -31,8 +28,8 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	if (_element == nullptr) {
+bool esvg::Group::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	// parse ...
@@ -51,42 +48,42 @@ bool esvg::Group::parseXML(const std::shared_ptr<exml::Element>& _element, mat2&
 	_sizeMax.setValue(0,0);
 	vec2 tmpPos(0,0);
 	// parse all sub node :
-	for(int32_t iii=0; iii<_element->size() ; iii++) {
-		std::shared_ptr<exml::Element> child = _element->getElement(iii);
-		if (child == nullptr) {
+	for(const auto it : _element.nodes) {
+		exml::Element child = _element.toElement();
+		if (child.exist() == false) {
 			// can be a comment ...
 			continue;
 		}
 		std::shared_ptr<esvg::Base> elementParser;
-		if (child->getValue() == "g") {
+		if (child.getValue() == "g") {
 			elementParser = std::make_shared<esvg::Group>(m_paint);
-		} else if (child->getValue() == "a") {
+		} else if (child.getValue() == "a") {
 			// TODO ...
-		} else if (child->getValue() == "path") {
+		} else if (child.getValue() == "path") {
 			elementParser = std::make_shared<esvg::Path>(m_paint);
-		} else if (child->getValue() == "rect") {
+		} else if (child.getValue() == "rect") {
 			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
-		} else if (child->getValue() == "circle") {
+		} else if (child.getValue() == "circle") {
 			elementParser = std::make_shared<esvg::Circle>(m_paint);
-		} else if (child->getValue() == "ellipse") {
+		} else if (child.getValue() == "ellipse") {
 			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
-		} else if (child->getValue() == "line") {
+		} else if (child.getValue() == "line") {
 			elementParser = std::make_shared<esvg::Line>(m_paint);
-		} else if (child->getValue() == "polyline") {
+		} else if (child.getValue() == "polyline") {
 			elementParser = std::make_shared<esvg::Polyline>(m_paint);
-		} else if (child->getValue() == "polygon") {
+		} else if (child.getValue() == "polygon") {
 			elementParser = std::make_shared<esvg::Polygon>(m_paint);
-		} else if (child->getValue() == "text") {
+		} else if (child.getValue() == "text") {
 			elementParser = std::make_shared<esvg::Text>(m_paint);
 		} else {
-			ESVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
 		if (elementParser == nullptr) {
-			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
+			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
 		if (elementParser->parseXML(child, m_transformMatrix, tmpPos) == false) {
-			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
+			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' Sub Parsing ERROR");
 			elementParser.reset();
 			continue;
 		}

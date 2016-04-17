@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
-
-#undef __class__
-#define __class__	"rerder::Element"
 
 std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::render::path _obj) {
 	switch (_obj) {

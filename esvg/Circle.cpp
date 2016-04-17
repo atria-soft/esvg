@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Circle"
-
 esvg::Circle::Circle(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
@@ -22,10 +19,10 @@ esvg::Circle::~Circle() {
 	
 }
 
-bool esvg::Circle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Circle::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -34,24 +31,24 @@ bool esvg::Circle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string content = _element->getAttribute("cx");
+	std::string content = _element.attributes["cx"];
 	if (content.size()!=0) {
 		m_position.setX(parseLength(content));
 	}
-	content = _element->getAttribute("cy");
+	content = _element.attributes["cy"];
 	if (content.size()!=0) {
 		m_position.setY(parseLength(content));
 	}
-	content = _element->getAttribute("r");
+	content = _element.attributes["r"];
 	if (content.size()!=0) {
 		m_radius = parseLength(content);
 	} else {
-		ESVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is not present");
+		ESVG_ERROR("(l "<<_element.getPos()<<") Circle \"r\" is not present");
 		return false;
 	}
 	if (0 > m_radius) {
 		m_radius = 0;
-		ESVG_ERROR("(l "<<_element->getPos()<<") Circle \"r\" is negative");
+		ESVG_ERROR("(l "<<_element.getPos()<<") Circle \"r\" is negative");
 		return false;
 	}
 	_sizeMax.setValue(m_position.x() + m_radius, m_position.y() + m_radius);

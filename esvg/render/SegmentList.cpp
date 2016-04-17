@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -9,11 +9,6 @@
 #include <esvg/render/SegmentList.h>
 #include <esvg/debug.h>
 #include <etk/math/Matrix2.h>
-
-
-
-#undef __class__
-#define __class__	"rerder::SegmentList"
 
 esvg::render::SegmentList::SegmentList() {
 	

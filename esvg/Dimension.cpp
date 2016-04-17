@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 
 #include <esvg/Dimension.h>
 #include <esvg/debug.h>
-
-#undef __class__
-#define __class__	"Dimension"
 
 static const float       inchToMillimeter = 1.0f/25.4f;
 static const float       footToMillimeter = 1.0f/304.8f;
@@ -281,10 +278,6 @@ namespace etk {
 		return from_string(_variableRet, etk::to_string(_value));
 	}
 };
-
-
-#undef __class__
-#define __class__	"Dimension1D"
 
 esvg::Dimension1D::Dimension1D() :
   m_data(0.0f),

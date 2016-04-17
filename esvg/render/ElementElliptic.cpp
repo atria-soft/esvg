@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,10 +8,6 @@
 
 #include <esvg/render/Element.h>
 #include <esvg/debug.h>
-
-
-#undef __class__
-#define __class__	"rerder::ElementElliptic"
 
 esvg::render::ElementElliptic::ElementElliptic(bool _relative,
                                                const vec2& _radius, // in m_vec1

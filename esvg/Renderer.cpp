@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -9,9 +9,6 @@
 #include <esvg/debug.h>
 #include <esvg/Renderer.h>
 #include <etk/os/FSNode.h>
-
-#undef __class__
-#define __class__ "Renderer"
 
 esvg::Renderer::Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug) :
 #ifdef DEBUG

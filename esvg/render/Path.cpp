@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,9 +8,6 @@
 #include <esvg/debug.h>
 #include <esvg/render/Path.h>
 #include <esvg/render/Element.h>
-
-#undef __class__
-#define __class__	"rerder::Path"
 
 void esvg::render::Path::clear() {
 	m_listElement.clear();

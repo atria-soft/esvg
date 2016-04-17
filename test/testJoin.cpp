@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2014, Edouard DUPIN, all right reserved
@@ -10,8 +10,6 @@
 #include <esvg/esvg.h>
 #include "main.h"
 
-#undef __class__
-#define __class__	"TestJoin"
 // ------------------------------------------------------ Miter test -----------------------------------------------------
 
 TEST(TestJoin, miterRight1) {

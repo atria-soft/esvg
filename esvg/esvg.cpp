@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -20,10 +20,6 @@
 #include <esvg/Group.h>
 #include <esvg/LinearGradient.h>
 #include <esvg/RadialGradient.h>
-
-#undef __class__
-#define __class__ "Document"
-
 
 esvg::Document::Document() {
 	m_fileName = "";
@@ -158,18 +154,18 @@ bool esvg::Document::parse(const std::string& _data) {
 	clear();
 	exml::Document doc;
 	if (doc.parse(_data) == false) {
-		ESVG_ERROR("Error occured when loading SVG : " << m_fileName);
+		ESVG_ERROR("Error occured when loading SVG: " << m_fileName);
 		m_loadOK = false;
 		return m_loadOK;
 	}
-	if (doc.size() == 0) {
-		ESVG_ERROR("(l ?) No nodes in the SVG file ... \"" << m_fileName << "\"");
+	if (doc.nodes.size() == 0) {
+		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_fileName << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
-	std::shared_ptr<exml::Element> root = doc.getNamed("svg" );
-	if (root == nullptr) {
-		ESVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
+	exml::Element root = doc.nodes["svg"];
+	if (root.exist() == false) {
+		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_fileName << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
@@ -191,14 +187,14 @@ bool esvg::Document::load(const std::string& _file) {
 		m_loadOK = false;
 		return m_loadOK;
 	}
-	if (doc.size() == 0) {
-		ESVG_ERROR("(l ?) No nodes in the SVG file ... \"" << m_fileName << "\"");
+	if (doc.nodes.size() == 0) {
+		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_fileName << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
-	std::shared_ptr<exml::Element> root = doc.getNamed("svg");
-	if (root == nullptr) {
-		ESVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
+	exml::Element root = doc.nodes["svg"];
+	if (root.exist() == false) {
+		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_fileName << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
@@ -211,16 +207,16 @@ bool esvg::Document::store(const std::string& _file) {
 	return false;
 }
 
-bool esvg::Document::cleanStyleProperty(const std::shared_ptr<exml::Element>& _root) {
+bool esvg::Document::cleanStyleProperty(const exml::Element& _root) {
 	// for each nodes:
-	for(int32_t iii=0; iii< _root->size(); iii++) {
-		std::shared_ptr<exml::Element> child = _root->getElement(iii);
-		if (child == nullptr) {
+	for(auto it: _root.nodes) {
+		exml::Element child = it.toElement();
+		if (child.exist() == false) {
 			continue;
 		}
 		// get attribute style:
-		if (child->existAttribute("style") == true) {
-			std::string content = child->getAttribute("style");
+		if (child.attributes.exist("style") == true) {
+			std::string content = child.attributes["style"];
 			if (content.size() != 0) {
 				std::vector<std::string> listStyle = etk::split(content, ';');
 				for (auto &it : listStyle) {
@@ -230,11 +226,11 @@ bool esvg::Document::cleanStyleProperty(const std::shared_ptr<exml::Element>& _r
 						continue;
 					}
 					// TODO : Check if the attibute already exist ...
-					child->setAttribute(value[0], value[1]);
+					child.attributes.set(value[0], value[1]);
 				}
 			}
 			// remove attribute style:
-			child->removeAttribute("style");
+			child.attributes.remove("style");
 		}
 		// sub-parsing ...
 		cleanStyleProperty(child);
@@ -242,9 +238,9 @@ bool esvg::Document::cleanStyleProperty(const std::shared_ptr<exml::Element>& _r
 	return true;
 }
 
-bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference) {
+bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference) {
 	// get the svg version :
-	m_version = _root->getAttribute("version");
+	m_version = _root.attributes["version"];
 	// parse ...
 	vec2 pos(0,0);
 	if (_isReference == false) {
@@ -258,75 +254,75 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 	vec2 maxSize(0,0);
 	vec2 size(0,0);
 	// parse all sub node:
-	for(int32_t iii=0; iii< _root->size(); iii++) {
-		std::shared_ptr<exml::Element> child = _root->getElement(iii);
-		if (child == nullptr) {
+	for(auto it : _root.nodes) {
+		exml::Element child = it.toElement();
+		if (child.exist() == false) {
 			// comment can be here...
 			continue;
 		}
 		std::shared_ptr<esvg::Base> elementParser;
-		if (child->getValue() == "g") {
+		if (child.getValue() == "g") {
 			elementParser = std::make_shared<esvg::Group>(m_paint);
-		} else if (child->getValue() == "a") {
+		} else if (child.getValue() == "a") {
 			ESVG_INFO("Note : 'a' balise is parsed like a g balise ...");
 			elementParser = std::make_shared<esvg::Group>(m_paint);
-		} else if (child->getValue() == "title") {
+		} else if (child.getValue() == "title") {
 			m_title = "TODO : set the title here ...";
 			continue;
-		} else if (child->getValue() == "path") {
+		} else if (child.getValue() == "path") {
 			elementParser = std::make_shared<esvg::Path>(m_paint);
-		} else if (child->getValue() == "rect") {
+		} else if (child.getValue() == "rect") {
 			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
-		} else if (child->getValue() == "circle") {
+		} else if (child.getValue() == "circle") {
 			elementParser = std::make_shared<esvg::Circle>(m_paint);
-		} else if (child->getValue() == "ellipse") {
+		} else if (child.getValue() == "ellipse") {
 			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
-		} else if (child->getValue() == "line") {
+		} else if (child.getValue() == "line") {
 			elementParser = std::make_shared<esvg::Line>(m_paint);
-		} else if (child->getValue() == "polyline") {
+		} else if (child.getValue() == "polyline") {
 			elementParser = std::make_shared<esvg::Polyline>(m_paint);
-		} else if (child->getValue() == "polygon") {
+		} else if (child.getValue() == "polygon") {
 			elementParser = std::make_shared<esvg::Polygon>(m_paint);
-		} else if (child->getValue() == "text") {
+		} else if (child.getValue() == "text") {
 			elementParser = std::make_shared<esvg::Text>(m_paint);
-		} else if (child->getValue() == "radialGradient") {
+		} else if (child.getValue() == "radialGradient") {
 			if (_isReference == false) {
-				ESVG_ERROR("'" << child->getValue() << "' node must not be defined outside a defs Section");
+				ESVG_ERROR("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
 				elementParser = std::make_shared<esvg::RadialGradient>(m_paint);
 			}
-		} else if (child->getValue() == "linearGradient") {
+		} else if (child.getValue() == "linearGradient") {
 			if (_isReference == false) {
-				ESVG_ERROR("'" << child->getValue() << "' node must not be defined outside a defs Section");
+				ESVG_ERROR("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
 				elementParser = std::make_shared<esvg::LinearGradient>(m_paint);
 			}
-		} else if (child->getValue() == "defs") {
+		} else if (child.getValue() == "defs") {
 			if (_isReference == true) {
-				ESVG_ERROR("'" << child->getValue() << "' node must not be defined in a defs Section");
+				ESVG_ERROR("'" << child.getValue() << "' node must not be defined in a defs Section");
 				continue;
 			} else {
 				bool retRefs = parseXMLData(child, true);
 				// TODO : Use retRefs ...
 				continue;
 			}
-		} else if (child->getValue() == "sodipodi:namedview") {
+		} else if (child.getValue() == "sodipodi:namedview") {
 			// Node ignore : generaly inkscape data
 			continue;
-		} else if (child->getValue() == "metadata") {
+		} else if (child.getValue() == "metadata") {
 			// Node ignore : generaly inkscape data
 			continue;
 		} else {
-			ESVG_ERROR("(l "<<child->getPos()<<") node not suported : \""<<child->getValue()<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
 		if (elementParser == nullptr) {
-			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" allocation error or not supported ...");
+			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
 		if (elementParser->parseXML(child, m_transformMatrix, size) == false) {
-			ESVG_ERROR("(l "<<child->getPos()<<") error on node: \""<<child->getValue()<<"\" Sub Parsing ERROR");
+			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' Sub Parsing ERROR");
 			elementParser.reset();
 			continue;
 		}
@@ -343,7 +339,8 @@ bool esvg::Document::parseXMLData(const std::shared_ptr<exml::Element>& _root, b
 			m_refList.push_back(elementParser);
 		}
 	}
-	if (m_size.x() == 0 || m_size.y()==0) {
+	if (    m_size.x() == 0
+	     || m_size.y()==0) {
 		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
 	} else {
 		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 #include <esvg/esvg.h>
-
-#undef __class__
-#define __class__	"RadialGradient"
 
 esvg::RadialGradient::RadialGradient(PaintState _parentPaintState) :
   esvg::Base(_parentPaintState),
@@ -31,15 +28,15 @@ esvg::RadialGradient::~RadialGradient() {
 }
 
 
-bool esvg::RadialGradient::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	//m_paint.strokeWidth = 1;
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	
 	// ---------------- get unique ID ----------------
-	m_id = _element->getAttribute("id");
+	m_id = _element.attributes["id"];
 	
 	//parseTransform(_element);
 	//parsePaintAttr(_element);
@@ -47,23 +44,23 @@ bool esvg::RadialGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string contentX = _element->getAttribute("cx");
-	std::string contentY = _element->getAttribute("cy");
+	std::string contentX = _element.attributes["cx"];
+	std::string contentY = _element.attributes["cy"];
 	if (    contentX != ""
 	     && contentY != "") {
 		m_center.set(contentX, contentY);
 	}
-	contentX = _element->getAttribute("r");
+	contentX = _element.attributes["r"];
 	if (contentX != "") {
 		m_radius.set(contentX);
 	}
-	contentX = _element->getAttribute("fx");
-	contentY = _element->getAttribute("fy");
+	contentX = _element.attributes["fx"];
+	contentY = _element.attributes["fy"];
 	if (    contentX != ""
 	     && contentY != "") {
 		m_focal.set(contentX, contentY);
 	}
-	contentX = _element->getAttribute("gradientUnits");
+	contentX = _element.attributes["gradientUnits"];
 	if (contentX == "userSpaceOnUse") {
 		m_unit = gradientUnits_userSpaceOnUse;
 	} else {
@@ -73,7 +70,7 @@ bool esvg::RadialGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 			ESVG_ERROR("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
 		}
 	}
-	contentX = _element->getAttribute("spreadMethod");
+	contentX = _element.attributes["spreadMethod"];
 	if (contentX == "reflect") {
 		m_spread = spreadMethod_reflect;
 	} else if (contentX == "repeat") {
@@ -86,21 +83,21 @@ bool esvg::RadialGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 		}
 	}
 	// note: xlink:href is incompatible with subNode "stop"
-	m_href = _element->getAttribute("xlink:href");
+	m_href = _element.attributes["xlink:href"];
 	if (m_href.size() != 0) {
 		m_href = std::string(m_href.begin()+1, m_href.end());
 	}
 	// parse all sub node :
-	for(int32_t iii=0; iii<_element->size() ; iii++) {
-		std::shared_ptr<exml::Element> child = _element->getElement(iii);
-		if (child == nullptr) {
+	for(auto it : _element.nodes) {
+		exml::Element child = it.toElement();
+		if (child.exist() == false) {
 			// can be a comment ...
 			continue;
 		}
-		if (child->getValue() == "stop") {
+		if (child.getValue() == "stop") {
 			float offset = 100;
 			etk::Color<float,4> stopColor = etk::color::none;
-			std::string content = child->getAttribute("offset");
+			std::string content = child.attributes["offset"];
 			if (content.size()!=0) {
 				std::pair<float, enum esvg::distance> tmp = parseLength2(content);
 				if (tmp.second == esvg::distance_pixel) {
@@ -112,26 +109,26 @@ bool esvg::RadialGradient::parseXML(const std::shared_ptr<exml::Element>& _eleme
 					offset = tmp.first;
 				}
 			}
-			content = child->getAttribute("stop-color");
+			content = child.attributes["stop-color"];
 			if (content.size()!=0) {
 				stopColor = parseColor(content).first;
 				ESVG_VERBOSE(" color : \"" << content << "\"  == > " << stopColor);
 			}
-			content = child->getAttribute("stop-opacity");
+			content = child.attributes["stop-opacity"];
 			if (content.size()!=0) {
 				float opacity = parseLength(content);
 				opacity = std::avg(0.0f, opacity, 1.0f);
 				stopColor.setA(opacity);
-				ESVG_VERBOSE(" opacity : \"" << content << "\"  == > " << stopColor);
+				ESVG_VERBOSE(" opacity : '" << content << "'  == > " << stopColor);
 			}
 			m_data.push_back(std::pair<float, etk::Color<float,4>>(offset, stopColor));
 		} else {
-			ESVG_ERROR("(l " << child->getPos() << ") node not suported : \"" << child->getValue() << "\" must be [stop]");
+			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [stop]");
 		}
 	}
 	if (m_data.size() != 0) {
 		if (m_href != "") {
-			ESVG_ERROR("(l " << _element->getPos() << ") node can not have an xlink:href element with sub node named: stop ==> removing href");
+			ESVG_ERROR("(l " << _element.getPos() << ") node can not have an xlink:href element with sub node named: stop ==> removing href");
 			m_href = "";
 		}
 	}

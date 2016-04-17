@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,10 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Rectangle"
-
-
 esvg::Rectangle::Rectangle(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_position.setValue(0,0);
 	m_size.setValue(0,0);
@@ -25,8 +21,8 @@ esvg::Rectangle::~Rectangle() {
 	
 }
 
-bool esvg::Rectangle::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	if (_element == nullptr) {
+bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	m_position.setValue(0.0f, 0.0f);
@@ -41,11 +37,11 @@ bool esvg::Rectangle::parseXML(const std::shared_ptr<exml::Element>& _element, m
 	
 	parsePosition(_element, m_position, m_size);
 	
-	std::string content = _element->getAttribute("rx");
+	std::string content = _element.attributes["rx"];
 	if (content.size()!=0) {
 		m_roundedCorner.setX(parseLength(content));
 	}
-	content = _element->getAttribute("ry");
+	content = _element.attributes["ry"];
 	if (content.size()!=0) {
 		m_roundedCorner.setY(parseLength(content));
 	}

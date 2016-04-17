@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -60,8 +60,8 @@ namespace esvg {
 			/**
 			 * @brief change all style in a xml atribute
 			 */
-			virtual bool cleanStyleProperty(const std::shared_ptr<exml::Element>& _root);
-			virtual bool parseXMLData(const std::shared_ptr<exml::Element>& _root, bool _isReference = false);
+			virtual bool cleanStyleProperty(const exml::Element& _root);
+			virtual bool parseXMLData(const exml::Element& _root, bool _isReference = false);
 		public:
 			bool isLoadOk() {
 				return m_loadOK;

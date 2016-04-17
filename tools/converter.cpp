@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2014, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <vector>
 #include <etk/etk.h>
 #include <esvg/esvg.h>
-
-#undef __class__
-#define __class__ "converter"
 
 static void usage() {
 	TEST_PRINT(etk::getApplicationName() << " - help : ");

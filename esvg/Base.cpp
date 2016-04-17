@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -12,9 +12,6 @@
 #include <math.h>
 
 const float esvg::kappa90(0.5522847493f);
-
-#undef __class__
-#define __class__	"PaintState"
 
 esvg::PaintState::PaintState() :
   fill(std::pair<etk::Color<float,4>, std::string>(etk::color::black, "")),
@@ -41,10 +38,6 @@ void esvg::PaintState::clear() {
 	miterLimit = 4.0f;
 	opacity = 1.0;
 }
-
-
-#undef __class__
-#define __class__	"Base"
 
 
 esvg::Base::Base(PaintState _parentPaintState) {
@@ -86,11 +79,11 @@ std::string extractTransformData(const std::string& _value, const std::string& _
 	return std::string(_value.begin()+posStart, _value.begin()+posEnd);
 }
 
-void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) {
-	if (_element == nullptr) {
+void esvg::Base::parseTransform(const exml::Element& _element) {
+	if (_element.exist() == false) {
 		return;
 	}
-	std::string inputString = _element->getAttribute("transform");
+	std::string inputString = _element.attributes["transform"];
 	if (inputString.size() == 0) {
 		return;
 	}
@@ -179,26 +172,26 @@ void esvg::Base::parseTransform(const std::shared_ptr<exml::Element>& _element) 
 	}
 }
 
-void esvg::Base::parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size) {
+void esvg::Base::parsePosition(const exml::Element& _element, vec2 &_pos, vec2 &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
 	
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		return;
 	}
-	std::string content = _element->getAttribute("x");
+	std::string content = _element.attributes["x"];
 	if (content.size()!=0) {
 		_pos.setX(parseLength(content));
 	}
-	content = _element->getAttribute("y");
+	content = _element.attributes["y"];
 	if (content.size()!=0) {
 		_pos.setY(parseLength(content));
 	}
-	content = _element->getAttribute("width");
+	content = _element.attributes["width"];
 	if (content.size()!=0) {
 		_size.setX(parseLength(content));
 	}
-	content = _element->getAttribute("height");
+	content = _element.attributes["height"];
 	if (content.size()!=0) {
 		_size.setY(parseLength(content));
 	}
@@ -281,8 +274,8 @@ float esvg::Base::parseLength(const std::string& _dataInput) {
 	return 0.0f;
 }
 
-void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _element) {
-	if (_element == nullptr) {
+void esvg::Base::parsePaintAttr(const exml::Element& _element) {
+	if (_element.exist() == false) {
 		return;
 	}
 	/*
@@ -291,27 +284,27 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 	*/
 	std::string content;
 	// ---------------- get unique ID ----------------
-	m_id = _element->getAttribute("id");
+	m_id = _element.attributes["id"];
 	// ---------------- stroke ----------------
-	content = _element->getAttribute("stroke");
+	content = _element.attributes["stroke"];
 	if (content == "none") {
 		m_paint.stroke = std::pair<etk::Color<float,4>, std::string>(etk::color::none, "");
 	} else {
 		if (content.size()!=0) {
 			m_paint.stroke = parseColor(content);
 		}
-		content = _element->getAttribute("stroke-width");
+		content = _element.attributes["stroke-width"];
 		if (content.size()!=0) {
 			m_paint.strokeWidth = parseLength(content);
 		}
-		content = _element->getAttribute("stroke-opacity");
+		content = _element.attributes["stroke-opacity"];
 		if (content.size()!=0) {
 			float opacity = parseLength(content);
 			opacity = std::avg(0.0f, opacity, 1.0f);
 			m_paint.stroke.first.setA(opacity);
 		}
 		
-		content = _element->getAttribute("stroke-dasharray");
+		content = _element.attributes["stroke-dasharray"];
 		if (content.size()!=0) {
 			if (content == "none" ) {
 				// OK, Nothing to do ...
@@ -319,7 +312,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 				ESVG_TODO(" 'stroke-dasharray' not implemented ...");
 			}
 		}
-		content = _element->getAttribute("stroke-linecap");
+		content = _element.attributes["stroke-linecap"];
 		if (content.size()!=0) {
 			if (content == "butt" ) {
 				m_paint.lineCap = esvg::cap_butt;
@@ -332,7 +325,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 				ESVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 			}
 		}
-		content = _element->getAttribute("stroke-linejoin");
+		content = _element.attributes["stroke-linejoin"];
 		if (content.size()!=0) {
 			if (content == "miter" ) {
 				m_paint.lineJoin = esvg::join_miter;
@@ -345,27 +338,27 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 				ESVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 			}
 		}
-		content = _element->getAttribute("stroke-miterlimit");
+		content = _element.attributes["stroke-miterlimit"];
 		if (content.size()!=0) {
 			float tmp = parseLength(content);
 			m_paint.miterLimit = std::max(0.0f, tmp);
 		}
 	}
 	// ---------------- FILL ----------------
-	content = _element->getAttribute("fill");
+	content = _element.attributes["fill"];
 	if (content == "none") {
 		m_paint.fill = std::pair<etk::Color<float,4>, std::string>(etk::color::none, "");
 	} else {
 		if (content.size()!=0) {
 			m_paint.fill = parseColor(content);
 		}
-		content = _element->getAttribute("fill-opacity");
+		content = _element.attributes["fill-opacity"];
 		if (content.size()!=0) {
 			float opacity = parseLength(content);
 			opacity = std::avg(0.0f, opacity, 1.0f);
 			m_paint.fill.first.setA(opacity);
 		}
-		content = _element->getAttribute("fill-rule");
+		content = _element.attributes["fill-rule"];
 		if (content.size()!=0) {
 			if (content == "nonzero") {
 				m_paint.flagEvenOdd = false;
@@ -376,7 +369,7 @@ void esvg::Base::parsePaintAttr(const std::shared_ptr<const exml::Element>& _ele
 			}
 		}
 		// ---------------- opacity ----------------
-		content = _element->getAttribute("opacity");
+		content = _element.attributes["opacity"];
 		if (content.size()!=0) {
 			m_paint.opacity = parseLength(content);
 			m_paint.opacity = std::avg(0.0f, m_paint.opacity, 1.0f);
@@ -405,10 +398,10 @@ std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::st
 	return localColor;
 }
 
-bool esvg::Base::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Base::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// TODO : UNDERSTAND why nothing is done here ...
 	// Parse basic elements (ID...):
-	m_id = _element->getAttribute("id");
+	m_id = _element.attributes["id"];
 	_sizeMax = vec2(0.0f, 0.0f);
 	return false;
 }

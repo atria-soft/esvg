@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -64,19 +64,19 @@ namespace esvg {
 			 * @param[in] _element standart XML node
 			 * @return true if no problem arrived
 			 */
-			virtual bool parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
 			
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };
-			void parseTransform(const std::shared_ptr<exml::Element>& _element);
+			void parseTransform(const exml::Element& _element);
 			/**
 			 * @brief parse x, y, width, height attribute of the xml node
 			 * @param[in] _element XML node
 			 * @param[out] _pos parsed position
 			 * @param[out] _size parsed dimention
 			 */
-			void parsePosition(const std::shared_ptr<const exml::Element>& _element, vec2 &_pos, vec2 &_size);
+			void parsePosition(const exml::Element& _element, vec2 &_pos, vec2 &_size);
 			/**
 			 * @brief parse a lenght of the xml element
 			 * @param[in] _dataInput Data C String with the printed lenght
@@ -88,7 +88,7 @@ namespace esvg {
 			 * @brief parse a Painting attribute of a specific node
 			 * @param[in] _element Basic node of the XML that might be parsed
 			 */
-			void parsePaintAttr(const std::shared_ptr<const exml::Element>& _element);
+			void parsePaintAttr(const exml::Element& _element);
 			/**
 			 * @brief parse a color specification from the svg file
 			 * @param[in] _inputData Data C String with the xml definition

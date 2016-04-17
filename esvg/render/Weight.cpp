@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -8,10 +8,6 @@
 
 #include <esvg/render/Weight.h>
 #include <esvg/debug.h>
-
-#undef __class__
-#define __class__	"render::Weight"
-
 
 esvg::render::Weight::Weight() :
   m_size(0,0)  {

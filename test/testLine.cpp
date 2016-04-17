@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2014, Edouard DUPIN, all right reserved
@@ -9,9 +9,6 @@
 #include <gtest/gtest.h>
 #include <esvg/esvg.h>
 #include "main.h"
-
-#undef __class__
-#define __class__	"TestLine"
 
 TEST(TestLine, stroke) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"

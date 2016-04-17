@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Line"
-
 esvg::Line::Line(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_startPos.setValue(0,0);
 	m_stopPos.setValue(0,0);
@@ -23,10 +20,10 @@ esvg::Line::~Line() {
 	
 }
 
-bool esvg::Line::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Line::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -35,20 +32,20 @@ bool esvg::Line::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string content = _element->getAttribute("x1");
-	if (content.size()!=0) {
+	std::string content = _element.attributes["x1"];
+	if (content.size() != 0) {
 		m_startPos.setX(parseLength(content));
 	}
-	content = _element->getAttribute("y1");
-	if (content.size()!=0) {
+	content = _element.attributes["y1"];
+	if (content.size() != 0) {
 		m_startPos.setY(parseLength(content));
 	}
-	content = _element->getAttribute("x2");
-	if (content.size()!=0) {
+	content = _element.attributes["x2"];
+	if (content.size() != 0) {
 		m_stopPos.setX(parseLength(content));
 	}
-	content = _element->getAttribute("y2");
-	if (content.size()!=0) {
+	content = _element.attributes["y2"];
+	if (content.size() != 0) {
 		m_stopPos.setY(parseLength(content));
 	}
 	_sizeMax.setValue(std::max(m_startPos.x(), m_stopPos.x()),

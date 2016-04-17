@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -10,9 +10,6 @@
 #include <esvg/Path.h>
 #include <esvg/render/PointList.h>
 #include <esvg/render/Weight.h>
-
-#undef __class__
-#define __class__	"Path"
 
 esvg::Path::Path(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
@@ -81,8 +78,8 @@ std::string cleanBadSpaces(const std::string& _input) {
 	return out;
 }
 
-bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	if (_element == nullptr) {
+bool esvg::Path::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -92,9 +89,9 @@ bool esvg::Path::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& 
 	m_transformMatrix *= _parentTrans;
 	
 	
-	std::string elementXML1 = _element->getAttribute("d");
+	std::string elementXML1 = _element.attributes["d"];
 	if (elementXML1.size() == 0) {
-		ESVG_WARNING("(l "<<_element->getPos()<<") path: missing 'd' attribute or empty");
+		ESVG_WARNING("(l "<<_element.getPos()<<") path: missing 'd' attribute or empty");
 		return false;
 	}
 	ESVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");

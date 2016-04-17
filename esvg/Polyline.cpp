@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Polyline"
-
 esvg::Polyline::Polyline(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
@@ -22,10 +19,10 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polyline::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
-	if (_element == nullptr) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -34,9 +31,9 @@ bool esvg::Polyline::parseXML(const std::shared_ptr<exml::Element>& _element, ma
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string sss1 = _element->getAttribute("points");
+	std::string sss1 = _element.attributes["points"];
 	if (sss1.size() == 0) {
-		ESVG_ERROR("(l "<<_element->getPos()<<") polyline: missing points attribute");
+		ESVG_ERROR("(l "<<_element.getPos()<<") polyline: missing points attribute");
 		return false;
 	}
 	_sizeMax.setValue(0,0);

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Ellipse"
-
 esvg::Ellipse::Ellipse(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	
 }
@@ -22,8 +19,8 @@ esvg::Ellipse::~Ellipse() {
 	
 }
 
-bool esvg::Ellipse::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	if (_element == nullptr) {
+bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -35,26 +32,26 @@ bool esvg::Ellipse::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 	m_c.setValue(0,0);
 	m_r.setValue(0,0);
 	
-	std::string content = _element->getAttribute("cx");
+	std::string content = _element.attributes["cx"];
 	if (content.size()!=0) {
 		m_c.setX(parseLength(content));
 	}
-	content = _element->getAttribute("cy");
+	content = _element.attributes["cy"];
 	if (content.size()!=0) {
 		m_c.setY(parseLength(content));
 	}
-	content = _element->getAttribute("rx");
+	content = _element.attributes["rx"];
 	if (content.size()!=0) {
 		m_r.setX(parseLength(content));
 	} else {
-		ESVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"rx\" is not present");
+		ESVG_ERROR("(l "<<_element.getPos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
-	content = _element->getAttribute("ry");
+	content = _element.attributes["ry"];
 	if (content.size()!=0) {
 		m_r.setY(parseLength(content));
 	} else {
-		ESVG_ERROR("(l "<<_element->getPos()<<") Ellipse \"ry\" is not present");
+		ESVG_ERROR("(l "<<_element.getPos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
 	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());

@@ -1,4 +1,4 @@
-/**
+/** @file
  * @author Edouard DUPIN
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +11,6 @@
 #include <esvg/render/Path.h>
 #include <esvg/render/Weight.h>
 
-#undef __class__
-#define __class__	"Polygon"
-
 esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState) {
 	
 }
@@ -22,8 +19,8 @@ esvg::Polygon::~Polygon() {
 	
 }
 
-bool esvg::Polygon::parseXML(const std::shared_ptr<exml::Element>& _element, mat2& _parentTrans, vec2& _sizeMax) {
-	if (_element == nullptr) {
+bool esvg::Polygon::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+	if (_element.exist() == false) {
 		return false;
 	}
 	parseTransform(_element);
@@ -36,7 +33,7 @@ bool esvg::Polygon::parseXML(const std::shared_ptr<exml::Element>& _element, mat
 	
 	ESVG_VERBOSE("parsed P2.   trans: " << m_transformMatrix);
 	
-	const std::string sss1 = _element->getAttribute("points");
+	const std::string sss1 = _element.attributes["points"];
 	if (sss1.size() == 0) {
 		ESVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
