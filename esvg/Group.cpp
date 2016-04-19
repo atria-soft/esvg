@@ -49,7 +49,7 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2& _parentTrans, ve
 	vec2 tmpPos(0,0);
 	// parse all sub node :
 	for(const auto it : _element.nodes) {
-		exml::Element child = _element.toElement();
+		exml::Element child = it.toElement();
 		if (child.exist() == false) {
 			// can be a comment ...
 			continue;
