@@ -15,12 +15,12 @@ namespace esvg {
 	namespace render {
 		class Point {
 			public:
-				enum type {
-					type_single, //!< Point type is single, this mean that it start and stop of a path
-					type_start, //!< Point type is starting of a path
-					type_stop, //!< Point type is stoping of a path
-					type_join, //!< Point type in an user point provided inside a path
-					type_interpolation, //!< This point is dynamicly calculated to create an interpolation
+				enum class type {
+					single, //!< Point type is single, this mean that it start and stop of a path
+					start, //!< Point type is starting of a path
+					stop, //!< Point type is stoping of a path
+					join, //!< Point type in an user point provided inside a path
+					interpolation, //!< This point is dynamicly calculated to create an interpolation
 				};
 			public:
 				// TODO : Clean all element here ...
@@ -33,7 +33,7 @@ namespace esvg {
 				vec2 m_posNext;
 				vec2 m_delta;
 				float m_len;
-				Point(const vec2& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type_join) :
+				Point(const vec2& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type::join) :
 				  m_pos(_pos),
 				  m_type(_type) {
 					// nothing to do ...

@@ -145,8 +145,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 			if (idNext == itListPoint.size()) {
 				idNext = 0;
 			}
-			if (    itListPoint[idCurrent].m_type == esvg::render::Point::type_join
-			     || itListPoint[idCurrent].m_type == esvg::render::Point::type_interpolation) {
+			if (    itListPoint[idCurrent].m_type == esvg::render::Point::type::join
+			     || itListPoint[idCurrent].m_type == esvg::render::Point::type::interpolation) {
 				if (idPevious < 0 ) {
 					ESVG_ERROR("an error occure a previous ID is < 0.... ");
 					continue;
@@ -181,14 +181,14 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				vecB.safeNormalize();
 				itListPoint[idCurrent].m_orthoAxePrevious = vec2(vecB.y(), -vecB.x());
 				//ESVG_DEBUG("JOIN : miterAxe " << itListPoint[idCurrent].m_miterAxe);
-			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type_start) {
+			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type::start) {
 				itListPoint[idCurrent].m_posNext = itListPoint[idNext].m_pos;
 				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				vecB.safeNormalize();
 				itListPoint[idCurrent].m_miterAxe = vec2(vecB.y(), -vecB.x());
 				itListPoint[idCurrent].m_orthoAxePrevious = itListPoint[idCurrent].m_miterAxe;
 				itListPoint[idCurrent].m_orthoAxeNext = itListPoint[idCurrent].m_miterAxe;
-			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type_stop) {
+			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type::stop) {
 				if (idPevious < 0 ) {
 					ESVG_ERROR("an error occure a previous ID is < 0.... ");
 					continue;
@@ -208,7 +208,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		vec2 leftPoint(0,0);
 		vec2 rightPoint(0,0);
 		if (itListPoint.size() > 0) {
-			if (itListPoint.front().m_type == esvg::render::Point::type_join) {
+			if (itListPoint.front().m_type == esvg::render::Point::type::join) {
 				const esvg::render::Point& it = itListPoint.back();
 				// Calculate the perpendiculary axis ...
 				leftPoint =   itListPoint.back().m_pos
@@ -216,10 +216,10 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				rightPoint =   itListPoint.back().m_pos
 				             - itListPoint.back().m_orthoAxePrevious*_width*0.5f;
 				// cyclic path...
-				if (it.m_type == esvg::render::Point::type_interpolation) {
+				if (it.m_type == esvg::render::Point::type::interpolation) {
 					leftPoint  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 					rightPoint = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-				} else if (it.m_type == esvg::render::Point::type_join) {
+				} else if (it.m_type == esvg::render::Point::type::join) {
 					// Calculate the perpendiculary axis ...
 					leftPoint =   it.m_pos
 					            + it.m_orthoAxePrevious*_width*0.5f;
@@ -269,11 +269,11 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		}
 		for (auto &it : itListPoint) {
 			switch (it.m_type) {
-				case esvg::render::Point::type_single:
+				case esvg::render::Point::type::single:
 					// just do nothing ....
 					ESVG_VERBOSE("Find Single " << it.m_pos);
 					break;
-				case esvg::render::Point::type_start:
+				case esvg::render::Point::type::start:
 					ESVG_VERBOSE("Find Start " << it.m_pos);
 					if (haveStartLine == true) {
 						// close previous :
@@ -283,7 +283,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					haveStartLine = true;
 					startStopPoint(leftPoint, rightPoint, it, _cap, _width, true);
 					break;
-				case esvg::render::Point::type_stop:
+				case esvg::render::Point::type::stop:
 					ESVG_VERBOSE("Find Stop " << it.m_pos);
 					if (haveStartLine == false) {
 						ESVG_WARNING("find close path without start part ...");
@@ -292,7 +292,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					haveStartLine = false;
 					startStopPoint(leftPoint, rightPoint, it, _cap, _width, false);
 					break;
-				case esvg::render::Point::type_interpolation:
+				case esvg::render::Point::type::interpolation:
 					{
 						ESVG_VERBOSE("Find interpolation " << it.m_pos);
 						vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
@@ -306,7 +306,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						rightPoint = right;
 					}
 					break;
-				case esvg::render::Point::type_join:
+				case esvg::render::Point::type::join:
 					ESVG_VERBOSE("Find join " << it.m_pos);
 					switch (_join) {
 						case esvg::join_miter:

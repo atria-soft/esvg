@@ -45,19 +45,19 @@ void esvg::render::PointList::display() {
 		     iii < it.size();
 		     ++iii) {
 			switch (it[iii].m_type) {
-				case esvg::render::Point::type_single:
+				case esvg::render::Point::type::single:
 					ESVG_VERBOSE("        [" << iii << "] Find Single " << it[iii].m_pos);
 					break;
-				case esvg::render::Point::type_start:
+				case esvg::render::Point::type::start:
 					ESVG_VERBOSE("        [" << iii << "] Find Start " << it[iii].m_pos);
 					break;
-				case esvg::render::Point::type_stop:
+				case esvg::render::Point::type::stop:
 					ESVG_VERBOSE("        [" << iii << "] Find Stop " << it[iii].m_pos);
 					break;
-				case esvg::render::Point::type_interpolation:
+				case esvg::render::Point::type::interpolation:
 					ESVG_VERBOSE("        [" << iii << "] Find interpolation " << it[iii].m_pos);
 					break;
-				case esvg::render::Point::type_join:
+				case esvg::render::Point::type::join:
 					ESVG_VERBOSE("        [" << iii << "] Find Join " << it[iii].m_pos);
 					break;
 			}

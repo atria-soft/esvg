@@ -114,7 +114,7 @@ void interpolateCubicBezier(std::vector<esvg::render::Point>& _listPoint,
 	vec2 pos234 = (pos23+pos34)*0.5f;
 	vec2 pos1234 = (pos123+pos234)*0.5f;
 	
-	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, _pos1, pos12, pos123, pos1234, _level+1, esvg::render::Point::type_interpolation);
+	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, _pos1, pos12, pos123, pos1234, _level+1, esvg::render::Point::type::interpolation);
 	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, pos1234, pos234, pos34, _pos4, _level+1, _type);
 }
 
@@ -158,7 +158,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						ESVG_WARNING(spacingDist(_level+1) << " Request path close of not starting path ...");
 					} else {
 						// find the previous tart of the path ...
-						tmpListPoint.front().m_type = esvg::render::Point::type_join;
+						tmpListPoint.front().m_type = esvg::render::Point::type::join;
 						// Remove the last point if it is the same position...
 						vec2 delta = (tmpListPoint.front().m_pos - tmpListPoint.back().m_pos).absolute();
 						if (    delta.x() <= 0.00001
@@ -185,49 +185,49 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					lastPosition = vec2(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
-				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_start));
+				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				lastAngle = lastPosition;
 				break;
 			case esvg::render::path_lineTo:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_start));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
-				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				lastAngle = lastPosition;
 				break;
 			case esvg::render::path_lineToH:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_start));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
-				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				lastAngle = lastPosition;
 				break;
 			case esvg::render::path_lineToV:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_start));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
 					lastPosition = vec2(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
-				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+				tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				lastAngle = lastPosition;
 				break;
 			case esvg::render::path_curveTo:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
 					vec2 lastPosStore(lastPosition);
@@ -245,7 +245,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					                       pos2,
 					                       pos,
 					                       0,
-					                       esvg::render::Point::type_join);
+					                       esvg::render::Point::type::join);
 					lastPosition = pos;
 					lastAngle = pos2;
 				}
@@ -253,7 +253,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 			case esvg::render::path_smoothCurveTo:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
 					vec2 lastPosStore(lastPosition);
@@ -272,7 +272,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					                       pos2,
 					                       pos,
 					                       0,
-					                       esvg::render::Point::type_join);
+					                       esvg::render::Point::type::join);
 					lastPosition = pos;
 					lastAngle = pos2;
 				}
@@ -280,7 +280,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 			case esvg::render::path_bezierCurveTo:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
 					vec2 lastPosStore(lastPosition);
@@ -300,7 +300,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					                       pos2,
 					                       pos,
 					                       0,
-					                       esvg::render::Point::type_join);
+					                       esvg::render::Point::type::join);
 					lastPosition = pos;
 					lastAngle = tmp1;
 				}
@@ -308,7 +308,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 			case esvg::render::path_bezierSmoothCurveTo:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
 					vec2 lastPosStore(lastPosition);
@@ -328,7 +328,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					                       pos2,
 					                       pos,
 					                       0,
-					                       esvg::render::Point::type_join);
+					                       esvg::render::Point::type::join);
 					lastPosition = pos;
 					lastAngle = tmp1;
 				}
@@ -336,7 +336,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 			case esvg::render::path_elliptic:
 				// If no previous point, we need to create the last point has start ...
 				if (tmpListPoint.size() == 0) {
-					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
 					std::shared_ptr<esvg::render::ElementElliptic> tmpIt(std::dynamic_pointer_cast<esvg::render::ElementElliptic>(it));
@@ -365,9 +365,9 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					     || radius.y() < 1e-6f) {
 						ESVG_WARNING("Degenerate arc in Line");
 						if (tmpListPoint.size() == 0) {
-							tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type_join));
+							tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 						}
-						tmpListPoint.push_back(esvg::render::Point(pos, esvg::render::Point::type_join));
+						tmpListPoint.push_back(esvg::render::Point(pos, esvg::render::Point::type::join));
 					} else {
 						// Convert to center point parameterization.
 						// http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes
@@ -486,7 +486,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 								                       zpos2,
 								                       zpos,
 								                       0,
-								                       esvg::render::Point::type_join);
+								                       esvg::render::Point::type::join);
 								lastPosition = zpos;
 								lastAngle = zpos2;
 							}
