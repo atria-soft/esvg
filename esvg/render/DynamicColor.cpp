@@ -42,7 +42,7 @@ static vec2 getIntersect(const vec2& _point1,
 	return _point2;
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _pos) {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _pos) const {
 	if (m_data.size() < 2) {
 		return etk::color::purple;
 	}
@@ -54,7 +54,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _po
 	return etk::color::purple;
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec2& _pos) {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec2& _pos) const {
 	float ratio = 0.0f;
 	if (m_unit == gradientUnits_userSpaceOnUse) {
 		vec2 vectorBase = m_pos2 - m_pos1;
@@ -205,7 +205,7 @@ static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 	return std::pair<vec2,vec2>(midpt + v1, midpt - v1);
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) const {
 	float ratio = 0.0f;
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object)..
 	vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
@@ -308,13 +308,13 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		ESVG_ERROR("Get nullptr input for document");
 		return;
 	}
-	std::shared_ptr<esvg::Base> base = _document->getReference(m_colorName);
+	ememory::SharedPtr<esvg::Base> base = _document->getReference(m_colorName);
 	if (base == nullptr) {
 		ESVG_ERROR("Can not get base : '" << m_colorName << "'");
 		return;
 	}
 	// Now we can know if we use linear or radial gradient ...
-	std::shared_ptr<esvg::LinearGradient> gradient = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
+	ememory::SharedPtr<esvg::LinearGradient> gradient = ememory::dynamicPointerCast<esvg::LinearGradient>(base);
 	if (gradient != nullptr) {
 		m_linear = true;
 		ESVG_VERBOSE("get for color linear:");
@@ -362,7 +362,7 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_data = gradient->getColors(_document);
 	} else {
 		m_linear = false;
-		std::shared_ptr<esvg::RadialGradient> gradient = std::dynamic_pointer_cast<esvg::RadialGradient>(base);
+		ememory::SharedPtr<esvg::RadialGradient> gradient = ememory::dynamicPointerCast<esvg::RadialGradient>(base);
 		if (gradient == nullptr) {
 			ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
 			return;
@@ -441,14 +441,14 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	}
 }
 
-std::shared_ptr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx) {
+ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx) {
 	// Check if need to create a color:
 	if (    _color.first.a() == 0x00
 	     && _color.second == "") {
 	     return nullptr;
 	}
 	if (_color.second != "") {
-		return std::make_shared<esvg::render::DynamicColorSpecial>(_color.second, _mtx);
+		return ememory::makeShared<esvg::render::DynamicColorSpecial>(_color.second, _mtx);
 	}
-	return std::make_shared<esvg::render::DynamicColorUni>(_color.first);
+	return ememory::makeShared<esvg::render::DynamicColorUni>(_color.first);
 }

@@ -55,9 +55,9 @@ etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, etk::C
 }
 
 void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
-                           const std::shared_ptr<esvg::render::DynamicColor>& _colorFill,
+                           ememory::SharedPtr<esvg::render::DynamicColor>& _colorFill,
                            const esvg::render::Weight& _weightStroke,
-                           const std::shared_ptr<esvg::render::DynamicColor>& _colorStroke,
+                           ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
 	if (_colorFill != nullptr) {
 		//_colorFill->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
@@ -102,7 +102,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 	}
 	#ifdef DEBUG
 		// display the gradient position:
-		std::shared_ptr<esvg::render::DynamicColorSpecial> tmpColor = std::dynamic_pointer_cast<esvg::render::DynamicColorSpecial>(_colorFill);
+		ememory::SharedPtr<esvg::render::DynamicColorSpecial> tmpColor = ememory::dynamicPointerCast<esvg::render::DynamicColorSpecial>(_colorFill);
 		if (tmpColor != nullptr) {
 			esvg::render::SegmentList listSegment;
 			// Display bounding box

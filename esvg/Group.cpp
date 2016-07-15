@@ -54,27 +54,27 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2& _parentTrans, ve
 			// can be a comment ...
 			continue;
 		}
-		std::shared_ptr<esvg::Base> elementParser;
+		ememory::SharedPtr<esvg::Base> elementParser;
 		if (child.getValue() == "g") {
-			elementParser = std::make_shared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(m_paint);
 		} else if (child.getValue() == "a") {
 			// TODO ...
 		} else if (child.getValue() == "path") {
-			elementParser = std::make_shared<esvg::Path>(m_paint);
+			elementParser = ememory::makeShared<esvg::Path>(m_paint);
 		} else if (child.getValue() == "rect") {
-			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Rectangle>(m_paint);
 		} else if (child.getValue() == "circle") {
-			elementParser = std::make_shared<esvg::Circle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Circle>(m_paint);
 		} else if (child.getValue() == "ellipse") {
-			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
+			elementParser = ememory::makeShared<esvg::Ellipse>(m_paint);
 		} else if (child.getValue() == "line") {
-			elementParser = std::make_shared<esvg::Line>(m_paint);
+			elementParser = ememory::makeShared<esvg::Line>(m_paint);
 		} else if (child.getValue() == "polyline") {
-			elementParser = std::make_shared<esvg::Polyline>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polyline>(m_paint);
 		} else if (child.getValue() == "polygon") {
-			elementParser = std::make_shared<esvg::Polygon>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polygon>(m_paint);
 		} else if (child.getValue() == "text") {
-			elementParser = std::make_shared<esvg::Text>(m_paint);
+			elementParser = ememory::makeShared<esvg::Text>(m_paint);
 		} else {
 			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}

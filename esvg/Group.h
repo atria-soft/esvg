@@ -13,7 +13,7 @@
 namespace esvg {
 	class Group : public esvg::Base {
 		private:
-			std::vector<std::shared_ptr<esvg::Base>> m_subElementList;  //!< sub elements ...
+			std::vector<ememory::SharedPtr<esvg::Base>> m_subElementList;  //!< sub elements ...
 		public:
 			Group(PaintState _parentPaintState);
 			~Group();

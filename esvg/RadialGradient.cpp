@@ -166,14 +166,14 @@ const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::RadialGradient::
 		ESVG_ERROR("Get nullptr input for document");
 		return m_data;
 	}
-	std::shared_ptr<esvg::Base> base = _document->getReference(m_href);
+	ememory::SharedPtr<esvg::Base> base = _document->getReference(m_href);
 	if (base == nullptr) {
 		ESVG_ERROR("Can not get base : '" << m_href << "'");
 		return m_data;
 	}
-	std::shared_ptr<esvg::RadialGradient> gradientR = std::dynamic_pointer_cast<esvg::RadialGradient>(base);
+	ememory::SharedPtr<esvg::RadialGradient> gradientR = ememory::dynamicPointerCast<esvg::RadialGradient>(base);
 	if (gradientR == nullptr) {
-		std::shared_ptr<esvg::LinearGradient> gradientL = std::dynamic_pointer_cast<esvg::LinearGradient>(base);
+		ememory::SharedPtr<esvg::LinearGradient> gradientL = ememory::dynamicPointerCast<esvg::LinearGradient>(base);
 		if (gradientL == nullptr) {
 			ESVG_ERROR("Can not cast in a linear/radial gradient: '" << m_href << "' ==> wrong type");
 			return m_data;

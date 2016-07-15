@@ -73,7 +73,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 	}
 	ESVG_DEBUG("Generate size " << sizeRender);
 	
-	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(sizeRender, this, _visualDebug);
+	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(sizeRender, this, _visualDebug);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
 	basicTrans *= etk::mat2Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
@@ -98,7 +98,7 @@ std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _si
 		_size.setY(m_size.y());
 	}
 	ESVG_DEBUG("Generate size " << _size);
-	std::shared_ptr<esvg::Renderer> renderedElement = std::make_shared<esvg::Renderer>(_size, this);
+	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(_size, this);
 	// create the first element matrix modification ...
 	mat2 basicTrans;
 	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
@@ -260,44 +260,44 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 			// comment can be here...
 			continue;
 		}
-		std::shared_ptr<esvg::Base> elementParser;
+		ememory::SharedPtr<esvg::Base> elementParser;
 		if (child.getValue() == "g") {
-			elementParser = std::make_shared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(m_paint);
 		} else if (child.getValue() == "a") {
 			ESVG_INFO("Note : 'a' balise is parsed like a g balise ...");
-			elementParser = std::make_shared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(m_paint);
 		} else if (child.getValue() == "title") {
 			m_title = "TODO : set the title here ...";
 			continue;
 		} else if (child.getValue() == "path") {
-			elementParser = std::make_shared<esvg::Path>(m_paint);
+			elementParser = ememory::makeShared<esvg::Path>(m_paint);
 		} else if (child.getValue() == "rect") {
-			elementParser = std::make_shared<esvg::Rectangle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Rectangle>(m_paint);
 		} else if (child.getValue() == "circle") {
-			elementParser = std::make_shared<esvg::Circle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Circle>(m_paint);
 		} else if (child.getValue() == "ellipse") {
-			elementParser = std::make_shared<esvg::Ellipse>(m_paint);
+			elementParser = ememory::makeShared<esvg::Ellipse>(m_paint);
 		} else if (child.getValue() == "line") {
-			elementParser = std::make_shared<esvg::Line>(m_paint);
+			elementParser = ememory::makeShared<esvg::Line>(m_paint);
 		} else if (child.getValue() == "polyline") {
-			elementParser = std::make_shared<esvg::Polyline>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polyline>(m_paint);
 		} else if (child.getValue() == "polygon") {
-			elementParser = std::make_shared<esvg::Polygon>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polygon>(m_paint);
 		} else if (child.getValue() == "text") {
-			elementParser = std::make_shared<esvg::Text>(m_paint);
+			elementParser = ememory::makeShared<esvg::Text>(m_paint);
 		} else if (child.getValue() == "radialGradient") {
 			if (_isReference == false) {
 				ESVG_ERROR("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
-				elementParser = std::make_shared<esvg::RadialGradient>(m_paint);
+				elementParser = ememory::makeShared<esvg::RadialGradient>(m_paint);
 			}
 		} else if (child.getValue() == "linearGradient") {
 			if (_isReference == false) {
 				ESVG_ERROR("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
-				elementParser = std::make_shared<esvg::LinearGradient>(m_paint);
+				elementParser = ememory::makeShared<esvg::LinearGradient>(m_paint);
 			}
 		} else if (child.getValue() == "defs") {
 			if (_isReference == true) {
@@ -353,7 +353,7 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 
 
 
-std::shared_ptr<esvg::Base> esvg::Document::getReference(const std::string& _name) {
+ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const std::string& _name) {
 	if (_name == "") {
 		ESVG_ERROR("request a reference with no name ... ");
 		return nullptr;

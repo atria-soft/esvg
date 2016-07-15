@@ -55,9 +55,9 @@ namespace esvg {
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:
 			void print(const esvg::render::Weight& _weightFill,
-			           const std::shared_ptr<esvg::render::DynamicColor>& _colorFill,
+			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorFill,
 			           const esvg::render::Weight& _weightStroke,
-			           const std::shared_ptr<esvg::render::DynamicColor>& _colorStroke,
+			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
 			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);

@@ -11,7 +11,7 @@
 #include <etk/math/Vector2D.h>
 #include <esvg/render/Element.h>
 #include <esvg/render/PointList.h>
-#include <memory>
+#include <ememory/memory.h>
 #ifdef DEBUG
 	#include <esvg/render/SegmentList.h>
 #endif
@@ -20,7 +20,7 @@ namespace esvg {
 	namespace render {
 		class Path {
 			public:
-				std::vector<std::shared_ptr<esvg::render::Element>> m_listElement;
+				std::vector<ememory::SharedPtr<esvg::render::Element>> m_listElement;
 				#ifdef DEBUG
 					esvg::render::SegmentList m_debugInformation;
 				#endif

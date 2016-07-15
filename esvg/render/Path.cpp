@@ -14,43 +14,43 @@ void esvg::render::Path::clear() {
 }
 
 void esvg::render::Path::stop() {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementStop>());
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementStop>());
 }
 
 void esvg::render::Path::close(bool _relative) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementClose>(_relative));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementClose>(_relative));
 }
 
 void esvg::render::Path::moveTo(bool _relative, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementMoveTo>(_relative, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementMoveTo>(_relative, _pos));
 }
 
 void esvg::render::Path::lineTo(bool _relative, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementLineTo>(_relative, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementLineTo>(_relative, _pos));
 }
 
 void esvg::render::Path::lineToH(bool _relative, float _posX) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementLineToH>(_relative, _posX));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementLineToH>(_relative, _posX));
 }
 
 void esvg::render::Path::lineToV(bool _relative, float _posY) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementLineToV>(_relative, _posY));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementLineToV>(_relative, _posY));
 }
 
 void esvg::render::Path::curveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementCurveTo>(_relative, _pos1, _pos2, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementCurveTo>(_relative, _pos1, _pos2, _pos));
 }
 
 void esvg::render::Path::smoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementSmoothCurveTo>(_relative, _pos2, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementSmoothCurveTo>(_relative, _pos2, _pos));
 }
 
 void esvg::render::Path::bezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementBezierCurveTo>(_relative, _pos1, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementBezierCurveTo>(_relative, _pos1, _pos));
 }
 
 void esvg::render::Path::bezierSmoothCurveTo(bool _relative, const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementBezierSmoothCurveTo>(_relative, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementBezierSmoothCurveTo>(_relative, _pos));
 }
 
 void esvg::render::Path::ellipticTo(bool _relative,
@@ -59,7 +59,7 @@ void esvg::render::Path::ellipticTo(bool _relative,
                                     bool _largeArcFlag,
                                     bool _sweepFlag,
                                     const vec2& _pos) {
-	m_listElement.push_back(std::make_shared<esvg::render::ElementElliptic>(_relative, _radius, _angle, _largeArcFlag, _sweepFlag, _pos));
+	m_listElement.push_back(ememory::makeShared<esvg::render::ElementElliptic>(_relative, _radius, _angle, _largeArcFlag, _sweepFlag, _pos));
 }
 
 static const char* spacingDist(int32_t _spacing) {
@@ -339,7 +339,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.push_back(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
-					std::shared_ptr<esvg::render::ElementElliptic> tmpIt(std::dynamic_pointer_cast<esvg::render::ElementElliptic>(it));
+					ememory::SharedPtr<esvg::render::ElementElliptic> tmpIt(ememory::dynamicPointerCast<esvg::render::ElementElliptic>(it));
 					float angle = tmpIt->m_angle * (M_PI / 180.0);
 					ESVG_TODO(spacingDist(_level+1) << " Elliptic arc: radius=" << tmpIt->getPos1());
 					ESVG_TODO(spacingDist(_level+1) << "               angle=" << tmpIt->m_angle);

@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include <memory>
+#include <ememory/memory.h>
 #include <etk/types.h>
 #include <etk/Color.h>
 #include <etk/math/Vector2D.h>
@@ -24,7 +24,7 @@ namespace esvg {
 					// nothing to do ...
 				}
 				virtual ~DynamicColor() {};
-				virtual etk::Color<float,4> getColor(const ivec2& _pos) = 0;
+				virtual etk::Color<float,4> getColor(const ivec2& _pos) const = 0;
 				virtual void generate(esvg::Document* _document) = 0;
 				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort) = 0;
 		};
@@ -36,7 +36,7 @@ namespace esvg {
 				  m_color(_color) {
 					
 				}
-				virtual etk::Color<float,4> getColor(const ivec2& _pos) {
+				virtual etk::Color<float,4> getColor(const ivec2& _pos) const {
 					return m_color;
 				}
 				virtual void generate(esvg::Document* _document) {
@@ -66,16 +66,16 @@ namespace esvg {
 				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
 				DynamicColorSpecial(const std::string& _link, const mat2& _mtx);
-				virtual etk::Color<float,4> getColor(const ivec2& _pos);
+				virtual etk::Color<float,4> getColor(const ivec2& _pos) const;
 			private:
-				etk::Color<float,4> getColorLinear(const ivec2& _pos);
-				etk::Color<float,4> getColorRadial(const ivec2& _pos);
+				etk::Color<float,4> getColorLinear(const ivec2& _pos) const;
+				etk::Color<float,4> getColorRadial(const ivec2& _pos) const;
 			public:
 				virtual void generate(esvg::Document* _document);
 				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort);
 		};
 		
-		std::shared_ptr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx);
+		ememory::SharedPtr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx);
 	}
 }
 

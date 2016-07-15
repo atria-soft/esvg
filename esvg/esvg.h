@@ -21,8 +21,8 @@ namespace esvg {
 			bool m_loadOK;
 			std::string m_version;
 			std::string m_title;
-			std::vector<std::shared_ptr<esvg::Base>> m_subElementList; //!< sub-element list
-			std::vector<std::shared_ptr<esvg::Base>> m_refList; //!< reference elements ...
+			std::vector<ememory::SharedPtr<esvg::Base>> m_subElementList; //!< sub-element list
+			std::vector<ememory::SharedPtr<esvg::Base>> m_refList; //!< reference elements ...
 			vec2 m_size;
 		public:
 			Document();
@@ -91,7 +91,7 @@ namespace esvg {
 			vec2 getDefinedSize() {
 				return m_size;
 			};
-			std::shared_ptr<esvg::Base> getReference(const std::string& _name);
+			ememory::SharedPtr<esvg::Base> getReference(const std::string& _name);
 	};
 }
 

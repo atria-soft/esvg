@@ -99,8 +99,8 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
-	std::shared_ptr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
-	std::shared_ptr<esvg::render::DynamicColor> colorStroke;
+	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
+	ememory::SharedPtr<esvg::render::DynamicColor> colorStroke;
 	if (m_paint.strokeWidth > 0.0f) {
 		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
 	}
