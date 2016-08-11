@@ -204,6 +204,7 @@ bool esvg::Document::load(const std::string& _file) {
 }
 
 bool esvg::Document::store(const std::string& _file) {
+	ESVG_TODO("not implemented store in SVG...");
 	return false;
 }
 
