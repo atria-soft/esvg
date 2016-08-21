@@ -430,3 +430,12 @@ void esvg::Base::setId(const std::string& _newId) {
 	m_id = _newId;
 }
 
+
+void esvg::Base::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                 int32_t _recurtionMax,
+                                 int32_t _threshold,
+                                 mat2& _basicTrans,
+                                 int32_t _level) {
+	
+}
+

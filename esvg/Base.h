@@ -17,6 +17,7 @@
 #include <etk/math/Vector2D.h>
 #include <etk/math/Matrix2.h>
 #include <etk/Color.h>
+#include <esvg/render/Path.h>
 
 #include <exml/exml.h>
 #include <esvg/Renderer.h>
@@ -65,8 +66,26 @@ namespace esvg {
 			 * @return true if no problem arrived
 			 */
 			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
-			
+			/**
+			 * @brief Draw the form in the renderer
+			 * @param[in] _myRenderer Renderer engine
+			 * @param[in] _basicTrans Parant transformation of the environement
+			 * @param[in] _level Level of the tree
+			 */
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
+			/**
+			 * @brief Draw rhe shape with all points
+			 * @param[in] _out where the lines are added
+			 * @param[in] _recurtionMax interpolation recurtion max
+			 * @param[in] _threshold threshold to stop recurtion
+			 * @param[in] _basicTrans Parant transformation of the environement
+			 * @param[in] _level Level of the tree
+			 */
+			virtual void drawShapePoints(std::vector<std::vector<vec2>>& _out,
+			                             int32_t _recurtionMax,
+			                             int32_t _threshold,
+			                             mat2& _basicTrans,
+			                             int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };
 			void parseTransform(const exml::Element& _element);

@@ -59,6 +59,30 @@ void esvg::Circle::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Circle " << m_position << " radius=" << m_radius);
 }
 
+esvg::render::Path esvg::Circle::createPath() {
+	esvg::render::Path out;
+	
+	out.clear();
+	out.moveTo(false, m_position + vec2(m_radius, 0.0f));
+	out.curveTo(false,
+	            m_position + vec2(m_radius,                m_radius*esvg::kappa90),
+	            m_position + vec2(m_radius*esvg::kappa90,  m_radius),
+	            m_position + vec2(0.0f,                    m_radius));
+	out.curveTo(false,
+	            m_position + vec2(-m_radius*esvg::kappa90, m_radius),
+	            m_position + vec2(-m_radius,               m_radius*esvg::kappa90),
+	            m_position + vec2(-m_radius,               0.0f));
+	out.curveTo(false,
+	            m_position + vec2(-m_radius,               -m_radius*esvg::kappa90),
+	            m_position + vec2(-m_radius*esvg::kappa90, -m_radius),
+	            m_position + vec2(0.0f,                    -m_radius));
+	out.curveTo(false,
+	            m_position + vec2(m_radius*esvg::kappa90,  -m_radius),
+	            m_position + vec2(m_radius,                -m_radius*esvg::kappa90),
+	            m_position + vec2(m_radius,                0.0f));
+	out.close();
+	return out;
+}
 
 void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Circle");
@@ -66,26 +90,7 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 		ESVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_radius);
 		return;
 	}
-	esvg::render::Path listElement;
-	listElement.clear();
-	listElement.moveTo(false, m_position + vec2(m_radius, 0.0f));
-	listElement.curveTo(false,
-	                    m_position + vec2(m_radius,                m_radius*esvg::kappa90),
-	                    m_position + vec2(m_radius*esvg::kappa90,  m_radius),
-	                    m_position + vec2(0.0f,                    m_radius));
-	listElement.curveTo(false,
-	                    m_position + vec2(-m_radius*esvg::kappa90, m_radius),
-	                    m_position + vec2(-m_radius,               m_radius*esvg::kappa90),
-	                    m_position + vec2(-m_radius,               0.0f));
-	listElement.curveTo(false,
-	                    m_position + vec2(-m_radius,               -m_radius*esvg::kappa90),
-	                    m_position + vec2(-m_radius*esvg::kappa90, -m_radius),
-	                    m_position + vec2(0.0f,                    -m_radius));
-	listElement.curveTo(false,
-	                    m_position + vec2(m_radius*esvg::kappa90,  -m_radius),
-	                    m_position + vec2(m_radius,                -m_radius*esvg::kappa90),
-	                    m_position + vec2(m_radius,                0.0f));
-	listElement.close();
+	esvg::render::Path listElement = createPath();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
@@ -138,5 +143,25 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
 	#endif
+}
+
+void esvg::Circle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                   int32_t _recurtionMax,
+                                   int32_t _threshold,
+                                   mat2& _basicTrans,
+                                   int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Circle");
+	esvg::render::Path listElement = createPath();
+	mat2 mtx = m_transformMatrix;
+	mtx *= _basicTrans;
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	for (auto &it : listPoints.m_data) {
+		std::vector<vec2> listPoint;
+		for (auto &itDot : it) {
+			listPoint.push_back(itDot.m_pos);
+		}
+		_out.push_back(listPoint);
+	}
 }
 

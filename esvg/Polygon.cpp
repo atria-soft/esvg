@@ -63,15 +63,20 @@ void esvg::Polygon::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Polygon nbPoint=" << m_listPoint.size());
 }
 
+esvg::render::Path esvg::Polygon::createPath() {
+	esvg::render::Path out;
+	out.moveTo(false, m_listPoint[0]);
+	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
+		out.lineTo(false, m_listPoint[iii]);
+	}
+	out.close();
+	return out;
+}
+
 void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polygon");
 	
-	esvg::render::Path listElement;
-	listElement.moveTo(false, m_listPoint[0]);
-	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
-		listElement.lineTo(false, m_listPoint[iii]);
-	}
-	listElement.close();
+	esvg::render::Path listElement = createPath();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
@@ -124,5 +129,26 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
 	#endif
+}
+
+
+void esvg::Polygon::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                    int32_t _recurtionMax,
+                                    int32_t _threshold,
+                                    mat2& _basicTrans,
+                                    int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Polygon");
+	esvg::render::Path listElement = createPath();
+	mat2 mtx = m_transformMatrix;
+	mtx *= _basicTrans;
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	for (auto &it : listPoints.m_data) {
+		std::vector<vec2> listPoint;
+		for (auto &itDot : it) {
+			listPoint.push_back(itDot.m_pos);
+		}
+		_out.push_back(listPoint);
+	}
 }
 

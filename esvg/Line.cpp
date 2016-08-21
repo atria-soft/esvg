@@ -57,14 +57,19 @@ void esvg::Line::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Line " << m_startPos << " to " << m_stopPos);
 }
 
+esvg::render::Path esvg::Line::createPath() {
+	esvg::render::Path out;
+	out.clear();
+	out.moveTo(false, m_startPos);
+	out.lineTo(false, m_stopPos);
+	out.stop();
+	return out;
+}
+
 void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Line");
 	
-	esvg::render::Path listElement;
-	listElement.clear();
-	listElement.moveTo(false, m_startPos);
-	listElement.lineTo(false, m_stopPos);
-	listElement.stop();
+	esvg::render::Path listElement = createPath();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
@@ -112,4 +117,24 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 	#endif
 }
 
+
+void esvg::Line::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                 int32_t _recurtionMax,
+                                 int32_t _threshold,
+                                 mat2& _basicTrans,
+                                 int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Line");
+	esvg::render::Path listElement = createPath();
+	mat2 mtx = m_transformMatrix;
+	mtx *= _basicTrans;
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	for (auto &it : listPoints.m_data) {
+		std::vector<vec2> listPoint;
+		for (auto &itDot : it) {
+			listPoint.push_back(itDot.m_pos);
+		}
+		_out.push_back(listPoint);
+	}
+}
 

@@ -370,4 +370,32 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const std::string& _
 	return nullptr;
 }
 
+std::vector<std::vector<vec2>> esvg::Document::getLines(vec2 _size) {
+	std::vector<std::vector<vec2>> out;
+	if (_size.x() <= 0) {
+		_size.setX(m_size.x());
+	}
+	if (_size.y() <= 0) {
+		_size.setY(m_size.y());
+	}
+	ESVG_DEBUG("lineification size " << _size);
+	// create the first element matrix modification ...
+	mat2 basicTrans;
+	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	drawShapePoints(out, 10, 0.25f, basicTrans);
+	return out;
+}
 
+
+void esvg::Document::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                     int32_t _recurtionMax,
+                                     int32_t _threshold,
+                                     mat2& _basicTrans,
+                                     int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::Document");
+	for (auto &it : m_subElementList) {
+		if (it != nullptr) {
+			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
+		}
+	}
+}

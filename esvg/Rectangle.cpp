@@ -54,38 +54,43 @@ void esvg::Rectangle::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
+esvg::render::Path esvg::Rectangle::createPath() {
+	esvg::render::Path out;
+	out.clear();
+	if (    m_roundedCorner.x() == 0.0f
+	     || m_roundedCorner.y() == 0.0f) {
+		out.moveTo(false, m_position);
+		out.lineToH(true, m_size.x());
+		out.lineToV(true, m_size.y());
+		out.lineToH(true, -m_size.x());
+	} else {
+		// Rounded rectangle
+		out.moveTo(false, m_position + vec2(m_roundedCorner.x(), 0.0f));
+		out.lineToH(true, m_size.x()-m_roundedCorner.x()*2.0f);
+		out.curveTo(true, vec2(m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                  vec2(m_roundedCorner.x(),               m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                  vec2(m_roundedCorner.x(),               m_roundedCorner.y()) );
+		out.lineToV(true, m_size.y()-m_roundedCorner.y()*2.0f);
+		out.curveTo(true, vec2(0.0f,                                         m_roundedCorner.y() * esvg::kappa90),
+		                  vec2(-m_roundedCorner.x()* (1.0f - esvg::kappa90), m_roundedCorner.y()),
+		                  vec2(-m_roundedCorner.x(),                         m_roundedCorner.y()) );
+		out.lineToH(true, -(m_size.x()-m_roundedCorner.x()*2.0f));
+		out.curveTo(true, vec2(-m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                  vec2(-m_roundedCorner.x(),               -m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                  vec2(-m_roundedCorner.x(),               -m_roundedCorner.y()) );
+		out.lineToV(true, -(m_size.y()-m_roundedCorner.y()*2.0f));
+		out.curveTo(true, vec2(0.0f,                                        -m_roundedCorner.y() * esvg::kappa90),
+		                  vec2(m_roundedCorner.x()* (1.0f - esvg::kappa90), -m_roundedCorner.y()),
+		                  vec2(m_roundedCorner.x(),                         -m_roundedCorner.y()) );
+	}
+	out.close();
+	return out;
+}
+
 void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle: fill=" << m_paint.fill.first << "/" << m_paint.fill.second
 	                                 << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second);
-	esvg::render::Path listElement;
-	listElement.clear();
-	if (    m_roundedCorner.x() == 0.0f
-	     || m_roundedCorner.y() == 0.0f) {
-		listElement.moveTo(false, m_position);
-		listElement.lineToH(true, m_size.x());
-		listElement.lineToV(true, m_size.y());
-		listElement.lineToH(true, -m_size.x());
-	} else {
-		// Rounded rectangle
-		listElement.moveTo(false, m_position + vec2(m_roundedCorner.x(), 0.0f));
-		listElement.lineToH(true, m_size.x()-m_roundedCorner.x()*2.0f);
-		listElement.curveTo(true, vec2(m_roundedCorner.x()*esvg::kappa90, 0.0f),
-		                          vec2(m_roundedCorner.x(),               m_roundedCorner.y() * (1.0f - esvg::kappa90)),
-		                          vec2(m_roundedCorner.x(),               m_roundedCorner.y()) );
-		listElement.lineToV(true, m_size.y()-m_roundedCorner.y()*2.0f);
-		listElement.curveTo(true, vec2(0.0f,                                         m_roundedCorner.y() * esvg::kappa90),
-		                          vec2(-m_roundedCorner.x()* (1.0f - esvg::kappa90), m_roundedCorner.y()),
-		                          vec2(-m_roundedCorner.x(),                         m_roundedCorner.y()) );
-		listElement.lineToH(true, -(m_size.x()-m_roundedCorner.x()*2.0f));
-		listElement.curveTo(true, vec2(-m_roundedCorner.x()*esvg::kappa90, 0.0f),
-		                          vec2(-m_roundedCorner.x(),               -m_roundedCorner.y() * (1.0f - esvg::kappa90)),
-		                          vec2(-m_roundedCorner.x(),               -m_roundedCorner.y()) );
-		listElement.lineToV(true, -(m_size.y()-m_roundedCorner.y()*2.0f));
-		listElement.curveTo(true, vec2(0.0f,                                        -m_roundedCorner.y() * esvg::kappa90),
-		                          vec2(m_roundedCorner.x()* (1.0f - esvg::kappa90), -m_roundedCorner.y()),
-		                          vec2(m_roundedCorner.x(),                         -m_roundedCorner.y()) );
-	}
-	listElement.close();
+	esvg::render::Path listElement = createPath();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
@@ -140,3 +145,23 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32
 	#endif
 }
 
+
+void esvg::Rectangle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                      int32_t _recurtionMax,
+                                      int32_t _threshold,
+                                      mat2& _basicTrans,
+                                      int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Rectangle");
+	esvg::render::Path listElement = createPath();
+	mat2 mtx = m_transformMatrix;
+	mtx *= _basicTrans;
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	for (auto &it : listPoints.m_data) {
+		std::vector<vec2> listPoint;
+		for (auto &itDot : it) {
+			listPoint.push_back(itDot.m_pos);
+		}
+		_out.push_back(listPoint);
+	}
+}

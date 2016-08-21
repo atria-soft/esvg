@@ -99,9 +99,9 @@ void esvg::Group::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill.first << "/" << m_paint.fill.second
 	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second
 	                                << " stroke-width=" << m_paint.strokeWidth );
-	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
-		if (m_subElementList[iii] != nullptr) {
-			m_subElementList[iii]->display(_spacing+1);
+	for (auto &it : m_subElementList) {
+		if (it != nullptr) {
+			it->display(_spacing+1);
 		}
 	}
 	ESVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
@@ -109,9 +109,22 @@ void esvg::Group::display(int32_t _spacing) {
 
 void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
-	for (size_t iii=0; iii<m_subElementList.size(); ++iii) {
-		if (m_subElementList[iii] != nullptr) {
-			m_subElementList[iii]->draw(_myRenderer, _basicTrans, _level+1);
+	for (auto &it : m_subElementList) {
+		if (it != nullptr) {
+			it->draw(_myRenderer, _basicTrans, _level+1);
+		}
+	}
+}
+
+void esvg::Group::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                  int32_t _recurtionMax,
+                                  int32_t _threshold,
+                                  mat2& _basicTrans,
+                                  int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::group");
+	for (auto &it : m_subElementList) {
+		if (it != nullptr) {
+			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
 		}
 	}
 }

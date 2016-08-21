@@ -85,6 +85,7 @@ namespace esvg {
 			std::vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
 			//! @previous
 			std::vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
+			std::vector<std::vector<vec2>> getLines(vec2 _size=vec2(256,256));
 		protected:
 			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=0);
 		public:
@@ -92,6 +93,12 @@ namespace esvg {
 				return m_size;
 			};
 			ememory::SharedPtr<esvg::Base> getReference(const std::string& _name);
+		protected:
+			void drawShapePoints(std::vector<std::vector<vec2>>& _out,
+			                     int32_t _recurtionMax,
+			                     int32_t _threshold,
+			                     mat2& _basicTrans,
+			                     int32_t _level=1) override;
 	};
 }
 

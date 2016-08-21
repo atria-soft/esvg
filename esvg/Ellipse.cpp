@@ -64,6 +64,30 @@ void esvg::Ellipse::display(int32_t _spacing) {
 }
 
 
+esvg::render::Path esvg::Ellipse::createPath() {
+	esvg::render::Path out;
+	out.clear();
+	out.moveTo(false, m_c + vec2(m_r.x(), 0.0f));
+	out.curveTo(false,
+	            m_c + vec2(m_r.x(),                m_r.y()*esvg::kappa90),
+	            m_c + vec2(m_r.x()*esvg::kappa90,  m_r.y()),
+	            m_c + vec2(0.0f,                   m_r.y()));
+	out.curveTo(false,
+	            m_c + vec2(-m_r.x()*esvg::kappa90, m_r.y()),
+	            m_c + vec2(-m_r.x(),               m_r.y()*esvg::kappa90),
+	            m_c + vec2(-m_r.x(),               0.0f));
+	out.curveTo(false,
+	            m_c + vec2(-m_r.x(),               -m_r.y()*esvg::kappa90),
+	            m_c + vec2(-m_r.x()*esvg::kappa90, -m_r.y()),
+	            m_c + vec2(0.0f,                   -m_r.y()));
+	out.curveTo(false,
+	            m_c + vec2(m_r.x()*esvg::kappa90,  -m_r.y()),
+	            m_c + vec2(m_r.x(),                -m_r.y()*esvg::kappa90),
+	            m_c + vec2(m_r.x(),                0.0f));
+	out.close();
+	return out;
+}
+
 void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
 	if (    m_r.x()<=0.0f
@@ -71,26 +95,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 		ESVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_r);
 		return;
 	}
-	esvg::render::Path listElement;
-	listElement.clear();
-	listElement.moveTo(false, m_c + vec2(m_r.x(), 0.0f));
-	listElement.curveTo(false,
-	                    m_c + vec2(m_r.x(),                m_r.y()*esvg::kappa90),
-	                    m_c + vec2(m_r.x()*esvg::kappa90,  m_r.y()),
-	                    m_c + vec2(0.0f,                   m_r.y()));
-	listElement.curveTo(false,
-	                    m_c + vec2(-m_r.x()*esvg::kappa90, m_r.y()),
-	                    m_c + vec2(-m_r.x(),               m_r.y()*esvg::kappa90),
-	                    m_c + vec2(-m_r.x(),               0.0f));
-	listElement.curveTo(false,
-	                    m_c + vec2(-m_r.x(),               -m_r.y()*esvg::kappa90),
-	                    m_c + vec2(-m_r.x()*esvg::kappa90, -m_r.y()),
-	                    m_c + vec2(0.0f,                   -m_r.y()));
-	listElement.curveTo(false,
-	                    m_c + vec2(m_r.x()*esvg::kappa90,  -m_r.y()),
-	                    m_c + vec2(m_r.x(),                -m_r.y()*esvg::kappa90),
-	                    m_c + vec2(m_r.x(),                0.0f));
-	listElement.close();
+	esvg::render::Path listElement = createPath();
 	
 	mat2 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
@@ -145,4 +150,24 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	#endif
 }
 
+
+void esvg::Ellipse::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+                                    int32_t _recurtionMax,
+                                    int32_t _threshold,
+                                    mat2& _basicTrans,
+                                    int32_t _level) {
+	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Ellipse");
+	esvg::render::Path listElement = createPath();
+	mat2 mtx = m_transformMatrix;
+	mtx *= _basicTrans;
+	esvg::render::PointList listPoints;
+	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	for (auto &it : listPoints.m_data) {
+		std::vector<vec2> listPoint;
+		for (auto &itDot : it) {
+			listPoint.push_back(itDot.m_pos);
+		}
+		_out.push_back(listPoint);
+	}
+}
 

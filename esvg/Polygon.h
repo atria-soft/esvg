@@ -24,9 +24,16 @@ namespace esvg {
 		public:
 			Polygon(PaintState parentPaintState);
 			~Polygon();
-			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
-			virtual void display(int32_t _spacing);
-			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
+			bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) override;
+			void display(int32_t _spacing) override;
+			void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) override;
+			void drawShapePoints(std::vector<std::vector<vec2>>& _out,
+			                     int32_t _recurtionMax,
+			                     int32_t _threshold,
+			                     mat2& _basicTrans,
+			                     int32_t _level=1) override;
+		private:
+			esvg::render::Path createPath();
 	};
 }
 
