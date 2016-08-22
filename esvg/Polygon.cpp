@@ -141,6 +141,7 @@ void esvg::Polygon::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
 		std::vector<vec2> listPoint;
 		for (auto &itDot : it) {

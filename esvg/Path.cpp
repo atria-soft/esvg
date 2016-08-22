@@ -337,7 +337,7 @@ void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	
 	esvg::render::PointList listPoints;
 	listPoints = m_listElement.generateListPoints(_level, _recurtionMax, _threshold);
-	
+	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
 		std::vector<vec2> listPoint;
 		for (auto &itDot : it) {
