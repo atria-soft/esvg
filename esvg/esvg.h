@@ -1,8 +1,6 @@
 /** @file
  * @author Edouard DUPIN
- * 
  * @copyright 2011, Edouard DUPIN, all right reserved
- * 
  * @license APACHE v2.0 (see license file)
  */
 #pragma once
@@ -96,7 +94,7 @@ namespace esvg {
 		protected:
 			void drawShapePoints(std::vector<std::vector<vec2>>& _out,
 			                     int32_t _recurtionMax,
-			                     int32_t _threshold,
+			                     float _threshold,
 			                     mat2& _basicTrans,
 			                     int32_t _level=1) override;
 	};

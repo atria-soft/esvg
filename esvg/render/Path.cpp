@@ -509,10 +509,6 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 		out.addList(tmpListPoint);
 		tmpListPoint.clear();
 	}
-	ESVG_VERBOSE(spacingDist(_level) << " ==> " << out.m_data.size());
-	for (auto &it : out.m_data) {
-		ESVG_VERBOSE(spacingDist(_level) << "         " << it.size());
-	}
 	out.display();
 	return out;
 }

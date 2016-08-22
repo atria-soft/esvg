@@ -153,7 +153,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 
 void esvg::Ellipse::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                     int32_t _recurtionMax,
-                                    int32_t _threshold,
+                                    float _threshold,
                                     mat2& _basicTrans,
                                     int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Ellipse");

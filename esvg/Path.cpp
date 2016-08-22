@@ -329,7 +329,7 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 
 void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                  int32_t _recurtionMax,
-                                 int32_t _threshold,
+                                 float _threshold,
                                  mat2& _basicTrans,
                                  int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Path");
@@ -341,7 +341,6 @@ void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = m_listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	
 	for (auto &it : listPoints.m_data) {
-		ESVG_CRITICAL("add list... " << it.size() << " / " << m_listElement.m_listElement.size());
 		std::vector<vec2> listPoint;
 		for (auto &itDot : it) {
 			listPoint.push_back(itDot.m_pos);
