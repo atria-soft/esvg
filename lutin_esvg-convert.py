@@ -29,6 +29,6 @@ def create(target, module_name):
 	my_module.add_src_file([
 		'tools/converter.cpp'
 		])
-	my_module.add_module_depend(['esvg', 'test-debug'])
+	my_module.add_depend(['esvg', 'test-debug'])
 	return my_module
 
