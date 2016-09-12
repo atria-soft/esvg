@@ -19,10 +19,10 @@ def get_compagny_name():
 	return "atria-soft"
 
 def get_maintainer():
-	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
+	return "authors.txt"
 
 def get_version():
-	return [0,7,"dev"]
+	return "version.txt"
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())

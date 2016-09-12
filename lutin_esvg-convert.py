@@ -22,7 +22,7 @@ def get_compagny_name():
 	return "atria-soft"
 
 def get_maintainer():
-	return ["Mr DUPIN Edouard <yui.heero@gmail.com>"]
+	return "authors.txt"
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
