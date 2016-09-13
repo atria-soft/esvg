@@ -12,6 +12,9 @@
 
 #include <esvg/Base.h>
 
+/**
+ * @brief Main esvg namespace
+ */
 namespace esvg {
 	class Document : public esvg::Base {
 		private:

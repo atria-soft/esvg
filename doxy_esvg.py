@@ -10,7 +10,10 @@ def create(target, module_name):
 	my_module.set_title("esvg: Ewol SVG parser and renderer")
 	my_module.set_website("http://atria-soft.github.io/" + module_name)
 	my_module.set_website_sources("http://github.com/atria-soft/" + module_name)
-	my_module.set_path(os.path.join(tools.get_current_path(__file__), module_name))
+	my_module.add_path([
+	    module_name,
+	    "doc"
+	    ])
 	my_module.add_depend([
 	    'exml',
 	    'etk'
