@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/Polygon.h>
-#include <esvg/render/Path.h>
-#include <esvg/render/Weight.h>
+#include <esvg/debug.hpp>
+#include <esvg/Polygon.hpp>
+#include <esvg/render/Path.hpp>
+#include <esvg/render/Weight.hpp>
 
 esvg::Polygon::Polygon(PaintState parentPaintState) : esvg::Base(parentPaintState) {
 	

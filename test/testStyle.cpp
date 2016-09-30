@@ -7,8 +7,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <esvg/esvg.h>
-#include "main.h"
+#include <esvg/esvg.hpp>
+#include "main.hpp"
 
 TEST(TestExtern, worddown) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"

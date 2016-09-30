@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/gradientUnits.h>
-#include <esvg/debug.h>
+#include <esvg/gradientUnits.hpp>
+#include <esvg/debug.hpp>
 
 static const char* values[] = {
 	"userSpaceOnUse",

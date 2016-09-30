@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/Renderer.h>
-#include <etk/os/FSNode.h>
+#include <esvg/debug.hpp>
+#include <esvg/Renderer.hpp>
+#include <etk/os/FSNode.hpp>
 
 esvg::Renderer::Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug) :
 #ifdef DEBUG

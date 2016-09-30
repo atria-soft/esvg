@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Segment.h>
-#include <esvg/debug.h>
+#include <esvg/render/Segment.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::Segment::Segment(const vec2& _p0, const vec2& _p1) {
 	// segment register all time the lower at P0n then we need to register the sens of the path

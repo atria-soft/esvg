@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Element.h>
-#include <esvg/debug.h>
+#include <esvg/render/Element.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::ElementClose::ElementClose(bool _relative):
   Element(esvg::render::path_close, _relative) {

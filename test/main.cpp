@@ -6,10 +6,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
+#include <test-debug/debug.hpp>
 #include <vector>
-#include <gtest/gtest.h>
-#include <etk/etk.h>
+#include <gtest/gtest.hpp>
+#include <etk/etk.hpp>
 
 bool g_visualDebug = false;
 

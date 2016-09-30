@@ -4,20 +4,20 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/esvg.h>
-#include <esvg/Base.h>
-#include <esvg/Circle.h>
-#include <esvg/Ellipse.h>
-#include <esvg/Line.h>
-#include <esvg/Path.h>
-#include <esvg/Polygon.h>
-#include <esvg/Polyline.h>
-#include <esvg/Rectangle.h>
-#include <esvg/Text.h>
-#include <esvg/Group.h>
-#include <esvg/LinearGradient.h>
-#include <esvg/RadialGradient.h>
+#include <esvg/debug.hpp>
+#include <esvg/esvg.hpp>
+#include <esvg/Base.hpp>
+#include <esvg/Circle.hpp>
+#include <esvg/Ellipse.hpp>
+#include <esvg/Line.hpp>
+#include <esvg/Path.hpp>
+#include <esvg/Polygon.hpp>
+#include <esvg/Polyline.hpp>
+#include <esvg/Rectangle.hpp>
+#include <esvg/Text.hpp>
+#include <esvg/Group.hpp>
+#include <esvg/LinearGradient.hpp>
+#include <esvg/RadialGradient.hpp>
 
 esvg::Document::Document() {
 	m_fileName = "";

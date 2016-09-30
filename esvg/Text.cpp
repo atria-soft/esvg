@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/Text.h>
+#include <esvg/debug.hpp>
+#include <esvg/Text.hpp>
 
 esvg::Text::Text(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	

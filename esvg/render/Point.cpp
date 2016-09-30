@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Point.h>
-#include <esvg/debug.h>
+#include <esvg/render/Point.hpp>
+#include <esvg/debug.hpp>
 
 void esvg::render::Point::setEndPath() {
 	if (m_type == esvg::render::Point::type::interpolation) {

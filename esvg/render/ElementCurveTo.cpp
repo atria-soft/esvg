@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Element.h>
-#include <esvg/debug.h>
+#include <esvg/render/Element.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::ElementCurveTo::ElementCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos):
   Element(esvg::render::path_curveTo, _relative) {

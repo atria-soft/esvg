@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 #include <esvg/esvg.h>
-#include "main.h"
+#include "main.hpp"
 
 TEST(TestGradientLinear, horizontal) {
 	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"

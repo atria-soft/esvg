@@ -4,9 +4,9 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/SegmentList.h>
-#include <esvg/debug.h>
-#include <etk/math/Matrix2.h>
+#include <esvg/render/SegmentList.hpp>
+#include <esvg/debug.hpp>
+#include <etk/math/Matrix2.hpp>
 
 esvg::render::SegmentList::SegmentList() {
 	

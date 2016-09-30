@@ -3,9 +3,9 @@
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license APACHE v2.0 (see license file)
  */
-#include <esvg/debug.h>
-#include <esvg/render/Path.h>
-#include <esvg/render/Element.h>
+#include <esvg/debug.hpp>
+#include <esvg/render/Path.hpp>
+#include <esvg/render/Element.hpp>
 
 void esvg::render::Path::clear() {
 	m_listElement.clear();

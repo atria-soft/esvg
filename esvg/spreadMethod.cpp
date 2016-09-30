@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/spreadMethod.h>
-#include <esvg/debug.h>
+#include <esvg/spreadMethod.hpp>
+#include <esvg/debug.hpp>
 
 static const char* values[] = {
 	"pad",

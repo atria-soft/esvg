@@ -4,12 +4,12 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/LinearGradient.h>
-#include <esvg/RadialGradient.h>
-#include <esvg/render/Path.h>
-#include <esvg/render/Weight.h>
-#include <esvg/esvg.h>
+#include <esvg/debug.hpp>
+#include <esvg/LinearGradient.hpp>
+#include <esvg/RadialGradient.hpp>
+#include <esvg/render/Path.hpp>
+#include <esvg/render/Weight.hpp>
+#include <esvg/esvg.hpp>
 
 esvg::LinearGradient::LinearGradient(PaintState _parentPaintState) :
   esvg::Base(_parentPaintState),

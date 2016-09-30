@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/Path.h>
-#include <esvg/render/PointList.h>
-#include <esvg/render/Weight.h>
+#include <esvg/debug.hpp>
+#include <esvg/Path.hpp>
+#include <esvg/render/PointList.hpp>
+#include <esvg/render/Weight.hpp>
 
 esvg::Path::Path(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	

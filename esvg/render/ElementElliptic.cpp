@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Element.h>
-#include <esvg/debug.h>
+#include <esvg/render/Element.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::ElementElliptic::ElementElliptic(bool _relative,
                                                const vec2& _radius, // in m_vec1

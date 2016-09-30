@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/Line.h>
-#include <esvg/render/Path.h>
-#include <esvg/render/Weight.h>
+#include <esvg/debug.hpp>
+#include <esvg/Line.hpp>
+#include <esvg/render/Path.hpp>
+#include <esvg/render/Weight.hpp>
 
 esvg::Line::Line(PaintState _parentPaintState) : esvg::Base(_parentPaintState) {
 	m_startPos.setValue(0,0);

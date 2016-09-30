@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/render/PointList.h>
+#include <esvg/debug.hpp>
+#include <esvg/render/PointList.hpp>
 
 esvg::render::PointList::PointList() {
 	// nothing to do ...

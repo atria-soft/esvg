@@ -7,8 +7,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <esvg/esvg.h>
-#include "main.h"
+#include <esvg/esvg.hpp>
+#include "main.hpp"
 
 // ------------------------------------------------------ Miter test -----------------------------------------------------
 

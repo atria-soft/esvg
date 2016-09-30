@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
+#include <esvg/debug.hpp>
 
 int32_t esvg::getLogId() {
 	static int32_t g_val = elog::registerInstance("esvg");

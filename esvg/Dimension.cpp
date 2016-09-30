@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/Dimension.h>
-#include <esvg/debug.h>
+#include <esvg/Dimension.hpp>
+#include <esvg/debug.hpp>
 
 static const float       inchToMillimeter = 1.0f/25.4f;
 static const float       footToMillimeter = 1.0f/304.8f;

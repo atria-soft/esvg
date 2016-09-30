@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Weight.h>
-#include <esvg/debug.h>
+#include <esvg/render/Weight.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::Weight::Weight() :
   m_size(0,0)  {

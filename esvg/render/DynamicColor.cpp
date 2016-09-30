@@ -4,11 +4,11 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/debug.h>
-#include <esvg/render/DynamicColor.h>
-#include <esvg/LinearGradient.h>
-#include <esvg/RadialGradient.h>
-#include <esvg/esvg.h>
+#include <esvg/debug.hpp>
+#include <esvg/render/DynamicColor.hpp>
+#include <esvg/LinearGradient.hpp>
+#include <esvg/RadialGradient.hpp>
+#include <esvg/esvg.hpp>
 
 esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2& _mtx) :
   m_linear(true),

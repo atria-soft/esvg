@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/join.h>
-#include <esvg/debug.h>
+#include <esvg/join.hpp>
+#include <esvg/debug.hpp>
 
 static const char* values[] = {
 	"miter",

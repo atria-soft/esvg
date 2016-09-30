@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/cap.h>
-#include <esvg/debug.h>
+#include <esvg/cap.hpp>
+#include <esvg/debug.hpp>
 
 static const char* values[] = {
 	"butt",

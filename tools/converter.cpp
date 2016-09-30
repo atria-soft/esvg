@@ -6,10 +6,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
+#include <test-debug/debug.hpp>
 #include <vector>
-#include <etk/etk.h>
-#include <esvg/esvg.h>
+#include <etk/etk.hpp>
+#include <esvg/esvg.hpp>
 
 static void usage() {
 	TEST_PRINT(etk::getApplicationName() << " - help : ");

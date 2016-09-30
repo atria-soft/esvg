@@ -4,8 +4,8 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <esvg/render/Scanline.h>
-#include <esvg/debug.h>
+#include <esvg/render/Scanline.hpp>
+#include <esvg/debug.hpp>
 
 esvg::render::Scanline::Scanline(size_t _size) {
 	float tmp(0);
