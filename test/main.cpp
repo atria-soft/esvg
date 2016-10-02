@@ -8,7 +8,7 @@
 
 #include <test-debug/debug.hpp>
 #include <vector>
-#include <gtest/gtest.hpp>
+#include <gtest/gtest.h>
 #include <etk/etk.hpp>
 
 bool g_visualDebug = false;

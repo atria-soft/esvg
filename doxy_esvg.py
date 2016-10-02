@@ -18,5 +18,15 @@ def create(target, module_name):
 	    'exml',
 	    'etk'
 	    ])
+	my_module.add_exclude_symbols([
+	    '*operator<<*',
+	    ])
+	my_module.add_exclude_file([
+	    'debug.hpp',
+	    ])
+	my_module.add_file_patterns([
+	    '*.hpp',
+	    '*.md',
+	    ])
 	
 	return my_module

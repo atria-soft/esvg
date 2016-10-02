@@ -7,7 +7,7 @@
 
 #include <esvg/debug.hpp>
 #include <esvg/Base.hpp>
-#include <math.h>
+#include <cmath>
 
 const float esvg::kappa90(0.5522847493f);
 
