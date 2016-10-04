@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import lutin.module as module
+import lutin.debug as debug
 import lutin.tools as tools
 
 
@@ -24,26 +24,29 @@ def get_compagny_name():
 def get_maintainer():
 	return "authors.txt"
 
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
+def configure(target, my_module):
 	my_module.add_src_file([
-		'test/main.cpp',
-		'test/testCircle.cpp',
-		'test/testEllipse.cpp',
-		'test/testGroup.cpp',
-		'test/testLine.cpp',
-		'test/testParsingFile.cpp',
-		'test/testPath.cpp',
-		'test/testPolygon.cpp',
-		'test/testPolyline.cpp',
-		'test/testRectangle.cpp',
-		'test/testJoin.cpp',
-		'test/testCap.cpp',
-		'test/testColor.cpp',
-		'test/testStyle.cpp',
-		'test/testGradientLinear.cpp',
-		'test/testGradientRadial.cpp'
-		])
-	my_module.add_depend(['esvg', 'gtest', 'test-debug'])
-	return my_module
+	    'test/main.cpp',
+	    'test/testCircle.cpp',
+	    'test/testEllipse.cpp',
+	    'test/testGroup.cpp',
+	    'test/testLine.cpp',
+	    'test/testParsingFile.cpp',
+	    'test/testPath.cpp',
+	    'test/testPolygon.cpp',
+	    'test/testPolyline.cpp',
+	    'test/testRectangle.cpp',
+	    'test/testJoin.cpp',
+	    'test/testCap.cpp',
+	    'test/testColor.cpp',
+	    'test/testStyle.cpp',
+	    'test/testGradientLinear.cpp',
+	    'test/testGradientRadial.cpp'
+	    ])
+	my_module.add_depend([
+	    'esvg',
+	    'gtest',
+	    'test-debug'
+	    ])
+	return True
 
