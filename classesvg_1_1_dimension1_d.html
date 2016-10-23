@@ -1,0 +1,470 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>esvg: Ewol SVG parser and renderer: esvg::Dimension1D Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">esvg: Ewol SVG parser and renderer 0.7.4</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceesvg.html">esvg</a></li><li class="navelem"><a class="el" href="classesvg_1_1_dimension1_d.html">Dimension1D</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classesvg_1_1_dimension1_d-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">esvg::Dimension1D Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_dimension_8hpp_source.html">Dimension.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8d8b2e67398667f4225c27dac316d2d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a8d8b2e67398667f4225c27dac316d2d1">Dimension1D</a> ()</td></tr>
+<tr class="separator:a8d8b2e67398667f4225c27dac316d2d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e394d4b07bd2f14f373fde04050c0e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a7e394d4b07bd2f14f373fde04050c0e8">Dimension1D</a> (float _size, enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">esvg::distance</a> _type=<a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecabafd77227f9df87151202363764f4f6b1e">esvg::distance_pixel</a>)</td></tr>
+<tr class="separator:a7e394d4b07bd2f14f373fde04050c0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ff67467811430f8640eafd07b62ab70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a7ff67467811430f8640eafd07b62ab70">Dimension1D</a> (const std::string &amp;_config)</td></tr>
+<tr class="separator:a7ff67467811430f8640eafd07b62ab70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e4e3168e2b8bf83c22b2fc42d1b995f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a8e4e3168e2b8bf83c22b2fc42d1b995f">~Dimension1D</a> ()</td></tr>
+<tr class="separator:a8e4e3168e2b8bf83c22b2fc42d1b995f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6b3400d8f623a747b31a8eac6d53430"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#ac6b3400d8f623a747b31a8eac6d53430">operator std::string</a> () const</td></tr>
+<tr class="separator:ac6b3400d8f623a747b31a8eac6d53430"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d60727e67d048021e186c55aa4c03b0"><td class="memItemLeft" align="right" valign="top">const float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a6d60727e67d048021e186c55aa4c03b0">getValue</a> () const</td></tr>
+<tr class="separator:a6d60727e67d048021e186c55aa4c03b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf57b1d26707af9d529f15c2a703b18"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">distance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#afcf57b1d26707af9d529f15c2a703b18">getType</a> () const</td></tr>
+<tr class="separator:afcf57b1d26707af9d529f15c2a703b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f682e5acbc77ca233d475f864cdb96e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a3f682e5acbc77ca233d475f864cdb96e">set</a> (float _size, enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">distance</a> _type)</td></tr>
+<tr class="separator:a3f682e5acbc77ca233d475f864cdb96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa00aeacc43e12b52178ff841e4e3d7f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#aa00aeacc43e12b52178ff841e4e3d7f9">set</a> (std::string _config)</td></tr>
+<tr class="separator:aa00aeacc43e12b52178ff841e4e3d7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11103eda2d81fd200bee169f4767c83f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_dimension1_d.html#a11103eda2d81fd200bee169f4767c83f">getPixel</a> (float _upperSize) const</td></tr>
+<tr class="separator:a11103eda2d81fd200bee169f4767c83f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3661b630a2285b4a4c4e3898f05967c"><td class="memItemLeft" align="right" valign="top"><a id="ac3661b630a2285b4a4c4e3898f05967c"></a>
+const <a class="el" href="classesvg_1_1_dimension1_d.html">Dimension1D</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classesvg_1_1_dimension1_d.html">Dimension1D</a> &amp;_obj)</td></tr>
+<tr class="separator:ac3661b630a2285b4a4c4e3898f05967c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0090340f28fd62b5fde42275c75528dd"><td class="memItemLeft" align="right" valign="top"><a id="a0090340f28fd62b5fde42275c75528dd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classesvg_1_1_dimension1_d.html">Dimension1D</a> &amp;_obj) const</td></tr>
+<tr class="separator:a0090340f28fd62b5fde42275c75528dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afef86f0468f43b7b0824469e408dbd13"><td class="memItemLeft" align="right" valign="top"><a id="afef86f0468f43b7b0824469e408dbd13"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classesvg_1_1_dimension1_d.html">Dimension1D</a> &amp;_obj) const</td></tr>
+<tr class="separator:afef86f0468f43b7b0824469e408dbd13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>in the dimention class we store the data as the more usefull unit (pixel) but one case need to be dynamic the %, then when requested in % the register the % value </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8d8b2e67398667f4225c27dac316d2d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d8b2e67398667f4225c27dac316d2d1">&sect;&nbsp;</a></span>Dimension1D() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esvg::Dimension1D::Dimension1D </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor (default :0,0 mode pixel) </p>
+
+</div>
+</div>
+<a id="a7e394d4b07bd2f14f373fde04050c0e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e394d4b07bd2f14f373fde04050c0e8">&sect;&nbsp;</a></span>Dimension1D() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esvg::Dimension1D::Dimension1D </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">esvg::distance</a>&#160;</td>
+          <td class="paramname"><em>_type</em> = <code><a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecabafd77227f9df87151202363764f4f6b1e">esvg::distance_pixel</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_size</td><td>Requested dimention </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_type</td><td>Unit of the Dimention </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7ff67467811430f8640eafd07b62ab70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ff67467811430f8640eafd07b62ab70">&sect;&nbsp;</a></span>Dimension1D() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">esvg::Dimension1D::Dimension1D </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_config</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_config</td><td>dimension configuration. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8e4e3168e2b8bf83c22b2fc42d1b995f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e4e3168e2b8bf83c22b2fc42d1b995f">&sect;&nbsp;</a></span>~Dimension1D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esvg::Dimension1D::~Dimension1D </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a11103eda2d81fd200bee169f4767c83f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11103eda2d81fd200bee169f4767c83f">&sect;&nbsp;</a></span>getPixel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float esvg::Dimension1D::getPixel </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_upperSize</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the current dimention in pixel </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_upperSize</td><td>Size in pixel of the upper value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>dimention in Pixel </dd></dl>
+
+</div>
+</div>
+<a id="afcf57b1d26707af9d529f15c2a703b18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcf57b1d26707af9d529f15c2a703b18">&sect;&nbsp;</a></span>getType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">distance</a> esvg::Dimension1D::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>get the dimension type </p><dl class="section return"><dt>Returns</dt><dd>the type </dd></dl>
+
+</div>
+</div>
+<a id="a6d60727e67d048021e186c55aa4c03b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d60727e67d048021e186c55aa4c03b0">&sect;&nbsp;</a></span>getValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float&amp; esvg::Dimension1D::getValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the current dimention. </p>
+<dl class="section return"><dt>Returns</dt><dd>dimention requested. </dd></dl>
+
+</div>
+</div>
+<a id="ac6b3400d8f623a747b31a8eac6d53430"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6b3400d8f623a747b31a8eac6d53430">&sect;&nbsp;</a></span>operator std::string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esvg::Dimension1D::operator std::string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>string cast : </p>
+
+</div>
+</div>
+<a id="a3f682e5acbc77ca233d475f864cdb96e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f682e5acbc77ca233d475f864cdb96e">&sect;&nbsp;</a></span>set() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void esvg::Dimension1D::set </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">distance</a>&#160;</td>
+          <td class="paramname"><em>_type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set the current dimention in requested type </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_size</td><td>Dimention to set </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_type</td><td>Type of unit requested. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa00aeacc43e12b52178ff841e4e3d7f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa00aeacc43e12b52178ff841e4e3d7f9">&sect;&nbsp;</a></span>set() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void esvg::Dimension1D::set </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>_config</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set the current dimention in requested type </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_config</td><td>dimension configuration. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/esvg/esvg/<a class="el" href="_dimension_8hpp_source.html">Dimension.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:21 for esvg: Ewol SVG parser and renderer by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>esvg: Ewol SVG parser and renderer: esvg::render::Point Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">esvg: Ewol SVG parser and renderer 0.7.4</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceesvg.html">esvg</a></li><li class="navelem"><b>render</b></li><li class="navelem"><a class="el" href="classesvg_1_1render_1_1_point.html">Point</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="classesvg_1_1render_1_1_point-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">esvg::render::Point Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a65437496d031f43c1eeedc5ed624dba0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0">type</a> { <br />
+&#160;&#160;<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0add5c07036f2975ff4bce568b6511d3bc">type::single</a>, 
+<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0aea2b2676c28c0db26d39331a336c6b92">type::start</a>, 
+<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0aef399b2d446bb37b7c32ad2cc1b6045b">type::stop</a>, 
+<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0a731b886d80d2ea138da54d30f43b2005">type::join</a>, 
+<br />
+&#160;&#160;<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0acc801bd8b3e2970a29e5346ff2068dc8">type::interpolation</a>
+<br />
+ }</td></tr>
+<tr class="separator:a65437496d031f43c1eeedc5ed624dba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa35ecae86dd2ddf4019e8a2092307cb7"><td class="memItemLeft" align="right" valign="top"><a id="aa35ecae86dd2ddf4019e8a2092307cb7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Point</b> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos, enum <a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0">esvg::render::Point::type</a> _type=<a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0a731b886d80d2ea138da54d30f43b2005">esvg::render::Point::type::join</a>)</td></tr>
+<tr class="separator:aa35ecae86dd2ddf4019e8a2092307cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d697f5d20018834263612636414090b"><td class="memItemLeft" align="right" valign="top"><a id="a9d697f5d20018834263612636414090b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEndPath</b> ()</td></tr>
+<tr class="separator:a9d697f5d20018834263612636414090b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2051d7cec4f057957a4b59aeebab211e"><td class="memItemLeft" align="right" valign="top"><a id="a2051d7cec4f057957a4b59aeebab211e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>normalize</b> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_nextPoint)</td></tr>
+<tr class="separator:a2051d7cec4f057957a4b59aeebab211e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a5e00d4d20fa8ac98a7f0c75c93456dbe"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1render_1_1_point.html#a5e00d4d20fa8ac98a7f0c75c93456dbe">m_pos</a></td></tr>
+<tr class="separator:a5e00d4d20fa8ac98a7f0c75c93456dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a495a6fa4a016a298e55172f4ef4db2e2"><td class="memItemLeft" align="right" valign="top"><a id="a495a6fa4a016a298e55172f4ef4db2e2"></a>
+enum <a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0">esvg::render::Point::type</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_type</b></td></tr>
+<tr class="separator:a495a6fa4a016a298e55172f4ef4db2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3da2f13237ddd1677c0334904c3f089"><td class="memItemLeft" align="right" valign="top"><a id="ac3da2f13237ddd1677c0334904c3f089"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_miterAxe</b></td></tr>
+<tr class="separator:ac3da2f13237ddd1677c0334904c3f089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4921e64c888f06dde758132a791ae334"><td class="memItemLeft" align="right" valign="top"><a id="a4921e64c888f06dde758132a791ae334"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_orthoAxePrevious</b></td></tr>
+<tr class="separator:a4921e64c888f06dde758132a791ae334"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af17b4069df46e28b2dc88137b4df9525"><td class="memItemLeft" align="right" valign="top"><a id="af17b4069df46e28b2dc88137b4df9525"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_orthoAxeNext</b></td></tr>
+<tr class="separator:af17b4069df46e28b2dc88137b4df9525"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae73e5d279ddaf88b92d527bb4cb60bc7"><td class="memItemLeft" align="right" valign="top"><a id="ae73e5d279ddaf88b92d527bb4cb60bc7"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_posPrevious</b></td></tr>
+<tr class="separator:ae73e5d279ddaf88b92d527bb4cb60bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50724529f63215144ea0a56cde9dcbfd"><td class="memItemLeft" align="right" valign="top"><a id="a50724529f63215144ea0a56cde9dcbfd"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_posNext</b></td></tr>
+<tr class="separator:a50724529f63215144ea0a56cde9dcbfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace98729addf1d4bf86fdf5bc9278bb66"><td class="memItemLeft" align="right" valign="top"><a id="ace98729addf1d4bf86fdf5bc9278bb66"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_delta</b></td></tr>
+<tr class="separator:ace98729addf1d4bf86fdf5bc9278bb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500d6a7a112f1b0b5d79b46c582bd3d3"><td class="memItemLeft" align="right" valign="top"><a id="a500d6a7a112f1b0b5d79b46c582bd3d3"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>m_len</b></td></tr>
+<tr class="separator:a500d6a7a112f1b0b5d79b46c582bd3d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a65437496d031f43c1eeedc5ed624dba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65437496d031f43c1eeedc5ed624dba0">&sect;&nbsp;</a></span>type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classesvg_1_1render_1_1_point.html#a65437496d031f43c1eeedc5ed624dba0">esvg::render::Point::type</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a65437496d031f43c1eeedc5ed624dba0add5c07036f2975ff4bce568b6511d3bc"></a>single&#160;</td><td class="fielddoc"><p><a class="el" href="classesvg_1_1render_1_1_point.html">Point</a> type is single, this mean that it start and stop of a path. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65437496d031f43c1eeedc5ed624dba0aea2b2676c28c0db26d39331a336c6b92"></a>start&#160;</td><td class="fielddoc"><p><a class="el" href="classesvg_1_1render_1_1_point.html">Point</a> type is starting of a path. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65437496d031f43c1eeedc5ed624dba0aef399b2d446bb37b7c32ad2cc1b6045b"></a>stop&#160;</td><td class="fielddoc"><p><a class="el" href="classesvg_1_1render_1_1_point.html">Point</a> type is stoping of a path. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65437496d031f43c1eeedc5ed624dba0a731b886d80d2ea138da54d30f43b2005"></a>join&#160;</td><td class="fielddoc"><p><a class="el" href="classesvg_1_1render_1_1_point.html">Point</a> type in an user point provided inside a path. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65437496d031f43c1eeedc5ed624dba0acc801bd8b3e2970a29e5346ff2068dc8"></a>interpolation&#160;</td><td class="fielddoc"><p>This point is dynamicly calculated to create an interpolation. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a5e00d4d20fa8ac98a7f0c75c93456dbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e00d4d20fa8ac98a7f0c75c93456dbe">&sect;&nbsp;</a></span>m_pos</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> esvg::render::Point::m_pos</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>position of the point </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/esvg/esvg/render/<a class="el" href="_point_8hpp_source.html">Point.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:21 for esvg: Ewol SVG parser and renderer by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

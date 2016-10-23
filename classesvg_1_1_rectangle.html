@@ -1,0 +1,397 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>esvg: Ewol SVG parser and renderer: esvg::Rectangle Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">esvg: Ewol SVG parser and renderer 0.7.4</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceesvg.html">esvg</a></li><li class="navelem"><a class="el" href="classesvg_1_1_rectangle.html">Rectangle</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classesvg_1_1_rectangle-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">esvg::Rectangle Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for esvg::Rectangle:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classesvg_1_1_rectangle.png" usemap="#esvg::Rectangle_map" alt=""/>
+  <map id="esvg::Rectangle_map" name="esvg::Rectangle_map">
+<area href="classesvg_1_1_base.html" alt="esvg::Base" shape="rect" coords="0,0,101,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:afdd327177e41f8ed060862d186cfa45e"><td class="memItemLeft" align="right" valign="top"><a id="afdd327177e41f8ed060862d186cfa45e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Rectangle</b> (<a class="el" href="classesvg_1_1_paint_state.html">PaintState</a> _parentPaintState)</td></tr>
+<tr class="separator:afdd327177e41f8ed060862d186cfa45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67678234846fb017510f96226735d9f8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_rectangle.html#a67678234846fb017510f96226735d9f8">parseXML</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;_element, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;_parentTrans, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_sizeMax) override</td></tr>
+<tr class="separator:a67678234846fb017510f96226735d9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74e382f7b50159e7552089e8aa1a212b"><td class="memItemLeft" align="right" valign="top"><a id="a74e382f7b50159e7552089e8aa1a212b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>display</b> (int32_t _spacing) override</td></tr>
+<tr class="separator:a74e382f7b50159e7552089e8aa1a212b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ed06ba29525a5379c8a34d03c4a8807"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_rectangle.html#a1ed06ba29525a5379c8a34d03c4a8807">draw</a> (<a class="el" href="classesvg_1_1_renderer.html">esvg::Renderer</a> &amp;_myRenderer, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;_basicTrans, int32_t _level) override</td></tr>
+<tr class="separator:a1ed06ba29525a5379c8a34d03c4a8807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a687a2266b698cba9951f8a5c9a2213a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_rectangle.html#a687a2266b698cba9951f8a5c9a2213a7">drawShapePoints</a> (std::vector&lt; std::vector&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &gt;&gt; &amp;_out, int32_t _recurtionMax, float _threshold, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;_basicTrans, int32_t _level=1) override</td></tr>
+<tr class="separator:a687a2266b698cba9951f8a5c9a2213a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classesvg_1_1_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classesvg_1_1_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classesvg_1_1_base.html">esvg::Base</a></td></tr>
+<tr class="memitem:a7c5a9a4ed1f282d79a23faad9513cb92 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a id="a7c5a9a4ed1f282d79a23faad9513cb92"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Base</b> (<a class="el" href="classesvg_1_1_paint_state.html">PaintState</a> _parentPaintState)</td></tr>
+<tr class="separator:a7c5a9a4ed1f282d79a23faad9513cb92 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af58630e0343aa47c15da08bd5b9a4a2a inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a id="af58630e0343aa47c15da08bd5b9a4a2a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>parseTransform</b> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;_element)</td></tr>
+<tr class="separator:af58630e0343aa47c15da08bd5b9a4a2a inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa437080ada76e30230019b14f48cc850 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#aa437080ada76e30230019b14f48cc850">parsePosition</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;_element, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_pos, <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;_size)</td></tr>
+<tr class="separator:aa437080ada76e30230019b14f48cc850 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4458638fa02695356fbd485810fbf745 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#a4458638fa02695356fbd485810fbf745">parseLength</a> (const std::string &amp;_dataInput)</td></tr>
+<tr class="separator:a4458638fa02695356fbd485810fbf745 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a79355319230b9a3db23165490a439 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a id="af0a79355319230b9a3db23165490a439"></a>
+std::pair&lt; float, enum <a class="el" href="namespaceesvg.html#a79132597b58acc8f2e6a1e8f0696ecab">esvg::distance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parseLength2</b> (const std::string &amp;_dataInput)</td></tr>
+<tr class="separator:af0a79355319230b9a3db23165490a439 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04de60b57929e5e0b360ef08447502b7 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#a04de60b57929e5e0b360ef08447502b7">parsePaintAttr</a> (const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;_element)</td></tr>
+<tr class="separator:a04de60b57929e5e0b360ef08447502b7 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb88afedfb89d41bea8fbca12a0160c3 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_color.html">etk::Color</a>&lt; float, 4 &gt;, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#afb88afedfb89d41bea8fbca12a0160c3">parseColor</a> (const std::string &amp;_inputData)</td></tr>
+<tr class="separator:afb88afedfb89d41bea8fbca12a0160c3 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f6a5b8de75e690fdfbf3039b70cff81 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#a7f6a5b8de75e690fdfbf3039b70cff81">getId</a> () const</td></tr>
+<tr class="separator:a7f6a5b8de75e690fdfbf3039b70cff81 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b4c6aca7da843f184ca0c318301a7c7 inherit pub_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#a6b4c6aca7da843f184ca0c318301a7c7">setId</a> (const std::string &amp;_newId)</td></tr>
+<tr class="separator:a6b4c6aca7da843f184ca0c318301a7c7 inherit pub_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classesvg_1_1_base"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classesvg_1_1_base')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classesvg_1_1_base.html">esvg::Base</a></td></tr>
+<tr class="memitem:a9ae7f71860c7979d7fb0bfac1ab5c58f inherit pro_methods_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a id="a9ae7f71860c7979d7fb0bfac1ab5c58f"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>spacingDist</b> (int32_t _spacing)</td></tr>
+<tr class="separator:a9ae7f71860c7979d7fb0bfac1ab5c58f inherit pro_methods_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classesvg_1_1_base"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classesvg_1_1_base')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classesvg_1_1_base.html">esvg::Base</a></td></tr>
+<tr class="memitem:aba361caeaeddd65fa345a2d3ac8d03a4 inherit pro_attribs_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a id="aba361caeaeddd65fa345a2d3ac8d03a4"></a>
+<a class="el" href="classesvg_1_1_paint_state.html">PaintState</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_paint</b></td></tr>
+<tr class="separator:aba361caeaeddd65fa345a2d3ac8d03a4 inherit pro_attribs_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a065aecc5f85f8cfa4c1b3d695db0d621 inherit pro_attribs_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#a065aecc5f85f8cfa4c1b3d695db0d621">m_transformMatrix</a></td></tr>
+<tr class="separator:a065aecc5f85f8cfa4c1b3d695db0d621 inherit pro_attribs_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe016b6b82b00b0a2836f0fa52ce1697 inherit pro_attribs_classesvg_1_1_base"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classesvg_1_1_base.html#abe016b6b82b00b0a2836f0fa52ce1697">m_id</a></td></tr>
+<tr class="separator:abe016b6b82b00b0a2836f0fa52ce1697 inherit pro_attribs_classesvg_1_1_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1ed06ba29525a5379c8a34d03c4a8807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ed06ba29525a5379c8a34d03c4a8807">&sect;&nbsp;</a></span>draw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void esvg::Rectangle::draw </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classesvg_1_1_renderer.html">esvg::Renderer</a> &amp;&#160;</td>
+          <td class="paramname"><em>_myRenderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_basicTrans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draw the form in the renderer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_myRenderer</td><td><a class="el" href="classesvg_1_1_renderer.html">Renderer</a> engine </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_basicTrans</td><td>Parant transformation of the environement </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_level</td><td>Level of the tree </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classesvg_1_1_base.html#ad338c26a43d03e50c0096b68f5661890">esvg::Base</a>.</p>
+
+</div>
+</div>
+<a id="a687a2266b698cba9951f8a5c9a2213a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a687a2266b698cba9951f8a5c9a2213a7">&sect;&nbsp;</a></span>drawShapePoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void esvg::Rectangle::drawShapePoints </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_recurtionMax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_threshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_basicTrans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_level</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draw rhe shape with all points. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_out</td><td>where the lines are added </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_recurtionMax</td><td>interpolation recurtion max </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_threshold</td><td>threshold to stop recurtion </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_basicTrans</td><td>Parant transformation of the environement </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_level</td><td>Level of the tree </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classesvg_1_1_base.html#ae0b3990716f185b53369b467e6a9e1f9">esvg::Base</a>.</p>
+
+</div>
+</div>
+<a id="a67678234846fb017510f96226735d9f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67678234846fb017510f96226735d9f8">&sect;&nbsp;</a></span>parseXML()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool esvg::Rectangle::parseXML </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a> &amp;&#160;</td>
+          <td class="paramname"><em>_element</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_matrix2_8hpp.html#a91e098698a1b6803e0368d95ceb782e9">mat2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_parentTrans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/_vector2_d_8hpp.html#ac499ddf9a4fa1db2545c53a02ee0c44e">vec2</a> &amp;&#160;</td>
+          <td class="paramname"><em>_sizeMax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>parse all the element needed in the basic node </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_element</td><td>standart XML node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if no problem arrived </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classesvg_1_1_base.html#af89bdabc80d38b3ab16c21de758b59b5">esvg::Base</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/esvg/esvg/<a class="el" href="_rectangle_8hpp_source.html">Rectangle.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:21 for esvg: Ewol SVG parser and renderer by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>esvg: Ewol SVG parser and renderer: framework/atria-soft/esvg/esvg/esvg.hpp Source File</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">esvg: Ewol SVG parser and renderer 0.7.4</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_644e041c3a6521da7b27eba0e4eb2b95.html">framework</a></li><li class="navelem"><a class="el" href="dir_a094892b17be858f66bf3446bbb755c7.html">atria-soft</a></li><li class="navelem"><a class="el" href="dir_b7b96464043d1516cf5529341a151f34.html">esvg</a></li><li class="navelem"><a class="el" href="dir_75dd85fc47b4ee509eea8347866fa642.html">esvg</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">esvg.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="esvg_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/types__8hpp.html">etk/types.hpp</a>&gt;</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/__vector2__d__8hpp.html">etk/math/Vector2D.hpp</a>&gt;</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/__f__s__node__8hpp.html">etk/os/FSNode.hpp</a>&gt;</span></div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_base_8hpp.html">esvg/Base.hpp</a>&gt;</span></div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceesvg.html">esvg</a> {</div><div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classesvg_1_1_document.html">   19</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classesvg_1_1_document.html">Document</a> : <span class="keyword">public</span> <a class="code" href="classesvg_1_1_base.html">esvg::Base</a> {</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">private</span>:</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            std::string m_fileName;</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">bool</span> m_loadOK;</div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            std::string m_version;</div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            std::string m_title;</div><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            std::vector&lt;ememory::SharedPtr&lt;esvg::Base&gt;&gt; m_subElementList; </div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            std::vector&lt;ememory::SharedPtr&lt;esvg::Base&gt;&gt; m_refList; </div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a> m_size;</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <a class="code" href="classesvg_1_1_document.html">Document</a>();</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            ~<a class="code" href="classesvg_1_1_document.html">Document</a>();</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordtype">void</span> clear();</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="classesvg_1_1_document.html#ac3049c8fff0d7d58d1ffe0c6e27b3f86">parse</a>(<span class="keyword">const</span> std::string&amp; _data);</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="classesvg_1_1_document.html#a8ee7799f64849fd8f98a19d8e425381d">generate</a>(std::string&amp; _data);</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="classesvg_1_1_document.html#a667ff5b38e65b6c78475fdaa98a3e094">load</a>(<span class="keyword">const</span> std::string&amp; _file);</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="classesvg_1_1_document.html#a3b414769464207495c0219b0228e86d6">store</a>(<span class="keyword">const</span> std::string&amp; _file);</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">protected</span>:</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classesvg_1_1_document.html#a91d277c93d9c5df432b606418e0583c4">cleanStyleProperty</a>(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a>&amp; _root);</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">bool</span> parseXMLData(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/exml.tag:http://atria-soft.github.io/exml/" href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a>&amp; _root, <span class="keywordtype">bool</span> _isReference = <span class="keyword">false</span>);</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordtype">bool</span> isLoadOk() {</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordflow">return</span> m_loadOK;</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            };</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classesvg_1_1_document.html#a1dbc8067ac1d8dbcdd8792c7aa07a11a">displayDebug</a>();</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="comment">// TODO: remove this fucntion : use generic function ...</span></div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordtype">void</span> generateAnImage(<span class="keyword">const</span> std::string&amp; _fileName, <span class="keywordtype">bool</span> _visualDebug=<span class="keyword">false</span>);</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordtype">void</span> generateAnImage(<span class="keyword">const</span> <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size, <span class="keyword">const</span> std::string&amp; _fileName, <span class="keywordtype">bool</span> _visualDebug=<span class="keyword">false</span>);</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            std::vector&lt;etk::Color&lt;float,4&gt;&gt; <a class="code" href="classesvg_1_1_document.html#a497d34027b4101090f594f595be6590e">renderImageFloatRGBA</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            std::vector&lt;etk::Color&lt;float,3&gt;&gt; <a class="code" href="classesvg_1_1_document.html#aafcc5178edb306af61b7cdef9c219186">renderImageFloatRGB</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            std::vector&lt;etk::Color&lt;uint8_t,4&gt;&gt; <a class="code" href="classesvg_1_1_document.html#a3ab1089ca5d2beaa61993dd90b09c40d">renderImageU8RGBA</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            std::vector&lt;etk::Color&lt;uint8_t,3&gt;&gt; <a class="code" href="classesvg_1_1_document.html#a2af89aee2227bcdef0f61a03bf24a169">renderImageU8RGB</a>(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">ivec2</a>&amp; _size);</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            std::vector&lt;std::vector&lt;vec2&gt;&gt; getLines(<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a> _size=<a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a>(256,256));</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">protected</span>:</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classesvg_1_1_document.html#a5632f469764086357753cdc5d21a3518">draw</a>(<a class="code" href="classesvg_1_1_renderer.html">esvg::Renderer</a>&amp; _myRenderer, <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_matrix2.html">mat2</a>&amp; _basicTrans, int32_t _level=0) <span class="keyword">override</span>;</div><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">vec2</a> getDefinedSize() {</div><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <span class="keywordflow">return</span> m_size;</div><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            };</div><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr&lt;esvg::Base&gt;</a> getReference(<span class="keyword">const</span> std::string&amp; _name);</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">protected</span>:</div><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classesvg_1_1_document.html#a3d53543c2f913a7313dc2f8389c2ca11">drawShapePoints</a>(std::vector&lt;std::vector&lt;vec2&gt;&gt;&amp; _out,</div><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                                 int32_t _recurtionMax,</div><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                                 <span class="keywordtype">float</span> _threshold,</div><div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                 <a class="codeRef" doxygen="/home/heero/dev/perso/out/doc/release/etk.tag:http://atria-soft.github.io/etk/" href="http://atria-soft.github.io/etk/classetk_1_1_matrix2.html">mat2</a>&amp; _basicTrans,</div><div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                 int32_t _level=1) <span class="keyword">override</span>;</div><div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    };</div><div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div><div class="ttc" id="classesvg_1_1_document_html_a3ab1089ca5d2beaa61993dd90b09c40d"><div class="ttname"><a href="classesvg_1_1_document.html#a3ab1089ca5d2beaa61993dd90b09c40d">esvg::Document::renderImageU8RGBA</a></div><div class="ttdeci">std::vector&lt; etk::Color&lt; uint8_t, 4 &gt; &gt; renderImageU8RGBA(ivec2 &amp;_size)</div></div>
+<div class="ttc" id="namespaceesvg_html"><div class="ttname"><a href="namespaceesvg.html">esvg</a></div><div class="ttdoc">Main esvg namespace. </div><div class="ttdef"><b>Definition:</b> Base.hpp:24</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a2af89aee2227bcdef0f61a03bf24a169"><div class="ttname"><a href="classesvg_1_1_document.html#a2af89aee2227bcdef0f61a03bf24a169">esvg::Document::renderImageU8RGB</a></div><div class="ttdeci">std::vector&lt; etk::Color&lt; uint8_t, 3 &gt; &gt; renderImageU8RGB(ivec2 &amp;_size)</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_aafcc5178edb306af61b7cdef9c219186"><div class="ttname"><a href="classesvg_1_1_document.html#aafcc5178edb306af61b7cdef9c219186">esvg::Document::renderImageFloatRGB</a></div><div class="ttdeci">std::vector&lt; etk::Color&lt; float, 3 &gt; &gt; renderImageFloatRGB(ivec2 &amp;_size)</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a497d34027b4101090f594f595be6590e"><div class="ttname"><a href="classesvg_1_1_document.html#a497d34027b4101090f594f595be6590e">esvg::Document::renderImageFloatRGBA</a></div><div class="ttdeci">std::vector&lt; etk::Color&lt; float, 4 &gt; &gt; renderImageFloatRGBA(ivec2 &amp;_size)</div><div class="ttdoc">Generate Image in a specific format. </div></div>
+<div class="ttc" id="classesvg_1_1_base_html"><div class="ttname"><a href="classesvg_1_1_base.html">esvg::Base</a></div><div class="ttdef"><b>Definition:</b> Base.hpp:52</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a667ff5b38e65b6c78475fdaa98a3e094"><div class="ttname"><a href="classesvg_1_1_document.html#a667ff5b38e65b6c78475fdaa98a3e094">esvg::Document::load</a></div><div class="ttdeci">bool load(const std::string &amp;_file)</div><div class="ttdoc">Load the file that might contain the svg. </div></div>
+<div class="ttc" id="__vector2__d__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/__vector2__d__8hpp.html">Vector2D.hpp</a></div></div>
+<div class="ttc" id="types__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/types__8hpp.html">types.hpp</a></div></div>
+<div class="ttc" id="classesvg_1_1_renderer_html"><div class="ttname"><a href="classesvg_1_1_renderer.html">esvg::Renderer</a></div><div class="ttdef"><b>Definition:</b> Renderer.hpp:16</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_ac3049c8fff0d7d58d1ffe0c6e27b3f86"><div class="ttname"><a href="classesvg_1_1_document.html#ac3049c8fff0d7d58d1ffe0c6e27b3f86">esvg::Document::parse</a></div><div class="ttdeci">bool parse(const std::string &amp;_data)</div><div class="ttdoc">parse a string that contain an svg stream </div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a91d277c93d9c5df432b606418e0583c4"><div class="ttname"><a href="classesvg_1_1_document.html#a91d277c93d9c5df432b606418e0583c4">esvg::Document::cleanStyleProperty</a></div><div class="ttdeci">virtual bool cleanStyleProperty(const exml::Element &amp;_root)</div><div class="ttdoc">change all style in a xml atribute </div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a1dbc8067ac1d8dbcdd8792c7aa07a11a"><div class="ttname"><a href="classesvg_1_1_document.html#a1dbc8067ac1d8dbcdd8792c7aa07a11a">esvg::Document::displayDebug</a></div><div class="ttdeci">void displayDebug()</div><div class="ttdoc">Display all the node in the svg file. </div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a3d53543c2f913a7313dc2f8389c2ca11"><div class="ttname"><a href="classesvg_1_1_document.html#a3d53543c2f913a7313dc2f8389c2ca11">esvg::Document::drawShapePoints</a></div><div class="ttdeci">void drawShapePoints(std::vector&lt; std::vector&lt; vec2 &gt;&gt; &amp;_out, int32_t _recurtionMax, float _threshold, mat2 &amp;_basicTrans, int32_t _level=1) override</div><div class="ttdoc">Draw rhe shape with all points. </div></div>
+<div class="ttc" id="__f__s__node__8hpp_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/__f__s__node__8hpp.html">FSNode.hpp</a></div></div>
+<div class="ttc" id="classesvg_1_1_document_html"><div class="ttname"><a href="classesvg_1_1_document.html">esvg::Document</a></div><div class="ttdef"><b>Definition:</b> esvg.hpp:19</div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a8ee7799f64849fd8f98a19d8e425381d"><div class="ttname"><a href="classesvg_1_1_document.html#a8ee7799f64849fd8f98a19d8e425381d">esvg::Document::generate</a></div><div class="ttdeci">bool generate(std::string &amp;_data)</div><div class="ttdoc">generate a string that contain the created SVG </div></div>
+<div class="ttc" id="classexml_1_1_element_html"><div class="ttname"><a href="http://atria-soft.github.io/exml/classexml_1_1_element.html">exml::Element</a></div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a5632f469764086357753cdc5d21a3518"><div class="ttname"><a href="classesvg_1_1_document.html#a5632f469764086357753cdc5d21a3518">esvg::Document::draw</a></div><div class="ttdeci">void draw(esvg::Renderer &amp;_myRenderer, mat2 &amp;_basicTrans, int32_t _level=0) override</div><div class="ttdoc">Draw the form in the renderer. </div></div>
+<div class="ttc" id="_base_8hpp_html"><div class="ttname"><a href="_base_8hpp.html">Base.hpp</a></div></div>
+<div class="ttc" id="classetk_1_1_vector2_d_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_vector2_d.html">etk::Vector2D&lt; float &gt;</a></div></div>
+<div class="ttc" id="classememory_1_1_shared_ptr_html"><div class="ttname"><a href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a></div></div>
+<div class="ttc" id="classesvg_1_1_document_html_a3b414769464207495c0219b0228e86d6"><div class="ttname"><a href="classesvg_1_1_document.html#a3b414769464207495c0219b0228e86d6">esvg::Document::store</a></div><div class="ttdeci">bool store(const std::string &amp;_file)</div><div class="ttdoc">Store the SVG in the file. </div></div>
+<div class="ttc" id="classetk_1_1_matrix2_html"><div class="ttname"><a href="http://atria-soft.github.io/etk/classetk_1_1_matrix2.html">etk::Matrix2</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:21 for esvg: Ewol SVG parser and renderer by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
