@@ -1,7 +1,7 @@
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
- * @license APACHE v2.0 (see license file)
+ * @license MPL v2.0 (see license file)
  */
 
 #include <esvg/debug.hpp>
@@ -339,7 +339,7 @@ void esvg::Renderer::writeBMP(const std::string& _fileName) {
 	infoHeader.biBitMaskGreen = 0x00FF0000;
 	infoHeader.biBitMaskBlue =0x0000FF00;
 	infoHeader.biBitMaskAlpha = 0x000000FF;
-	infoHeader.biLCSColorSpace = 0x73524742; // "???"
+	infoHeader.biLCSColorSpace = 0x73524742; // "Win "
 	for (int32_t jjj=0; jjj<16; ++jjj) {
 		infoHeader.biUnused[jjj] = 0;
 	}

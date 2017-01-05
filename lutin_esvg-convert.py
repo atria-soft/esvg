@@ -13,7 +13,7 @@ def get_desc():
 	return "eSVG converter in bitmap"
 
 def get_licence():
-	return "APACHE-2"
+	return "MPL-2"
 
 def get_compagny_type():
 	return "com"
