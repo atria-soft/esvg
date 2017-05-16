@@ -122,7 +122,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			                       esvg::render::Point(tmpColor->m_pos2),
 			                       false);
 			/*
-				mat2 m_matrix;
+				mat2x3 m_matrix;
 				std::pair<vec2, vec2> m_viewPort;
 				vec2 m_pos1;
 				vec2 m_pos2;

@@ -26,7 +26,7 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -105,7 +105,7 @@ void esvg::Group::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Group (STOP)");
 }
 
-void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
 	for (auto &it : m_subElementList) {
 		if (it != nullptr) {
@@ -117,7 +117,7 @@ void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _
 void esvg::Group::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                   int32_t _recurtionMax,
                                   float _threshold,
-                                  mat2& _basicTrans,
+                                  mat2x3& _basicTrans,
                                   int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::group");
 	for (auto &it : m_subElementList) {

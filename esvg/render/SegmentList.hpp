@@ -44,7 +44,7 @@ namespace esvg {
 				                             bool _isStart);
 			public:
 				std::pair<vec2, vec2> getViewPort();
-				void applyMatrix(const mat2& _transformationMatrix);
+				void applyMatrix(const mat2x3& _transformationMatrix);
 		};
 	}
 }

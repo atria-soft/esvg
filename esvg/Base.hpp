@@ -13,7 +13,7 @@
 #include <etk/types.hpp>
 #include <vector>
 #include <etk/math/Vector2D.hpp>
-#include <etk/math/Matrix2.hpp>
+#include <etk/math/Matrix2x3.hpp>
 #include <etk/Color.hpp>
 #include <esvg/render/Path.hpp>
 
@@ -52,7 +52,7 @@ namespace esvg {
 	class Base {
 		protected:
 			PaintState m_paint;
-			mat2 m_transformMatrix; //!< specific render of the curent element
+			mat2x3 m_transformMatrix; //!< specific render of the curent element
 			const char * spacingDist(int32_t _spacing);
 		public:
 			Base() {};
@@ -63,14 +63,14 @@ namespace esvg {
 			 * @param[in] _element standart XML node
 			 * @return true if no problem arrived
 			 */
-			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax);
 			/**
 			 * @brief Draw the form in the renderer
 			 * @param[in] _myRenderer Renderer engine
 			 * @param[in] _basicTrans Parant transformation of the environement
 			 * @param[in] _level Level of the tree
 			 */
-			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=1);
+			virtual void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level=1);
 			/**
 			 * @brief Draw rhe shape with all points
 			 * @param[in] _out where the lines are added
@@ -82,7 +82,7 @@ namespace esvg {
 			virtual void drawShapePoints(std::vector<std::vector<vec2>>& _out,
 			                             int32_t _recurtionMax,
 			                             float _threshold,
-			                             mat2& _basicTrans,
+			                             mat2x3& _basicTrans,
 			                             int32_t _level=1);
 			
 			virtual void display(int32_t _spacing) { };

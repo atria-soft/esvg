@@ -17,7 +17,7 @@ esvg::Ellipse::~Ellipse() {
 	
 }
 
-bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -86,7 +86,7 @@ esvg::render::Path esvg::Ellipse::createPath() {
 	return out;
 }
 
-void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Ellipse");
 	if (    m_r.x()<=0.0f
 	     || m_r.y()<=0.0f) {
@@ -95,7 +95,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 	}
 	esvg::render::Path listElement = createPath();
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -152,11 +152,11 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t
 void esvg::Ellipse::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                     int32_t _recurtionMax,
                                     float _threshold,
-                                    mat2& _basicTrans,
+                                    mat2x3& _basicTrans,
                                     int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Ellipse");
 	esvg::render::Path listElement = createPath();
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);

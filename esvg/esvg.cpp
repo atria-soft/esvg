@@ -49,7 +49,7 @@ void esvg::Document::displayDebug() {
 }
 
 
-void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
@@ -73,8 +73,8 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 	
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(sizeRender, this, _visualDebug);
 	// create the first element matrix modification ...
-	mat2 basicTrans;
-	basicTrans *= etk::mat2Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
+	mat2x3 basicTrans;
+	basicTrans *= etk::mat2x3Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
 	
 	draw(*renderedElement, basicTrans);
 	
@@ -98,8 +98,8 @@ std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _si
 	ESVG_DEBUG("Generate size " << _size);
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(_size, this);
 	// create the first element matrix modification ...
-	mat2 basicTrans;
-	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	mat2x3 basicTrans;
+	basicTrans *= etk::mat2x3Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
 	draw(*renderedElement, basicTrans);
 	
 	// direct return the generated data ...
@@ -379,8 +379,8 @@ std::vector<std::vector<vec2>> esvg::Document::getLines(vec2 _size) {
 	}
 	ESVG_DEBUG("lineification size " << _size);
 	// create the first element matrix modification ...
-	mat2 basicTrans;
-	basicTrans *= etk::mat2Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	mat2x3 basicTrans;
+	basicTrans *= etk::mat2x3Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
 	drawShapePoints(out, 10, 0.25f, basicTrans);
 	return out;
 }
@@ -389,7 +389,7 @@ std::vector<std::vector<vec2>> esvg::Document::getLines(vec2 _size) {
 void esvg::Document::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                      int32_t _recurtionMax,
                                      float _threshold,
-                                     mat2& _basicTrans,
+                                     mat2x3& _basicTrans,
                                      int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::Document");
 	for (auto &it : m_subElementList) {

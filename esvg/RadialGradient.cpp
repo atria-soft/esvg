@@ -26,7 +26,7 @@ esvg::RadialGradient::~RadialGradient() {
 }
 
 
-bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	//m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -140,7 +140,7 @@ void esvg::RadialGradient::display(int32_t _spacing) {
 	}
 }
 
-void esvg::RadialGradient::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::RadialGradient::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::RadialGradient");
 }
 

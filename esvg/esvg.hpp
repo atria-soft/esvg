@@ -88,7 +88,7 @@ namespace esvg {
 			std::vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
 			std::vector<std::vector<vec2>> getLines(vec2 _size=vec2(256,256));
 		protected:
-			void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level=0) override;
+			void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level=0) override;
 		public:
 			vec2 getDefinedSize() {
 				return m_size;
@@ -98,7 +98,7 @@ namespace esvg {
 			void drawShapePoints(std::vector<std::vector<vec2>>& _out,
 			                     int32_t _recurtionMax,
 			                     float _threshold,
-			                     mat2& _basicTrans,
+			                     mat2x3& _basicTrans,
 			                     int32_t _level=1) override;
 	};
 }

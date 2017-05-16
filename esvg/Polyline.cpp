@@ -17,7 +17,7 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -68,12 +68,12 @@ esvg::render::Path esvg::Polyline::createPath() {
 	return out;
 }
 
-void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Polyline");
 	
 	esvg::render::Path listElement = createPath();
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -130,11 +130,11 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_
 void esvg::Polyline::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                      int32_t _recurtionMax,
                                      float _threshold,
-                                     mat2& _basicTrans,
+                                     mat2x3& _basicTrans,
                                      int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Polyline");
 	esvg::render::Path listElement = createPath();
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);

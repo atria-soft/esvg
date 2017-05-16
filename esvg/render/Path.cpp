@@ -371,7 +371,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes
 						// procedure describe here : http://www.w3.org/TR/SVG11/implnote.html#ArcConversionCenterToEndpoint
 						// Compute delta'
-						mat2 matrixRotationCenter = etk::mat2Rotate(-rotationX);
+						mat2x3 matrixRotationCenter = etk::mat2x3Rotate(-rotationX);
 						vec2 deltaPrim = matrixRotationCenter * (delta*0.5f);
 						ddd =   (deltaPrim.x()*deltaPrim.x())/(radius.x()*radius.x())
 						      + (deltaPrim.y()*deltaPrim.y())/(radius.y()*radius.y());
@@ -406,7 +406,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						vec2 centerPrime(sss * radius.x() * deltaPrim.y() / radius.y(),
 						                 sss * -radius.y() * deltaPrim.x() / radius.x());
 						// Compute center from center'
-						mat2 matrix = etk::mat2Rotate(rotationX);
+						mat2x3 matrix = etk::mat2x3Rotate(rotationX);
 						vec2 center = (lastPosStore + pos)*0.5f + matrix*centerPrime;
 						#ifdef DEBUG
 							m_debugInformation.addSegment(center-vec2(3.0,3.0), center+vec2(3.0,3.0));

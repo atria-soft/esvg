@@ -14,7 +14,7 @@ esvg::render::Segment::Segment(const vec2& _p0, const vec2& _p1) {
 	direction = 0;
 }
 
-void esvg::render::Segment::applyMatrix(const mat2& _transformationMatrix) {
+void esvg::render::Segment::applyMatrix(const mat2x3& _transformationMatrix) {
 	p0 = _transformationMatrix * p0;
 	p1 = _transformationMatrix * p1;
 	createDirection();

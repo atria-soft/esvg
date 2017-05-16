@@ -24,9 +24,9 @@ namespace esvg {
 		public:
 			LinearGradient(PaintState _parentPaintState);
 			~LinearGradient();
-			virtual bool parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax);
 			virtual void display(int32_t _spacing);
-			virtual void draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level);
+			virtual void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level);
 		public:
 			const esvg::Dimension& getPosition1();
 			const esvg::Dimension& getPosition2();

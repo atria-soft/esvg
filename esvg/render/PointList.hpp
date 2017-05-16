@@ -7,7 +7,7 @@
 
 #include <etk/types.hpp>
 #include <etk/math/Vector2D.hpp>
-#include <etk/math/Matrix2.hpp>
+#include <etk/math/Matrix2x3.hpp>
 #include <esvg/render/Element.hpp>
 #include <esvg/render/Point.hpp>
 
@@ -20,7 +20,7 @@ namespace esvg {
 				PointList();
 				void addList(std::vector<esvg::render::Point>& _list);
 				void display();
-				void applyMatrix(const mat2& _transformationMatrix);
+				void applyMatrix(const mat2x3& _transformationMatrix);
 				std::pair<vec2, vec2> getViewPort();
 		};
 	}

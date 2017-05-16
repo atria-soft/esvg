@@ -6,7 +6,7 @@
 
 #include <esvg/render/SegmentList.hpp>
 #include <esvg/debug.hpp>
-#include <etk/math/Matrix2.hpp>
+#include <etk/math/Matrix2x3.hpp>
 
 esvg::render::SegmentList::SegmentList() {
 	
@@ -90,11 +90,11 @@ void esvg::render::SegmentList::createSegmentListStroke(const vec2& _point1,
 	vec2 ppp1(_point1);
 	vec2 ppp2(_point2);
 	for (iii=baseAngle; iii<angleToDraw; iii+=baseAngle) {
-		mat2 tmpMat;
+		mat2x3 tmpMat;
 		if (_isStart == true) {
-			tmpMat = etk::mat2Rotate(-iii);
+			tmpMat = etk::mat2x3Rotate(-iii);
 		} else {
-			tmpMat = etk::mat2Rotate(iii);
+			tmpMat = etk::mat2x3Rotate(iii);
 		}
 		vec2 axeRotate = tmpMat * axe;
 		ppp2 =   _center
@@ -470,7 +470,7 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 				            + _point.m_miterAxe*_width*0.5f;
 				vec2 right =   _point.m_pos
 				             - _point.m_miterAxe*_width*0.5f;
-				mat2 tmpMat = etk::mat2Translate(nextAxe.safeNormalize()*_width*-0.5f);
+				mat2x3 tmpMat = etk::mat2x3Translate(nextAxe.safeNormalize()*_width*-0.5f);
 				left = tmpMat*left;
 				right = tmpMat*right;
 				if (_isStart == false) {
@@ -500,7 +500,7 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 	}
 }
 
-void esvg::render::SegmentList::applyMatrix(const mat2& _transformationMatrix) {
+void esvg::render::SegmentList::applyMatrix(const mat2x3& _transformationMatrix) {
 	for (auto &it : m_data) {
 		it.applyMatrix(_transformationMatrix);
 	}

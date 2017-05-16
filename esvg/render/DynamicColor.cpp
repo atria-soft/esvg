@@ -10,7 +10,7 @@
 #include <esvg/RadialGradient.hpp>
 #include <esvg/esvg.hpp>
 
-esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2& _mtx) :
+esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2x3& _mtx) :
   m_linear(true),
   m_colorName(_link),
   m_matrix(_mtx),
@@ -439,7 +439,7 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	}
 }
 
-ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx) {
+ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2x3& _mtx) {
 	// Check if need to create a color:
 	if (    _color.first.a() == 0x00
 	     && _color.second == "") {

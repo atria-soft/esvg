@@ -76,7 +76,7 @@ std::string cleanBadSpaces(const std::string& _input) {
 	return out;
 }
 
-bool esvg::Path::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -270,10 +270,10 @@ void esvg::Path::display(int32_t _spacing) {
 	m_listElement.display(_spacing);
 }
 
-void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Path");
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -328,11 +328,11 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _l
 void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
-                                 mat2& _basicTrans,
+                                 mat2x3& _basicTrans,
                                  int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Path");
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;

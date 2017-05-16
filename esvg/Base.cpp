@@ -97,7 +97,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		double matrix[6];
 		if (sscanf(data.c_str(), "%lf %lf %lf %lf %lf %lf", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5]) == 6) {
-			m_transformMatrix = mat2(matrix);
+			m_transformMatrix = mat2x3(matrix);
 			// find a matrix : simply exit ...
 			return;
 		} else {
@@ -108,10 +108,10 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, yyy));
 			ESVG_VERBOSE("Translate : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
-			m_transformMatrix *= etk::mat2Translate(vec2(xxx, 0));
+			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, 0));
 			ESVG_VERBOSE("Translate : " << xxx << ", " << 0);
 		} else {
 			ESVG_ERROR("Parsing translate() with wrong data ... '" << data << "'");
@@ -121,10 +121,10 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2Scale(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Scale(vec2(xxx, yyy));
 			ESVG_VERBOSE("Scale : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
-			m_transformMatrix *= etk::mat2Scale(xxx);
+			m_transformMatrix *= etk::mat2x3Scale(xxx);
 			ESVG_VERBOSE("Scale : " << xxx << ", " << xxx);
 		} else {
 			ESVG_ERROR("Parsing scale() with wrong data ... '" << data << "'");
@@ -135,13 +135,13 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		float angle, xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f %f", &angle, &xxx, &yyy) == 3) {
 			angle = angle / 180 * M_PI;
-			m_transformMatrix *= etk::mat2Translate(vec2(-xxx, -yyy));
-			m_transformMatrix *= etk::mat2Rotate(angle);
-			m_transformMatrix *= etk::mat2Translate(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Translate(vec2(-xxx, -yyy));
+			m_transformMatrix *= etk::mat2x3Rotate(angle);
+			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, yyy));
 		} else if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2Rotate(angle);
+			m_transformMatrix *= etk::mat2x3Rotate(angle);
 		} else {
 			ESVG_ERROR("Parsing rotate() with wrong data ... '" << data << "'");
 		}
@@ -152,7 +152,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2Skew(vec2(angle, 0.0f));
+			m_transformMatrix *= etk::mat2x3Skew(vec2(angle, 0.0f));
 		} else {
 			ESVG_ERROR("Parsing skewX() with wrong data ... '" << data << "'");
 		}
@@ -163,7 +163,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			ESVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2Skew(vec2(0.0f, angle));
+			m_transformMatrix *= etk::mat2x3Skew(vec2(0.0f, angle));
 		} else {
 			ESVG_ERROR("Parsing skewY() with wrong data ... '" << data << "'");
 		}
@@ -396,7 +396,7 @@ std::pair<etk::Color<float,4>, std::string> esvg::Base::parseColor(const std::st
 	return localColor;
 }
 
-bool esvg::Base::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Base::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	// TODO : UNDERSTAND why nothing is done here ...
 	// Parse basic elements (ID...):
 	m_id = _element.attributes["id"];
@@ -413,7 +413,7 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 	return tmpValue + 20*4 - _spacing*4;
 }
 
-void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_WARNING(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
 }
 
@@ -432,7 +432,7 @@ void esvg::Base::setId(const std::string& _newId) {
 void esvg::Base::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
-                                 mat2& _basicTrans,
+                                 mat2x3& _basicTrans,
                                  int32_t _level) {
 	
 }

@@ -9,7 +9,7 @@
 #include <etk/types.hpp>
 #include <etk/Color.hpp>
 #include <etk/math/Vector2D.hpp>
-#include <etk/math/Matrix2.hpp>
+#include <etk/math/Matrix2x3.hpp>
 #include <esvg/gradientUnits.hpp>
 #include <esvg/spreadMethod.hpp>
 
@@ -50,7 +50,7 @@ namespace esvg {
 				esvg::spreadMethod m_spread;
 				esvg::gradientUnits m_unit;
 				std::string m_colorName;
-				mat2 m_matrix;
+				mat2x3 m_matrix;
 				std::pair<vec2, vec2> m_viewPort;
 				vec2 m_pos1; // in radius ==> center
 				vec2 m_pos2; // in radius ==> radius end position
@@ -63,7 +63,7 @@ namespace esvg {
 				bool m_centerIsFocal;
 				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
 			public:
-				DynamicColorSpecial(const std::string& _link, const mat2& _mtx);
+				DynamicColorSpecial(const std::string& _link, const mat2x3& _mtx);
 				virtual etk::Color<float,4> getColor(const ivec2& _pos) const;
 			private:
 				etk::Color<float,4> getColorLinear(const ivec2& _pos) const;
@@ -73,7 +73,7 @@ namespace esvg {
 				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort);
 		};
 		
-		ememory::SharedPtr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2& _mtx);
+		ememory::SharedPtr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2x3& _mtx);
 	}
 }
 

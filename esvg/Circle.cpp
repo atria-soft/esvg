@@ -17,7 +17,7 @@ esvg::Circle::~Circle() {
 	
 }
 
-bool esvg::Circle::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Circle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
 	if (_element.exist() == false) {
@@ -82,7 +82,7 @@ esvg::render::Path esvg::Circle::createPath() {
 	return out;
 }
 
-void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Circle");
 	if (m_radius <= 0.0f) {
 		ESVG_VERBOSE(spacingDist(_level+1) << "Too small radius" << m_radius);
@@ -90,7 +90,7 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 	}
 	esvg::render::Path listElement = createPath();
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -146,11 +146,11 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t 
 void esvg::Circle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                    int32_t _recurtionMax,
                                    float _threshold,
-                                   mat2& _basicTrans,
+                                   mat2x3& _basicTrans,
                                    int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Circle");
 	esvg::render::Path listElement = createPath();
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);

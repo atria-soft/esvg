@@ -7,7 +7,7 @@
 
 #include <etk/types.hpp>
 #include <etk/math/Vector2D.hpp>
-#include <etk/math/Matrix2.hpp>
+#include <etk/math/Matrix2x3.hpp>
 
 namespace esvg {
 	namespace render {
@@ -17,7 +17,7 @@ namespace esvg {
 				vec2 p0;
 				vec2 p1;
 				int32_t direction;
-				void applyMatrix(const mat2& _transformationMatrix);
+				void applyMatrix(const mat2x3& _transformationMatrix);
 				void createDirection();
 		};
 	}

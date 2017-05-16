@@ -12,7 +12,7 @@ namespace esvg {
 		public:
 			Text(PaintState _parentPaintState);
 			~Text();
-			bool parse(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax);
+			bool parse(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax);
 			void display(int32_t _spacing) override;
 	};
 }

@@ -19,7 +19,7 @@ esvg::Rectangle::~Rectangle() {
 	
 }
 
-bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2& _parentTrans, vec2& _sizeMax) {
+bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -85,12 +85,12 @@ esvg::render::Path esvg::Rectangle::createPath() {
 	return out;
 }
 
-void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32_t _level) {
+void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::Rectangle: fill=" << m_paint.fill.first << "/" << m_paint.fill.second
 	                                 << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second);
 	esvg::render::Path listElement = createPath();
 	
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -147,11 +147,11 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2& _basicTrans, int32
 void esvg::Rectangle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
                                       int32_t _recurtionMax,
                                       float _threshold,
-                                      mat2& _basicTrans,
+                                      mat2x3& _basicTrans,
                                       int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW Shape esvg::Rectangle");
 	esvg::render::Path listElement = createPath();
-	mat2 mtx = m_transformMatrix;
+	mat2x3 mtx = m_transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
