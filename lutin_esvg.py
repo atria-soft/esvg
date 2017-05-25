@@ -25,6 +25,7 @@ def get_version():
 	return "version.txt"
 
 def configure(target, my_module):
+	my_module.add_extra_flags()
 	my_module.add_depend(['etk', 'exml'])
 	my_module.add_src_file([
 	    'esvg/Base.cpp',
