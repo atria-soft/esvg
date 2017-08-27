@@ -12,7 +12,7 @@ esvg::render::ElementStop::ElementStop():
 	
 }
 
-std::string esvg::render::ElementStop::display() const {
+etk::String esvg::render::ElementStop::display() const {
 	return "";
 }
 

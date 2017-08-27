@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestPath, fill) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
 	                 "	      fill='red' />"
@@ -23,7 +23,7 @@ TEST(TestPath, fill) {
 }
 
 TEST(TestPath, stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
 	                 "	      stroke='green' stroke-width='3' />"
@@ -35,7 +35,7 @@ TEST(TestPath, stroke) {
 }
 
 TEST(TestPath, fill_and_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 c -12.426,0 -22.5,10.072 -22.5,22.5 0,12.426 10.074,22.5 22.5,22.5 12.428,0 22.5,-10.074 22.5,-22.5 0,-12.427 -10.072,-22.5 -22.5,-22.5 z'"
 	                 "	      stroke='green' stroke-width='3' fill='red' />"
@@ -47,7 +47,7 @@ TEST(TestPath, fill_and_stroke) {
 }
 
 TEST(TestPath, curveTo) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 c -30,0 -30,1 -20,20 z'"
 	                 "	      fill='red' />"
@@ -61,7 +61,7 @@ TEST(TestPath, curveTo) {
 
 
 TEST(TestPath, smoothCurveTo) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 s -30,0 -20,20 z'"
 	                 "	      fill='red' />"
@@ -75,7 +75,7 @@ TEST(TestPath, smoothCurveTo) {
 
 
 TEST(TestPath, bezierCurveTo) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 q -30,1 -20,20 z'"
 	                 "	      fill='red' />"
@@ -89,7 +89,7 @@ TEST(TestPath, bezierCurveTo) {
 
 
 TEST(TestPath, bezierSmoothCurveTo) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path d='m 50,50 t -20,30 t 30,-20 z'"
 	                 "	      fill='red' />"
@@ -101,7 +101,7 @@ TEST(TestPath, bezierSmoothCurveTo) {
 }
 
 TEST(TestPath, arc) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='300' width='800'>"
 	                 "	<path d='M20,290 l 50,-25"
 	                 "	      a25,25 -30 0,1 50,-25 l 30,0"
@@ -124,7 +124,7 @@ TEST(TestPath, arc) {
 
 
 TEST(TestPath, end_path_border_case) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<path\n"
 	                 "	   style='fill:#9fecff;fill-opacity:1;stroke:#1b57df;stroke-width:8.81125546;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94901961'\n"

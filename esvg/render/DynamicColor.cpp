@@ -10,7 +10,7 @@
 #include <esvg/RadialGradient.hpp>
 #include <esvg/esvg.hpp>
 
-esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link, const mat2x3& _mtx) :
+esvg::render::DynamicColorSpecial::DynamicColorSpecial(const etk::String& _link, const mat2x3& _mtx) :
   m_linear(true),
   m_colorName(_link),
   m_matrix(_mtx),
@@ -18,7 +18,7 @@ esvg::render::DynamicColorSpecial::DynamicColorSpecial(const std::string& _link,
 	
 }
 
-void esvg::render::DynamicColorSpecial::setViewPort(const std::pair<vec2, vec2>& _viewPort) {
+void esvg::render::DynamicColorSpecial::setViewPort(const etk::Pair<vec2, vec2>& _viewPort) {
 	m_viewPort = _viewPort;
 }
 
@@ -162,7 +162,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 	}
 	return etk::color::green;
 }
-static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
+static etk::Pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
                                                   const vec2& _pos2,
                                                   const vec2& _center = vec2(0.0f, 0.0f),
                                                   float _radius = 1.0f) {
@@ -180,10 +180,10 @@ static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 	
 	float distToCenter = (midpt - _center).length2();
 	if (distToCenter > _radius * _radius) {
-		return std::pair<vec2,vec2>(vec2(0.0,0.0), vec2(0.0,0.0));
+		return etk::Pair<vec2,vec2>(vec2(0.0,0.0), vec2(0.0,0.0));
 	}
 	if (distToCenter == _radius * _radius) {
-		return std::pair<vec2,vec2>(midpt, midpt);
+		return etk::Pair<vec2,vec2>(midpt, midpt);
 	}
 	float distToIntersection;
 	if (distToCenter == 0.0f) {
@@ -200,7 +200,7 @@ static std::pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 	// normalize...
 	v1.safeNormalize();
 	v1 *= distToIntersection;
-	return std::pair<vec2,vec2>(midpt + v1, midpt - v1);
+	return etk::Pair<vec2,vec2>(midpt + v1, midpt - v1);
 }
 
 etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) const {
@@ -252,7 +252,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec
 			if (focalCenter == currentPoint) {
 				ratio = 0.0f;
 			} else {
-				std::pair<vec2,vec2> positions = intersectLineToCircle(focalCenter, currentPoint);
+				etk::Pair<vec2,vec2> positions = intersectLineToCircle(focalCenter, currentPoint);
 				float lenghtBase = (currentPoint - focalCenter).length();
 				float lenghtBorder1 = (positions.first - focalCenter).length();
 				float lenghtBorder2 = (positions.second - focalCenter).length();
@@ -439,7 +439,7 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	}
 }
 
-ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2x3& _mtx) {
+ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(etk::Pair<etk::Color<float,4>, etk::String> _color, const mat2x3& _mtx) {
 	// Check if need to create a color:
 	if (    _color.first.a() == 0x00
 	     && _color.second == "") {

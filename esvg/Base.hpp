@@ -11,7 +11,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/math/Vector2D.hpp>
 #include <etk/math/Matrix2x3.hpp>
 #include <etk/Color.hpp>
@@ -38,14 +38,14 @@ namespace esvg {
 			PaintState();
 			void clear();
 		public:
-			std::pair<etk::Color<float,4>, std::string> fill;
-			std::pair<etk::Color<float,4>, std::string> stroke;
+			etk::Pair<etk::Color<float,4>, etk::String> fill;
+			etk::Pair<etk::Color<float,4>, etk::String> stroke;
 			float strokeWidth;
 			bool flagEvenOdd; //!< Fill rules
 			enum esvg::cap lineCap;
 			enum esvg::join lineJoin;
 			float miterLimit;
-			std::pair<vec2, vec2> viewPort; //!< min pos, max pos
+			etk::Pair<vec2, vec2> viewPort; //!< min pos, max pos
 			float opacity;
 	};
 	
@@ -79,7 +79,7 @@ namespace esvg {
 			 * @param[in] _basicTrans Parant transformation of the environement
 			 * @param[in] _level Level of the tree
 			 */
-			virtual void drawShapePoints(std::vector<std::vector<vec2>>& _out,
+			virtual void drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 			                             int32_t _recurtionMax,
 			                             float _threshold,
 			                             mat2x3& _basicTrans,
@@ -99,8 +99,8 @@ namespace esvg {
 			 * @param[in] _dataInput Data C String with the printed lenght
 			 * @return standard number of pixels
 			 */
-			float parseLength(const std::string& _dataInput);
-			std::pair<float, enum esvg::distance> parseLength2(const std::string& _dataInput);
+			float parseLength(const etk::String& _dataInput);
+			etk::Pair<float, enum esvg::distance> parseLength2(const etk::String& _dataInput);
 			/**
 			 * @brief parse a Painting attribute of a specific node
 			 * @param[in] _element Basic node of the XML that might be parsed
@@ -111,19 +111,19 @@ namespace esvg {
 			 * @param[in] _inputData Data C String with the xml definition
 			 * @return The parsed color (color used and the link if needed)
 			 */
-			std::pair<etk::Color<float,4>, std::string> parseColor(const std::string& _inputData);
+			etk::Pair<etk::Color<float,4>, etk::String> parseColor(const etk::String& _inputData);
 		protected:
-			std::string m_id; //!< unique ID of the element.
+			etk::String m_id; //!< unique ID of the element.
 		public:
 			/**
 			 * @brief Get the ID of the Element
 			 * @return UniqueId in the svg file
 			 */
-			const std::string& getId() const;
+			const etk::String& getId() const;
 			/**
 			 * @brief Set the ID of the Element
 			 * @param[in] _newId New Id of the element
 			 */
-			void setId(const std::string& _newId);
+			void setId(const etk::String& _newId);
 	};
 };

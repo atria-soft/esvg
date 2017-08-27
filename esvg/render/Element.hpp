@@ -74,17 +74,17 @@ namespace esvg {
 					m_pos2 = _val;
 				}
 			public:
-				virtual std::string display() const = 0;
+				virtual etk::String display() const = 0;
 		};
 	}
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
-	std::ostream& operator <<(std::ostream& _os, const esvg::render::Element& _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const esvg::render::Element& _obj);
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
-	std::ostream& operator <<(std::ostream& _os, enum esvg::render::path _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum esvg::render::path _obj);
 }
 
 #include <esvg/render/ElementStop.hpp>

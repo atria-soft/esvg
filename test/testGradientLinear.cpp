@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestGradientLinear, horizontal) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='0%'>\n"
@@ -31,7 +31,7 @@ TEST(TestGradientLinear, horizontal) {
 
 
 TEST(TestGradientLinear, vertical) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='0%' x2='0%' y2='100%'>\n"
@@ -50,7 +50,7 @@ TEST(TestGradientLinear, vertical) {
 }
 
 TEST(TestGradientLinear, diag1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'>\n"
@@ -69,7 +69,7 @@ TEST(TestGradientLinear, diag1) {
 }
 
 TEST(TestGradientLinear, diag1Partiel) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='70%' y2='70%'>\n"
@@ -86,7 +86,7 @@ TEST(TestGradientLinear, diag1Partiel) {
 }
 
 TEST(TestGradientLinear, diag2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
@@ -107,7 +107,7 @@ TEST(TestGradientLinear, diag2) {
 
 
 TEST(TestGradientLinear, diag2Rotate0) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='50%' x2='100%' y2='50%'>\n"
@@ -126,7 +126,7 @@ TEST(TestGradientLinear, diag2Rotate0) {
 }
 
 TEST(TestGradientLinear, diag2Rotate1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
@@ -145,7 +145,7 @@ TEST(TestGradientLinear, diag2Rotate1) {
 }
 
 TEST(TestGradientLinear, diag2Rotate2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
@@ -164,7 +164,7 @@ TEST(TestGradientLinear, diag2Rotate2) {
 }
 
 TEST(TestGradientLinear, diag2scale) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='0%' y1='100%' x2='100%' y2='0%'>\n"
@@ -183,7 +183,7 @@ TEST(TestGradientLinear, diag2scale) {
 }
 
 TEST(TestGradientLinear, internalHref) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2Values'>\n"
@@ -204,7 +204,7 @@ TEST(TestGradientLinear, internalHref) {
 
 
 TEST(TestGradientLinear, unitBox_spreadNone) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='60%' y2='60%'>\n"
@@ -221,7 +221,7 @@ TEST(TestGradientLinear, unitBox_spreadNone) {
 }
 
 TEST(TestGradientLinear, unitBox_spreadPad) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='60%' y2='60%' spreadMethod='pad'>\n"
@@ -239,7 +239,7 @@ TEST(TestGradientLinear, unitBox_spreadPad) {
 
 
 TEST(TestGradientLinear, unitBox_spreadReflect) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='60%' y2='60%' spreadMethod='reflect'>\n"
@@ -257,7 +257,7 @@ TEST(TestGradientLinear, unitBox_spreadReflect) {
 
 
 TEST(TestGradientLinear, unitBox_spreadRepeat) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='40%' y1='40%' x2='60%' y2='60%' spreadMethod='repeat'>\n"
@@ -274,7 +274,7 @@ TEST(TestGradientLinear, unitBox_spreadRepeat) {
 }
 
 TEST(TestGradientLinear, unitUser_spreadNone) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='45' y1='45' x2='55' y2='55' gradientUnits='userSpaceOnUse'>\n"
@@ -291,7 +291,7 @@ TEST(TestGradientLinear, unitUser_spreadNone) {
 }
 
 TEST(TestGradientLinear, unitUser_spreadPad) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='45' y1='45' x2='55' y2='55' spreadMethod='pad' gradientUnits='userSpaceOnUse' >\n"
@@ -309,7 +309,7 @@ TEST(TestGradientLinear, unitUser_spreadPad) {
 
 
 TEST(TestGradientLinear, unitUser_spreadReflect) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='45' y1='45' x2='55' y2='55' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
@@ -327,7 +327,7 @@ TEST(TestGradientLinear, unitUser_spreadReflect) {
 
 
 TEST(TestGradientLinear, unitUser_spreadRepeate) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<linearGradient id='grad2' x1='45' y1='45' x2='55' y2='55' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"

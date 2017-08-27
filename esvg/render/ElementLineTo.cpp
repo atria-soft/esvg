@@ -13,6 +13,6 @@ esvg::render::ElementLineTo::ElementLineTo(bool _relative, const vec2& _pos):
 }
 
 
-std::string esvg::render::ElementLineTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos);
+etk::String esvg::render::ElementLineTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos);
 }

@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestCap, butt) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,75 80,75' stroke='green' stroke-width='20' fill='none' stroke-linecap='butt'/>"
 	                 "	<polyline points='80,25 20,25' stroke='orange' stroke-width='20' fill='none' stroke-linecap='butt'/>"
@@ -23,7 +23,7 @@ TEST(TestCap, butt) {
 }
 
 TEST(TestCap, round) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,75 80,75' stroke='green' stroke-width='20' fill='none' stroke-linecap='round'/>"
 	                 "	<polyline points='80,25 20,25' stroke='orange' stroke-width='20' fill='none' stroke-linecap='round'/>"
@@ -35,7 +35,7 @@ TEST(TestCap, round) {
 }
 
 TEST(TestCap, square) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,75 80,75' stroke='green' stroke-width='20' fill='none' stroke-linecap='square'/>"
 	                 "	<polyline points='80,25 20,25' stroke='orange' stroke-width='20' fill='none' stroke-linecap='square'/>"
@@ -48,7 +48,7 @@ TEST(TestCap, square) {
 
 
 TEST(TestCap, buttVert) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='25,20 25,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='butt'/>"
 	                 "	<polyline points='75,80 75,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='butt'/>"
@@ -60,7 +60,7 @@ TEST(TestCap, buttVert) {
 }
 
 TEST(TestCap, roundVert) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='25,20 25,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='round'/>"
 	                 "	<polyline points='75,80 75,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='round'/>"
@@ -72,7 +72,7 @@ TEST(TestCap, roundVert) {
 }
 
 TEST(TestCap, squareVert) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='25,20 25,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='square'/>"
 	                 "	<polyline points='75,80 75,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='square'/>"
@@ -86,7 +86,7 @@ TEST(TestCap, squareVert) {
 
 
 TEST(TestCap, buttDiag1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 80,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='butt'/>"
 	                 "	<polyline points='80,20 20,80' stroke='orange' stroke-width='20' fill='none' stroke-linecap='butt'/>"
@@ -98,7 +98,7 @@ TEST(TestCap, buttDiag1) {
 }
 
 TEST(TestCap, roundDiag1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 80,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='round'/>"
 	                 "	<polyline points='80,20 20,80' stroke='orange' stroke-width='20' fill='none' stroke-linecap='round'/>"
@@ -110,7 +110,7 @@ TEST(TestCap, roundDiag1) {
 }
 
 TEST(TestCap, squareDiag1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 80,80' stroke='green' stroke-width='20' fill='none' stroke-linecap='square'/>"
 	                 "	<polyline points='80,20 20,80' stroke='orange' stroke-width='20' fill='none' stroke-linecap='square'/>"
@@ -123,7 +123,7 @@ TEST(TestCap, squareDiag1) {
 
 
 TEST(TestCap, buttDiag2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 80,20' stroke='green' stroke-width='20' fill='none' stroke-linecap='butt'/>"
 	                 "	<polyline points='80,80 20,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='butt'/>"
@@ -135,7 +135,7 @@ TEST(TestCap, buttDiag2) {
 }
 
 TEST(TestCap, roundDiag2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 80,20' stroke='green' stroke-width='20' fill='none' stroke-linecap='round'/>"
 	                 "	<polyline points='80,80 20,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='round'/>"
@@ -147,7 +147,7 @@ TEST(TestCap, roundDiag2) {
 }
 
 TEST(TestCap, squareDiag2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 80,20' stroke='green' stroke-width='20' fill='none' stroke-linecap='square'/>"
 	                 "	<polyline points='80,80 20,20' stroke='orange' stroke-width='20' fill='none' stroke-linecap='square'/>"

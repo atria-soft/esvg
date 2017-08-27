@@ -7,6 +7,12 @@
 #include <esvg/render/Segment.hpp>
 #include <esvg/debug.hpp>
 
+esvg::render::Segment::Segment() {
+	p0 = vec2(0,0);
+	p1 = vec2(0,0);
+	direction = 0;
+}
+
 esvg::render::Segment::Segment(const vec2& _p0, const vec2& _p1) {
 	// segment register all time the lower at P0n then we need to register the sens of the path
 	p0 = _p0;

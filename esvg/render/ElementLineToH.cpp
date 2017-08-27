@@ -13,6 +13,6 @@ esvg::render::ElementLineToH::ElementLineToH(bool _relative, float _posX):
 }
 
 
-std::string esvg::render::ElementLineToH::display() const {
-	return std::string("posX=") + etk::to_string(m_pos.x());
+etk::String esvg::render::ElementLineToH::display() const {
+	return etk::String("posX=") + etk::toString(m_pos.x());
 }

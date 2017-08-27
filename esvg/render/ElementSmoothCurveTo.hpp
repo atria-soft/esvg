@@ -15,7 +15,7 @@ namespace esvg {
 			public:
 				ElementSmoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos);
 			public:
-				virtual std::string display() const;
+				virtual etk::String display() const;
 		};
 	}
 }

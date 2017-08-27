@@ -31,7 +31,7 @@ bool esvg::Polygon::parseXML(const exml::Element& _element, mat2x3& _parentTrans
 	
 	ESVG_VERBOSE("parsed P2.   trans: " << m_transformMatrix);
 	
-	const std::string sss1 = _element.attributes["points"];
+	const etk::String sss1 = _element.attributes["points"];
 	if (sss1.size() == 0) {
 		ESVG_ERROR("(l "/*<<_element->Pos()*/<<") polygon: missing points attribute");
 		return false;
@@ -43,10 +43,10 @@ bool esvg::Polygon::parseXML(const exml::Element& _element, mat2x3& _parentTrans
 		vec2 pos(0,0);
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.push_back(pos);
+			m_listPoint.pushBack(pos);
 			sss += n;
-			_sizeMax.setValue(std::max(_sizeMax.x(), pos.x()),
-			                  std::max(_sizeMax.y(), pos.y()));
+			_sizeMax.setValue(etk::max(_sizeMax.x(), pos.x()),
+			                  etk::max(_sizeMax.y(), pos.y()));
 			if(sss[0] == ' ' || sss[0] == ',') {
 				sss++;
 			}
@@ -130,7 +130,7 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 }
 
 
-void esvg::Polygon::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Polygon::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                     int32_t _recurtionMax,
                                     float _threshold,
                                     mat2x3& _basicTrans,
@@ -143,11 +143,11 @@ void esvg::Polygon::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		std::vector<vec2> listPoint;
+		etk::Vector<vec2> listPoint;
 		for (auto &itDot : it) {
-			listPoint.push_back(itDot.m_pos);
+			listPoint.pushBack(itDot.m_pos);
 		}
-		_out.push_back(listPoint);
+		_out.pushBack(listPoint);
 	}
 }
 

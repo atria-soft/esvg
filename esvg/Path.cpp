@@ -19,7 +19,7 @@ esvg::Path::~Path() {
 
 
 // return the next char position ... (after 'X' or NULL)
-const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _outputList) {
+const char * extractCmd(const char* _input, char& _cmd, etk::Vector<float>& _outputList) {
 	if (*_input == '\0') {
 		return nullptr;
 	}
@@ -46,7 +46,7 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	while(    sscanf(&_input[iii], "%1[, ]%f%n", spacer, &element, &nbElementRead) == 2
 	       || sscanf(&_input[iii], "%f%n", &element, &nbElementRead) == 1) {
 		ESVG_VERBOSE("Find element : " << element);
-		_outputList.push_back(element);
+		_outputList.pushBack(element);
 		iii += nbElementRead;
 	}
 	outputPointer = &_input[iii];
@@ -56,8 +56,8 @@ const char * extractCmd(const char* _input, char& _cmd, std::vector<float>& _out
 	//outputPointer++;
 	return outputPointer;
 }
-std::string cleanBadSpaces(const std::string& _input) {
-	std::string out;
+etk::String cleanBadSpaces(const etk::String& _input) {
+	etk::String out;
 	bool haveSpace = false;
 	for (auto &it : _input) {
 		if (    it == ' '
@@ -87,7 +87,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	m_transformMatrix *= _parentTrans;
 	
 	
-	std::string elementXML1 = _element.attributes["d"];
+	etk::String elementXML1 = _element.attributes["d"];
 	if (elementXML1.size() == 0) {
 		ESVG_WARNING("(l "<<_element.getPos()<<") path: missing 'd' attribute or empty");
 		return false;
@@ -95,7 +95,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	ESVG_VERBOSE("Parse Path : \"" << elementXML1 << "\"");
 	
 	char command;
-	std::vector<float> listDot;
+	etk::Vector<float> listDot;
 	elementXML1 = cleanBadSpaces(elementXML1);
 	const char* elementXML = elementXML1.c_str();
 	
@@ -325,7 +325,7 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 }
 
 
-void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Path::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
@@ -339,11 +339,11 @@ void esvg::Path::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = m_listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		std::vector<vec2> listPoint;
+		etk::Vector<vec2> listPoint;
 		for (auto &itDot : it) {
-			listPoint.push_back(itDot.m_pos);
+			listPoint.pushBack(itDot.m_pos);
 		}
-		_out.push_back(listPoint);
+		_out.pushBack(listPoint);
 	}
 }
 

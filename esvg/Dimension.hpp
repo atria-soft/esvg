@@ -46,7 +46,7 @@ namespace esvg {
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const std::string& _config) :
+			Dimension(const etk::String& _config) :
 			  m_data(0,0),
 			  m_type(esvg::distance_pixel) {
 				set(_config);
@@ -56,7 +56,7 @@ namespace esvg {
 			 * @param[in] _configX dimension X configuration.
 			 * @param[in] _configY dimension Y configuration.
 			 */
-			Dimension(const std::string& _configX, const std::string& _configY) :
+			Dimension(const etk::String& _configX, const etk::String& _configY) :
 			  m_data(0,0),
 			  m_type(esvg::distance_pixel) {
 				set(_configX, _configY);
@@ -69,7 +69,7 @@ namespace esvg {
 			/**
 			 * @brief string cast :
 			 */
-			operator std::string() const;
+			operator etk::String() const;
 			
 			/**
 			 * @brief get the current dimention.
@@ -97,13 +97,13 @@ namespace esvg {
 			 * @brief set the current dimention in requested type
 			 * @param[in] _config dimension configuration.
 			 */
-			void set(std::string _config);
+			void set(etk::String _config);
 			/**
 			 * @brief set the current dimention in requested type
 			 * @param[in] _configX dimension X configuration.
 			 * @param[in] _configY dimension Y configuration.
 			 */
-			void set(std::string _configX, std::string _configY);
+			void set(etk::String _configX, etk::String _configY);
 		public:
 			/**
 			 * @brief get the current dimention in pixel
@@ -142,8 +142,8 @@ namespace esvg {
 				return false;
 			}
 	};
-	std::ostream& operator <<(std::ostream& _os, enum esvg::distance _obj);
-	std::ostream& operator <<(std::ostream& _os, const esvg::Dimension& _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum esvg::distance _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const esvg::Dimension& _obj);
 	/**
 	 * @brief in the dimention class we store the data as the more usefull unit (pixel) 
 	 * but one case need to be dynamic the %, then when requested in % the register the % value
@@ -167,7 +167,7 @@ namespace esvg {
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension1D(const std::string& _config) :
+			Dimension1D(const etk::String& _config) :
 			  m_data(0.0f),
 			  m_type(esvg::distance_pixel) {
 				set(_config);
@@ -180,7 +180,7 @@ namespace esvg {
 			/**
 			 * @brief string cast :
 			 */
-			operator std::string() const;
+			operator etk::String() const;
 			
 			/**
 			 * @brief get the current dimention.
@@ -208,7 +208,7 @@ namespace esvg {
 			 * @brief set the current dimention in requested type
 			 * @param[in] _config dimension configuration.
 			 */
-			void set(std::string _config);
+			void set(etk::String _config);
 		public:
 			/**
 			 * @brief get the current dimention in pixel
@@ -247,6 +247,6 @@ namespace esvg {
 				return false;
 			}
 	};
-	std::ostream& operator <<(std::ostream& _os, const esvg::Dimension1D& _obj);
+	etk::Stream& operator <<(etk::Stream& _os, const esvg::Dimension1D& _obj);
 }
 

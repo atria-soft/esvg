@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/math/Vector2D.hpp>
 #include <etk/os/FSNode.hpp>
 
@@ -18,12 +18,12 @@
 namespace esvg {
 	class Document : public esvg::Base {
 		private:
-			std::string m_fileName;
+			etk::String m_fileName;
 			bool m_loadOK;
-			std::string m_version;
-			std::string m_title;
-			std::vector<ememory::SharedPtr<esvg::Base>> m_subElementList; //!< sub-element list
-			std::vector<ememory::SharedPtr<esvg::Base>> m_refList; //!< reference elements ...
+			etk::String m_version;
+			etk::String m_title;
+			etk::Vector<ememory::SharedPtr<esvg::Base>> m_subElementList; //!< sub-element list
+			etk::Vector<ememory::SharedPtr<esvg::Base>> m_refList; //!< reference elements ...
 			vec2 m_size;
 		public:
 			Document();
@@ -35,28 +35,28 @@ namespace esvg {
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool parse(const std::string& _data);
+			bool parse(const etk::String& _data);
 			/**
 			 * @brief generate a string that contain the created SVG
 			 * @param[out] _data Data where the svg is stored
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool generate(std::string& _data);
+			bool generate(etk::String& _data);
 			/**
 			 * @brief Load the file that might contain the svg
 			 * @param[in] _file Filename of the svg (compatible with etk FSNode naming)
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool load(const std::string& _file);
+			bool load(const etk::String& _file);
 			/**
 			 * @brief Store the SVG in the file
 			 * @param[in] _file Filename of the svg (compatible with etk FSNode naming)
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool store(const std::string& _file);
+			bool store(const etk::String& _file);
 		protected:
 			/**
 			 * @brief change all style in a xml atribute
@@ -72,30 +72,30 @@ namespace esvg {
 			 */
 			void displayDebug();
 			// TODO: remove this fucntion : use generic function ...
-			void generateAnImage(const std::string& _fileName, bool _visualDebug=false);
-			void generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug=false);
+			void generateAnImage(const etk::String& _fileName, bool _visualDebug=false);
+			void generateAnImage(const ivec2& _size, const etk::String& _fileName, bool _visualDebug=false);
 			/**
 			 * @brief Generate Image in a specific format.
 			 * @param[in,out] _size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
 			 * @return Vector of the data used to display (simple vector: generic to transmit)
 			 */
-			std::vector<etk::Color<float,4>> renderImageFloatRGBA(ivec2& _size);
+			etk::Vector<etk::Color<float,4>> renderImageFloatRGBA(ivec2& _size);
 			//! @previous
-			std::vector<etk::Color<float,3>> renderImageFloatRGB(ivec2& _size);
+			etk::Vector<etk::Color<float,3>> renderImageFloatRGB(ivec2& _size);
 			//! @previous
-			std::vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
+			etk::Vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
 			//! @previous
-			std::vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
-			std::vector<std::vector<vec2>> getLines(vec2 _size=vec2(256,256));
+			etk::Vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
+			etk::Vector<etk::Vector<vec2>> getLines(vec2 _size=vec2(256,256));
 		protected:
 			void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level=0) override;
 		public:
 			vec2 getDefinedSize() {
 				return m_size;
 			};
-			ememory::SharedPtr<esvg::Base> getReference(const std::string& _name);
+			ememory::SharedPtr<esvg::Base> getReference(const etk::String& _name);
 		protected:
-			void drawShapePoints(std::vector<std::vector<vec2>>& _out,
+			void drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 			                     int32_t _recurtionMax,
 			                     float _threshold,
 			                     mat2x3& _basicTrans,

@@ -13,6 +13,6 @@ esvg::render::ElementBezierCurveTo::ElementBezierCurveTo(bool _relative, const v
 	m_pos1 = _pos1;
 }
 
-std::string esvg::render::ElementBezierCurveTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos) + " pos1=" + etk::to_string(m_pos1);
+etk::String esvg::render::ElementBezierCurveTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos) + " pos1=" + etk::toString(m_pos1);
 }

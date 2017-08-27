@@ -24,7 +24,7 @@ namespace esvg {
 				virtual ~DynamicColor() {};
 				virtual etk::Color<float,4> getColor(const ivec2& _pos) const = 0;
 				virtual void generate(esvg::Document* _document) = 0;
-				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort) = 0;
+				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort) = 0;
 		};
 		class DynamicColorUni : public esvg::render::DynamicColor {
 			public:
@@ -40,7 +40,7 @@ namespace esvg {
 				virtual void generate(esvg::Document* _document) {
 					// nothing to do ...
 				}
-				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort) {
+				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort) {
 					// nothing to do ...
 				};
 		};
@@ -49,9 +49,9 @@ namespace esvg {
 				bool m_linear;
 				esvg::spreadMethod m_spread;
 				esvg::gradientUnits m_unit;
-				std::string m_colorName;
+				etk::String m_colorName;
 				mat2x3 m_matrix;
-				std::pair<vec2, vec2> m_viewPort;
+				etk::Pair<vec2, vec2> m_viewPort;
 				vec2 m_pos1; // in radius ==> center
 				vec2 m_pos2; // in radius ==> radius end position
 				vec2 m_focal; // Specific radius
@@ -61,19 +61,19 @@ namespace esvg {
 				float m_focalLength;
 				bool m_clipOut;
 				bool m_centerIsFocal;
-				std::vector<std::pair<float, etk::Color<float,4>>> m_data;
+				etk::Vector<etk::Pair<float, etk::Color<float,4>>> m_data;
 			public:
-				DynamicColorSpecial(const std::string& _link, const mat2x3& _mtx);
+				DynamicColorSpecial(const etk::String& _link, const mat2x3& _mtx);
 				virtual etk::Color<float,4> getColor(const ivec2& _pos) const;
 			private:
 				etk::Color<float,4> getColorLinear(const ivec2& _pos) const;
 				etk::Color<float,4> getColorRadial(const ivec2& _pos) const;
 			public:
 				virtual void generate(esvg::Document* _document);
-				virtual void setViewPort(const std::pair<vec2, vec2>& _viewPort);
+				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort);
 		};
 		
-		ememory::SharedPtr<DynamicColor> createColor(std::pair<etk::Color<float,4>, std::string> _color, const mat2x3& _mtx);
+		ememory::SharedPtr<DynamicColor> createColor(etk::Pair<etk::Color<float,4>, etk::String> _color, const mat2x3& _mtx);
 	}
 }
 

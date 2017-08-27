@@ -19,8 +19,8 @@ namespace esvg {
 			enum gradientUnits m_unit;
 			enum spreadMethod m_spread;
 		private:
-			std::string m_href; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
-			std::vector<std::pair<float, etk::Color<float,4>>> m_data; //!< incompatible with href
+			etk::String m_href; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
+			etk::Vector<etk::Pair<float, etk::Color<float,4>>> m_data; //!< incompatible with href
 		public:
 			LinearGradient(PaintState _parentPaintState);
 			~LinearGradient();
@@ -30,7 +30,7 @@ namespace esvg {
 		public:
 			const esvg::Dimension& getPosition1();
 			const esvg::Dimension& getPosition2();
-			const std::vector<std::pair<float, etk::Color<float,4>>>& getColors(esvg::Document* _document);
+			const etk::Vector<etk::Pair<float, etk::Color<float,4>>>& getColors(esvg::Document* _document);
 	};
 }
 

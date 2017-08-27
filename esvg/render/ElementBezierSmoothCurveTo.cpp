@@ -13,6 +13,6 @@ esvg::render::ElementBezierSmoothCurveTo::ElementBezierSmoothCurveTo(bool _relat
 }
 
 
-std::string esvg::render::ElementBezierSmoothCurveTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos);
+etk::String esvg::render::ElementBezierSmoothCurveTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos);
 }

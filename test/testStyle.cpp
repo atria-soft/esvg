@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestExtern, worddown) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 "<!-- Created with Inkscape (http://www.inkscape.org/) -->\n"
 "\n"
 "<svg\n"

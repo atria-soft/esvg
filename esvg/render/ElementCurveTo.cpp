@@ -16,6 +16,6 @@ esvg::render::ElementCurveTo::ElementCurveTo(bool _relative, const vec2& _pos1, 
 
 
 
-std::string esvg::render::ElementCurveTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos) + " pos1=" + etk::to_string(m_pos1) + " pos2=" + etk::to_string(m_pos2);
+etk::String esvg::render::ElementCurveTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos) + " pos1=" + etk::toString(m_pos1) + " pos2=" + etk::toString(m_pos2);
 }

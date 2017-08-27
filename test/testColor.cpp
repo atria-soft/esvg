@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestColor, blending) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' />"
 	                 "</svg>");
@@ -22,7 +22,7 @@ TEST(TestColor, blending) {
 }
 
 TEST(TestColor, opacity) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-width='3' fill='#F00' opacity='0.5' />"
 	                 "</svg>");
@@ -33,7 +33,7 @@ TEST(TestColor, opacity) {
 }
 
 TEST(TestColor, blending_and_opacity) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' opacity='0.7' />"
 	                 "</svg>");
@@ -44,7 +44,7 @@ TEST(TestColor, blending_and_opacity) {
 }
 
 TEST(TestColor, multiple_layer) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='50'   y='5' width='15' height='75' stroke='blue' stroke-width='9' fill='green'/>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='30' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' opacity='0.7' />"

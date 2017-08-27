@@ -15,7 +15,7 @@ namespace esvg {
 			public:
 				ElementClose(bool _relative=false);
 			public:
-				virtual std::string display() const;
+				virtual etk::String display() const;
 		};
 	}
 }

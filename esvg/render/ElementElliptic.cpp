@@ -22,10 +22,10 @@ esvg::render::ElementElliptic::ElementElliptic(bool _relative,
 }
 
 
-std::string esvg::render::ElementElliptic::display() const {
-	return std::string("pos=") + etk::to_string(m_pos)
-	       + " radius=" + etk::to_string(m_pos1)
-	       + " angle=" + etk::to_string(m_angle)
-	       + " largeArcFlag=" + etk::to_string(m_largeArcFlag)
-	       + " sweepFlag=" + etk::to_string(m_sweepFlag);
+etk::String esvg::render::ElementElliptic::display() const {
+	return etk::String("pos=") + etk::toString(m_pos)
+	       + " radius=" + etk::toString(m_pos1)
+	       + " angle=" + etk::toString(m_angle)
+	       + " largeArcFlag=" + etk::toString(m_largeArcFlag)
+	       + " sweepFlag=" + etk::toString(m_sweepFlag);
 }

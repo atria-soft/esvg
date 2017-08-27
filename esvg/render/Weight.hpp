@@ -15,7 +15,7 @@ namespace esvg {
 		class Weight {
 			private:
 				ivec2 m_size;
-				std::vector<float> m_data;
+				etk::Vector<float> m_data;
 			public:
 				// constructor :
 				Weight();

@@ -85,10 +85,10 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 			elementParser.reset();
 			continue;
 		}
-		_sizeMax.setValue(std::max(_sizeMax.x(), tmpPos.x()),
-		                  std::max(_sizeMax.y(), tmpPos.y()));
+		_sizeMax.setValue(etk::max(_sizeMax.x(), tmpPos.x()),
+		                  etk::max(_sizeMax.y(), tmpPos.y()));
 		// add element in the system
-		m_subElementList.push_back(elementParser);
+		m_subElementList.pushBack(elementParser);
 	}
 	return true;
 }
@@ -114,7 +114,7 @@ void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t
 	}
 }
 
-void esvg::Group::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Group::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                   int32_t _recurtionMax,
                                   float _threshold,
                                   mat2x3& _basicTrans,

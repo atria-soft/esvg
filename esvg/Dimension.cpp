@@ -33,7 +33,7 @@ esvg::Dimension::Dimension(const vec2& _size, enum esvg::distance _type) :
 	set(_size, _type);
 }
 
-void esvg::Dimension::set(std::string _config) {
+void esvg::Dimension::set(etk::String _config) {
 	m_data.setValue(0,0);
 	m_type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
@@ -71,7 +71,7 @@ void esvg::Dimension::set(std::string _config) {
 	ESVG_VERBOSE(" config dimention : \"" << _config << "\"  == > " << *this );
 }
 
-static enum esvg::distance parseType(std::string& _config) {
+static enum esvg::distance parseType(etk::String& _config) {
 	enum esvg::distance type = esvg::distance_pixel;
 	if (etk::end_with(_config, "%", false) == true) {
 		type = esvg::distance_pourcent;
@@ -105,7 +105,7 @@ static enum esvg::distance parseType(std::string& _config) {
 }
 
 
-void esvg::Dimension::set(std::string _configX, std::string _configY) {
+void esvg::Dimension::set(etk::String _configX, etk::String _configY) {
 	m_data.setValue(0,0);
 	m_type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
@@ -125,8 +125,8 @@ esvg::Dimension::~Dimension() {
 	// nothing to do ...
 }
 
-esvg::Dimension::operator std::string() const {
-	std::string str;
+esvg::Dimension::operator etk::String() const {
+	etk::String str;
 	str = getValue();
 	switch(getType()) {
 		case esvg::distance_pourcent:
@@ -214,7 +214,7 @@ vec2 esvg::Dimension::getPixel(const vec2& _upperSize) const {
 	return vec2(128.0f, 128.0f);
 }
 
-std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::distance _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::distance _obj) {
 	switch(_obj) {
 		case esvg::distance_pourcent:
 			_os << "%";
@@ -256,24 +256,24 @@ std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::distance _obj) {
 	return _os;
 }
 
-std::ostream& esvg::operator <<(std::ostream& _os, const esvg::Dimension& _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, const esvg::Dimension& _obj) {
 	_os << _obj.getValue() << _obj.getType();
 	return _os;
 }
 
 namespace etk {
-	template<> std::string to_string<esvg::Dimension>(const esvg::Dimension& _obj) {
+	template<> etk::String toString<esvg::Dimension>(const esvg::Dimension& _obj) {
 		return _obj;
 	}
-	template<> std::u32string to_u32string<esvg::Dimension>(const esvg::Dimension& _obj) {
-		return etk::to_u32string(etk::to_string(_obj));
+	template<> etk::UString toUString<esvg::Dimension>(const esvg::Dimension& _obj) {
+		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const std::string& _value) {
+	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::String& _value) {
 		_variableRet = esvg::Dimension(_value);
 		return true;
 	}
-	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const std::u32string& _value) {
-		return from_string(_variableRet, etk::to_string(_value));
+	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::UString& _value) {
+		return from_string(_variableRet, etk::toString(_value));
 	}
 };
 
@@ -289,7 +289,7 @@ esvg::Dimension1D::Dimension1D(float _size, enum esvg::distance _type) :
 	set(_size, _type);
 }
 
-void esvg::Dimension1D::set(std::string _config) {
+void esvg::Dimension1D::set(etk::String _config) {
 	m_data = 0;
 	m_type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
@@ -330,8 +330,8 @@ esvg::Dimension1D::~Dimension1D() {
 	// nothing to do ...
 }
 
-esvg::Dimension1D::operator std::string() const {
-	std::string str;
+esvg::Dimension1D::operator etk::String() const {
+	etk::String str;
 	str = getValue();
 	switch(getType()) {
 		case esvg::distance_pourcent:
@@ -419,24 +419,24 @@ float esvg::Dimension1D::getPixel(float _upperSize) const {
 	return 128.0f;
 }
 
-std::ostream& esvg::operator <<(std::ostream& _os, const esvg::Dimension1D& _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, const esvg::Dimension1D& _obj) {
 	_os << _obj.getValue() << _obj.getType();
 	return _os;
 }
 
 namespace etk {
-	template<> std::string to_string<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
+	template<> etk::String toString<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
 		return _obj;
 	}
-	template<> std::u32string to_u32string<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
-		return etk::to_u32string(etk::to_string(_obj));
+	template<> etk::UString toUString<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
+		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const std::string& _value) {
+	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::String& _value) {
 		_variableRet = esvg::Dimension1D(_value);
 		return true;
 	}
-	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const std::u32string& _value) {
-		return from_string(_variableRet, etk::to_string(_value));
+	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::UString& _value) {
+		return from_string(_variableRet, etk::toString(_value));
 	}
 };
 

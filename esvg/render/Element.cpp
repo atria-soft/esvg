@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::render::path _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::render::path _obj) {
 	switch (_obj) {
 		case esvg::render::path_stop:
 			_os << "path_stop";
@@ -48,9 +48,9 @@ std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::render::path _obj)
 	};
 	return _os;
 }
-std::ostream& esvg::operator <<(std::ostream& _os, const esvg::render::Element& _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, const esvg::render::Element& _obj) {
 	_os << _obj.getType();
-	_os << ": rel=" << etk::to_string(_obj.getRelative()) << " ";
+	_os << ": rel=" << etk::toString(_obj.getRelative()) << " ";
 	_os << _obj.display();
 	return _os;
 }

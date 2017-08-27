@@ -18,7 +18,7 @@ namespace esvg {
 	namespace render {
 		class Path {
 			public:
-				std::vector<ememory::SharedPtr<esvg::render::Element>> m_listElement;
+				etk::Vector<ememory::SharedPtr<esvg::render::Element>> m_listElement;
 				#ifdef DEBUG
 					esvg::render::SegmentList m_debugInformation;
 				#endif

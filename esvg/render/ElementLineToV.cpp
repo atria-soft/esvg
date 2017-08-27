@@ -13,6 +13,6 @@ esvg::render::ElementLineToV::ElementLineToV(bool _relative, float _posY):
 }
 
 
-std::string esvg::render::ElementLineToV::display() const {
-	return std::string("posY=") + etk::to_string(m_pos.y());
+etk::String esvg::render::ElementLineToV::display() const {
+	return etk::String("posY=") + etk::toString(m_pos.y());
 }

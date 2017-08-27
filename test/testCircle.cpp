@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestCircle, fill) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<circle cx='50' cy='50' r='40' fill='red' />"
 	                 "</svg>");
@@ -22,7 +22,7 @@ TEST(TestCircle, fill) {
 }
 
 TEST(TestCircle, stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<circle cx='50' cy='50' r='40' stroke='green' stroke-width='3' />"
 	                 "</svg>");
@@ -33,7 +33,7 @@ TEST(TestCircle, stroke) {
 }
 
 TEST(TestCircle, fill_and_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<circle cx='50' cy='50' r='40' stroke='green' stroke-width='3' fill='red' />"
 	                 "</svg>");

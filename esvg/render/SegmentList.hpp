@@ -16,7 +16,7 @@ namespace esvg {
 	namespace render {
 		class SegmentList {
 			public:
-				std::vector<esvg::render::Segment> m_data;
+				etk::Vector<esvg::render::Segment> m_data;
 			public:
 				SegmentList();
 				#ifdef DEBUG
@@ -43,7 +43,7 @@ namespace esvg {
 				                             float _width,
 				                             bool _isStart);
 			public:
-				std::pair<vec2, vec2> getViewPort();
+				etk::Pair<vec2, vec2> getViewPort();
 				void applyMatrix(const mat2x3& _transformationMatrix);
 		};
 	}

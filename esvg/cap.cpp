@@ -13,7 +13,7 @@ static const char* values[] = {
 	"square"
 };
 
-std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::cap _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::cap _obj) {
 	_os << values[_obj];
 	return _os;
 }

@@ -15,7 +15,7 @@ namespace esvg {
 			public:
 				ElementLineToH(bool _relative, float _posX);
 			public:
-				virtual std::string display() const;
+				virtual etk::String display() const;
 		};
 	}
 }

@@ -13,6 +13,8 @@ namespace esvg {
 	namespace render {
 		class Segment {
 			public:
+				// TODO: Update etk::Vector to support not having it ...
+				Segment();
 				Segment(const vec2& _p0, const vec2& _p1);
 				vec2 p0;
 				vec2 p1;

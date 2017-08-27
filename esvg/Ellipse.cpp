@@ -30,7 +30,7 @@ bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans
 	m_c.setValue(0,0);
 	m_r.setValue(0,0);
 	
-	std::string content = _element.attributes["cx"];
+	etk::String content = _element.attributes["cx"];
 	if (content.size()!=0) {
 		m_c.setX(parseLength(content));
 	}
@@ -149,7 +149,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 }
 
 
-void esvg::Ellipse::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Ellipse::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                     int32_t _recurtionMax,
                                     float _threshold,
                                     mat2x3& _basicTrans,
@@ -162,11 +162,11 @@ void esvg::Ellipse::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		std::vector<vec2> listPoint;
+		etk::Vector<vec2> listPoint;
 		for (auto &itDot : it) {
-			listPoint.push_back(itDot.m_pos);
+			listPoint.pushBack(itDot.m_pos);
 		}
-		_out.push_back(listPoint);
+		_out.pushBack(listPoint);
 	}
 }
 

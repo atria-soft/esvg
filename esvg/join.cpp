@@ -13,7 +13,7 @@ static const char* values[] = {
 	"bevel"
 };
 
-std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::join _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::join _obj) {
 	_os << values[_obj];
 	return _os;
 }

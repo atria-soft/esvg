@@ -13,6 +13,6 @@ esvg::render::ElementMoveTo::ElementMoveTo(bool _relative, const vec2& _pos):
 }
 
 
-std::string esvg::render::ElementMoveTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos);
+etk::String esvg::render::ElementMoveTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos);
 }

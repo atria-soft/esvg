@@ -28,9 +28,9 @@ namespace esvg {
 			void setSize(const ivec2& _size);
 			const ivec2& getSize() const;
 		protected:
-			std::vector<etk::Color<float,4>> m_buffer;
+			etk::Vector<etk::Color<float,4>> m_buffer;
 		public:
-			std::vector<etk::Color<float,4>> getData();
+			etk::Vector<etk::Color<float,4>> getData();
 		protected:
 			int32_t m_interpolationRecurtionMax;
 		public:
@@ -47,8 +47,8 @@ namespace esvg {
 			void setNumberSubScanLine(int32_t _value);
 			int32_t getNumberSubScanLine() const;
 		public:
-			void writePPM(const std::string& _fileName);
-			void writeBMP(const std::string& _fileName);
+			void writePPM(const etk::String& _fileName);
+			void writeBMP(const etk::String& _fileName);
 		protected:
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:
@@ -59,7 +59,7 @@ namespace esvg {
 			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
-			void addDebug(const std::vector<std::pair<vec2,vec2>>& _info);
+			void addDebug(const etk::Vector<etk::Pair<vec2,vec2>>& _info);
 			#endif
 		protected:
 			esvg::Document* m_document;

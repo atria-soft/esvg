@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestRectangle, fill) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' fill='red' />"
 	                 "</svg>");
@@ -22,7 +22,7 @@ TEST(TestRectangle, fill) {
 }
 
 TEST(TestRectangle, stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' />"
 	                 "</svg>");
@@ -33,7 +33,7 @@ TEST(TestRectangle, stroke) {
 }
 
 TEST(TestRectangle, fill_and_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' fill='red' />"
 	                 "</svg>");
@@ -44,7 +44,7 @@ TEST(TestRectangle, fill_and_stroke) {
 }
 
 TEST(TestRectangle, corned_fill) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' fill='red' />"
 	                 "</svg>");
@@ -55,7 +55,7 @@ TEST(TestRectangle, corned_fill) {
 }
 
 TEST(TestRectangle, corned_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' />"
 	                 "</svg>");
@@ -66,7 +66,7 @@ TEST(TestRectangle, corned_stroke) {
 }
 
 TEST(TestRectangle, corned_fill_and_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' fill='red' />"
 	                 "</svg>");

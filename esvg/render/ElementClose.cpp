@@ -12,7 +12,7 @@ esvg::render::ElementClose::ElementClose(bool _relative):
 	
 }
 
-std::string esvg::render::ElementClose::display() const {
+etk::String esvg::render::ElementClose::display() const {
 	return "";
 }
 

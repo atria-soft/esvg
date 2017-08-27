@@ -58,11 +58,11 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
 	if (_colorFill != nullptr) {
-		//_colorFill->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
+		//_colorFill->setViewPort(etk::Pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorFill->generate(m_document);
 	}
 	if (_colorStroke != nullptr) {
-		//_colorStroke->setViewPort(std::pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
+		//_colorStroke->setViewPort(etk::Pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorStroke->generate(m_document);
 	}
 	// all together
@@ -123,7 +123,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			                       false);
 			/*
 				mat2x3 m_matrix;
-				std::pair<vec2, vec2> m_viewPort;
+				etk::Pair<vec2, vec2> m_viewPort;
 				vec2 m_pos1;
 				vec2 m_pos2;
 			*/
@@ -141,25 +141,25 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 		// for each lines:
 		for (int32_t yyy=0; yyy<dynamicSize.y(); ++yyy) {
 			// Reduce the number of lines in the subsampling parsing:
-			std::vector<esvg::render::Segment> availlableSegmentPixel;
+			etk::Vector<esvg::render::Segment> availlableSegmentPixel;
 			for (auto &it : _listSegment.m_data) {
 				if (    it.p0.y() * m_factor <= float(yyy+1)
 				     && it.p1.y() * m_factor >= float(yyy)) {
-					availlableSegmentPixel.push_back(it);
+					availlableSegmentPixel.pushBack(it);
 				}
 			}
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = yyy + 0.5f;
-			std::vector<esvg::render::Segment> availlableSegment;
+			etk::Vector<esvg::render::Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() * m_factor <= subSamplingCenterPos
 				     && it.p1.y() * m_factor >= subSamplingCenterPos ) {
-					availlableSegment.push_back(it);
+					availlableSegment.pushBack(it);
 				}
 			}
 			// x position, angle
-			std::vector<std::pair<float, float>> listPosition;
+			etk::Vector<etk::Pair<float, float>> listPosition;
 			for (auto &it : availlableSegment) {
 				vec2 delta = it.p0 * m_factor - it.p1 * m_factor;
 				// x = coefficent*y+bbb;
@@ -181,29 +181,29 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 		// for each colomn:
 		for (int32_t xxx=0; xxx<dynamicSize.x(); ++xxx) {
 			// Reduce the number of lines in the subsampling parsing:
-			std::vector<esvg::render::Segment> availlableSegmentPixel;
+			etk::Vector<esvg::render::Segment> availlableSegmentPixel;
 			for (auto &it : _listSegment.m_data) {
 				if (    (    it.p0.x() * m_factor <= float(xxx+1)
 				          && it.p1.x() * m_factor >= float(xxx) )
 				     || (    it.p0.x() * m_factor >= float(xxx+1)
 				          && it.p1.x() * m_factor <= float(xxx) ) ) {
-					availlableSegmentPixel.push_back(it);
+					availlableSegmentPixel.pushBack(it);
 				}
 			}
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = xxx + 0.5f;
-			std::vector<esvg::render::Segment> availlableSegment;
+			etk::Vector<esvg::render::Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    (    it.p0.x() * m_factor <= subSamplingCenterPos
 				          && it.p1.x() * m_factor >= subSamplingCenterPos)
 				     || (    it.p0.x() * m_factor >= subSamplingCenterPos
 				          && it.p1.x() * m_factor <= subSamplingCenterPos) ) {
-					availlableSegment.push_back(it);
+					availlableSegment.pushBack(it);
 				}
 			}
 			// x position, angle
-			std::vector<std::pair<float, float>> listPosition;
+			etk::Vector<etk::Pair<float, float>> listPosition;
 			for (auto &it : availlableSegment) {
 				vec2 delta = it.p0 * m_factor - it.p1 * m_factor;
 				// x = coefficent*y+bbb;
@@ -229,7 +229,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 #endif
 
 
-void esvg::Renderer::writePPM(const std::string& _fileName) {
+void esvg::Renderer::writePPM(const etk::String& _fileName) {
 	if (m_buffer.size() == 0) {
 		return;
 	}
@@ -290,7 +290,7 @@ extern "C" {
 	};
 	#pragma pack(pop)
 }
-void esvg::Renderer::writeBMP(const std::string& _fileName) {
+void esvg::Renderer::writeBMP(const etk::String& _fileName) {
 	if (m_buffer.size() == 0) {
 		return;
 	}
@@ -385,7 +385,7 @@ const ivec2& esvg::Renderer::getSize() const {
 	return m_size;
 }
 
-std::vector<etk::Color<float,4>> esvg::Renderer::getData() {
+etk::Vector<etk::Color<float,4>> esvg::Renderer::getData() {
 	return m_buffer;
 }
 
@@ -393,7 +393,7 @@ std::vector<etk::Color<float,4>> esvg::Renderer::getData() {
 
 
 void esvg::Renderer::setInterpolationRecurtionMax(int32_t _value) {
-	m_interpolationRecurtionMax = std::avg(1, _value, 200);
+	m_interpolationRecurtionMax = etk::avg(1, _value, 200);
 }
 
 int32_t esvg::Renderer::getInterpolationRecurtionMax() const {
@@ -401,7 +401,7 @@ int32_t esvg::Renderer::getInterpolationRecurtionMax() const {
 }
 
 void esvg::Renderer::setInterpolationThreshold(float _value) {
-	m_interpolationThreshold = std::avg(0.0f, _value, 20000.0f);
+	m_interpolationThreshold = etk::avg(0.0f, _value, 20000.0f);
 }
 
 float esvg::Renderer::getInterpolationThreshold() const {
@@ -409,7 +409,7 @@ float esvg::Renderer::getInterpolationThreshold() const {
 }
 
 void esvg::Renderer::setNumberSubScanLine(int32_t _value) {
-	m_nbSubScanLine = std::avg(1, _value, 200);
+	m_nbSubScanLine = etk::avg(1, _value, 200);
 }
 
 int32_t esvg::Renderer::getNumberSubScanLine() const {

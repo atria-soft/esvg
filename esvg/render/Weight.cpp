@@ -82,7 +82,7 @@ void esvg::render::Weight::append(int32_t _posY, const esvg::render::Scanline& _
 	}
 }
 
-bool sortXPosFunction(const std::pair<float,float>& _e1, const std::pair<float,float>& _e2) {
+bool sortXPosFunction(const etk::Pair<float,int32_t>& _e1, const etk::Pair<float,int32_t>& _e2) {
 	return _e1.first < _e2.first;
 }
 
@@ -93,11 +93,11 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 	for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
 		ESVG_VERBOSE("Weighting ... " << yyy << " / " << _size.y());
 		// Reduce the number of lines in the subsampling parsing:
-		std::vector<Segment> availlableSegmentPixel;
+		etk::Vector<Segment> availlableSegmentPixel;
 		for (auto &it : _listSegment.m_data) {
 			if (    it.p0.y() < float(yyy+1)
 			     && it.p1.y() > float(yyy)) {
-				availlableSegmentPixel.push_back(it);
+				availlableSegmentPixel.pushBack(it);
 			}
 		}
 		if (availlableSegmentPixel.size() == 0) {
@@ -111,7 +111,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			Scanline scanline(_size.x());
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = yyy + deltaSize*0.5f + deltaSize*kkk;
-			std::vector<Segment> availlableSegment;
+			etk::Vector<Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() <= subSamplingCenterPos
@@ -122,7 +122,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 					     && availlableSegment.back().direction == it.direction) {
 						// we not add this point in this case to prevent double count of the same point.
 					} else {
-						availlableSegment.push_back(it);
+						availlableSegment.pushBack(it);
 					}
 				}
 			}
@@ -134,18 +134,18 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				ESVG_VERBOSE("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
 			}
 			// x position, angle
-			std::vector<std::pair<float, int32_t>> listPosition;
+			etk::Vector<etk::Pair<float, int32_t>> listPosition;
 			for (auto &it : availlableSegment) {
 				vec2 delta = it.p0 - it.p1;
 				// x = coefficent*y+bbb;
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() - coefficient*it.p0.y();
 				float xpos = coefficient * subSamplingCenterPos + bbb;
-				listPosition.push_back(std::pair<float,int32_t>(xpos, it.direction));
+				listPosition.pushBack(etk::Pair<float,int32_t>(xpos, it.direction));
 			}
 			ESVG_VERBOSE("        List position " << listPosition.size());
 			// now we order position of the xPosition:
-			std::sort(listPosition.begin(), listPosition.end(), sortXPosFunction);
+			listPosition.sort(0, listPosition.size(), sortXPosFunction);
 			// move through all element in the point:
 			int32_t lastState = 0;
 			float currentValue = 0.0f;
@@ -160,9 +160,9 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				if (currentPos != int32_t(it.first)) {
 					// fill to the new pos -1:
 					#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
-						float endValue = float(std::min(1,std::abs(lastState))) * deltaSize;
+						float endValue = float(etk::min(1,std::abs(lastState))) * deltaSize;
 					#else
-						float endValue = float(std::min(1,abs(lastState))) * deltaSize;
+						float endValue = float(etk::min(1,abs(lastState))) * deltaSize;
 					#endif
 					for (int32_t iii=currentPos+1; iii<int32_t(it.first); ++iii) {
 						scanline.set(iii, endValue);

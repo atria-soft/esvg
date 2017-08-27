@@ -42,8 +42,8 @@ bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string contentX = _element.attributes["cx"];
-	std::string contentY = _element.attributes["cy"];
+	etk::String contentX = _element.attributes["cx"];
+	etk::String contentY = _element.attributes["cy"];
 	if (    contentX != ""
 	     && contentY != "") {
 		m_center.set(contentX, contentY);
@@ -83,7 +83,7 @@ bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 	// note: xlink:href is incompatible with subNode "stop"
 	m_href = _element.attributes["xlink:href"];
 	if (m_href.size() != 0) {
-		m_href = std::string(m_href.begin()+1, m_href.end());
+		m_href = etk::String(m_href.begin()+1, m_href.end());
 	}
 	// parse all sub node :
 	for(auto it : _element.nodes) {
@@ -95,9 +95,9 @@ bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 		if (child.getValue() == "stop") {
 			float offset = 100;
 			etk::Color<float,4> stopColor = etk::color::none;
-			std::string content = child.attributes["offset"];
+			etk::String content = child.attributes["offset"];
 			if (content.size()!=0) {
-				std::pair<float, enum esvg::distance> tmp = parseLength2(content);
+				etk::Pair<float, enum esvg::distance> tmp = parseLength2(content);
 				if (tmp.second == esvg::distance_pixel) {
 					// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
 					offset = tmp.first*100.0f;
@@ -115,11 +115,11 @@ bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 			content = child.attributes["stop-opacity"];
 			if (content.size()!=0) {
 				float opacity = parseLength(content);
-				opacity = std::avg(0.0f, opacity, 1.0f);
+				opacity = etk::avg(0.0f, opacity, 1.0f);
 				stopColor.setA(opacity);
 				ESVG_VERBOSE(" opacity : '" << content << "'  == > " << stopColor);
 			}
-			m_data.push_back(std::pair<float, etk::Color<float,4>>(offset, stopColor));
+			m_data.pushBack(etk::Pair<float, etk::Color<float,4>>(offset, stopColor));
 		} else {
 			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [stop]");
 		}
@@ -156,7 +156,7 @@ const esvg::Dimension1D& esvg::RadialGradient::getRadius() {
 	return m_radius;
 }
 
-const std::vector<std::pair<float, etk::Color<float,4>>>& esvg::RadialGradient::getColors(esvg::Document* _document) {
+const etk::Vector<etk::Pair<float, etk::Color<float,4>>>& esvg::RadialGradient::getColors(esvg::Document* _document) {
 	if (m_href == "") {
 		return m_data;
 	}

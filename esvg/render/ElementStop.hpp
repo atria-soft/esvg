@@ -15,7 +15,7 @@ namespace esvg {
 			public:
 				ElementStop();
 			public:
-				virtual std::string display() const;
+				virtual etk::String display() const;
 		};
 	}
 }

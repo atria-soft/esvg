@@ -30,7 +30,7 @@ bool esvg::Line::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	// add the property of the parrent modifications ...
 	m_transformMatrix *= _parentTrans;
 	
-	std::string content = _element.attributes["x1"];
+	etk::String content = _element.attributes["x1"];
 	if (content.size() != 0) {
 		m_startPos.setX(parseLength(content));
 	}
@@ -46,8 +46,8 @@ bool esvg::Line::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	if (content.size() != 0) {
 		m_stopPos.setY(parseLength(content));
 	}
-	_sizeMax.setValue(std::max(m_startPos.x(), m_stopPos.x()),
-	                  std::max(m_startPos.y(), m_stopPos.y()));
+	_sizeMax.setValue(etk::max(m_startPos.x(), m_stopPos.x()),
+	                  etk::max(m_startPos.y(), m_stopPos.y()));
 	return true;
 }
 
@@ -116,7 +116,7 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 }
 
 
-void esvg::Line::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Line::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
@@ -129,11 +129,11 @@ void esvg::Line::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		std::vector<vec2> listPoint;
+		etk::Vector<vec2> listPoint;
 		for (auto &itDot : it) {
-			listPoint.push_back(itDot.m_pos);
+			listPoint.pushBack(itDot.m_pos);
 		}
-		_out.push_back(listPoint);
+		_out.pushBack(listPoint);
 	}
 }
 

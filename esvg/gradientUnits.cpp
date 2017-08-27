@@ -12,7 +12,7 @@ static const char* values[] = {
 	"objectBoundingBox"
 };
 
-std::ostream& esvg::operator <<(std::ostream& _os, enum esvg::gradientUnits _obj) {
+etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::gradientUnits _obj) {
 	_os << values[_obj];
 	return _os;
 }

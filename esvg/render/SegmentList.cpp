@@ -13,7 +13,7 @@ esvg::render::SegmentList::SegmentList() {
 }
 #ifdef DEBUG
 	void esvg::render::SegmentList::addSegment(const vec2& _pos0, const vec2& _pos1) {
-		m_data.push_back(Segment(_pos0, _pos1));
+		m_data.pushBack(Segment(_pos0, _pos1));
 	}
 #endif
 
@@ -23,7 +23,7 @@ void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, con
 		// remove /0 operation
 		return;
 	}
-	m_data.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
+	m_data.pushBack(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
 void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1, bool _disableHorizontal) {
@@ -33,11 +33,11 @@ void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, con
 		// remove /0 operation
 		return;
 	}
-	m_data.push_back(Segment(_pos0.m_pos, _pos1.m_pos));
+	m_data.pushBack(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
-std::pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
-	std::pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
+etk::Pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
+	etk::Pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
 	for (auto &it : m_data) {
 		out.first.setMin(it.p0);
 		out.second.setMax(it.p0);

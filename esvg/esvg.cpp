@@ -58,10 +58,10 @@ void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 }
 
 // FOR TEST only ...
-void esvg::Document::generateAnImage(const std::string& _fileName, bool _visualDebug) {
+void esvg::Document::generateAnImage(const etk::String& _fileName, bool _visualDebug) {
 	generateAnImage(m_size, _fileName, _visualDebug);
 }
-void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fileName, bool _visualDebug) {
+void esvg::Document::generateAnImage(const ivec2& _size, const etk::String& _fileName, bool _visualDebug) {
 	ivec2 sizeRender = _size;
 	if (sizeRender.x() <= 0) {
 		sizeRender.setX(m_size.x());
@@ -88,7 +88,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const std::string& _fil
 }
 
 
-std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _size) {
+etk::Vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _size) {
 	if (_size.x() <= 0) {
 		_size.setX(m_size.x());
 	}
@@ -106,10 +106,10 @@ std::vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _si
 	return renderedElement->getData();
 }
 
-std::vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _size) {
-	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+etk::Vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _size) {
+	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	std::vector<etk::Color<float,3>> out;
+	etk::Vector<etk::Color<float,3>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -117,10 +117,10 @@ std::vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _siz
 	return out;
 }
 
-std::vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _size) {
-	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+etk::Vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _size) {
+	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	std::vector<etk::Color<uint8_t,4>> out;
+	etk::Vector<etk::Color<uint8_t,4>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -128,10 +128,10 @@ std::vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _siz
 	return out;
 }
 
-std::vector<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(ivec2& _size) {
-	std::vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+etk::Vector<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(ivec2& _size) {
+	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	std::vector<etk::Color<uint8_t,3>> out;
+	etk::Vector<etk::Color<uint8_t,3>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -148,7 +148,7 @@ void esvg::Document::clear() {
 }
 
 
-bool esvg::Document::parse(const std::string& _data) {
+bool esvg::Document::parse(const etk::String& _data) {
 	clear();
 	exml::Document doc;
 	if (doc.parse(_data) == false) {
@@ -172,11 +172,11 @@ bool esvg::Document::parse(const std::string& _data) {
 	return m_loadOK;
 }
 
-bool esvg::Document::generate(std::string& _data) {
+bool esvg::Document::generate(etk::String& _data) {
 	return false;
 }
 
-bool esvg::Document::load(const std::string& _file) {
+bool esvg::Document::load(const etk::String& _file) {
 	clear();
 	m_fileName = _file;
 	exml::Document doc;
@@ -201,7 +201,7 @@ bool esvg::Document::load(const std::string& _file) {
 	return m_loadOK;
 }
 
-bool esvg::Document::store(const std::string& _file) {
+bool esvg::Document::store(const etk::String& _file) {
 	ESVG_TODO("not implemented store in SVG...");
 	return false;
 }
@@ -215,11 +215,11 @@ bool esvg::Document::cleanStyleProperty(const exml::Element& _root) {
 		}
 		// get attribute style:
 		if (child.attributes.exist("style") == true) {
-			std::string content = child.attributes["style"];
+			etk::String content = child.attributes["style"];
 			if (content.size() != 0) {
-				std::vector<std::string> listStyle = etk::split(content, ';');
+				etk::Vector<etk::String> listStyle = etk::split(content, ';');
 				for (auto &it : listStyle) {
-					std::vector<std::string> value = etk::split(it, ':');
+					etk::Vector<etk::String> value = etk::split(it, ':');
 					if (value.size() != 2) {
 						ESVG_ERROR("parsing style with a wrong patern : " << it << " missing ':'");
 						continue;
@@ -333,9 +333,9 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 		}
 		// add element in the system
 		if (_isReference == false) {
-			m_subElementList.push_back(elementParser);
+			m_subElementList.pushBack(elementParser);
 		} else {
-			m_refList.push_back(elementParser);
+			m_refList.pushBack(elementParser);
 		}
 	}
 	if (    m_size.x() == 0
@@ -352,7 +352,7 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 
 
 
-ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const std::string& _name) {
+ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _name) {
 	if (_name == "") {
 		ESVG_ERROR("request a reference with no name ... ");
 		return nullptr;
@@ -369,8 +369,8 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const std::string& _
 	return nullptr;
 }
 
-std::vector<std::vector<vec2>> esvg::Document::getLines(vec2 _size) {
-	std::vector<std::vector<vec2>> out;
+etk::Vector<etk::Vector<vec2>> esvg::Document::getLines(vec2 _size) {
+	etk::Vector<etk::Vector<vec2>> out;
 	if (_size.x() <= 0) {
 		_size.setX(m_size.x());
 	}
@@ -386,7 +386,7 @@ std::vector<std::vector<vec2>> esvg::Document::getLines(vec2 _size) {
 }
 
 
-void esvg::Document::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Document::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                      int32_t _recurtionMax,
                                      float _threshold,
                                      mat2x3& _basicTrans,

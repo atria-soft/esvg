@@ -7,7 +7,7 @@
  */
 
 #include <test-debug/debug.hpp>
-#include <vector>
+#include <etk/Vector.hpp>
 #include <etk/etk.hpp>
 #include <esvg/esvg.hpp>
 
@@ -21,12 +21,12 @@ static void usage() {
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
-	std::string inputFile;
+	etk::String inputFile;
 	bool visualTest = false;
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (etk::start_with(data, "--file=") == true) {
-			inputFile = std::string(&data[7]);
+			inputFile = etk::String(&data[7]);
 			TEST_PRINT("file='" << inputFile << "'");
 		} else if (data == "--visual") {
 			visualTest = true;

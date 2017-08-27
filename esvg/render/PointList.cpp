@@ -11,8 +11,8 @@ esvg::render::PointList::PointList() {
 	// nothing to do ...
 }
 
-void esvg::render::PointList::addList(std::vector<esvg::render::Point>& _list) {
-	m_data.push_back(_list);
+void esvg::render::PointList::addList(etk::Vector<esvg::render::Point>& _list) {
+	m_data.pushBack(_list);
 	// TODO : Add a checker of correct list ...
 }
 
@@ -24,8 +24,8 @@ void esvg::render::PointList::applyMatrix(const mat2x3& _transformationMatrix) {
 	}
 }
 
-std::pair<vec2, vec2> esvg::render::PointList::getViewPort() {
-	std::pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
+etk::Pair<vec2, vec2> esvg::render::PointList::getViewPort() {
+	etk::Pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
 	for (auto &it : m_data) {
 		for (auto &it2 : it) {
 			out.first.setMin(it2.m_pos);

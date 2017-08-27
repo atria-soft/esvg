@@ -13,7 +13,7 @@
 // ------------------------------------------------------ Miter test -----------------------------------------------------
 
 TEST(TestJoin, miterRight1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -24,7 +24,7 @@ TEST(TestJoin, miterRight1) {
 }
 
 TEST(TestJoin, miterRight2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -35,7 +35,7 @@ TEST(TestJoin, miterRight2) {
 }
 
 TEST(TestJoin, miterRight3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -46,7 +46,7 @@ TEST(TestJoin, miterRight3) {
 }
 
 TEST(TestJoin, miterRight4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -57,7 +57,7 @@ TEST(TestJoin, miterRight4) {
 }
 
 TEST(TestJoin, miterLeft1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -68,7 +68,7 @@ TEST(TestJoin, miterLeft1) {
 }
 
 TEST(TestJoin, miterLeft2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -79,7 +79,7 @@ TEST(TestJoin, miterLeft2) {
 }
 
 TEST(TestJoin, miterLeft3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -90,7 +90,7 @@ TEST(TestJoin, miterLeft3) {
 }
 
 TEST(TestJoin, miterLeft4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -101,7 +101,7 @@ TEST(TestJoin, miterLeft4) {
 }
 
 TEST(TestJoin, miterLimit1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='10,10 25,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -112,7 +112,7 @@ TEST(TestJoin, miterLimit1) {
 }
 
 TEST(TestJoin, miterLimit2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='10,10 50,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -123,7 +123,7 @@ TEST(TestJoin, miterLimit2) {
 }
 
 TEST(TestJoin, miterLimit3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='10,10 75,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -134,7 +134,7 @@ TEST(TestJoin, miterLimit3) {
 }
 
 TEST(TestJoin, miterLimit4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='10,10 90,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>"
 	                 "</svg>");
@@ -145,7 +145,7 @@ TEST(TestJoin, miterLimit4) {
 }
 
 TEST(TestJoin, miterCornerCasePath) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "    <path"
 	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
@@ -158,7 +158,7 @@ TEST(TestJoin, miterCornerCasePath) {
 }
 
 TEST(TestJoin, miterCornerCasePathLimit) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "    <path"
 	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
@@ -173,7 +173,7 @@ TEST(TestJoin, miterCornerCasePathLimit) {
 // ------------------------------------------------------ Round test -----------------------------------------------------
 
 TEST(TestJoin, roundRight1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -184,7 +184,7 @@ TEST(TestJoin, roundRight1) {
 }
 
 TEST(TestJoin, roundRight2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -195,7 +195,7 @@ TEST(TestJoin, roundRight2) {
 }
 
 TEST(TestJoin, roundRight3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -206,7 +206,7 @@ TEST(TestJoin, roundRight3) {
 }
 
 TEST(TestJoin, roundRight4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -217,7 +217,7 @@ TEST(TestJoin, roundRight4) {
 }
 
 TEST(TestJoin, roundLeft1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -228,7 +228,7 @@ TEST(TestJoin, roundLeft1) {
 }
 
 TEST(TestJoin, roundLeft2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -239,7 +239,7 @@ TEST(TestJoin, roundLeft2) {
 }
 
 TEST(TestJoin, roundLeft3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -250,7 +250,7 @@ TEST(TestJoin, roundLeft3) {
 }
 
 TEST(TestJoin, roundLeft4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>"
 	                 "</svg>");
@@ -261,7 +261,7 @@ TEST(TestJoin, roundLeft4) {
 }
 
 TEST(TestJoin, roundCornerCasePath) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "    <path"
 	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"
@@ -277,7 +277,7 @@ TEST(TestJoin, roundCornerCasePath) {
 // ------------------------------------------------------ Bevel test -----------------------------------------------------
 
 TEST(TestJoin, bevelRight1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -288,7 +288,7 @@ TEST(TestJoin, bevelRight1) {
 }
 
 TEST(TestJoin, bevelRight2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -299,7 +299,7 @@ TEST(TestJoin, bevelRight2) {
 }
 
 TEST(TestJoin, bevelRight3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -310,7 +310,7 @@ TEST(TestJoin, bevelRight3) {
 }
 
 TEST(TestJoin, bevelRight4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -321,7 +321,7 @@ TEST(TestJoin, bevelRight4) {
 }
 
 TEST(TestJoin, bevelLeft1) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -332,7 +332,7 @@ TEST(TestJoin, bevelLeft1) {
 }
 
 TEST(TestJoin, bevelLeft2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -343,7 +343,7 @@ TEST(TestJoin, bevelLeft2) {
 }
 
 TEST(TestJoin, bevelLeft3) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -354,7 +354,7 @@ TEST(TestJoin, bevelLeft3) {
 }
 
 TEST(TestJoin, bevelLeft4) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>"
 	                 "</svg>");
@@ -365,7 +365,7 @@ TEST(TestJoin, bevelLeft4) {
 }
 
 TEST(TestJoin, bevelCornerCasePath) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "    <path"
 	                 "       d='m 37.984608,9.9629707 c 6.211703,0 12.423406,0 18.635109,0 0,2.5633883 0,5.1267763 0,7.6901643 -6.211703,0 -12.423406,0 -18.635109,0 0,-2.563388 0,-5.126776 0,-7.6901643 z'\n"

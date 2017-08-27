@@ -15,5 +15,5 @@ namespace esvg {
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
-	std::ostream& operator <<(std::ostream& _os, enum esvg::gradientUnits _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum esvg::gradientUnits _obj);
 }

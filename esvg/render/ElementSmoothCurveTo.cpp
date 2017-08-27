@@ -14,6 +14,6 @@ esvg::render::ElementSmoothCurveTo::ElementSmoothCurveTo(bool _relative, const v
 }
 
 
-std::string esvg::render::ElementSmoothCurveTo::display() const {
-	return std::string("pos=") + etk::to_string(m_pos) + " pos2=" + etk::to_string(m_pos2);
+etk::String esvg::render::ElementSmoothCurveTo::display() const {
+	return etk::String("pos=") + etk::toString(m_pos) + " pos2=" + etk::toString(m_pos2);
 }

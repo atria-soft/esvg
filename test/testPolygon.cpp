@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestPolygon, fill) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polygon points='50,10 90,50 10,80' fill='red' />"
 	                 "</svg>");
@@ -22,7 +22,7 @@ TEST(TestPolygon, fill) {
 }
 
 TEST(TestPolygon, stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polygon points='50,10 90,50 10,80' stroke='green' stroke-width='3' />"
 	                 "</svg>");
@@ -33,7 +33,7 @@ TEST(TestPolygon, stroke) {
 }
 
 TEST(TestPolygon, fill_and_stroke) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
 	                 "<svg height='100' width='100'>"
 	                 "	<polygon points='50,10 90,50 10,80' stroke='green' stroke-width='3' fill='red' />"
 	                 "</svg>");

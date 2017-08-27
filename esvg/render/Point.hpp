@@ -31,6 +31,12 @@ namespace esvg {
 				vec2 m_posNext;
 				vec2 m_delta;
 				float m_len;
+				// TODO: Update etk::Vector to support not having it ...
+				Point() :
+				  m_pos(0,0),
+				  m_type(esvg::render::Point::type::join) {
+					// nothing to do ...
+				}
 				Point(const vec2& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type::join) :
 				  m_pos(_pos),
 				  m_type(_type) {

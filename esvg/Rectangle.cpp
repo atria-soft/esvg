@@ -35,7 +35,7 @@ bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2x3& _parentTra
 	
 	parsePosition(_element, m_position, m_size);
 	
-	std::string content = _element.attributes["rx"];
+	etk::String content = _element.attributes["rx"];
 	if (content.size()!=0) {
 		m_roundedCorner.setX(parseLength(content));
 	}
@@ -144,7 +144,7 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int
 }
 
 
-void esvg::Rectangle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
+void esvg::Rectangle::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                       int32_t _recurtionMax,
                                       float _threshold,
                                       mat2x3& _basicTrans,
@@ -157,10 +157,10 @@ void esvg::Rectangle::drawShapePoints(std::vector<std::vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		std::vector<vec2> listPoint;
+		etk::Vector<vec2> listPoint;
 		for (auto &itDot : it) {
-			listPoint.push_back(itDot.m_pos);
+			listPoint.pushBack(itDot.m_pos);
 		}
-		_out.push_back(listPoint);
+		_out.pushBack(listPoint);
 	}
 }

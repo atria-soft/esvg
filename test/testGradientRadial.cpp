@@ -11,7 +11,7 @@
 #include "main.hpp"
 
 TEST(TestGradientRadial, circle) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>\n"
@@ -31,7 +31,7 @@ TEST(TestGradientRadial, circle) {
 
 
 TEST(TestGradientRadial, full) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>\n"
@@ -51,7 +51,7 @@ TEST(TestGradientRadial, full) {
 
 
 TEST(TestGradientRadial, partial) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad2' cx='20%' cy='30%' r='30%' fx='50%' fy='50%'>\n"
@@ -70,7 +70,7 @@ TEST(TestGradientRadial, partial) {
 }
 
 TEST(TestGradientRadial, unitBox_spreadNone) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='10%' fx='50%' fy='50%'>\n"
@@ -89,7 +89,7 @@ TEST(TestGradientRadial, unitBox_spreadNone) {
 }
 
 TEST(TestGradientRadial, unitBox_spreadPad) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='10%' fx='50%' fy='50%' spreadMethod='pad'>\n"
@@ -108,7 +108,7 @@ TEST(TestGradientRadial, unitBox_spreadPad) {
 }
 
 TEST(TestGradientRadial, unitBox_spreadReflect) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='10%' fx='50%' fy='50%' spreadMethod='reflect'>\n"
@@ -128,7 +128,7 @@ TEST(TestGradientRadial, unitBox_spreadReflect) {
 
 
 TEST(TestGradientRadial, unitBox_spreadRepeat) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50%' cy='50%' r='10%' fx='50%' fy='50%' spreadMethod='repeat'>\n"
@@ -148,7 +148,7 @@ TEST(TestGradientRadial, unitBox_spreadRepeat) {
 
 
 TEST(TestGradientRadial, unitUser_spreadNone) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='10' fx='50' fy='50%' gradientUnits='userSpaceOnUse' >\n"
@@ -167,7 +167,7 @@ TEST(TestGradientRadial, unitUser_spreadNone) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadPad) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='10' fx='50' fy='50' spreadMethod='pad' gradientUnits='userSpaceOnUse' >\n"
@@ -186,7 +186,7 @@ TEST(TestGradientRadial, unitUser_spreadPad) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadReflect) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='10' fx='50' fy='50' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
@@ -206,7 +206,7 @@ TEST(TestGradientRadial, unitUser_spreadReflect) {
 
 
 TEST(TestGradientRadial, unitUser_spreadRepeat) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='10' fx='50' fy='50' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"
@@ -225,7 +225,7 @@ TEST(TestGradientRadial, unitUser_spreadRepeat) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadPad_unCenter) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='pad' gradientUnits='userSpaceOnUse' >\n"
@@ -244,7 +244,7 @@ TEST(TestGradientRadial, unitUser_spreadPad_unCenter) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadReflect_unCenter) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
@@ -263,7 +263,7 @@ TEST(TestGradientRadial, unitUser_spreadReflect_unCenter) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='40' fy='40' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"
@@ -282,7 +282,7 @@ TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter) {
 }
 
 TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter2) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='60' fy='60' spreadMethod='repeat' gradientUnits='userSpaceOnUse' >\n"
@@ -302,7 +302,7 @@ TEST(TestGradientRadial, unitUser_spreadRepeat_unCenter2) {
 
 
 TEST(TestGradientRadial, unitUser_spreadRepeat_out) {
-	std::string data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+	etk::String data("<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
 	                 "<svg height='100' width='100'>\n"
 	                 "	<defs>\n"
 	                 "		<radialGradient id='grad1' cx='50' cy='50' r='24' fx='20' fy='40' spreadMethod='reflect' gradientUnits='userSpaceOnUse' >\n"
