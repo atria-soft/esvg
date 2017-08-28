@@ -7,6 +7,7 @@
 
 #include <ememory/memory.hpp>
 #include <etk/types.hpp>
+#include <etk/Pair.hpp>
 #include <etk/Color.hpp>
 #include <etk/math/Vector2D.hpp>
 #include <etk/math/Matrix2x3.hpp>

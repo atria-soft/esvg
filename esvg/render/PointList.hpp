@@ -8,6 +8,7 @@
 #include <etk/types.hpp>
 #include <etk/math/Vector2D.hpp>
 #include <etk/math/Matrix2x3.hpp>
+#include <etk/Pair.hpp>
 #include <esvg/render/Element.hpp>
 #include <esvg/render/Point.hpp>
 
