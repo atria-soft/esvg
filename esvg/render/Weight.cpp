@@ -160,7 +160,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				if (currentPos != int32_t(it.first)) {
 					// fill to the new pos -1:
 					#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
-						float endValue = float(etk::min(1,std::abs(lastState))) * deltaSize;
+						float endValue = float(etk::min(1,etk::abs(lastState))) * deltaSize;
 					#else
 						float endValue = float(etk::min(1,abs(lastState))) * deltaSize;
 					#endif

@@ -97,8 +97,8 @@ void interpolateCubicBezier(etk::Vector<esvg::render::Point>& _listPoint,
 	
 	vec2 delta = _pos4 - _pos1;
 	#ifndef __STDCPP_LLVM__
-		float distance2 = std::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
-		float distance3 = std::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
+		float distance2 = etk::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
+		float distance3 = etk::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
 	#else
 		float distance2 = fabs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
 		float distance3 = fabs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
@@ -377,7 +377,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						      + (deltaPrim.y()*deltaPrim.y())/(radius.y()*radius.y());
 						if (ddd > 1.0f) {
 							#ifndef __STDCPP_LLVM__
-								ddd = std::sqrt(ddd);
+								ddd = etk::sqrt(ddd);
 							#else
 								ddd = sqrtf(ddd);
 							#endif
@@ -395,7 +395,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						}
 						if (ssb > 0.0f) {
 							#ifndef __STDCPP_LLVM__
-								sss = std::sqrt(ssa / ssb);
+								sss = etk::sqrt(ssa / ssb);
 							#else
 								sss = sqrtf(ssa / ssb);
 							#endif
@@ -442,13 +442,13 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// Split arc into max 90 degree segments.
 						// The loop assumes an iteration per end point (including start and end), this +1.
 						#ifndef __STDCPP_LLVM__
-							int32_t ndivs = int32_t(std::abs(deltaTheta) / (M_PI*0.5f)) + 1;
+							int32_t ndivs = int32_t(etk::abs(deltaTheta) / (M_PI*0.5f)) + 1;
 						#else
 							int32_t ndivs = int32_t(fabs(deltaTheta) / (M_PI*0.5f)) + 1;
 						#endif
 						float hda = (deltaTheta / float(ndivs)) * 0.5f;
 						#ifndef __STDCPP_LLVM__
-							float kappa = std::abs(4.0f / 3.0f * (1.0f - std::cos(hda)) / std::sin(hda));
+							float kappa = etk::abs(4.0f / 3.0f * (1.0f - etk::cos(hda)) / etk::sin(hda));
 						#else
 							float kappa = fabs(4.0f / 3.0f * (1.0f - cosf(hda)) / sinf(hda));
 						#endif
@@ -460,7 +460,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						for (int32_t iii=0; iii<=ndivs; ++iii) {
 							float a = theta1 + deltaTheta * (float(iii)/(float)ndivs);
 							#ifndef __STDCPP_LLVM__
-								delta = vec2(std::cos(a), std::sin(a));
+								delta = vec2(etk::cos(a), etk::sin(a));
 							#else
 								delta = vec2(cosf(a), sinf(a));
 							#endif

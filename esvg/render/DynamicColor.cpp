@@ -82,7 +82,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 				ratio -= float(int32_t(ratio));
 				if (ratio <0.0f) {
 					#ifndef __STDCPP_LLVM__
-						ratio = 1.0f-std::abs(ratio);
+						ratio = 1.0f-etk::abs(ratio);
 					#else
 						ratio = 1.0f-abs(ratio);
 					#endif
@@ -123,7 +123,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 				break;
 			case spreadMethod_reflect:
 				#ifndef __STDCPP_LLVM__
-					ratio = std::abs(ratio);
+					ratio = etk::abs(ratio);
 				#else
 					ratio = abs(ratio);
 				#endif
@@ -136,7 +136,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 				ratio -= float(int32_t(ratio));
 				if (ratio <0.0f) {
 					#ifndef __STDCPP_LLVM__
-						ratio = 1.0f-std::abs(ratio);
+						ratio = 1.0f-etk::abs(ratio);
 					#else
 						ratio = 1.0f-abs(ratio);
 					#endif
@@ -190,8 +190,8 @@ static etk::Pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 		distToIntersection = _radius;
 	} else {
 		#ifndef __STDCPP_LLVM__
-			distToCenter = std::sqrt(distToCenter);
-			distToIntersection = std::sqrt(_radius * _radius - distToCenter * distToCenter);
+			distToCenter = etk::sqrt(distToCenter);
+			distToIntersection = etk::sqrt(_radius * _radius - distToCenter * distToCenter);
 		#else
 			distToCenter = sqrtf(distToCenter);
 			distToIntersection = sqrtf(_radius * _radius - distToCenter * distToCenter);
@@ -274,7 +274,7 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec
 			ratio -= float(int32_t(ratio));
 			if (ratio <0.0f) {
 				#ifndef __STDCPP_LLVM__
-					ratio = 1.0f-std::abs(ratio);
+					ratio = 1.0f-etk::abs(ratio);
 				#else
 					ratio = 1.0f-abs(ratio);
 				#endif
