@@ -35,13 +35,13 @@ esvg::Document::~Document() {
 void esvg::Document::displayDebug() {
 	ESVG_DEBUG("Main SVG: size=" << m_size);
 	ESVG_DEBUG("    refs:");
-	for (int32_t iii=0; iii<m_refList.size(); iii++) {
+	for (size_t iii=0; iii<m_refList.size(); iii++) {
 		if (m_refList[iii] != nullptr) {
 			m_refList[iii]->display(2);
 		}
 	}
 	ESVG_DEBUG("    Nodes:");
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
+	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->display(2);
 		}
@@ -50,7 +50,7 @@ void esvg::Document::displayDebug() {
 
 
 void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
-	for (int32_t iii=0; iii<m_subElementList.size(); iii++) {
+	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
 		if (m_subElementList[iii] != nullptr) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
 		}

@@ -67,7 +67,7 @@ void esvg::render::Weight::set(const ivec2& _pos, float _newColor) {
 void esvg::render::Weight::set(int32_t _posY, const esvg::render::Scanline& _data) {
 	if (    _posY>=0
 	     && _posY<m_size.y()) {
-		for (size_t xxx=0; xxx<m_size.x(); ++xxx) {
+		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
 			m_data[xxx+_posY*m_size.x()] = _data.get(xxx);
 		}
 	}
@@ -76,7 +76,7 @@ void esvg::render::Weight::set(int32_t _posY, const esvg::render::Scanline& _dat
 void esvg::render::Weight::append(int32_t _posY, const esvg::render::Scanline& _data) {
 	if (    _posY>=0
 	     && _posY<m_size.y()) {
-		for (size_t xxx=0; xxx<m_size.x(); ++xxx) {
+		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
 			m_data[xxx+_posY*m_size.x()] += _data.get(xxx);
 		}
 	}

@@ -116,7 +116,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 					m_listElement.moveTo(relative,
 					                     vec2(listDot[0], listDot[1]));
 				}
-				for(int32_t iii=2; iii<listDot.size(); iii+=2) {
+				for (size_t iii=2; iii<listDot.size(); iii+=2) {
 					m_listElement.lineTo(relative,
 					                     vec2(listDot[iii], listDot[iii+1]));
 				}
@@ -129,7 +129,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
+				for (size_t iii=0; iii<listDot.size(); iii+=2) {
 					m_listElement.lineTo(relative,
 					                     vec2(listDot[iii], listDot[iii+1]));
 				}
@@ -143,7 +143,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
+				for (size_t iii=0; iii<listDot.size(); iii+=1) {
 					m_listElement.lineToV(relative,
 					                      listDot[iii]);
 				}
@@ -153,11 +153,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'H': // Horizantal Line to (absolute)
 				// 1 Element ...
-				if(listDot.size() == 0) {
+				if (listDot.size() == 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=1) {
+				for (size_t iii=0; iii<listDot.size(); iii+=1) {
 					m_listElement.lineToH(relative,
 					                      listDot[iii]);
 				}
@@ -167,11 +167,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'Q': // Quadratic Bezier curve (absolute)
 				// 4 Elements ...
-				if(listDot.size()%4 != 0) {
+				if (listDot.size()%4 != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
+				for (size_t iii=0; iii<listDot.size(); iii+=4) {
 					m_listElement.bezierCurveTo(relative,
 					                            vec2(listDot[iii],listDot[iii+1]),
 					                            vec2(listDot[iii+2],listDot[iii+3]));
@@ -182,11 +182,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'T': // smooth quadratic Bezier curve to (absolute)
 				// 2 Elements ...
-				if(listDot.size()%2 != 0) {
+				if (listDot.size()%2 != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=2) {
+				for (size_t iii=0; iii<listDot.size(); iii+=2) {
 					m_listElement.bezierSmoothCurveTo(relative,
 					                                  vec2(listDot[iii],listDot[iii+1]));
 				}
@@ -196,11 +196,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'C': // curve to (absolute)
 				// 6 Elements ...
-				if(listDot.size()%6 != 0) {
+				if (listDot.size()%6 != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=6) {
+				for (size_t iii=0; iii<listDot.size(); iii+=6) {
 					m_listElement.curveTo(relative,
 					                      vec2(listDot[iii],listDot[iii+1]),
 					                      vec2(listDot[iii+2],listDot[iii+3]),
@@ -212,11 +212,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'S': // smooth curve to (absolute)
 				// 4 Elements ...
-				if(listDot.size()%4 != 0) {
+				if (listDot.size()%4 != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=4) {
+				for (size_t iii=0; iii<listDot.size(); iii+=4) {
 					m_listElement.smoothCurveTo(relative,
 					                            vec2(listDot[iii],listDot[iii+1]),
 					                            vec2(listDot[iii+2],listDot[iii+3]));
@@ -227,11 +227,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'A': // elliptical Arc (absolute)
 				// 7 Elements ...
-				if(listDot.size()%7 != 0) {
+				if (listDot.size()%7 != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				for(int32_t iii=0; iii<listDot.size(); iii+=7) {
+				for (size_t iii=0; iii<listDot.size(); iii+=7) {
 					bool largeArcFlag = true;
 					bool sweepFlag = true;
 					if (listDot[iii+3] == 0.0f) {
@@ -252,7 +252,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				relative = true;
 			case 'Z': // closepath (absolute)
 				// 0 Element ...
-				if(listDot.size() != 0) {
+				if (listDot.size() != 0) {
 					ESVG_WARNING("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
