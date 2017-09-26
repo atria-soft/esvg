@@ -6,6 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
+#include <etk/Stream.hpp>
 
 namespace esvg {
 	enum gradientUnits {
