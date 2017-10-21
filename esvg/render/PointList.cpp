@@ -39,7 +39,7 @@ void esvg::render::PointList::display() {
 	ESVG_VERBOSE(" Display list of points : size=" << m_data.size());
 	for (auto &it : m_data) {
 		ESVG_VERBOSE("    Find List " << it.size() << " members");
-		for (int32_t iii=0;
+		for (size_t iii=0;
 		     iii < it.size();
 		     ++iii) {
 			switch (it[iii].m_type) {

@@ -8,8 +8,7 @@
 #include <esvg/debug.hpp>
 
 esvg::render::Scanline::Scanline(size_t _size) {
-	float tmp(0);
-	m_data.resize(_size, tmp);
+	m_data.resize(_size, 0.0f);
 }
 
 size_t esvg::render::Scanline::size() const {
@@ -23,16 +22,16 @@ void esvg::render::Scanline::clear(float _fill) {
 }
 
 float esvg::render::Scanline::get(int32_t _pos) const {
-	if(    _pos>=0
-	    && _pos<m_data.size()) {
+	if(    _pos >= 0
+	    && size_t(_pos) < m_data.size()) {
 		return m_data[_pos];
 	}
 	return 0;
 }
 
 void esvg::render::Scanline::set(int32_t _pos, float _newColor) {
-	if(    _pos>=0
-	    && _pos<m_data.size()) {
+	if(    _pos >= 0
+	    && size_t(_pos) < m_data.size()) {
 		m_data[_pos] = _newColor;
 	}
 }

@@ -200,7 +200,7 @@ etk::Pair<float, enum esvg::distance> esvg::Base::parseLength2(const etk::String
 	ESVG_VERBOSE(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.to<float>();
 	etk::String unit;
-	for (int32_t iii=0; iii<_dataInput.size(); ++iii) {
+	for (size_t iii=0; iii<_dataInput.size(); ++iii) {
 		if(    (_dataInput[iii]>='0' && _dataInput[iii]<='9')
 		    || _dataInput[iii]=='+'
 		    || _dataInput[iii]=='-'

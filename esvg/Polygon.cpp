@@ -64,7 +64,7 @@ void esvg::Polygon::display(int32_t _spacing) {
 esvg::render::Path esvg::Polygon::createPath() {
 	esvg::render::Path out;
 	out.moveTo(false, m_listPoint[0]);
-	for( int32_t iii=1; iii< m_listPoint.size(); iii++) {
+	for(size_t iii=1; iii< m_listPoint.size(); iii++) {
 		out.lineTo(false, m_listPoint[iii]);
 	}
 	out.close();

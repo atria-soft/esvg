@@ -49,7 +49,7 @@ etk::Pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
 void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList& _listPoint) {
 	for (auto &it : _listPoint.m_data) {
 		// Build Segments
-		for (int32_t iii=0, jjj=it.size()-1;
+		for (size_t iii=0, jjj=it.size()-1;
 		     iii < it.size();
 		     jjj = iii++) {
 			addSegment(it[jjj], it[iii]);
@@ -137,10 +137,10 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 		//                   .       *   *       .              * * * * * * * * * * * * *    
 		//                         *       *                                                 
 		//                       *           *                                               
-		for (int32_t idPevious=itListPoint.size()-1, idCurrent=0, idNext=1;
-		     idCurrent < itListPoint.size();
+		for (int64_t idPevious=itListPoint.size()-1, idCurrent=0, idNext=1;
+		     idCurrent < int64_t(itListPoint.size());
 		     idPevious = idCurrent++, idNext++) {
-			if (idNext == itListPoint.size()) {
+			if (idNext == int64_t(itListPoint.size())) {
 				idNext = 0;
 			}
 			if (    itListPoint[idCurrent].m_type == esvg::render::Point::type::join
@@ -149,7 +149,7 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					ESVG_ERROR("an error occure a previous ID is < 0.... ");
 					continue;
 				}
-				if (idNext >= itListPoint.size()) {
+				if (idNext >= int64_t(itListPoint.size())) {
 					ESVG_ERROR("an error occure a next ID is >= nbPoint len .... ");
 					continue;
 				}
