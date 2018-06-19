@@ -57,11 +57,11 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            const esvg::render::Weight& _weightStroke,
                            ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
-	if (_colorFill != nullptr) {
+	if (_colorFill != null) {
 		//_colorFill->setViewPort(etk::Pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorFill->generate(m_document);
 	}
-	if (_colorStroke != nullptr) {
+	if (_colorStroke != null) {
 		//_colorStroke->setViewPort(etk::Pair<vec2, vec2>(vec2(0,0), vec2(sizeX, sizeY)));
 		_colorStroke->generate(m_document);
 	}
@@ -74,12 +74,12 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			// calculate merge of stroke and fill value:
 			etk::Color<float,4> intermediateColorFill(etk::color::none);
 			etk::Color<float,4> intermediateColorStroke(etk::color::none);
-			if (    _colorFill != nullptr
+			if (    _colorFill != null
 			     && valueFill != 0.0f) {
 				intermediateColorFill = _colorFill->getColor(pos);
 				intermediateColorFill.setA(intermediateColorFill.a()*valueFill);
 			}
-			if (    _colorStroke != nullptr
+			if (    _colorStroke != null
 			     && valueStroke != 0.0f) {
 				intermediateColorStroke = _colorStroke->getColor(pos);
 				intermediateColorStroke.setA(intermediateColorStroke.a()*valueStroke);
@@ -101,7 +101,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 	#ifdef DEBUG
 		// display the gradient position:
 		ememory::SharedPtr<esvg::render::DynamicColorSpecial> tmpColor = ememory::dynamicPointerCast<esvg::render::DynamicColorSpecial>(_colorFill);
-		if (tmpColor != nullptr) {
+		if (tmpColor != null) {
 			esvg::render::SegmentList listSegment;
 			// Display bounding box
 			listSegment.addSegment(esvg::render::Point(tmpColor->m_viewPort.first),

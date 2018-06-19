@@ -36,13 +36,13 @@ void esvg::Document::displayDebug() {
 	ESVG_DEBUG("Main SVG: size=" << m_size);
 	ESVG_DEBUG("    refs:");
 	for (size_t iii=0; iii<m_refList.size(); iii++) {
-		if (m_refList[iii] != nullptr) {
+		if (m_refList[iii] != null) {
 			m_refList[iii]->display(2);
 		}
 	}
 	ESVG_DEBUG("    Nodes:");
 	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (m_subElementList[iii] != nullptr) {
+		if (m_subElementList[iii] != null) {
 			m_subElementList[iii]->display(2);
 		}
 	}
@@ -51,7 +51,7 @@ void esvg::Document::displayDebug() {
 
 void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (m_subElementList[iii] != nullptr) {
+		if (m_subElementList[iii] != null) {
 			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
 		}
 	}
@@ -316,7 +316,7 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 		} else {
 			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 		}
-		if (elementParser == nullptr) {
+		if (elementParser == null) {
 			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
@@ -355,10 +355,10 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _name) {
 	if (_name == "") {
 		ESVG_ERROR("request a reference with no name ... ");
-		return nullptr;
+		return null;
 	}
 	for (auto &it : m_refList) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		if (it->getId() == _name) {
@@ -366,7 +366,7 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _
 		}
 	}
 	ESVG_ERROR("Can not find reference name : '" << _name << "'");
-	return nullptr;
+	return null;
 }
 
 etk::Vector<etk::Vector<vec2>> esvg::Document::getLines(vec2 _size) {
@@ -393,7 +393,7 @@ void esvg::Document::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                      int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::Document");
 	for (auto &it : m_subElementList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
 		}
 	}

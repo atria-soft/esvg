@@ -302,18 +302,18 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec
 
 
 void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
-	if (_document == nullptr) {
-		ESVG_ERROR("Get nullptr input for document");
+	if (_document == null) {
+		ESVG_ERROR("Get null input for document");
 		return;
 	}
 	ememory::SharedPtr<esvg::Base> base = _document->getReference(m_colorName);
-	if (base == nullptr) {
+	if (base == null) {
 		ESVG_ERROR("Can not get base : '" << m_colorName << "'");
 		return;
 	}
 	// Now we can know if we use linear or radial gradient ...
 	ememory::SharedPtr<esvg::LinearGradient> gradient = ememory::dynamicPointerCast<esvg::LinearGradient>(base);
-	if (gradient != nullptr) {
+	if (gradient != null) {
 		m_linear = true;
 		ESVG_VERBOSE("get for color linear:");
 		gradient->display(2);
@@ -361,7 +361,7 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 	} else {
 		m_linear = false;
 		ememory::SharedPtr<esvg::RadialGradient> gradient = ememory::dynamicPointerCast<esvg::RadialGradient>(base);
-		if (gradient == nullptr) {
+		if (gradient == null) {
 			ESVG_ERROR("Can not cast in a linear gradient: '" << m_colorName << "' ==> wrong type");
 			return;
 		}
@@ -443,7 +443,7 @@ ememory::SharedPtr<esvg::render::DynamicColor> esvg::render::createColor(etk::Pa
 	// Check if need to create a color:
 	if (    _color.first.a() == 0x00
 	     && _color.second == "") {
-	     return nullptr;
+	     return null;
 	}
 	if (_color.second != "") {
 		return ememory::makeShared<esvg::render::DynamicColorSpecial>(_color.second, _mtx);

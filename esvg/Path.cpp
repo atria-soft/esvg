@@ -21,17 +21,17 @@ esvg::Path::~Path() {
 // return the next char position ... (after 'X' or NULL)
 const char * extractCmd(const char* _input, char& _cmd, etk::Vector<float>& _outputList) {
 	if (*_input == '\0') {
-		return nullptr;
+		return null;
 	}
 	_outputList.clear();
 	_cmd = '\0';
-	const char * outputPointer = nullptr;
+	const char * outputPointer = null;
 	if (!(    (    _input[0] <= 'Z'
 	            && _input[0] >= 'A')
 	       || (    _input[0] <= 'z'
 	            && _input[0] >= 'a') ) ) {
 		ESVG_ERROR("Error in the SVG Path : \"" << _input << "\"");
-		return nullptr;
+		return null;
 	}
 	_cmd = _input[0];
 	ESVG_VERBOSE("Find command : " << _cmd);
@@ -100,7 +100,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	const char* elementXML = elementXML1.c_str();
 	
 	for( const char *sss=extractCmd(elementXML, command, listDot);
-	     sss != nullptr;
+	     sss != null;
 	     sss=extractCmd(sss, command, listDot) ) {
 		bool relative = false;
 		switch(command) {
@@ -291,7 +291,7 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
 	}
 	// Check if we need to display background
-	if (colorFill != nullptr) {
+	if (colorFill != null) {
 		listSegmentFill.createSegmentList(listPoints);
 		colorFill->setViewPort(listSegmentFill.getViewPort());
 		listSegmentFill.applyMatrix(mtx);
@@ -299,7 +299,7 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 		tmpFill.generate(_myRenderer.getSize(), _myRenderer.getNumberSubScanLine(), listSegmentFill);
 	}
 	// check if we need to display stroke:
-	if (colorStroke != nullptr) {
+	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
 		                                          m_paint.strokeWidth,
 		                                          m_paint.lineCap,

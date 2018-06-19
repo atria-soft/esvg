@@ -89,7 +89,7 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 	// Check if we need to display background
 	// No background ...
 	// check if we need to display stroke:
-	if (colorStroke != nullptr) {
+	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
 		                                          m_paint.strokeWidth,
 		                                          m_paint.lineCap,

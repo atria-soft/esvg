@@ -151,19 +151,19 @@ const etk::Vector<etk::Pair<float, etk::Color<float,4>>>& esvg::LinearGradient::
 	if (m_href == "") {
 		return m_data;
 	}
-	if (_document == nullptr) {
-		ESVG_ERROR("Get nullptr input for document");
+	if (_document == null) {
+		ESVG_ERROR("Get null input for document");
 		return m_data;
 	}
 	ememory::SharedPtr<esvg::Base> base = _document->getReference(m_href);
-	if (base == nullptr) {
+	if (base == null) {
 		ESVG_ERROR("Can not get base : '" << m_href << "'");
 		return m_data;
 	}
 	ememory::SharedPtr<esvg::RadialGradient> gradientR = ememory::dynamicPointerCast<esvg::RadialGradient>(base);
-	if (gradientR == nullptr) {
+	if (gradientR == null) {
 		ememory::SharedPtr<esvg::LinearGradient> gradientL = ememory::dynamicPointerCast<esvg::LinearGradient>(base);
-		if (gradientL == nullptr) {
+		if (gradientL == null) {
 			ESVG_ERROR("Can not cast in a linear/radial gradient: '" << m_href << "' ==> wrong type");
 			return m_data;
 		}

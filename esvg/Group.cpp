@@ -76,7 +76,7 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 		} else {
 			ESVG_ERROR("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
-		if (elementParser == nullptr) {
+		if (elementParser == null) {
 			ESVG_ERROR("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
@@ -98,7 +98,7 @@ void esvg::Group::display(int32_t _spacing) {
 	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second
 	                                << " stroke-width=" << m_paint.strokeWidth );
 	for (auto &it : m_subElementList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->display(_spacing+1);
 		}
 	}
@@ -108,7 +108,7 @@ void esvg::Group::display(int32_t _spacing) {
 void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW esvg::group");
 	for (auto &it : m_subElementList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->draw(_myRenderer, _basicTrans, _level+1);
 		}
 	}
@@ -121,7 +121,7 @@ void esvg::Group::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
                                   int32_t _level) {
 	ESVG_VERBOSE(spacingDist(_level) << "DRAW shape esvg::group");
 	for (auto &it : m_subElementList) {
-		if (it != nullptr) {
+		if (it != null) {
 			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
 		}
 	}

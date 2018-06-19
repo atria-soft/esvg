@@ -113,7 +113,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
 	}
 	// Check if we need to display background
-	if (colorFill != nullptr) {
+	if (colorFill != null) {
 		listSegmentFill.createSegmentList(listPoints);
 		colorFill->setViewPort(listSegmentFill.getViewPort());
 		listSegmentFill.applyMatrix(mtx);
@@ -123,7 +123,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 		                 listSegmentFill);
 	}
 	// check if we need to display stroke:
-	if (colorStroke != nullptr) {
+	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
 		                                          m_paint.strokeWidth,
 		                                          m_paint.lineCap,

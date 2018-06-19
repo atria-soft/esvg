@@ -71,7 +71,7 @@ static const char* spacingDist(int32_t _spacing) {
 void esvg::render::Path::display(int32_t _spacing) {
 	ESVG_DEBUG(spacingDist(_spacing) << "Path");
 	for(auto &it : m_listElement) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		ESVG_DEBUG(spacingDist(_spacing+1) << *it);
@@ -132,7 +132,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 	bool PathStart = false;
 	// Foreach element, we move in the path:
 	for(auto &it : m_listElement) {
-		if (it == nullptr) {
+		if (it == null) {
 			continue;
 		}
 		ESVG_VERBOSE(spacingDist(_level+1) << " Draw : " << *it);
