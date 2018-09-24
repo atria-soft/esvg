@@ -6,6 +6,7 @@
 
 #include <esvg/render/Weight.hpp>
 #include <esvg/debug.hpp>
+#include <etk/algorithm.hpp>
 
 esvg::render::Weight::Weight() :
   m_size(0,0)  {
@@ -145,7 +146,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			}
 			ESVG_VERBOSE("        List position " << listPosition.size());
 			// now we order position of the xPosition:
-			listPosition.sort(0, listPosition.size(), sortXPosFunction);
+			etk::algorithm::quickSort(listPosition, sortXPosFunction);
 			// move through all element in the point:
 			int32_t lastState = 0;
 			float currentValue = 0.0f;

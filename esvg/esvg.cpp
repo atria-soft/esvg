@@ -20,7 +20,7 @@
 #include <esvg/RadialGradient.hpp>
 
 esvg::Document::Document() {
-	m_fileName = "";
+	m_uri = "";
 	m_version = "0.0";
 	m_loadOK = false;
 	m_size.setValue(0,0);
@@ -58,10 +58,10 @@ void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 }
 
 // FOR TEST only ...
-void esvg::Document::generateAnImage(const etk::String& _fileName, bool _visualDebug) {
-	generateAnImage(m_size, _fileName, _visualDebug);
+void esvg::Document::generateAnImage(const etk::Uri& _uri, bool _visualDebug) {
+	generateAnImage(m_size, _uri, _visualDebug);
 }
-void esvg::Document::generateAnImage(const ivec2& _size, const etk::String& _fileName, bool _visualDebug) {
+void esvg::Document::generateAnImage(const ivec2& _size, const etk::Uri& _uri, bool _visualDebug) {
 	ivec2 sizeRender = _size;
 	if (sizeRender.x() <= 0) {
 		sizeRender.setX(m_size.x());
@@ -78,12 +78,12 @@ void esvg::Document::generateAnImage(const ivec2& _size, const etk::String& _fil
 	
 	draw(*renderedElement, basicTrans);
 	
-	if (etk::end_with(_fileName, ".ppm") == true) {
-		renderedElement->writePPM(_fileName);
-	} else if (etk::end_with(_fileName, ".bmp") == true) {
-		renderedElement->writeBMP(_fileName);
+	if (_uri.getPath().getExtention() == "ppm") {
+		renderedElement->writePPM(_uri);
+	} else if (_uri.getPath().getExtention() == "bmp") {
+		renderedElement->writeBMP(_uri);
 	} else {
-		ESVG_ERROR("Can not store with this extention : " << _fileName << " not in .bmp/.ppm");
+		ESVG_ERROR("Can not store with this extention : " << _uri << " not in .bmp/.ppm");
 	}
 }
 
@@ -140,7 +140,7 @@ etk::Vector<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(ivec2& _size
 }
 
 void esvg::Document::clear() {
-	m_fileName = "";
+	m_uri = "";
 	m_version = "0.0";
 	m_loadOK = true;
 	m_paint.clear();
@@ -152,18 +152,18 @@ bool esvg::Document::parse(const etk::String& _data) {
 	clear();
 	exml::Document doc;
 	if (doc.parse(_data) == false) {
-		ESVG_ERROR("Error occured when loading SVG: " << m_fileName);
+		ESVG_ERROR("Error occured when loading SVG: " << m_uri);
 		m_loadOK = false;
 		return m_loadOK;
 	}
 	if (doc.nodes.size() == 0) {
-		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_fileName << "'");
+		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_uri << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
 	exml::Element root = doc.nodes["svg"];
 	if (root.exist() == false) {
-		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_fileName << "'");
+		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_uri << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
@@ -176,23 +176,23 @@ bool esvg::Document::generate(etk::String& _data) {
 	return false;
 }
 
-bool esvg::Document::load(const etk::String& _file) {
+bool esvg::Document::load(const etk::Uri& _uri) {
 	clear();
-	m_fileName = _file;
+	m_uri = _uri;
 	exml::Document doc;
-	if (doc.load(m_fileName) == false) {
-		ESVG_ERROR("Error occured when loading SVG : " << m_fileName);
+	if (doc.load(m_uri) == false) {
+		ESVG_ERROR("Error occured when loading SVG : " << m_uri);
 		m_loadOK = false;
 		return m_loadOK;
 	}
 	if (doc.nodes.size() == 0) {
-		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_fileName << "'");
+		ESVG_ERROR("(l ?) No nodes in the SVG file ... '" << m_uri << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
 	exml::Element root = doc.nodes["svg"];
 	if (root.exist() == false) {
-		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_fileName << "'");
+		ESVG_ERROR("(l ?) main node not find: 'svg' in '" << m_uri << "'");
 		m_loadOK = false;
 		return m_loadOK;
 	}
@@ -201,7 +201,7 @@ bool esvg::Document::load(const etk::String& _file) {
 	return m_loadOK;
 }
 
-bool esvg::Document::store(const etk::String& _file) {
+bool esvg::Document::store(const etk::Uri& _uri) {
 	ESVG_TODO("not implemented store in SVG...");
 	return false;
 }

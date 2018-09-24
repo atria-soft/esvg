@@ -15,8 +15,8 @@ TEST(TestCircle, fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCircle_fill.svg", data);
-	doc.generateAnImage("TestCircle_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCircle_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestCircle_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestCircle, stroke) {
@@ -26,8 +26,8 @@ TEST(TestCircle, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCircle_stroke.svg", data);
-	doc.generateAnImage("TestCircle_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCircle_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestCircle_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestCircle, fill_and_stroke) {
@@ -37,6 +37,6 @@ TEST(TestCircle, fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCircle_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestCircle_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCircle_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestCircle_fill_and_stroke.bmp"), g_visualDebug);
 }

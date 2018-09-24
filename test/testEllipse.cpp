@@ -15,8 +15,8 @@ TEST(TestEllipse, fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestEllipse_fill.svg", data);
-	doc.generateAnImage("TestEllipse_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestEllipse_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestEllipse_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestEllipse, stroke) {
@@ -26,8 +26,8 @@ TEST(TestEllipse, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestEllipse_stroke.svg", data);
-	doc.generateAnImage("TestEllipse_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestEllipse_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestEllipse_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestEllipse, fill_and_stroke) {
@@ -37,7 +37,7 @@ TEST(TestEllipse, fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestEllipse_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestEllipse_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestEllipse_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestEllipse_fill_and_stroke.bmp"), g_visualDebug);
 }
 

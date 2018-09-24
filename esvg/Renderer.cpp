@@ -6,7 +6,8 @@
 
 #include <esvg/debug.hpp>
 #include <esvg/Renderer.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/Uri.hpp>
+#include <etk/uri/provider/provider.hpp>
 
 esvg::Renderer::Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug) :
 #ifdef DEBUG
@@ -229,13 +230,17 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 #endif
 
 
-void esvg::Renderer::writePPM(const etk::String& _fileName) {
+void esvg::Renderer::writePPM(const etk::Uri& _uri) {
 	if (m_buffer.size() == 0) {
 		return;
 	}
-	etk::FSNode tmpFile(_fileName);
-	if(tmpFile.fileOpenWrite() == false) {
-		ESVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+	auto fileIo = etk::uri::get(_uri);
+	if (fileIo == null) {
+		ESVG_ERROR("Can not create the uri: " << _uri);
+		return;
+	}
+	if (fileIo->open(etk::io::OpenMode::Write) == false) {
+		ESVG_ERROR("Can not open (r) the file : " << _uri);
 		return;
 	}
 	int32_t sizeX = m_size.x();
@@ -247,12 +252,12 @@ void esvg::Renderer::writePPM(const etk::String& _fileName) {
 	ESVG_DEBUG("Generate ppm : " << m_size << " debug size=" << ivec2(sizeX,sizeY));
 	char tmpValue[1024];
 	sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
-	tmpFile.fileWrite(tmpValue,1,sizeof(tmpValue));
+	fileIo->write(tmpValue,1,sizeof(tmpValue));
 	for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
 		etk::Color<uint8_t,3> tmp = m_buffer[iii];
-		tmpFile.fileWrite(&tmp, 1, 3);
+		fileIo->write(&tmp, 1, 3);
 	}
-	tmpFile.fileClose();
+	fileIo->close();
 }
 #define PLOPPP
 extern "C" {
@@ -290,14 +295,17 @@ extern "C" {
 	};
 	#pragma pack(pop)
 }
-void esvg::Renderer::writeBMP(const etk::String& _fileName) {
+void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
 	if (m_buffer.size() == 0) {
 		return;
 	}
-	etk::FSNode tmpFile(_fileName);
-	
-	if(tmpFile.fileOpenWrite() == false) {
-		ESVG_ERROR("Can not find the file name=\"" << tmpFile << "\"");
+	auto fileIo = etk::uri::get(_uri);
+	if (fileIo == null) {
+		ESVG_ERROR("Can not create the uri: " << _uri);
+		return;
+	}
+	if (fileIo->open(etk::io::OpenMode::Write) == false) {
+		ESVG_ERROR("Can not open (r) the file : " << _uri);
 		return;
 	}
 	struct bitmapFileHeader fileHeader;
@@ -346,8 +354,8 @@ void esvg::Renderer::writeBMP(const etk::String& _fileName) {
 	infoHeader.biUnused[12] = 0x00000002;
 	#endif
 	// get the data : 
-	tmpFile.fileWrite(&fileHeader, sizeof(struct bitmapFileHeader), 1);
-	tmpFile.fileWrite(&infoHeader, sizeof(struct bitmapInfoHeader), 1);
+	fileIo->write(&fileHeader, sizeof(struct bitmapFileHeader), 1);
+	fileIo->write(&infoHeader, sizeof(struct bitmapInfoHeader), 1);
 	
 	uint8_t data[16];
 	for(int32_t yyy=sizeY-1; yyy>=0; --yyy) {
@@ -365,10 +373,10 @@ void esvg::Renderer::writeBMP(const etk::String& _fileName) {
 			*pointer++ = tmpColor.g();
 			*pointer++ = tmpColor.r();
 			#endif
-			tmpFile.fileWrite(data,1,4);
+			fileIo->write(data,1,4);
 		}
 	}
-	tmpFile.fileClose();
+	fileIo->close();
 }
 
 

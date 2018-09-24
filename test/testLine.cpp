@@ -15,8 +15,8 @@ TEST(TestLine, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestLine_stroke.svg", data);
-	doc.generateAnImage("TestLine_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestLine_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestLine_stroke.bmp"), g_visualDebug);
 }
 
 

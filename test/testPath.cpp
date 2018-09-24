@@ -16,8 +16,8 @@ TEST(TestPath, fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_fill.svg", data);
-	doc.generateAnImage("TestPath_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestPath, stroke) {
@@ -28,8 +28,8 @@ TEST(TestPath, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_stroke.svg", data);
-	doc.generateAnImage("TestPath_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestPath, fill_and_stroke) {
@@ -40,8 +40,8 @@ TEST(TestPath, fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestPath_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_fill_and_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestPath, curveTo) {
@@ -52,8 +52,8 @@ TEST(TestPath, curveTo) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_curveTo.svg", data);
-	doc.generateAnImage("TestPath_curveTo.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_curveTo.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_curveTo.bmp"), g_visualDebug);
 }
 
 
@@ -66,8 +66,8 @@ TEST(TestPath, smoothCurveTo) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_smoothCurveTo.svg", data);
-	doc.generateAnImage("TestPath_smoothCurveTo.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_smoothCurveTo.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_smoothCurveTo.bmp"), g_visualDebug);
 }
 
 
@@ -80,8 +80,8 @@ TEST(TestPath, bezierCurveTo) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_bezierCurveTo.svg", data);
-	doc.generateAnImage("TestPath_bezierCurveTo.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_bezierCurveTo.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_bezierCurveTo.bmp"), g_visualDebug);
 }
 
 
@@ -94,8 +94,8 @@ TEST(TestPath, bezierSmoothCurveTo) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_bezierSmoothCurveTo.svg", data);
-	doc.generateAnImage("TestPath_bezierSmoothCurveTo.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_bezierSmoothCurveTo.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_bezierSmoothCurveTo.bmp"), g_visualDebug);
 }
 
 TEST(TestPath, arc) {
@@ -114,8 +114,8 @@ TEST(TestPath, arc) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_arc.svg", data);
-	doc.generateAnImage("TestPath_arc.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_arc.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_arc.bmp"), g_visualDebug);
 }
 
 
@@ -132,6 +132,6 @@ TEST(TestPath, end_path_border_case) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPath_end_path_border_case.svg", data);
-	doc.generateAnImage("TestPath_end_path_border_case.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPath_end_path_border_case.svg"), data);
+	doc.generateAnImage(etk::Path("TestPath_end_path_border_case.bmp"), g_visualDebug);
 }

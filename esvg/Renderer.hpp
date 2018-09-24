@@ -10,6 +10,7 @@
 #include <etk/Color.hpp>
 #include <esvg/render/Weight.hpp>
 #include <esvg/render/DynamicColor.hpp>
+#include <etk/uri/uri.hpp>
 
 namespace esvg {
 	class Document;
@@ -47,8 +48,8 @@ namespace esvg {
 			void setNumberSubScanLine(int32_t _value);
 			int32_t getNumberSubScanLine() const;
 		public:
-			void writePPM(const etk::String& _fileName);
-			void writeBMP(const etk::String& _fileName);
+			void writePPM(const etk::Uri& _uri);
+			void writeBMP(const etk::Uri& _uri);
 		protected:
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:

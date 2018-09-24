@@ -8,7 +8,7 @@
 #include <etk/types.hpp>
 #include <etk/Vector.hpp>
 #include <etk/math/Vector2D.hpp>
-#include <etk/os/FSNode.hpp>
+#include <etk/uri/uri.hpp>
 
 #include <esvg/Base.hpp>
 
@@ -18,7 +18,7 @@
 namespace esvg {
 	class Document : public esvg::Base {
 		private:
-			etk::String m_fileName;
+			etk::Uri m_uri;
 			bool m_loadOK;
 			etk::String m_version;
 			etk::String m_title;
@@ -45,18 +45,18 @@ namespace esvg {
 			bool generate(etk::String& _data);
 			/**
 			 * @brief Load the file that might contain the svg
-			 * @param[in] _file Filename of the svg (compatible with etk FSNode naming)
+			 * @param[in] _uri File of the svg
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool load(const etk::String& _file);
+			bool load(const etk::Uri& _uri);
 			/**
 			 * @brief Store the SVG in the file
-			 * @param[in] _file Filename of the svg (compatible with etk FSNode naming)
+			 * @param[in] _uri File of the svg
 			 * @return false : An error occured
 			 * @return true : Parsing is OK
 			 */
-			bool store(const etk::String& _file);
+			bool store(const etk::Uri& _uri);
 		protected:
 			/**
 			 * @brief change all style in a xml atribute
@@ -72,8 +72,8 @@ namespace esvg {
 			 */
 			void displayDebug();
 			// TODO: remove this fucntion : use generic function ...
-			void generateAnImage(const etk::String& _fileName, bool _visualDebug=false);
-			void generateAnImage(const ivec2& _size, const etk::String& _fileName, bool _visualDebug=false);
+			void generateAnImage(const etk::Uri& _uri, bool _visualDebug=false);
+			void generateAnImage(const ivec2& _size, const etk::Uri& _uri, bool _visualDebug=false);
 			/**
 			 * @brief Generate Image in a specific format.
 			 * @param[in,out] _size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate

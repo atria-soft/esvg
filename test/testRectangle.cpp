@@ -15,8 +15,8 @@ TEST(TestRectangle, fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_fill.svg", data);
-	doc.generateAnImage("TestRectangle_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestRectangle, stroke) {
@@ -26,8 +26,8 @@ TEST(TestRectangle, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_stroke.svg", data);
-	doc.generateAnImage("TestRectangle_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestRectangle, fill_and_stroke) {
@@ -37,8 +37,8 @@ TEST(TestRectangle, fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestRectangle_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_fill_and_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill) {
@@ -48,8 +48,8 @@ TEST(TestRectangle, corned_fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_corned_fill.svg", data);
-	doc.generateAnImage("TestRectangle_corned_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_corned_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_corned_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestRectangle, corned_stroke) {
@@ -59,8 +59,8 @@ TEST(TestRectangle, corned_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_corned_stroke.svg", data);
-	doc.generateAnImage("TestRectangle_corned_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_corned_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_corned_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestRectangle, corned_fill_and_stroke) {
@@ -70,6 +70,6 @@ TEST(TestRectangle, corned_fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestRectangle_corned_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestRectangle_corned_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestRectangle_corned_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestRectangle_corned_fill_and_stroke.bmp"), g_visualDebug);
 }

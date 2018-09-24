@@ -23,8 +23,8 @@ TEST(TestGradientLinear, horizontal) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_horizontal.svg", data);
-	doc.generateAnImage("TestGradientLinear_horizontal.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_horizontal.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_horizontal.bmp"), g_visualDebug);
 }
 
 
@@ -43,8 +43,8 @@ TEST(TestGradientLinear, vertical) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_vertical.svg", data);
-	doc.generateAnImage("TestGradientLinear_vertical.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_vertical.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_vertical.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag1) {
@@ -62,8 +62,8 @@ TEST(TestGradientLinear, diag1) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag1.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag1.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag1.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag1.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag1Partiel) {
@@ -79,8 +79,8 @@ TEST(TestGradientLinear, diag1Partiel) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag1Partiel.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag1Partiel.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag1Partiel.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag1Partiel.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2) {
@@ -98,8 +98,8 @@ TEST(TestGradientLinear, diag2) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag2.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag2.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag2.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag2.bmp"), g_visualDebug);
 }
 
 
@@ -119,8 +119,8 @@ TEST(TestGradientLinear, diag2Rotate0) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate0.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag2Rotate0.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag2Rotate0.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag2Rotate0.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2Rotate1) {
@@ -138,8 +138,8 @@ TEST(TestGradientLinear, diag2Rotate1) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate1.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag2Rotate1.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag2Rotate1.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag2Rotate1.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2Rotate2) {
@@ -157,8 +157,8 @@ TEST(TestGradientLinear, diag2Rotate2) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag2Rotate2.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag2Rotate2.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag2Rotate2.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag2Rotate2.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, diag2scale) {
@@ -176,8 +176,8 @@ TEST(TestGradientLinear, diag2scale) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_diag2scale.svg", data);
-	doc.generateAnImage("TestGradientLinear_diag2scale.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_diag2scale.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_diag2scale.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, internalHref) {
@@ -196,8 +196,8 @@ TEST(TestGradientLinear, internalHref) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_internalHref.svg", data);
-	doc.generateAnImage("TestGradientLinear_internalHref.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_internalHref.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_internalHref.bmp"), g_visualDebug);
 }
 
 
@@ -214,8 +214,8 @@ TEST(TestGradientLinear, unitBox_spreadNone) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadNone.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitBox_spreadNone.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitBox_spreadNone.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitBox_spreadNone.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitBox_spreadPad) {
@@ -231,8 +231,8 @@ TEST(TestGradientLinear, unitBox_spreadPad) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadPad.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitBox_spreadPad.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitBox_spreadPad.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitBox_spreadPad.bmp"), g_visualDebug);
 }
 
 
@@ -249,8 +249,8 @@ TEST(TestGradientLinear, unitBox_spreadReflect) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadReflect.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitBox_spreadReflect.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitBox_spreadReflect.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitBox_spreadReflect.bmp"), g_visualDebug);
 }
 
 
@@ -267,8 +267,8 @@ TEST(TestGradientLinear, unitBox_spreadRepeat) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitBox_spreadRepeat.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitBox_spreadRepeat.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitBox_spreadRepeat.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitBox_spreadRepeat.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitUser_spreadNone) {
@@ -284,8 +284,8 @@ TEST(TestGradientLinear, unitUser_spreadNone) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadNone.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitUser_spreadNone.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitUser_spreadNone.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitUser_spreadNone.bmp"), g_visualDebug);
 }
 
 TEST(TestGradientLinear, unitUser_spreadPad) {
@@ -301,8 +301,8 @@ TEST(TestGradientLinear, unitUser_spreadPad) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadPad.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitUser_spreadPad.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitUser_spreadPad.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitUser_spreadPad.bmp"), g_visualDebug);
 }
 
 
@@ -319,8 +319,8 @@ TEST(TestGradientLinear, unitUser_spreadReflect) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadReflect.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitUser_spreadReflect.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitUser_spreadReflect.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitUser_spreadReflect.bmp"), g_visualDebug);
 }
 
 
@@ -337,7 +337,7 @@ TEST(TestGradientLinear, unitUser_spreadRepeate) {
 	                 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestGradientLinear_unitUser_spreadRepeate.svg", data);
-	doc.generateAnImage("TestGradientLinear_unitUser_spreadRepeate.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestGradientLinear_unitUser_spreadRepeate.svg"), data);
+	doc.generateAnImage(etk::Path("TestGradientLinear_unitUser_spreadRepeate.bmp"), g_visualDebug);
 }
 

@@ -168,8 +168,8 @@ TEST(TestExtern, worddown) {
 "</svg>\n");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestExtern_worddown.svg", data);
-	doc.generateAnImage("TestExtern_worddown.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestExtern_worddown.svg"), data);
+	doc.generateAnImage(etk::Path("TestExtern_worddown.bmp"), g_visualDebug);
 }
 
 

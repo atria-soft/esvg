@@ -42,6 +42,6 @@ int main(int _argc, const char *_argv[]) {
 	}
 	esvg::Document doc;
 	doc.load(inputFile);
-	doc.generateAnImage(ivec2(512, 512), inputFile + ".bmp", visualTest);
+	doc.generateAnImage(ivec2(512, 512), etk::Path(inputFile + ".bmp"), visualTest);
 }
 

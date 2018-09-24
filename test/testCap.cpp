@@ -16,8 +16,8 @@ TEST(TestCap, butt) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_butt.svg", data);
-	doc.generateAnImage("TestCap_butt.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_butt.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_butt.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, round) {
@@ -28,8 +28,8 @@ TEST(TestCap, round) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_round.svg", data);
-	doc.generateAnImage("TestCap_round.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_round.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_round.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, square) {
@@ -40,8 +40,8 @@ TEST(TestCap, square) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_square.svg", data);
-	doc.generateAnImage("TestCap_square.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_square.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_square.bmp"), g_visualDebug);
 }
 
 
@@ -53,8 +53,8 @@ TEST(TestCap, buttVert) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_buttVert.svg", data);
-	doc.generateAnImage("TestCap_buttVert.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_buttVert.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_buttVert.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, roundVert) {
@@ -65,8 +65,8 @@ TEST(TestCap, roundVert) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_roundVert.svg", data);
-	doc.generateAnImage("TestCap_roundVert.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_roundVert.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_roundVert.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, squareVert) {
@@ -77,8 +77,8 @@ TEST(TestCap, squareVert) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_squareVert.svg", data);
-	doc.generateAnImage("TestCap_squareVert.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_squareVert.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_squareVert.bmp"), g_visualDebug);
 }
 
 
@@ -91,8 +91,8 @@ TEST(TestCap, buttDiag1) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_buttDiag1.svg", data);
-	doc.generateAnImage("TestCap_buttDiag1.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_buttDiag1.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_buttDiag1.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, roundDiag1) {
@@ -103,8 +103,8 @@ TEST(TestCap, roundDiag1) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_roundDiag1.svg", data);
-	doc.generateAnImage("TestCap_roundDiag1.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_roundDiag1.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_roundDiag1.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, squareDiag1) {
@@ -115,8 +115,8 @@ TEST(TestCap, squareDiag1) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_squareDiag1.svg", data);
-	doc.generateAnImage("TestCap_squareDiag1.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_squareDiag1.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_squareDiag1.bmp"), g_visualDebug);
 }
 
 
@@ -128,8 +128,8 @@ TEST(TestCap, buttDiag2) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_buttDiag2.svg", data);
-	doc.generateAnImage("TestCap_buttDiag2.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_buttDiag2.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_buttDiag2.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, roundDiag2) {
@@ -140,8 +140,8 @@ TEST(TestCap, roundDiag2) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_roundDiag2.svg", data);
-	doc.generateAnImage("TestCap_roundDiag2.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_roundDiag2.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_roundDiag2.bmp"), g_visualDebug);
 }
 
 TEST(TestCap, squareDiag2) {
@@ -152,7 +152,7 @@ TEST(TestCap, squareDiag2) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestCap_squareDiag2.svg", data);
-	doc.generateAnImage("TestCap_squareDiag2.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestCap_squareDiag2.svg"), data);
+	doc.generateAnImage(etk::Path("TestCap_squareDiag2.bmp"), g_visualDebug);
 }
 

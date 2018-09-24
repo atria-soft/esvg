@@ -15,8 +15,8 @@ TEST(TestPolygon, fill) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPolygon_fill.svg", data);
-	doc.generateAnImage("TestPolygon_fill.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPolygon_fill.svg"), data);
+	doc.generateAnImage(etk::Path("TestPolygon_fill.bmp"), g_visualDebug);
 }
 
 TEST(TestPolygon, stroke) {
@@ -26,8 +26,8 @@ TEST(TestPolygon, stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPolygon_stroke.svg", data);
-	doc.generateAnImage("TestPolygon_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPolygon_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestPolygon_stroke.bmp"), g_visualDebug);
 }
 
 TEST(TestPolygon, fill_and_stroke) {
@@ -37,6 +37,6 @@ TEST(TestPolygon, fill_and_stroke) {
 	                 "</svg>");
 	esvg::Document doc;
 	doc.parse(data);
-	etk::FSNodeWriteAllData("TestPolygon_fill_and_stroke.svg", data);
-	doc.generateAnImage("TestPolygon_fill_and_stroke.bmp", g_visualDebug);
+	etk::uri::writeAll(etk::Path("TestPolygon_fill_and_stroke.svg"), data);
+	doc.generateAnImage(etk::Path("TestPolygon_fill_and_stroke.bmp"), g_visualDebug);
 }

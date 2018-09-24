@@ -7,6 +7,8 @@
  */
 
 #include <etk/types.hpp>
+#include <etk/uri/uri.hpp>
+
 
 #pragma once
 
