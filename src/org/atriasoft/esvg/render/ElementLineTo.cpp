@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementLineTo::ElementLineTo(bool _relative, const vec2& _pos):
+esvg::render::ElementLineTo::ElementLineTo(bool _relative, const Vector2f& _pos):
   Element(esvg::render::path_lineTo, _relative) {
 	m_pos = _pos;
 }

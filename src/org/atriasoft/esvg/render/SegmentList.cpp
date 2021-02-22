@@ -12,7 +12,7 @@ esvg::render::SegmentList::SegmentList() {
 	
 }
 #ifdef DEBUG
-	void esvg::render::SegmentList::addSegment(const vec2& _pos0, const vec2& _pos1) {
+	void esvg::render::SegmentList::addSegment(const Vector2f& _pos0, const Vector2f& _pos1) {
 		m_data.pushBack(Segment(_pos0, _pos1));
 	}
 #endif
@@ -36,8 +36,8 @@ void esvg::render::SegmentList::addSegment(const esvg::render::Point& _pos0, con
 	m_data.pushBack(Segment(_pos0.m_pos, _pos1.m_pos));
 }
 
-etk::Pair<vec2, vec2> esvg::render::SegmentList::getViewPort() {
-	etk::Pair<vec2, vec2> out(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0));
+etk::Pair<Vector2f, Vector2f> esvg::render::SegmentList::getViewPort() {
+	etk::Pair<Vector2f, Vector2f> out(Vector2f(9999999999.0,9999999999.0),Vector2f(-9999999999.0,-9999999999.0));
 	for (auto &it : m_data) {
 		out.first.setMin(it.p0);
 		out.second.setMax(it.p0);
@@ -57,10 +57,10 @@ void esvg::render::SegmentList::createSegmentList(const esvg::render::PointList&
 	}
 }
 
-static vec2 getIntersect(const vec2& _point1,
-                         const vec2& _vect1,
-                         const vec2& _point2,
-                         const vec2& _vect2) {
+static Vector2f getIntersect(const Vector2f& _point1,
+                         const Vector2f& _vect1,
+                         const Vector2f& _point2,
+                         const Vector2f& _vect2) {
 	float diviseur = _vect1.x() * _vect2.y() - _vect1.y() * _vect2.x();
 	if(diviseur != 0.0f) {
 		float mmm = (   _vect1.x() * _point1.y()
@@ -68,15 +68,15 @@ static vec2 getIntersect(const vec2& _point1,
 		              - _vect1.y() * _point1.x()
 		              + _vect1.y() * _point2.x()
 		            ) / diviseur;
-		return vec2(_point2 + _vect2 * mmm);
+		return Vector2f(_point2 + _vect2 * mmm);
 	}
 	Log.error("Get divider / 0.0f");
 	return _point2;
 }
 
-void esvg::render::SegmentList::createSegmentListStroke(const vec2& _point1,
-                                                        const vec2& _point2,
-                                                        const vec2& _center,
+void esvg::render::SegmentList::createSegmentListStroke(const Vector2f& _point1,
+                                                        const Vector2f& _point2,
+                                                        const Vector2f& _center,
                                                         float _width,
                                                         bool _isStart) {
 	int32_t nbDot = int32_t(_width);
@@ -86,9 +86,9 @@ void esvg::render::SegmentList::createSegmentListStroke(const vec2& _point1,
 	float angleToDraw = acos((_point1 - _center).safeNormalize().dot((_point2 - _center).safeNormalize()));
 	float baseAngle = angleToDraw/float(nbDot);
 	float iii;
-	vec2 axe = (_point1 - _center).safeNormalize();
-	vec2 ppp1(_point1);
-	vec2 ppp2(_point2);
+	Vector2f axe = (_point1 - _center).safeNormalize();
+	Vector2f ppp1(_point1);
+	Vector2f ppp2(_point2);
 	for (iii=baseAngle; iii<angleToDraw; iii+=baseAngle) {
 		mat2x3 tmpMat;
 		if (_isStart == true) {
@@ -96,7 +96,7 @@ void esvg::render::SegmentList::createSegmentListStroke(const vec2& _point1,
 		} else {
 			tmpMat = etk::mat2x3Rotate(iii);
 		}
-		vec2 axeRotate = tmpMat * axe;
+		Vector2f axeRotate = tmpMat * axe;
 		ppp2 =   _center
 		       + axeRotate*_width*0.5f;
 		if (_isStart == true) {
@@ -155,17 +155,17 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				}
 				//Log.debug("JOIN : id : prev/curr/next : " << idPevious << "/" << idCurrent << "/" << idNext);
 				//Log.debug("JOIN : val : prev/curr/next : " << itListPoint[idPevious].m_pos << "/" << itListPoint[idCurrent].m_pos << "/" << itListPoint[idNext].m_pos);
-				vec2 vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
+				Vector2f vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
 				//Log.debug("JOIN : vecA : " << vecA);
 				vecA.safeNormalize();
-				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
+				Vector2f vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				//Log.debug("JOIN : vecB : " << vecB);
 				vecB.safeNormalize();
-				vec2 vecC = vecA - vecB;
+				Vector2f vecC = vecA - vecB;
 				//Log.debug("JOIN : vecC : " << vecC);
-				if (vecC == vec2(0.0f, 0.0f)) {
+				if (vecC == Vector2f(0.0f, 0.0f)) {
 					// special case: 1 line ...
-					itListPoint[idCurrent].m_miterAxe = vec2(vecA.y(), vecA.x());
+					itListPoint[idCurrent].m_miterAxe = Vector2f(vecA.y(), vecA.x());
 				} else {
 					vecC.safeNormalize();
 					itListPoint[idCurrent].m_miterAxe = vecC;
@@ -174,16 +174,16 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				itListPoint[idCurrent].m_posNext = itListPoint[idNext].m_pos;
 				vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				vecB.safeNormalize();
-				itListPoint[idCurrent].m_orthoAxeNext = vec2(vecB.y(), -vecB.x());
+				itListPoint[idCurrent].m_orthoAxeNext = Vector2f(vecB.y(), -vecB.x());
 				vecB = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
 				vecB.safeNormalize();
-				itListPoint[idCurrent].m_orthoAxePrevious = vec2(vecB.y(), -vecB.x());
+				itListPoint[idCurrent].m_orthoAxePrevious = Vector2f(vecB.y(), -vecB.x());
 				//Log.debug("JOIN : miterAxe " << itListPoint[idCurrent].m_miterAxe);
 			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type::start) {
 				itListPoint[idCurrent].m_posNext = itListPoint[idNext].m_pos;
-				vec2 vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
+				Vector2f vecB = itListPoint[idNext].m_pos - itListPoint[idCurrent].m_pos;
 				vecB.safeNormalize();
-				itListPoint[idCurrent].m_miterAxe = vec2(vecB.y(), -vecB.x());
+				itListPoint[idCurrent].m_miterAxe = Vector2f(vecB.y(), -vecB.x());
 				itListPoint[idCurrent].m_orthoAxePrevious = itListPoint[idCurrent].m_miterAxe;
 				itListPoint[idCurrent].m_orthoAxeNext = itListPoint[idCurrent].m_miterAxe;
 			} else if (itListPoint[idCurrent].m_type == esvg::render::Point::type::stop) {
@@ -192,19 +192,19 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					continue;
 				}
 				itListPoint[idCurrent].m_posPrevious = itListPoint[idPevious].m_pos;
-				vec2 vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
+				Vector2f vecA = itListPoint[idCurrent].m_pos - itListPoint[idPevious].m_pos;
 				vecA.safeNormalize();
-				itListPoint[idCurrent].m_miterAxe = vec2(vecA.y(), -vecA.x());
+				itListPoint[idCurrent].m_miterAxe = Vector2f(vecA.y(), -vecA.x());
 				itListPoint[idCurrent].m_orthoAxePrevious = itListPoint[idCurrent].m_miterAxe;
 				itListPoint[idCurrent].m_orthoAxeNext = itListPoint[idCurrent].m_miterAxe;
 			} else {
-				ESVG_TODO("Unsupported type of point ....");
+				Log.todo("Unsupported type of point ....");
 			}
 		}
 		// create segment list:
 		bool haveStartLine = false;
-		vec2 leftPoint(0,0);
-		vec2 rightPoint(0,0);
+		Vector2f leftPoint(0,0);
+		Vector2f rightPoint(0,0);
 		if (itListPoint.size() > 0) {
 			if (itListPoint.front().m_type == esvg::render::Point::type::join) {
 				const esvg::render::Point& it = itListPoint.back();
@@ -227,8 +227,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					switch (_join) {
 						case esvg::join_miter:
 							{
-								vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								Vector2f left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								Vector2f right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 								// Check the miter limit:
 								float limitRight = (left - it.m_pos).length() / _width * 2.0f;
 								float limitLeft  = (right - it.m_pos).length() / _width * 2.0f;
@@ -245,8 +245,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						case esvg::join_round:
 						case esvg::join_bevel:
 							{
-								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
-								vec2 axeNext = (it.m_posNext - it.m_pos).safeNormalize();
+								Vector2f axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
+								Vector2f axeNext = (it.m_posNext - it.m_pos).safeNormalize();
 								float cross = axePrevious.cross(axeNext);
 								if (cross > 0.0f) {
 									rightPoint = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
@@ -293,8 +293,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 				case esvg::render::Point::type::interpolation:
 					{
 						Log.verbose("Find interpolation " << it.m_pos);
-						vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-						vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+						Vector2f left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+						Vector2f right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 						//Draw from previous point:
 						addSegment(leftPoint, left);
 						Log.verbose("    segment :" << leftPoint << " -> " << left);
@@ -309,8 +309,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 					switch (_join) {
 						case esvg::join_miter:
 							{
-								vec2 left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-								vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								Vector2f left  = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+								Vector2f right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
 								// Check the miter limit:
 								float limitRight = (left - it.m_pos).length() / _width * 2.0f;
 								float limitLeft  = (right - it.m_pos).length() / _width * 2.0f;
@@ -333,14 +333,14 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 						case esvg::join_round:
 						case esvg::join_bevel:
 							{
-								vec2 axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
-								vec2 axeNext = (it.m_posNext - it.m_pos).safeNormalize();
+								Vector2f axePrevious = (it.m_pos-it.m_posPrevious).safeNormalize();
+								Vector2f axeNext = (it.m_posNext - it.m_pos).safeNormalize();
 								float cross = axePrevious.cross(axeNext);
 								if (cross > 0.0f) {
-									vec2 right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-									vec2 left1 =   it.m_pos
+									Vector2f right = getIntersect(rightPoint, it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									Vector2f left1 =   it.m_pos
 									             + it.m_orthoAxePrevious*_width*0.5f;
-									vec2 left2 =   it.m_pos
+									Vector2f left2 =   it.m_pos
 									             + it.m_orthoAxeNext*_width*0.5f;
 									//Draw from previous point:
 									addSegment(leftPoint, left1);
@@ -361,10 +361,10 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 									leftPoint = left2;
 									rightPoint = right;
 								} else {
-									vec2 left   = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
-									vec2 right1 =   it.m_pos
+									Vector2f left   = getIntersect(leftPoint,  it.m_pos-it.m_posPrevious, it.m_pos, it.m_miterAxe);
+									Vector2f right1 =   it.m_pos
 									              - it.m_orthoAxePrevious*_width*0.5f;
-									vec2 right2 =   it.m_pos
+									Vector2f right2 =   it.m_pos
 									              - it.m_orthoAxeNext*_width*0.5f;//Draw from previous point:
 									addSegment(leftPoint, left);
 									Log.verbose("    segment :" << leftPoint << " -> " << left);
@@ -393,8 +393,8 @@ void esvg::render::SegmentList::createSegmentListStroke(esvg::render::PointList&
 	}
 }
 
-void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
-                                               vec2& _rightPoint,
+void esvg::render::SegmentList::startStopPoint(Vector2f& _leftPoint,
+                                               Vector2f& _rightPoint,
                                                const esvg::render::Point& _point,
                                                enum esvg::cap _cap,
                                                float _width,
@@ -402,9 +402,9 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 	switch (_cap) {
 		case esvg::cap_butt:
 			{
-				vec2 left =   _point.m_pos
+				Vector2f left =   _point.m_pos
 				            + _point.m_miterAxe*_width*0.5f;
-				vec2 right =   _point.m_pos
+				Vector2f right =   _point.m_pos
 				             - _point.m_miterAxe*_width*0.5f;
 				if (_isStart == false) {
 					//Draw from previous point:
@@ -427,9 +427,9 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 		case esvg::cap_round:
 			{
 				if (_isStart == false) {
-					vec2 left =   _point.m_pos
+					Vector2f left =   _point.m_pos
 					            + _point.m_miterAxe*_width*0.5f;
-					vec2 right =   _point.m_pos
+					Vector2f right =   _point.m_pos
 					             - _point.m_miterAxe*_width*0.5f;
 					if (_isStart == false) {
 						//Draw from previous point:
@@ -460,15 +460,15 @@ void esvg::render::SegmentList::startStopPoint(vec2& _leftPoint,
 			break;
 		case esvg::cap_square:
 			{
-				vec2 nextAxe;
+				Vector2f nextAxe;
 				if (_isStart == true) {
 					nextAxe = _point.m_posNext - _point.m_pos;
 				} else {
 					nextAxe = _point.m_posPrevious - _point.m_pos;
 				}
-				vec2 left =   _point.m_pos
+				Vector2f left =   _point.m_pos
 				            + _point.m_miterAxe*_width*0.5f;
-				vec2 right =   _point.m_pos
+				Vector2f right =   _point.m_pos
 				             - _point.m_miterAxe*_width*0.5f;
 				mat2x3 tmpMat = etk::mat2x3Translate(nextAxe.safeNormalize()*_width*-0.5f);
 				left = tmpMat*left;

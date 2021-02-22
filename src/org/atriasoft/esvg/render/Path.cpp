@@ -19,11 +19,11 @@ void esvg::render::Path::close(bool _relative) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementClose>(_relative));
 }
 
-void esvg::render::Path::moveTo(bool _relative, const vec2& _pos) {
+void esvg::render::Path::moveTo(bool _relative, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementMoveTo>(_relative, _pos));
 }
 
-void esvg::render::Path::lineTo(bool _relative, const vec2& _pos) {
+void esvg::render::Path::lineTo(bool _relative, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementLineTo>(_relative, _pos));
 }
 
@@ -35,28 +35,28 @@ void esvg::render::Path::lineToV(bool _relative, float _posY) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementLineToV>(_relative, _posY));
 }
 
-void esvg::render::Path::curveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos) {
+void esvg::render::Path::curveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementCurveTo>(_relative, _pos1, _pos2, _pos));
 }
 
-void esvg::render::Path::smoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos) {
+void esvg::render::Path::smoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementSmoothCurveTo>(_relative, _pos2, _pos));
 }
 
-void esvg::render::Path::bezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos) {
+void esvg::render::Path::bezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierCurveTo>(_relative, _pos1, _pos));
 }
 
-void esvg::render::Path::bezierSmoothCurveTo(bool _relative, const vec2& _pos) {
+void esvg::render::Path::bezierSmoothCurveTo(bool _relative, const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierSmoothCurveTo>(_relative, _pos));
 }
 
 void esvg::render::Path::ellipticTo(bool _relative,
-                                    const vec2& _radius,
+                                    const Vector2f& _radius,
                                     float _angle,
                                     bool _largeArcFlag,
                                     bool _sweepFlag,
-                                    const vec2& _pos) {
+                                    const Vector2f& _pos) {
 	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementElliptic>(_relative, _radius, _angle, _largeArcFlag, _sweepFlag, _pos));
 }
 
@@ -79,23 +79,23 @@ void esvg::render::Path::display(int32_t _spacing) {
 }
 
 
-void interpolateCubicBezier(etk::Vector<esvg::render::Point>& _listPoint,
+void interpolateCubicBezier(List<esvg::render::Point>& _listPoint,
                             int32_t _recurtionMax,
                             float _threshold,
-                            vec2 _pos1,
-                            vec2 _pos2,
-                            vec2 _pos3,
-                            vec2 _pos4,
+                            Vector2f _pos1,
+                            Vector2f _pos2,
+                            Vector2f _pos3,
+                            Vector2f _pos4,
                             int32_t _level,
                             enum esvg::render::Point::type _type) {
 	if (_level > _recurtionMax) {
 		return;
 	}
-	vec2 pos12 = (_pos1+_pos2)*0.5f;
-	vec2 pos23 = (_pos2+_pos3)*0.5f;
-	vec2 pos34 = (_pos3+_pos4)*0.5f;
+	Vector2f pos12 = (_pos1+_pos2)*0.5f;
+	Vector2f pos23 = (_pos2+_pos3)*0.5f;
+	Vector2f pos34 = (_pos3+_pos4)*0.5f;
 	
-	vec2 delta = _pos4 - _pos1;
+	Vector2f delta = _pos4 - _pos1;
 	#ifndef __STDCPP_LLVM__
 		float distance2 = etk::abs(((_pos2.x() - _pos4.x()) * delta.y() - (_pos2.y() - _pos4.y()) * delta.x() ));
 		float distance3 = etk::abs(((_pos3.x() - _pos4.x()) * delta.y() - (_pos3.y() - _pos4.y()) * delta.x() ));
@@ -108,15 +108,15 @@ void interpolateCubicBezier(etk::Vector<esvg::render::Point>& _listPoint,
 		_listPoint.pushBack(esvg::render::Point(_pos4, _type) );
 		return;
 	}
-	vec2 pos123 = (pos12+pos23)*0.5f;
-	vec2 pos234 = (pos23+pos34)*0.5f;
-	vec2 pos1234 = (pos123+pos234)*0.5f;
+	Vector2f pos123 = (pos12+pos23)*0.5f;
+	Vector2f pos234 = (pos23+pos34)*0.5f;
+	Vector2f pos1234 = (pos123+pos234)*0.5f;
 	
 	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, _pos1, pos12, pos123, pos1234, _level+1, esvg::render::Point::type::interpolation);
 	interpolateCubicBezier(_listPoint, _recurtionMax, _threshold, pos1234, pos234, pos34, _pos4, _level+1, _type);
 }
 
-static float vectorAngle(vec2 _uuu, vec2 _vvv) {
+static float vectorAngle(Vector2f _uuu, Vector2f _vvv) {
 	_uuu.safeNormalize();
 	_vvv.safeNormalize();
 	return atan2(_uuu.cross(_vvv), _uuu.dot(_vvv));
@@ -125,9 +125,9 @@ static float vectorAngle(vec2 _uuu, vec2 _vvv) {
 esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, int32_t _recurtionMax, float _threshold) {
 	Log.verbose(spacingDist(_level) << "Generate List Points ... from a path");
 	esvg::render::PointList out;
-	etk::Vector<esvg::render::Point> tmpListPoint;
-	vec2 lastPosition(0.0f, 0.0f);
-	vec2 lastAngle(0.0f, 0.0f);
+	List<esvg::render::Point> tmpListPoint;
+	Vector2f lastPosition(0.0f, 0.0f);
+	Vector2f lastAngle(0.0f, 0.0f);
 	int32_t lastPointId = -1;
 	bool PathStart = false;
 	// Foreach element, we move in the path:
@@ -147,7 +147,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						tmpListPoint.clear();
 					}
 				}
-				lastAngle = vec2(0.0f, 0.0f);
+				lastAngle = Vector2f(0.0f, 0.0f);
 				// nothing alse to do ...
 				break;
 			case esvg::render::path_close:
@@ -158,7 +158,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// find the previous tart of the path ...
 						tmpListPoint.front().m_type = esvg::render::Point::type::join;
 						// Remove the last point if it is the same position...
-						vec2 delta = (tmpListPoint.front().m_pos - tmpListPoint.back().m_pos).absolute();
+						Vector2f delta = (tmpListPoint.front().m_pos - tmpListPoint.back().m_pos).absolute();
 						if (    delta.x() <= 0.00001
 						     && delta.y() <= 0.00001) {
 							tmpListPoint.popBack();
@@ -168,7 +168,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						tmpListPoint.clear();
 					}
 				}
-				lastAngle = vec2(0.0f, 0.0f);
+				lastAngle = Vector2f(0.0f, 0.0f);
 				// nothing alse to do ...
 				break;
 			case esvg::render::path_moveTo:
@@ -180,7 +180,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				}
 				// create a new one
 				if (it->getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
+					lastPosition = Vector2f(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
 				tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
@@ -192,7 +192,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
+					lastPosition = Vector2f(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
 				tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
@@ -204,7 +204,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
+					lastPosition = Vector2f(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
 				tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
@@ -216,7 +216,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::start));
 				}
 				if (it->getRelative() == false) {
-					lastPosition = vec2(0.0f, 0.0f);
+					lastPosition = Vector2f(0.0f, 0.0f);
 				}
 				lastPosition += it->getPos();
 				tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
@@ -228,13 +228,13 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
-					vec2 lastPosStore(lastPosition);
+					Vector2f lastPosStore(lastPosition);
 					if (it->getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
+						lastPosition = Vector2f(0.0f, 0.0f);
 					}
-					vec2 pos1 = lastPosition + it->getPos1();
-					vec2 pos2 = lastPosition + it->getPos2();
-					vec2 pos = lastPosition + it->getPos();
+					Vector2f pos1 = lastPosition + it->getPos1();
+					Vector2f pos2 = lastPosition + it->getPos2();
+					Vector2f pos = lastPosition + it->getPos();
 					interpolateCubicBezier(tmpListPoint,
 					                       _recurtionMax,
 					                       _threshold,
@@ -254,14 +254,14 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
-					vec2 lastPosStore(lastPosition);
+					Vector2f lastPosStore(lastPosition);
 					if (it->getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
+						lastPosition = Vector2f(0.0f, 0.0f);
 					}
-					vec2 pos2 = lastPosition + it->getPos2();
-					vec2 pos = lastPosition + it->getPos();
+					Vector2f pos2 = lastPosition + it->getPos2();
+					Vector2f pos = lastPosition + it->getPos();
 					// generate Pos 1
-					vec2 pos1 = lastPosStore*2.0f - lastAngle;
+					Vector2f pos1 = lastPosStore*2.0f - lastAngle;
 					interpolateCubicBezier(tmpListPoint,
 					                       _recurtionMax,
 					                       _threshold,
@@ -281,15 +281,15 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
-					vec2 lastPosStore(lastPosition);
+					Vector2f lastPosStore(lastPosition);
 					if (it->getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
+						lastPosition = Vector2f(0.0f, 0.0f);
 					}
-					vec2 pos = lastPosition + it->getPos();
-					vec2 tmp1 = lastPosition + it->getPos1();
+					Vector2f pos = lastPosition + it->getPos();
+					Vector2f tmp1 = lastPosition + it->getPos1();
 					// generate pos1 and pos2
-					vec2 pos1 = lastPosStore + (tmp1 - lastPosStore)*0.666666666f;
-					vec2 pos2 = pos          + (tmp1 - pos)*0.666666666f;
+					Vector2f pos1 = lastPosStore + (tmp1 - lastPosStore)*0.666666666f;
+					Vector2f pos2 = pos          + (tmp1 - pos)*0.666666666f;
 					interpolateCubicBezier(tmpListPoint,
 					                       _recurtionMax,
 					                       _threshold,
@@ -309,15 +309,15 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 					tmpListPoint.pushBack(esvg::render::Point(lastPosition, esvg::render::Point::type::join));
 				}
 				{
-					vec2 lastPosStore(lastPosition);
+					Vector2f lastPosStore(lastPosition);
 					if (it->getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
+						lastPosition = Vector2f(0.0f, 0.0f);
 					}
-					vec2 pos = lastPosition + it->getPos();
-					vec2 tmp1 = lastPosStore*2.0f - lastAngle;
+					Vector2f pos = lastPosition + it->getPos();
+					Vector2f tmp1 = lastPosStore*2.0f - lastAngle;
 					// generate pos1 and pos2
-					vec2 pos1 = lastPosStore + (tmp1 - lastPosStore)*0.666666666f;
-					vec2 pos2 = pos          + (tmp1 - pos)*0.66666666f;
+					Vector2f pos1 = lastPosStore + (tmp1 - lastPosStore)*0.666666666f;
+					Vector2f pos2 = pos          + (tmp1 - pos)*0.66666666f;
 					interpolateCubicBezier(tmpListPoint,
 					                       _recurtionMax,
 					                       _threshold,
@@ -339,24 +339,24 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				{
 					ememory::SharedPtr<esvg::render::ElementElliptic> tmpIt(ememory::dynamicPointerCast<esvg::render::ElementElliptic>(it));
 					float angle = tmpIt->m_angle * (M_PI / 180.0);
-					ESVG_TODO(spacingDist(_level+1) << " Elliptic arc: radius=" << tmpIt->getPos1());
-					ESVG_TODO(spacingDist(_level+1) << "               angle=" << tmpIt->m_angle);
-					ESVG_TODO(spacingDist(_level+1) << "               m_largeArcFlag=" << tmpIt->m_largeArcFlag);
-					ESVG_TODO(spacingDist(_level+1) << "               m_sweepFlag=" << tmpIt->m_sweepFlag);
+					Log.todo(spacingDist(_level+1) << " Elliptic arc: radius=" << tmpIt->getPos1());
+					Log.todo(spacingDist(_level+1) << "               angle=" << tmpIt->m_angle);
+					Log.todo(spacingDist(_level+1) << "               m_largeArcFlag=" << tmpIt->m_largeArcFlag);
+					Log.todo(spacingDist(_level+1) << "               m_sweepFlag=" << tmpIt->m_sweepFlag);
 					
 					
-					vec2 lastPosStore(lastPosition);
+					Vector2f lastPosStore(lastPosition);
 					if (it->getRelative() == false) {
-						lastPosition = vec2(0.0f, 0.0f);
+						lastPosition = Vector2f(0.0f, 0.0f);
 					}
-					vec2 pos = lastPosition + it->getPos();
+					Vector2f pos = lastPosition + it->getPos();
 					float rotationX = tmpIt->m_angle * (M_PI / 180.0);
-					vec2 radius = tmpIt->getPos1();
+					Vector2f radius = tmpIt->getPos1();
 					
 					#ifdef DEBUG
 						m_debugInformation.addSegment(lastPosStore, pos);
 					#endif
-					vec2 delta = lastPosStore - pos;
+					Vector2f delta = lastPosStore - pos;
 					float ddd = delta.length();
 					if (    ddd < 1e-6f
 					     || radius.x() < 1e-6f
@@ -372,7 +372,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// procedure describe here : http://www.w3.org/TR/SVG11/implnote.html#ArcConversionCenterToEndpoint
 						// Compute delta'
 						mat2x3 matrixRotationCenter = etk::mat2x3Rotate(-rotationX);
-						vec2 deltaPrim = matrixRotationCenter * (delta*0.5f);
+						Vector2f deltaPrim = matrixRotationCenter * (delta*0.5f);
 						ddd =   (deltaPrim.x()*deltaPrim.x())/(radius.x()*radius.x())
 						      + (deltaPrim.y()*deltaPrim.y())/(radius.y()*radius.y());
 						if (ddd > 1.0f) {
@@ -403,24 +403,24 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						if (tmpIt->m_largeArcFlag == tmpIt->m_sweepFlag) {
 							sss *= -1.0f;
 						}
-						vec2 centerPrime(sss * radius.x() * deltaPrim.y() / radius.y(),
+						Vector2f centerPrime(sss * radius.x() * deltaPrim.y() / radius.y(),
 						                 sss * -radius.y() * deltaPrim.x() / radius.x());
 						// Compute center from center'
 						mat2x3 matrix = etk::mat2x3Rotate(rotationX);
-						vec2 center = (lastPosStore + pos)*0.5f + matrix*centerPrime;
+						Vector2f center = (lastPosStore + pos)*0.5f + matrix*centerPrime;
 						#ifdef DEBUG
-							m_debugInformation.addSegment(center-vec2(3.0,3.0), center+vec2(3.0,3.0));
-							m_debugInformation.addSegment(center-vec2(3.0,-3.0), center+vec2(3.0,-3.0));
+							m_debugInformation.addSegment(center-Vector2f(3.0,3.0), center+Vector2f(3.0,3.0));
+							m_debugInformation.addSegment(center-Vector2f(3.0,-3.0), center+Vector2f(3.0,-3.0));
 						#endif
 						// Calculate theta1, and delta theta.
-						vec2 vectorA = (deltaPrim - centerPrime) / radius;
-						vec2 vectorB = (deltaPrim + centerPrime) / radius * -1.0f;
+						Vector2f vectorA = (deltaPrim - centerPrime) / radius;
+						Vector2f vectorB = (deltaPrim + centerPrime) / radius * -1.0f;
 						#ifdef DEBUG
 							m_debugInformation.addSegment(center, center+vectorA*radius.x());
 							m_debugInformation.addSegment(center, center+vectorB*radius.y());
 						#endif
 						// Initial angle
-						float theta1 = vectorAngle(vec2(1.0f,0.0f), vectorA);
+						float theta1 = vectorAngle(Vector2f(1.0f,0.0f), vectorA);
 						// Delta angle
 						float deltaTheta = vectorAngle(vectorA, vectorB);
 						// special case of invert angle...
@@ -455,27 +455,27 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						if (deltaTheta < 0.0f) {
 							kappa = -kappa;
 						}
-						vec2 pointPosPrevious(0.0,0.0);
-						vec2 tangentPrevious(0.0,0.0);
+						Vector2f pointPosPrevious(0.0,0.0);
+						Vector2f tangentPrevious(0.0,0.0);
 						for (int32_t iii=0; iii<=ndivs; ++iii) {
 							float a = theta1 + deltaTheta * (float(iii)/(float)ndivs);
 							#ifndef __STDCPP_LLVM__
-								delta = vec2(etk::cos(a), etk::sin(a));
+								delta = Vector2f(etk::cos(a), etk::sin(a));
 							#else
-								delta = vec2(cosf(a), sinf(a));
+								delta = Vector2f(cosf(a), sinf(a));
 							#endif
 							// position
-							vec2 pointPos = matrix * vec2(delta.x()*radius.x(), delta.y()*radius.y());
+							Vector2f pointPos = matrix * Vector2f(delta.x()*radius.x(), delta.y()*radius.y());
 							// tangent
-							vec2 tangent = matrix.applyScaleRotation(vec2(-delta.y()*radius.x() * kappa, delta.x()*radius.y() * kappa));
+							Vector2f tangent = matrix.applyScaleRotation(Vector2f(-delta.y()*radius.x() * kappa, delta.x()*radius.y() * kappa));
 							if (iii > 0) {
-								vec2 zlastPosStore(lastPosition);
+								Vector2f zlastPosStore(lastPosition);
 								if (it->getRelative() == false) {
-									lastPosition = vec2(0.0f, 0.0f);
+									lastPosition = Vector2f(0.0f, 0.0f);
 								}
-								vec2 zpos1 = pointPosPrevious + tangentPrevious;
-								vec2 zpos2 = pointPos - tangent;
-								vec2 zpos = pointPos;
+								Vector2f zpos1 = pointPosPrevious + tangentPrevious;
+								Vector2f zpos2 = pointPos - tangent;
+								Vector2f zpos = pointPos;
 								interpolateCubicBezier(tmpListPoint,
 								                       _recurtionMax,
 								                       _threshold,

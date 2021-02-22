@@ -12,7 +12,7 @@ namespace esvg {
 	namespace render {
 		class ElementCurveTo : public esvg::render::Element {
 			public:
-				ElementCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos);
+				ElementCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

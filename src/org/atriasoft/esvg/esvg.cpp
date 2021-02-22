@@ -61,8 +61,8 @@ void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 void esvg::Document::generateAnImage(const etk::Uri& _uri, bool _visualDebug) {
 	generateAnImage(m_size, _uri, _visualDebug);
 }
-void esvg::Document::generateAnImage(const ivec2& _size, const etk::Uri& _uri, bool _visualDebug) {
-	ivec2 sizeRender = _size;
+void esvg::Document::generateAnImage(const Vector2i& _size, const etk::Uri& _uri, bool _visualDebug) {
+	Vector2i sizeRender = _size;
 	if (sizeRender.x() <= 0) {
 		sizeRender.setX(m_size.x());
 	}
@@ -74,7 +74,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const etk::Uri& _uri, b
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(sizeRender, this, _visualDebug);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(vec2(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
 	
 	draw(*renderedElement, basicTrans);
 	
@@ -88,7 +88,7 @@ void esvg::Document::generateAnImage(const ivec2& _size, const etk::Uri& _uri, b
 }
 
 
-etk::Vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _size) {
+List<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(Vector2i& _size) {
 	if (_size.x() <= 0) {
 		_size.setX(m_size.x());
 	}
@@ -99,17 +99,17 @@ etk::Vector<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(ivec2& _si
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(_size, this);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/m_size.x(), _size.y()/m_size.y()));
 	draw(*renderedElement, basicTrans);
 	
 	// direct return the generated data ...
 	return renderedElement->getData();
 }
 
-etk::Vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _size) {
-	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+List<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(Vector2i& _size) {
+	List<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	etk::Vector<etk::Color<float,3>> out;
+	List<etk::Color<float,3>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -117,10 +117,10 @@ etk::Vector<etk::Color<float,3>> esvg::Document::renderImageFloatRGB(ivec2& _siz
 	return out;
 }
 
-etk::Vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _size) {
-	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+List<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(Vector2i& _size) {
+	List<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	etk::Vector<etk::Color<uint8_t,4>> out;
+	List<etk::Color<uint8_t,4>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -128,10 +128,10 @@ etk::Vector<etk::Color<uint8_t,4>> esvg::Document::renderImageU8RGBA(ivec2& _siz
 	return out;
 }
 
-etk::Vector<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(ivec2& _size) {
-	etk::Vector<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
+List<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(Vector2i& _size) {
+	List<etk::Color<float,4>> data = renderImageFloatRGBA(_size);
 	// Reduce scope:
-	etk::Vector<etk::Color<uint8_t,3>> out;
+	List<etk::Color<uint8_t,3>> out;
 	out.resize(data.size());
 	for (size_t iii=0; iii<data.size(); ++iii) {
 		out[iii] = data[iii];
@@ -202,7 +202,7 @@ bool esvg::Document::load(const etk::Uri& _uri) {
 }
 
 bool esvg::Document::store(const etk::Uri& _uri) {
-	ESVG_TODO("not implemented store in SVG...");
+	Log.todo("not implemented store in SVG...");
 	return false;
 }
 
@@ -217,9 +217,9 @@ bool esvg::Document::cleanStyleProperty(const exml::Element& _root) {
 		if (child.attributes.exist("style") == true) {
 			etk::String content = child.attributes["style"];
 			if (content.size() != 0) {
-				etk::Vector<etk::String> listStyle = etk::split(content, ';');
+				List<etk::String> listStyle = etk::split(content, ';');
 				for (auto &it : listStyle) {
-					etk::Vector<etk::String> value = etk::split(it, ':');
+					List<etk::String> value = etk::split(it, ':');
 					if (value.size() != 2) {
 						Log.error("parsing style with a wrong patern : " << it << " missing ':'");
 						continue;
@@ -241,7 +241,7 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 	// get the svg version :
 	m_version = _root.attributes["version"];
 	// parse ...
-	vec2 pos(0,0);
+	Vector2f pos(0,0);
 	if (_isReference == false) {
 		parseTransform(_root);
 		parsePosition(_root, pos, m_size);
@@ -250,8 +250,8 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 	} else {
 		Log.verbose("Parse Reference section ... (no attibute)");
 	}
-	vec2 maxSize(0,0);
-	vec2 size(0,0);
+	Vector2f maxSize(0,0);
+	Vector2f size(0,0);
 	// parse all sub node:
 	for(auto it : _root.nodes) {
 		exml::Element child = it.toElement();
@@ -369,8 +369,8 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _
 	return null;
 }
 
-etk::Vector<etk::Vector<vec2>> esvg::Document::getLines(vec2 _size) {
-	etk::Vector<etk::Vector<vec2>> out;
+List<etk::Vector<Vector2f>> esvg::Document::getLines(Vector2f _size) {
+	List<etk::Vector<Vector2f>> out;
 	if (_size.x() <= 0) {
 		_size.setX(m_size.x());
 	}
@@ -380,13 +380,13 @@ etk::Vector<etk::Vector<vec2>> esvg::Document::getLines(vec2 _size) {
 	Log.debug("lineification size " << _size);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(vec2(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/m_size.x(), _size.y()/m_size.y()));
 	drawShapePoints(out, 10, 0.25f, basicTrans);
 	return out;
 }
 
 
-void esvg::Document::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Document::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                      int32_t _recurtionMax,
                                      float _threshold,
                                      mat2x3& _basicTrans,

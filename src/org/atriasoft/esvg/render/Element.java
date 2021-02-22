@@ -47,30 +47,30 @@ namespace esvg {
 					m_relative = _relative;
 				}
 			protected:
-				vec2 m_pos;
+				Vector2f m_pos;
 			public:
-				const vec2& getPos() const {
+				const Vector2f& getPos() const {
 					return m_pos;
 				}
-				void setPos(const vec2& _val) {
+				void setPos(const Vector2f& _val) {
 					m_pos = _val;
 				}
 			protected:
-				vec2 m_pos1;
+				Vector2f m_pos1;
 			public:
-				const vec2& getPos1() const {
+				const Vector2f& getPos1() const {
 					return m_pos1;
 				}
-				void setPos1(const vec2& _val) {
+				void setPos1(const Vector2f& _val) {
 					m_pos1 = _val;
 				}
 			protected:
-				vec2 m_pos2;
+				Vector2f m_pos2;
 			public:
-				const vec2& getPos2() const {
+				const Vector2f& getPos2() const {
 					return m_pos2;
 				}
-				void setPos2(const vec2& _val) {
+				void setPos2(const Vector2f& _val) {
 					m_pos2 = _val;
 				}
 			public:

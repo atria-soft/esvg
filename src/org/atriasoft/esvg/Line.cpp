@@ -18,7 +18,7 @@ esvg::Line::~Line() {
 	
 }
 
-bool esvg::Line::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Line::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -116,7 +116,7 @@ void esvg::Line::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 }
 
 
-void esvg::Line::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Line::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
@@ -129,7 +129,7 @@ void esvg::Line::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

@@ -19,7 +19,7 @@ esvg::PaintState::PaintState() :
   lineCap(esvg::cap_butt),
   lineJoin(esvg::join_miter),
   miterLimit(4.0f),
-  viewPort(vec2(0.0f,0.0f), vec2(0.0f,0.0f)),
+  viewPort(Vector2f(0.0f,0.0f), Vector2f(0.0f,0.0f)),
   opacity(1.0) {
 	
 }
@@ -108,10 +108,10 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
 			Log.verbose("Translate : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
-			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, 0));
+			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, 0));
 			Log.verbose("Translate : " << xxx << ", " << 0);
 		} else {
 			Log.error("Parsing translate() with wrong data ... '" << data << "'");
@@ -121,7 +121,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2x3Scale(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Scale(Vector2f(xxx, yyy));
 			Log.verbose("Scale : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
 			m_transformMatrix *= etk::mat2x3Scale(xxx);
@@ -135,9 +135,9 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		float angle, xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f %f", &angle, &xxx, &yyy) == 3) {
 			angle = angle / 180 * M_PI;
-			m_transformMatrix *= etk::mat2x3Translate(vec2(-xxx, -yyy));
+			m_transformMatrix *= etk::mat2x3Translate(Vector2f(-xxx, -yyy));
 			m_transformMatrix *= etk::mat2x3Rotate(angle);
-			m_transformMatrix *= etk::mat2x3Translate(vec2(xxx, yyy));
+			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
 		} else if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
@@ -152,7 +152,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2x3Skew(vec2(angle, 0.0f));
+			m_transformMatrix *= etk::mat2x3Skew(Vector2f(angle, 0.0f));
 		} else {
 			Log.error("Parsing skewX() with wrong data ... '" << data << "'");
 		}
@@ -163,14 +163,14 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2x3Skew(vec2(0.0f, angle));
+			m_transformMatrix *= etk::mat2x3Skew(Vector2f(0.0f, angle));
 		} else {
 			Log.error("Parsing skewY() with wrong data ... '" << data << "'");
 		}
 	}
 }
 
-void esvg::Base::parsePosition(const exml::Element& _element, vec2 &_pos, vec2 &_size) {
+void esvg::Base::parsePosition(const exml::Element& _element, Vector2f &_pos, Vector2f &_size) {
 	_pos.setValue(0,0);
 	_size.setValue(0,0);
 	
@@ -307,7 +307,7 @@ void esvg::Base::parsePaintAttr(const exml::Element& _element) {
 			if (content == "none" ) {
 				// OK, Nothing to do ...
 			} else {
-				ESVG_TODO(" 'stroke-dasharray' not implemented ...");
+				Log.todo(" 'stroke-dasharray' not implemented ...");
 			}
 		}
 		content = _element.attributes["stroke-linecap"];
@@ -396,11 +396,11 @@ etk::Pair<etk::Color<float,4>, etk::String> esvg::Base::parseColor(const etk::St
 	return localColor;
 }
 
-bool esvg::Base::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Base::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// TODO : UNDERSTAND why nothing is done here ...
 	// Parse basic elements (ID...):
 	m_id = _element.attributes["id"];
-	_sizeMax = vec2(0.0f, 0.0f);
+	_sizeMax = Vector2f(0.0f, 0.0f);
 	return false;
 }
 
@@ -429,7 +429,7 @@ void esvg::Base::setId(const etk::String& _newId) {
 }
 
 
-void esvg::Base::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Base::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,

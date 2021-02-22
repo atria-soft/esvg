@@ -15,7 +15,7 @@ esvg::Text::~Text() {
 	
 }
 
-bool esvg::Text::parse(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Text::parse(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	_sizeMax.setValue(0,0);
 	Log.error("NOT IMPLEMENTED");
 	return false;

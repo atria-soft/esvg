@@ -45,7 +45,7 @@ namespace esvg {
 			enum esvg::cap lineCap;
 			enum esvg::join lineJoin;
 			float miterLimit;
-			etk::Pair<vec2, vec2> viewPort; //!< min pos, max pos
+			etk::Pair<Vector2f, Vector2f> viewPort; //!< min pos, max pos
 			float opacity;
 	};
 	
@@ -63,7 +63,7 @@ namespace esvg {
 			 * @param[in] _element standart XML node
 			 * @return true if no problem arrived
 			 */
-			virtual bool parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax);
+			virtual bool parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax);
 			/**
 			 * @brief Draw the form in the renderer
 			 * @param[in] _myRenderer Renderer engine
@@ -79,7 +79,7 @@ namespace esvg {
 			 * @param[in] _basicTrans Parant transformation of the environement
 			 * @param[in] _level Level of the tree
 			 */
-			virtual void drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+			virtual void drawShapePoints(List<List<Vector2f>>& _out,
 			                             int32_t _recurtionMax,
 			                             float _threshold,
 			                             mat2x3& _basicTrans,
@@ -93,7 +93,7 @@ namespace esvg {
 			 * @param[out] _pos parsed position
 			 * @param[out] _size parsed dimention
 			 */
-			void parsePosition(const exml::Element& _element, vec2 &_pos, vec2 &_size);
+			void parsePosition(const exml::Element& _element, Vector2f &_pos, Vector2f &_size);
 			/**
 			 * @brief parse a lenght of the xml element
 			 * @param[in] _dataInput Data C String with the printed lenght

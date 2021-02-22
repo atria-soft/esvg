@@ -22,28 +22,28 @@ namespace esvg {
 				};
 			public:
 				// TODO : Clean all element here ...
-				vec2 m_pos; //!< position of the point
+				Vector2f m_pos; //!< position of the point
 				enum esvg::render::Point::type m_type;
-				vec2 m_miterAxe;
-				vec2 m_orthoAxePrevious;
-				vec2 m_orthoAxeNext;
-				vec2 m_posPrevious;
-				vec2 m_posNext;
-				vec2 m_delta;
+				Vector2f m_miterAxe;
+				Vector2f m_orthoAxePrevious;
+				Vector2f m_orthoAxeNext;
+				Vector2f m_posPrevious;
+				Vector2f m_posNext;
+				Vector2f m_delta;
 				float m_len;
-				// TODO: Update etk::Vector to support not having it ...
+				// TODO: Update List to support not having it ...
 				Point() :
 				  m_pos(0,0),
 				  m_type(esvg::render::Point::type::join) {
 					// nothing to do ...
 				}
-				Point(const vec2& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type::join) :
+				Point(const Vector2f& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type::join) :
 				  m_pos(_pos),
 				  m_type(_type) {
 					// nothing to do ...
 				}
 				void setEndPath();
-				void normalize(const vec2& _nextPoint);
+				void normalize(const Vector2f& _nextPoint);
 		};
 	}
 }

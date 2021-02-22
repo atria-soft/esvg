@@ -24,7 +24,7 @@ void esvg::render::Point::setEndPath() {
 	m_type = esvg::render::Point::type::stop;
 }
 
-void esvg::render::Point::normalize(const vec2& _nextPoint) {
+void esvg::render::Point::normalize(const Vector2f& _nextPoint) {
 	m_delta = _nextPoint - m_pos;
 	m_len = m_delta.length();
 }

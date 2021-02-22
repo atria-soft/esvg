@@ -13,7 +13,7 @@ namespace esvg {
 	namespace render {
 		class ElementMoveTo : public esvg::render::Element {
 			public:
-				ElementMoveTo(bool _relative, const vec2& _pos);
+				ElementMoveTo(bool _relative, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

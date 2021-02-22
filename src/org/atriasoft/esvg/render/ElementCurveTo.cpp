@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementCurveTo::ElementCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos):
+esvg::render::ElementCurveTo::ElementCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos):
   Element(esvg::render::path_curveTo, _relative) {
 	m_pos = _pos;
 	m_pos1 = _pos1;

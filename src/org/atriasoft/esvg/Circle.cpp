@@ -17,7 +17,7 @@ esvg::Circle::~Circle() {
 	
 }
 
-bool esvg::Circle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Circle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	m_radius = 0.0;
 	m_position.setValue(0,0);
 	if (_element.exist() == false) {
@@ -61,23 +61,23 @@ esvg::render::Path esvg::Circle::createPath() {
 	esvg::render::Path out;
 	
 	out.clear();
-	out.moveTo(false, m_position + vec2(m_radius, 0.0f));
+	out.moveTo(false, m_position + Vector2f(m_radius, 0.0f));
 	out.curveTo(false,
-	            m_position + vec2(m_radius,                m_radius*esvg::kappa90),
-	            m_position + vec2(m_radius*esvg::kappa90,  m_radius),
-	            m_position + vec2(0.0f,                    m_radius));
+	            m_position + Vector2f(m_radius,                m_radius*esvg::kappa90),
+	            m_position + Vector2f(m_radius*esvg::kappa90,  m_radius),
+	            m_position + Vector2f(0.0f,                    m_radius));
 	out.curveTo(false,
-	            m_position + vec2(-m_radius*esvg::kappa90, m_radius),
-	            m_position + vec2(-m_radius,               m_radius*esvg::kappa90),
-	            m_position + vec2(-m_radius,               0.0f));
+	            m_position + Vector2f(-m_radius*esvg::kappa90, m_radius),
+	            m_position + Vector2f(-m_radius,               m_radius*esvg::kappa90),
+	            m_position + Vector2f(-m_radius,               0.0f));
 	out.curveTo(false,
-	            m_position + vec2(-m_radius,               -m_radius*esvg::kappa90),
-	            m_position + vec2(-m_radius*esvg::kappa90, -m_radius),
-	            m_position + vec2(0.0f,                    -m_radius));
+	            m_position + Vector2f(-m_radius,               -m_radius*esvg::kappa90),
+	            m_position + Vector2f(-m_radius*esvg::kappa90, -m_radius),
+	            m_position + Vector2f(0.0f,                    -m_radius));
 	out.curveTo(false,
-	            m_position + vec2(m_radius*esvg::kappa90,  -m_radius),
-	            m_position + vec2(m_radius,                -m_radius*esvg::kappa90),
-	            m_position + vec2(m_radius,                0.0f));
+	            m_position + Vector2f(m_radius*esvg::kappa90,  -m_radius),
+	            m_position + Vector2f(m_radius,                -m_radius*esvg::kappa90),
+	            m_position + Vector2f(m_radius,                0.0f));
 	out.close();
 	return out;
 }
@@ -143,7 +143,7 @@ void esvg::Circle::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_
 	#endif
 }
 
-void esvg::Circle::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Circle::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                    int32_t _recurtionMax,
                                    float _threshold,
                                    mat2x3& _basicTrans,
@@ -156,7 +156,7 @@ void esvg::Circle::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

@@ -26,13 +26,13 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
 	// parse ...
-	vec2 pos(0,0);
-	vec2 size(0,0);
+	Vector2f pos(0,0);
+	Vector2f size(0,0);
 	parseTransform(_element);
 	parsePosition(_element, pos, size);
 	parsePaintAttr(_element);
@@ -44,7 +44,7 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 	Log.verbose("parsed G2.   trans : " << m_transformMatrix);
 	
 	_sizeMax.setValue(0,0);
-	vec2 tmpPos(0,0);
+	Vector2f tmpPos(0,0);
 	// parse all sub node :
 	for(const auto it : _element.nodes) {
 		exml::Element child = it.toElement();
@@ -114,7 +114,7 @@ void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t
 	}
 }
 
-void esvg::Group::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Group::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                   int32_t _recurtionMax,
                                   float _threshold,
                                   mat2x3& _basicTrans,

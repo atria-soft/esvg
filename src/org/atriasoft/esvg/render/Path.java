@@ -18,7 +18,7 @@ namespace esvg {
 	namespace render {
 		class Path {
 			public:
-				etk::Vector<ememory::SharedPtr<esvg::render::Element>> m_listElement;
+				List<ememory::SharedPtr<esvg::render::Element>> m_listElement;
 				#ifdef DEBUG
 					esvg::render::SegmentList m_debugInformation;
 				#endif
@@ -33,20 +33,20 @@ namespace esvg {
 				void clear();
 				void stop();
 				void close(bool _relative=false);
-				void moveTo(bool _relative, const vec2& _pos);
-				void lineTo(bool _relative, const vec2& _pos);
+				void moveTo(bool _relative, const Vector2f& _pos);
+				void lineTo(bool _relative, const Vector2f& _pos);
 				void lineToH(bool _relative, float _posX);
 				void lineToV(bool _relative, float _posY);
-				void curveTo(bool _relative, const vec2& _pos1, const vec2& _pos2, const vec2& _pos);
-				void smoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos);
-				void bezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos);
-				void bezierSmoothCurveTo(bool _relative, const vec2& _pos);
+				void curveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos);
+				void smoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos);
+				void bezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos);
+				void bezierSmoothCurveTo(bool _relative, const Vector2f& _pos);
 				void ellipticTo(bool _relative,
-				                const vec2& _radius,
+				                const Vector2f& _radius,
 				                float _angle,
 				                bool _largeArcFlag,
 				                bool _sweepFlag,
-				                const vec2& _pos);
+				                const Vector2f& _pos);
 				void display(int32_t _spacing);
 				esvg::render::PointList generateListPoints(int32_t _level, int32_t _recurtionMax = 10, float _threshold = 0.25f);
 		};

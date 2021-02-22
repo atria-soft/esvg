@@ -14,28 +14,28 @@ namespace esvg {
 	namespace render {
 		class Weight {
 			private:
-				ivec2 m_size;
-				etk::Vector<float> m_data;
+				Vector2i m_size;
+				List<float> m_data;
 			public:
 				// constructor :
 				Weight();
-				Weight(const ivec2& _size);
+				Weight(const Vector2i& _size);
 				// destructor
 				~Weight();
 			// -----------------------------------------------
 			// -- basic tools :
 			// -----------------------------------------------
 			public:
-				void resize(const ivec2& _size);
-				const ivec2& getSize() const;
+				void resize(const Vector2i& _size);
+				const Vector2i& getSize() const;
 				int32_t getWidth() const;
 				int32_t getHeight() const;
 				void clear(float _fill);
-				float get(const ivec2& _pos) const;
-				void set(const ivec2& _pos, float _newColor);
+				float get(const Vector2i& _pos) const;
+				void set(const Vector2i& _pos, float _newColor);
 				void set(int32_t _posY, const esvg::render::Scanline& _data);
 				void append(int32_t _posY, const esvg::render::Scanline& _data);
-				void generate(ivec2 _size, int32_t _subSamplingCount, const esvg::render::SegmentList& _listSegment);
+				void generate(Vector2i _size, int32_t _subSamplingCount, const esvg::render::SegmentList& _listSegment);
 		};
 	}
 }

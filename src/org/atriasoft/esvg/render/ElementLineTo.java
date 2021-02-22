@@ -13,7 +13,7 @@ namespace esvg {
 	namespace render {
 		class ElementLineTo : public esvg::render::Element {
 			public:
-				ElementLineTo(bool _relative, const vec2& _pos);
+				ElementLineTo(bool _relative, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

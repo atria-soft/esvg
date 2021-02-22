@@ -18,11 +18,11 @@ namespace esvg {
 				bool m_sweepFlag;
 			public:
 				ElementElliptic(bool _relative,
-				                const vec2& _radius, // in m_pos1
+				                const Vector2f& _radius, // in m_pos1
 				                float _angle,
 				                bool _largeArcFlag,
 				                bool _sweepFlag,
-				                const vec2& _pos);
+				                const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

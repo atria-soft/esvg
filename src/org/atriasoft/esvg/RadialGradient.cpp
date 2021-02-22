@@ -13,9 +13,9 @@
 
 esvg::RadialGradient::RadialGradient(PaintState _parentPaintState) :
   esvg::Base(_parentPaintState),
-  m_center(vec2(50,50), esvg::distance_pourcent),
+  m_center(Vector2f(50,50), esvg::distance_pourcent),
   m_radius(50, esvg::distance_pourcent),
-  m_focal(vec2(50,50), esvg::distance_pourcent),
+  m_focal(Vector2f(50,50), esvg::distance_pourcent),
   m_unit(gradientUnits_objectBoundingBox),
   m_spread(spreadMethod_pad) {
 	
@@ -26,7 +26,7 @@ esvg::RadialGradient::~RadialGradient() {
 }
 
 
-bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::RadialGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
 	//m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -156,7 +156,7 @@ const esvg::Dimension1D& esvg::RadialGradient::getRadius() {
 	return m_radius;
 }
 
-const etk::Vector<etk::Pair<float, etk::Color<float,4>>>& esvg::RadialGradient::getColors(esvg::Document* _document) {
+const List<etk::Pair<float, etk::Color<float,4>>>& esvg::RadialGradient::getColors(esvg::Document* _document) {
 	if (m_href == "") {
 		return m_data;
 	}

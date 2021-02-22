@@ -13,7 +13,7 @@ namespace esvg {
 	namespace render {
 		class ElementSmoothCurveTo : public esvg::render::Element {
 			public:
-				ElementSmoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos);
+				ElementSmoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

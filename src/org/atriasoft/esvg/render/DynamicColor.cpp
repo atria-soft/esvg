@@ -14,19 +14,19 @@ esvg::render::DynamicColorSpecial::DynamicColorSpecial(const etk::String& _link,
   m_linear(true),
   m_colorName(_link),
   m_matrix(_mtx),
-  m_viewPort(vec2(9999999999.0,9999999999.0),vec2(-9999999999.0,-9999999999.0)) {
+  m_viewPort(Vector2f(9999999999.0,9999999999.0),Vector2f(-9999999999.0,-9999999999.0)) {
 	
 }
 
-void esvg::render::DynamicColorSpecial::setViewPort(const etk::Pair<vec2, vec2>& _viewPort) {
+void esvg::render::DynamicColorSpecial::setViewPort(const etk::Pair<Vector2f, Vector2f>& _viewPort) {
 	m_viewPort = _viewPort;
 }
 
 
-static vec2 getIntersect(const vec2& _point1,
-                         const vec2& _vect1,
-                         const vec2& _point2,
-                         const vec2& _vect2) {
+static Vector2f getIntersect(const Vector2f& _point1,
+                         const Vector2f& _vect1,
+                         const Vector2f& _point2,
+                         const Vector2f& _vect2) {
 	float diviseur = _vect1.x() * _vect2.y() - _vect1.y() * _vect2.x();
 	if(diviseur != 0.0f) {
 		float mmm = (   _vect1.x() * _point1.y()
@@ -34,13 +34,13 @@ static vec2 getIntersect(const vec2& _point1,
 		              - _vect1.y() * _point1.x()
 		              + _vect1.y() * _point2.x()
 		            ) / diviseur;
-		return vec2(_point2 + _vect2 * mmm);
+		return Vector2f(_point2 + _vect2 * mmm);
 	}
 	Log.error("Get divider / 0.0f");
 	return _point2;
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _pos) const {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const Vector2i& _pos) const {
 	if (m_data.size() < 2) {
 		return etk::color::purple;
 	}
@@ -52,15 +52,15 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColor(const ivec2& _po
 	return etk::color::purple;
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec2& _pos) const {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const Vector2i& _pos) const {
 	float ratio = 0.0f;
 	if (m_unit == gradientUnits_userSpaceOnUse) {
-		vec2 vectorBase = m_pos2 - m_pos1;
-		vec2 vectorOrtho(vectorBase.y(), -vectorBase.x());
-		vec2 intersec = getIntersect(m_pos1,                   vectorBase,
-		                             vec2(_pos.x(), _pos.y()), vectorOrtho);
+		Vector2f vectorBase = m_pos2 - m_pos1;
+		Vector2f vectorOrtho(vectorBase.y(), -vectorBase.x());
+		Vector2f intersec = getIntersect(m_pos1,                   vectorBase,
+		                             Vector2f(_pos.x(), _pos.y()), vectorOrtho);
 		float baseSize = vectorBase.length();
-		vec2 vectorBaseDraw = intersec - m_pos1;
+		Vector2f vectorBaseDraw = intersec - m_pos1;
 		float baseDraw = vectorBaseDraw.length();
 		ratio = baseDraw / baseSize;
 		switch(m_spread) {
@@ -91,12 +91,12 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 		}
 	} else {
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-		vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
-		                              vec2(_pos.x(), _pos.y()), m_axeY);
-		vec2 intersecY = getIntersect(m_pos1,                   m_axeY,
-		                              vec2(_pos.x(), _pos.y()), m_axeX);
-		vec2 vectorBaseDrawX = intersecX - m_pos1;
-		vec2 vectorBaseDrawY = intersecY - m_pos1;
+		Vector2f intersecX = getIntersect(m_pos1,                   m_axeX,
+		                              Vector2f(_pos.x(), _pos.y()), m_axeY);
+		Vector2f intersecY = getIntersect(m_pos1,                   m_axeY,
+		                              Vector2f(_pos.x(), _pos.y()), m_axeX);
+		Vector2f vectorBaseDrawX = intersecX - m_pos1;
+		Vector2f vectorBaseDrawY = intersecY - m_pos1;
 		float baseDrawX = vectorBaseDrawX.length();
 		float baseDrawY = vectorBaseDrawY.length();
 		if (m_axeX.dot(vectorBaseDrawX) < 0) {
@@ -162,28 +162,28 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorLinear(const ivec
 	}
 	return etk::color::green;
 }
-static etk::Pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
-                                                  const vec2& _pos2,
-                                                  const vec2& _center = vec2(0.0f, 0.0f),
+static etk::Pair<Vector2f,Vector2f> intersectLineToCircle(const Vector2f& _pos1,
+                                                  const Vector2f& _pos2,
+                                                  const Vector2f& _center = Vector2f(0.0f, 0.0f),
                                                   float _radius = 1.0f) {
-	vec2 v1;
-	vec2 v2;
+	Vector2f v1;
+	Vector2f v2;
 	//vector2D from point 1 to point 2
 	v1 = _pos2 - _pos1;
 	//vector2D from point 1 to the circle's center
 	v2 = _center - _pos1;
 	
 	float dot = v1.dot(v2);
-	vec2 proj1 = vec2(((dot / (v1.length2())) * v1.x()),
+	Vector2f proj1 = Vector2f(((dot / (v1.length2())) * v1.x()),
 	                  ((dot / (v1.length2())) * v1.y()));
-	vec2 midpt = _pos1 + proj1;
+	Vector2f midpt = _pos1 + proj1;
 	
 	float distToCenter = (midpt - _center).length2();
 	if (distToCenter > _radius * _radius) {
-		return etk::Pair<vec2,vec2>(vec2(0.0,0.0), vec2(0.0,0.0));
+		return etk::Pair<Vector2f,Vector2f>(Vector2f(0.0,0.0), Vector2f(0.0,0.0));
 	}
 	if (distToCenter == _radius * _radius) {
-		return etk::Pair<vec2,vec2>(midpt, midpt);
+		return etk::Pair<Vector2f,Vector2f>(midpt, midpt);
 	}
 	float distToIntersection;
 	if (distToCenter == 0.0f) {
@@ -200,27 +200,27 @@ static etk::Pair<vec2,vec2> intersectLineToCircle(const vec2& _pos1,
 	// normalize...
 	v1.safeNormalize();
 	v1 *= distToIntersection;
-	return etk::Pair<vec2,vec2>(midpt + v1, midpt - v1);
+	return etk::Pair<Vector2f,Vector2f>(midpt + v1, midpt - v1);
 }
 
-etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec2& _pos) const {
+etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const Vector2i& _pos) const {
 	float ratio = 0.0f;
 	// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object)..
-	vec2 intersecX = getIntersect(m_pos1,                   m_axeX,
-	                              vec2(_pos.x(), _pos.y()), m_axeY);
-	vec2 intersecY = getIntersect(m_pos1,                   m_axeY,
-	                              vec2(_pos.x(), _pos.y()), m_axeX);
-	vec2 vectorBaseDrawX = intersecX - m_pos1;
-	vec2 vectorBaseDrawY = intersecY - m_pos1;
+	Vector2f intersecX = getIntersect(m_pos1,                   m_axeX,
+	                              Vector2f(_pos.x(), _pos.y()), m_axeY);
+	Vector2f intersecY = getIntersect(m_pos1,                   m_axeY,
+	                              Vector2f(_pos.x(), _pos.y()), m_axeX);
+	Vector2f vectorBaseDrawX = intersecX - m_pos1;
+	Vector2f vectorBaseDrawY = intersecY - m_pos1;
 	float baseDrawX = vectorBaseDrawX.length();
 	float baseDrawY = vectorBaseDrawY.length();
 	// specal case when focal == center (this is faster ...)
 	if (m_centerIsFocal == true) {
-		ratio = vec2(baseDrawX, baseDrawY).length();
+		ratio = Vector2f(baseDrawX, baseDrawY).length();
 		if (m_baseSize.x()+m_baseSize.y() != 0.0f) {
 			if (    m_baseSize.x() != 0.0f
 			     && m_baseSize.y() != 0.0f) {
-				ratio = vec2(baseDrawX/m_baseSize.x(), baseDrawY/m_baseSize.y()).length();
+				ratio = Vector2f(baseDrawX/m_baseSize.x(), baseDrawY/m_baseSize.y()).length();
 			} else if (m_baseSize.x() != 0.0f) {
 				ratio = baseDrawX/m_baseSize.x();
 			} else {
@@ -247,12 +247,12 @@ etk::Color<float,4> esvg::render::DynamicColorSpecial::getColorRadial(const ivec
 			ratio = 1.0f;
 		} else {
 			float tmpLength = -m_focalLength/m_baseSize.x();
-			vec2 focalCenter = vec2(tmpLength, 0.0f);
-			vec2 currentPoint = vec2(baseDrawX, baseDrawY);
+			Vector2f focalCenter = Vector2f(tmpLength, 0.0f);
+			Vector2f currentPoint = Vector2f(baseDrawX, baseDrawY);
 			if (focalCenter == currentPoint) {
 				ratio = 0.0f;
 			} else {
-				etk::Pair<vec2,vec2> positions = intersectLineToCircle(focalCenter, currentPoint);
+				etk::Pair<Vector2f,Vector2f> positions = intersectLineToCircle(focalCenter, currentPoint);
 				float lenghtBase = (currentPoint - focalCenter).length();
 				float lenghtBorder1 = (positions.first - focalCenter).length();
 				float lenghtBorder2 = (positions.second - focalCenter).length();
@@ -320,7 +320,7 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_unit = gradient->m_unit;
 		m_spread = gradient->m_spread;
 		Log.verbose("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
-		vec2 size = m_viewPort.second - m_viewPort.first;
+		Vector2f size = m_viewPort.second - m_viewPort.first;
 		
 		esvg::Dimension dimPos1 = gradient->getPosition1();
 		m_pos1 = dimPos1.getPixel(size);
@@ -333,16 +333,16 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 			m_pos2 += m_viewPort.first;
 		}
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-		vec2 delta = m_pos2 - m_pos1;
+		Vector2f delta = m_pos2 - m_pos1;
 		if (delta.x() < 0.0f) {
-			m_axeX = vec2(-1.0f, 0.0f);
+			m_axeX = Vector2f(-1.0f, 0.0f);
 		} else {
-			m_axeX = vec2(1.0f, 0.0f);
+			m_axeX = Vector2f(1.0f, 0.0f);
 		}
 		if (delta.y() < 0.0f) {
-			m_axeY = vec2(0.0f, -1.0f);
+			m_axeY = Vector2f(0.0f, -1.0f);
 		} else {
-			m_axeY = vec2(0.0f, 1.0f);
+			m_axeY = Vector2f(0.0f, 1.0f);
 		}
 		// Move the positions ...
 		m_pos1 = m_matrix * m_pos1;
@@ -350,11 +350,11 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_axeX = m_matrix.applyScaleRotation(m_axeX);
 		m_axeY = m_matrix.applyScaleRotation(m_axeY);
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-		vec2 intersecX = getIntersect(m_pos1, m_axeX,
+		Vector2f intersecX = getIntersect(m_pos1, m_axeX,
 		                              m_pos2, m_axeY);
-		vec2 intersecY = getIntersect(m_pos1, m_axeY,
+		Vector2f intersecY = getIntersect(m_pos1, m_axeY,
 		                              m_pos2, m_axeX);
-		m_baseSize = vec2((m_pos1 - intersecX).length(),
+		m_baseSize = Vector2f((m_pos1 - intersecX).length(),
 		                  (m_pos1 - intersecY).length());
 		// get all the colors
 		m_data = gradient->getColors(_document);
@@ -370,15 +370,15 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_unit = gradient->m_unit;
 		m_spread = gradient->m_spread;
 		Log.verbose("    viewport = {" << m_viewPort.first << "," << m_viewPort.second << "}");
-		vec2 size = m_viewPort.second - m_viewPort.first;
+		Vector2f size = m_viewPort.second - m_viewPort.first;
 		
 		esvg::Dimension dimCenter = gradient->getCenter();
-		vec2 center = dimCenter.getPixel(size);
+		Vector2f center = dimCenter.getPixel(size);
 		if (dimCenter.getType() == esvg::distance_pourcent) {
 			center += m_viewPort.first;
 		}
 		esvg::Dimension dimFocal = gradient->getFocal();
-		vec2 focal = dimFocal.getPixel(size);
+		Vector2f focal = dimFocal.getPixel(size);
 		if (dimFocal.getType() == esvg::distance_pourcent) {
 			focal += m_viewPort.first;
 		}
@@ -389,22 +389,22 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 			m_pos2.setX(dimRadius.getPixel(size.x()));
 			m_pos2.setY(dimRadius.getPixel(size.y()));
 			m_pos2 += center;
-			vec2 delta = center - m_pos2;
+			Vector2f delta = center - m_pos2;
 			if (delta.x() < 0.0f) {
-				m_axeX = vec2(-1.0f, 0.0f);
+				m_axeX = Vector2f(-1.0f, 0.0f);
 			} else {
-				m_axeX = vec2(1.0f, 0.0f);
+				m_axeX = Vector2f(1.0f, 0.0f);
 			}
 			if (delta.y() < 0.0f) {
-				m_axeY = vec2(0.0f, -1.0f);
+				m_axeY = Vector2f(0.0f, -1.0f);
 			} else {
-				m_axeY = vec2(0.0f, 1.0f);
+				m_axeY = Vector2f(0.0f, 1.0f);
 			}
 			m_pos1 = center;
 		} else {
 			m_centerIsFocal = false;
 			m_axeX = (center - focal).safeNormalize();
-			m_axeY = vec2(m_axeX.y(), -m_axeX.x());
+			m_axeY = Vector2f(m_axeX.y(), -m_axeX.x());
 			
 			m_pos2 = m_axeX * dimRadius.getPixel(size.x()) + m_axeY * dimRadius.getPixel(size.y());
 			m_pos2 += center;
@@ -417,11 +417,11 @@ void esvg::render::DynamicColorSpecial::generate(esvg::Document* _document) {
 		m_axeX = m_matrix.applyScaleRotation(m_axeX);
 		m_axeY = m_matrix.applyScaleRotation(m_axeY);
 		// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object..
-		vec2 intersecX = getIntersect(m_pos1, m_axeX,
+		Vector2f intersecX = getIntersect(m_pos1, m_axeX,
 		                              m_pos2, m_axeY);
-		vec2 intersecY = getIntersect(m_pos1, m_axeY,
+		Vector2f intersecY = getIntersect(m_pos1, m_axeY,
 		                              m_pos2, m_axeX);
-		m_baseSize = vec2((intersecX - m_pos1).length(),
+		m_baseSize = Vector2f((intersecX - m_pos1).length(),
 		                  (intersecY - m_pos1).length());
 		if (m_centerIsFocal == false) {
 			m_focalLength = (center - m_matrix * focal).length();

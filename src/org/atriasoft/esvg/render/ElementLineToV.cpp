@@ -9,7 +9,7 @@
 
 esvg::render::ElementLineToV::ElementLineToV(bool _relative, float _posY):
   Element(esvg::render::path_lineToV, _relative) {
-	m_pos = vec2(0.0f, _posY);
+	m_pos = Vector2f(0.0f, _posY);
 }
 
 

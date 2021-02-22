@@ -13,11 +13,11 @@ namespace esvg {
 	namespace render {
 		class Segment {
 			public:
-				// TODO: Update etk::Vector to support not having it ...
+				// TODO: Update List to support not having it ...
 				Segment();
-				Segment(const vec2& _p0, const vec2& _p1);
-				vec2 p0;
-				vec2 p1;
+				Segment(const Vector2f& _p0, const Vector2f& _p1);
+				Vector2f p0;
+				Vector2f p1;
 				int32_t direction;
 				void applyMatrix(const mat2x3& _transformationMatrix);
 				void createDirection();

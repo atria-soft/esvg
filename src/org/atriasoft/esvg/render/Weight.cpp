@@ -13,7 +13,7 @@ esvg::render::Weight::Weight() :
 	
 }
 
-esvg::render::Weight::Weight(const ivec2& _size) :
+esvg::render::Weight::Weight(const Vector2i& _size) :
   m_size(_size) {
 	resize(_size);
 }
@@ -22,7 +22,7 @@ esvg::render::Weight::~Weight() {
 	
 }
 
-void esvg::render::Weight::resize(const ivec2& _size) {
+void esvg::render::Weight::resize(const Vector2i& _size) {
 	m_size = _size;
 	float tmp(0);
 	m_data.resize(m_size.x()*m_size.y(), tmp);
@@ -32,7 +32,7 @@ void esvg::render::Weight::resize(const ivec2& _size) {
 	}
 }
 
-const ivec2& esvg::render::Weight::getSize() const {
+const Vector2i& esvg::render::Weight::getSize() const {
 	return m_size;
 }
 
@@ -50,7 +50,7 @@ void esvg::render::Weight::clear(float _fill) {
 	}
 }
 
-float esvg::render::Weight::get(const ivec2& _pos) const {
+float esvg::render::Weight::get(const Vector2i& _pos) const {
 	if (    _pos.x()>=0 && _pos.x()<m_size.x()
 	     && _pos.y()>=0 && _pos.y()<m_size.y()) {
 		return m_data[_pos.x()+_pos.y()*m_size.x()];
@@ -58,7 +58,7 @@ float esvg::render::Weight::get(const ivec2& _pos) const {
 	return 0;
 }
 
-void esvg::render::Weight::set(const ivec2& _pos, float _newColor) {
+void esvg::render::Weight::set(const Vector2i& _pos, float _newColor) {
 	if (    _pos.x()>=0 && _pos.x()<m_size.x()
 	     && _pos.y()>=0 && _pos.y()<m_size.y()) {
 		m_data[_pos.x()+_pos.y()*m_size.x()] = _newColor;
@@ -88,13 +88,13 @@ bool sortXPosFunction(const etk::Pair<float,int32_t>& _e1, const etk::Pair<float
 }
 
 
-void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, const esvg::render::SegmentList& _listSegment) {
+void esvg::render::Weight::generate(Vector2i _size, int32_t _subSamplingCount, const esvg::render::SegmentList& _listSegment) {
 	resize(_size);
 	// for each lines:
 	for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
 		Log.verbose("Weighting ... " << yyy << " / " << _size.y());
 		// Reduce the number of lines in the subsampling parsing:
-		etk::Vector<Segment> availlableSegmentPixel;
+		List<Segment> availlableSegmentPixel;
 		for (auto &it : _listSegment.m_data) {
 			if (    it.p0.y() < float(yyy+1)
 			     && it.p1.y() > float(yyy)) {
@@ -112,7 +112,7 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 			Scanline scanline(_size.x());
 			//find all the segment that cross the middle of the line of the center of the pixel line:
 			float subSamplingCenterPos = yyy + deltaSize*0.5f + deltaSize*kkk;
-			etk::Vector<Segment> availlableSegment;
+			List<Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
 				if (    it.p0.y() <= subSamplingCenterPos
@@ -135,9 +135,9 @@ void esvg::render::Weight::generate(ivec2 _size, int32_t _subSamplingCount, cons
 				Log.verbose("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
 			}
 			// x position, angle
-			etk::Vector<etk::Pair<float, int32_t>> listPosition;
+			List<etk::Pair<float, int32_t>> listPosition;
 			for (auto &it : availlableSegment) {
-				vec2 delta = it.p0 - it.p1;
+				Vector2f delta = it.p0 - it.p1;
 				// x = coefficent*y+bbb;
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() - coefficient*it.p0.y();

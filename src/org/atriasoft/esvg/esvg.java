@@ -22,9 +22,9 @@ namespace esvg {
 			bool m_loadOK;
 			etk::String m_version;
 			etk::String m_title;
-			etk::Vector<ememory::SharedPtr<esvg::Base>> m_subElementList; //!< sub-element list
-			etk::Vector<ememory::SharedPtr<esvg::Base>> m_refList; //!< reference elements ...
-			vec2 m_size;
+			List<ememory::SharedPtr<esvg::Base>> m_subElementList; //!< sub-element list
+			List<ememory::SharedPtr<esvg::Base>> m_refList; //!< reference elements ...
+			Vector2f m_size;
 		public:
 			Document();
 			~Document();
@@ -73,29 +73,29 @@ namespace esvg {
 			void displayDebug();
 			// TODO: remove this fucntion : use generic function ...
 			void generateAnImage(const etk::Uri& _uri, bool _visualDebug=false);
-			void generateAnImage(const ivec2& _size, const etk::Uri& _uri, bool _visualDebug=false);
+			void generateAnImage(const Vector2i& _size, const etk::Uri& _uri, bool _visualDebug=false);
 			/**
 			 * @brief Generate Image in a specific format.
 			 * @param[in,out] _size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
 			 * @return Vector of the data used to display (simple vector: generic to transmit)
 			 */
-			etk::Vector<etk::Color<float,4>> renderImageFloatRGBA(ivec2& _size);
+			List<etk::Color<float,4>> renderImageFloatRGBA(Vector2i& _size);
 			//! @previous
-			etk::Vector<etk::Color<float,3>> renderImageFloatRGB(ivec2& _size);
+			List<etk::Color<float,3>> renderImageFloatRGB(Vector2i& _size);
 			//! @previous
-			etk::Vector<etk::Color<uint8_t,4>> renderImageU8RGBA(ivec2& _size);
+			List<etk::Color<uint8_t,4>> renderImageU8RGBA(Vector2i& _size);
 			//! @previous
-			etk::Vector<etk::Color<uint8_t,3>> renderImageU8RGB(ivec2& _size);
-			etk::Vector<etk::Vector<vec2>> getLines(vec2 _size=vec2(256,256));
+			List<etk::Color<uint8_t,3>> renderImageU8RGB(Vector2i& _size);
+			List<List<Vector2f>> getLines(Vector2f _size=Vector2f(256,256));
 		protected:
 			void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level=0) override;
 		public:
-			vec2 getDefinedSize() {
+			Vector2f getDefinedSize() {
 				return m_size;
 			};
 			ememory::SharedPtr<esvg::Base> getReference(const etk::String& _name);
 		protected:
-			void drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+			void drawShapePoints(List<List<Vector2f>>& _out,
 			                     int32_t _recurtionMax,
 			                     float _threshold,
 			                     mat2x3& _basicTrans,

@@ -21,17 +21,17 @@ namespace esvg {
 			int32_t m_factor;
 		#endif
 		public:
-			Renderer(const ivec2& _size, esvg::Document* _document, bool _visualDebug=false);
+			Renderer(const Vector2i& _size, esvg::Document* _document, bool _visualDebug=false);
 			~Renderer();
 		protected:
-			ivec2 m_size;
+			Vector2i m_size;
 		public:
-			void setSize(const ivec2& _size);
-			const ivec2& getSize() const;
+			void setSize(const Vector2i& _size);
+			const Vector2i& getSize() const;
 		protected:
-			etk::Vector<etk::Color<float,4>> m_buffer;
+			List<etk::Color<float,4>> m_buffer;
 		public:
-			etk::Vector<etk::Color<float,4>> getData();
+			List<etk::Color<float,4>> getData();
 		protected:
 			int32_t m_interpolationRecurtionMax;
 		public:
@@ -60,7 +60,7 @@ namespace esvg {
 			           float _opacity);
 			#ifdef DEBUG
 			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
-			void addDebug(const etk::Vector<etk::Pair<vec2,vec2>>& _info);
+			void addDebug(const List<etk::Pair<Vector2f,Vector2f>>& _info);
 			#endif
 		protected:
 			esvg::Document* m_document;

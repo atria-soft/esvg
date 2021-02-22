@@ -16,13 +16,13 @@ namespace esvg {
 	namespace render {
 		class PointList {
 			public:
-				etk::Vector<etk::Vector<esvg::render::Point>> m_data;
+				List<List<esvg::render::Point>> m_data;
 			public:
 				PointList();
-				void addList(etk::Vector<esvg::render::Point>& _list);
+				void addList(List<esvg::render::Point>& _list);
 				void display();
 				void applyMatrix(const mat2x3& _transformationMatrix);
-				etk::Pair<vec2, vec2> getViewPort();
+				etk::Pair<Vector2f, Vector2f> getViewPort();
 		};
 	}
 }

@@ -19,7 +19,7 @@ esvg::Rectangle::~Rectangle() {
 	
 }
 
-bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Rectangle::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -63,23 +63,23 @@ esvg::render::Path esvg::Rectangle::createPath() {
 		out.lineToH(true, -m_size.x());
 	} else {
 		// Rounded rectangle
-		out.moveTo(false, m_position + vec2(m_roundedCorner.x(), 0.0f));
+		out.moveTo(false, m_position + Vector2f(m_roundedCorner.x(), 0.0f));
 		out.lineToH(true, m_size.x()-m_roundedCorner.x()*2.0f);
-		out.curveTo(true, vec2(m_roundedCorner.x()*esvg::kappa90, 0.0f),
-		                  vec2(m_roundedCorner.x(),               m_roundedCorner.y() * (1.0f - esvg::kappa90)),
-		                  vec2(m_roundedCorner.x(),               m_roundedCorner.y()) );
+		out.curveTo(true, Vector2f(m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                  Vector2f(m_roundedCorner.x(),               m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                  Vector2f(m_roundedCorner.x(),               m_roundedCorner.y()) );
 		out.lineToV(true, m_size.y()-m_roundedCorner.y()*2.0f);
-		out.curveTo(true, vec2(0.0f,                                         m_roundedCorner.y() * esvg::kappa90),
-		                  vec2(-m_roundedCorner.x()* (1.0f - esvg::kappa90), m_roundedCorner.y()),
-		                  vec2(-m_roundedCorner.x(),                         m_roundedCorner.y()) );
+		out.curveTo(true, Vector2f(0.0f,                                         m_roundedCorner.y() * esvg::kappa90),
+		                  Vector2f(-m_roundedCorner.x()* (1.0f - esvg::kappa90), m_roundedCorner.y()),
+		                  Vector2f(-m_roundedCorner.x(),                         m_roundedCorner.y()) );
 		out.lineToH(true, -(m_size.x()-m_roundedCorner.x()*2.0f));
-		out.curveTo(true, vec2(-m_roundedCorner.x()*esvg::kappa90, 0.0f),
-		                  vec2(-m_roundedCorner.x(),               -m_roundedCorner.y() * (1.0f - esvg::kappa90)),
-		                  vec2(-m_roundedCorner.x(),               -m_roundedCorner.y()) );
+		out.curveTo(true, Vector2f(-m_roundedCorner.x()*esvg::kappa90, 0.0f),
+		                  Vector2f(-m_roundedCorner.x(),               -m_roundedCorner.y() * (1.0f - esvg::kappa90)),
+		                  Vector2f(-m_roundedCorner.x(),               -m_roundedCorner.y()) );
 		out.lineToV(true, -(m_size.y()-m_roundedCorner.y()*2.0f));
-		out.curveTo(true, vec2(0.0f,                                        -m_roundedCorner.y() * esvg::kappa90),
-		                  vec2(m_roundedCorner.x()* (1.0f - esvg::kappa90), -m_roundedCorner.y()),
-		                  vec2(m_roundedCorner.x(),                         -m_roundedCorner.y()) );
+		out.curveTo(true, Vector2f(0.0f,                                        -m_roundedCorner.y() * esvg::kappa90),
+		                  Vector2f(m_roundedCorner.x()* (1.0f - esvg::kappa90), -m_roundedCorner.y()),
+		                  Vector2f(m_roundedCorner.x(),                         -m_roundedCorner.y()) );
 	}
 	out.close();
 	return out;
@@ -144,7 +144,7 @@ void esvg::Rectangle::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int
 }
 
 
-void esvg::Rectangle::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Rectangle::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                       int32_t _recurtionMax,
                                       float _threshold,
                                       mat2x3& _basicTrans,
@@ -157,7 +157,7 @@ void esvg::Rectangle::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

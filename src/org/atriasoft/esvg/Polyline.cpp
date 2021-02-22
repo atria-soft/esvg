@@ -17,7 +17,7 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -38,7 +38,7 @@ bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTran
 	Log.verbose("Parse polyline : \"" << sss1 << "\"");
 	const char* sss = sss1.c_str();
 	while ('\0' != sss[0]) {
-		vec2 pos;
+		Vector2f pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.pushBack(pos);
@@ -127,7 +127,7 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 }
 
 
-void esvg::Polyline::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Polyline::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                      int32_t _recurtionMax,
                                      float _threshold,
                                      mat2x3& _basicTrans,
@@ -140,7 +140,7 @@ void esvg::Polyline::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

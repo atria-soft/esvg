@@ -12,7 +12,7 @@ namespace esvg {
 	namespace render {
 		class Scanline {
 			private:
-				etk::Vector<float> m_data;
+				List<float> m_data;
 			public:
 				// constructor :
 				Scanline(size_t _size=32);

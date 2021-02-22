@@ -19,7 +19,7 @@ esvg::Path::~Path() {
 
 
 // return the next char position ... (after 'X' or NULL)
-const char * extractCmd(const char* _input, char& _cmd, etk::Vector<float>& _outputList) {
+const char * extractCmd(const char* _input, char& _cmd, List<float>& _outputList) {
 	if (*_input == '\0') {
 		return null;
 	}
@@ -76,7 +76,7 @@ etk::String cleanBadSpaces(const etk::String& _input) {
 	return out;
 }
 
-bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -95,7 +95,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 	Log.verbose("Parse Path : \"" << elementXML1 << "\"");
 	
 	char command;
-	etk::Vector<float> listDot;
+	List<float> listDot;
 	elementXML1 = cleanBadSpaces(elementXML1);
 	const char* elementXML = elementXML1.c_str();
 	
@@ -114,11 +114,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				if (listDot.size() >= 2) {
 					m_listElement.moveTo(relative,
-					                     vec2(listDot[0], listDot[1]));
+					                     Vector2f(listDot[0], listDot[1]));
 				}
 				for (size_t iii=2; iii<listDot.size(); iii+=2) {
 					m_listElement.lineTo(relative,
-					                     vec2(listDot[iii], listDot[iii+1]));
+					                     Vector2f(listDot[iii], listDot[iii+1]));
 				}
 				break;
 			case 'l': // Line to (relative)
@@ -131,7 +131,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=2) {
 					m_listElement.lineTo(relative,
-					                     vec2(listDot[iii], listDot[iii+1]));
+					                     Vector2f(listDot[iii], listDot[iii+1]));
 				}
 				break;
 				
@@ -173,8 +173,8 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=4) {
 					m_listElement.bezierCurveTo(relative,
-					                            vec2(listDot[iii],listDot[iii+1]),
-					                            vec2(listDot[iii+2],listDot[iii+3]));
+					                            Vector2f(listDot[iii],listDot[iii+1]),
+					                            Vector2f(listDot[iii+2],listDot[iii+3]));
 				}
 				break;
 				
@@ -188,7 +188,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=2) {
 					m_listElement.bezierSmoothCurveTo(relative,
-					                                  vec2(listDot[iii],listDot[iii+1]));
+					                                  Vector2f(listDot[iii],listDot[iii+1]));
 				}
 				break;
 				
@@ -202,9 +202,9 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=6) {
 					m_listElement.curveTo(relative,
-					                      vec2(listDot[iii],listDot[iii+1]),
-					                      vec2(listDot[iii+2],listDot[iii+3]),
-					                      vec2(listDot[iii+4],listDot[iii+5]));
+					                      Vector2f(listDot[iii],listDot[iii+1]),
+					                      Vector2f(listDot[iii+2],listDot[iii+3]),
+					                      Vector2f(listDot[iii+4],listDot[iii+5]));
 				}
 				break;
 				
@@ -218,8 +218,8 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=4) {
 					m_listElement.smoothCurveTo(relative,
-					                            vec2(listDot[iii],listDot[iii+1]),
-					                            vec2(listDot[iii+2],listDot[iii+3]));
+					                            Vector2f(listDot[iii],listDot[iii+1]),
+					                            Vector2f(listDot[iii+2],listDot[iii+3]));
 				}
 				break;
 				
@@ -241,11 +241,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, v
 						sweepFlag = false;
 					}
 					m_listElement.ellipticTo(relative,
-					                         vec2(listDot[iii], listDot[iii+1]),
+					                         Vector2f(listDot[iii], listDot[iii+1]),
 					                         listDot[iii+2],
 					                         largeArcFlag,
 					                         sweepFlag,
-					                         vec2(listDot[iii+5], listDot[iii+6]) );
+					                         Vector2f(listDot[iii+5], listDot[iii+6]) );
 				}
 				break;
 			case 'z': // closepath (relative)
@@ -325,7 +325,7 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 }
 
 
-void esvg::Path::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Path::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                  int32_t _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
@@ -339,7 +339,7 @@ void esvg::Path::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = m_listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

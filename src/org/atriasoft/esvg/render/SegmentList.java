@@ -16,11 +16,11 @@ namespace esvg {
 	namespace render {
 		class SegmentList {
 			public:
-				etk::Vector<esvg::render::Segment> m_data;
+				List<esvg::render::Segment> m_data;
 			public:
 				SegmentList();
 				#ifdef DEBUG
-					void addSegment(const vec2& _pos0, const vec2& _pos1);
+					void addSegment(const Vector2f& _pos0, const Vector2f& _pos1);
 				#endif
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1);
 				void addSegment(const esvg::render::Point& _pos0, const esvg::render::Point& _pos1, bool _disableHorizontal);
@@ -31,19 +31,19 @@ namespace esvg {
 				                             enum esvg::join _join,
 				                             float _miterLimit);
 			private:
-				void startStopPoint(vec2& _leftPoint,
-				                    vec2& _rightPoint,
+				void startStopPoint(Vector2f& _leftPoint,
+				                    Vector2f& _rightPoint,
 				                    const esvg::render::Point& _point,
 				                    enum esvg::cap _cap,
 				                    float _width,
 				                    bool _isStart);
-				void createSegmentListStroke(const vec2& _point1,
-				                             const vec2& _point2,
-				                             const vec2& _center,
+				void createSegmentListStroke(const Vector2f& _point1,
+				                             const Vector2f& _point2,
+				                             const Vector2f& _center,
 				                             float _width,
 				                             bool _isStart);
 			public:
-				etk::Pair<vec2, vec2> getViewPort();
+				etk::Pair<Vector2f, Vector2f> getViewPort();
 				void applyMatrix(const mat2x3& _transformationMatrix);
 		};
 	}

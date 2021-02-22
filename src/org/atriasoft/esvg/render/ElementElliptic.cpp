@@ -8,11 +8,11 @@
 #include <esvg/debug.hpp>
 
 esvg::render::ElementElliptic::ElementElliptic(bool _relative,
-                                               const vec2& _radius, // in m_vec1
+                                               const Vector2f& _radius, // in m_vec1
                                                float _angle,
                                                bool _largeArcFlag,
                                                bool _sweepFlag,
-                                               const vec2& _pos):
+                                               const Vector2f& _pos):
   Element(esvg::render::path_elliptic, _relative) {
 	m_pos1 = _radius;
 	m_pos = _pos;

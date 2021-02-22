@@ -17,7 +17,7 @@ esvg::Polygon::~Polygon() {
 	
 }
 
-bool esvg::Polygon::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Polygon::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -40,7 +40,7 @@ bool esvg::Polygon::parseXML(const exml::Element& _element, mat2x3& _parentTrans
 	_sizeMax.setValue(0,0);
 	Log.verbose("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
-		vec2 pos(0,0);
+		Vector2f pos(0,0);
 		int32_t n;
 		if (sscanf(sss, "%f,%f%n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
 			m_listPoint.pushBack(pos);
@@ -130,7 +130,7 @@ void esvg::Polygon::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 }
 
 
-void esvg::Polygon::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Polygon::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                     int32_t _recurtionMax,
                                     float _threshold,
                                     mat2x3& _basicTrans,
@@ -143,7 +143,7 @@ void esvg::Polygon::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

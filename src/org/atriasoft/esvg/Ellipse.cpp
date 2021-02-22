@@ -17,7 +17,7 @@ esvg::Ellipse::~Ellipse() {
 	
 }
 
-bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -65,23 +65,23 @@ void esvg::Ellipse::display(int32_t _spacing) {
 esvg::render::Path esvg::Ellipse::createPath() {
 	esvg::render::Path out;
 	out.clear();
-	out.moveTo(false, m_c + vec2(m_r.x(), 0.0f));
+	out.moveTo(false, m_c + Vector2f(m_r.x(), 0.0f));
 	out.curveTo(false,
-	            m_c + vec2(m_r.x(),                m_r.y()*esvg::kappa90),
-	            m_c + vec2(m_r.x()*esvg::kappa90,  m_r.y()),
-	            m_c + vec2(0.0f,                   m_r.y()));
+	            m_c + Vector2f(m_r.x(),                m_r.y()*esvg::kappa90),
+	            m_c + Vector2f(m_r.x()*esvg::kappa90,  m_r.y()),
+	            m_c + Vector2f(0.0f,                   m_r.y()));
 	out.curveTo(false,
-	            m_c + vec2(-m_r.x()*esvg::kappa90, m_r.y()),
-	            m_c + vec2(-m_r.x(),               m_r.y()*esvg::kappa90),
-	            m_c + vec2(-m_r.x(),               0.0f));
+	            m_c + Vector2f(-m_r.x()*esvg::kappa90, m_r.y()),
+	            m_c + Vector2f(-m_r.x(),               m_r.y()*esvg::kappa90),
+	            m_c + Vector2f(-m_r.x(),               0.0f));
 	out.curveTo(false,
-	            m_c + vec2(-m_r.x(),               -m_r.y()*esvg::kappa90),
-	            m_c + vec2(-m_r.x()*esvg::kappa90, -m_r.y()),
-	            m_c + vec2(0.0f,                   -m_r.y()));
+	            m_c + Vector2f(-m_r.x(),               -m_r.y()*esvg::kappa90),
+	            m_c + Vector2f(-m_r.x()*esvg::kappa90, -m_r.y()),
+	            m_c + Vector2f(0.0f,                   -m_r.y()));
 	out.curveTo(false,
-	            m_c + vec2(m_r.x()*esvg::kappa90,  -m_r.y()),
-	            m_c + vec2(m_r.x(),                -m_r.y()*esvg::kappa90),
-	            m_c + vec2(m_r.x(),                0.0f));
+	            m_c + Vector2f(m_r.x()*esvg::kappa90,  -m_r.y()),
+	            m_c + Vector2f(m_r.x(),                -m_r.y()*esvg::kappa90),
+	            m_c + Vector2f(m_r.x(),                0.0f));
 	out.close();
 	return out;
 }
@@ -149,7 +149,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 }
 
 
-void esvg::Ellipse::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
+void esvg::Ellipse::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
                                     int32_t _recurtionMax,
                                     float _threshold,
                                     mat2x3& _basicTrans,
@@ -162,7 +162,7 @@ void esvg::Ellipse::drawShapePoints(etk::Vector<etk::Vector<vec2>>& _out,
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
 	for (auto &it : listPoints.m_data) {
-		etk::Vector<vec2> listPoint;
+		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
 			listPoint.pushBack(itDot.m_pos);
 		}

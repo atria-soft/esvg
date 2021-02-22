@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementBezierCurveTo::ElementBezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos):
+esvg::render::ElementBezierCurveTo::ElementBezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos):
   Element(esvg::render::path_bezierCurveTo, _relative) {
 	m_pos = _pos;
 	m_pos1 = _pos1;

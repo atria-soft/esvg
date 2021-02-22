@@ -8,12 +8,12 @@
 #include <esvg/debug.hpp>
 
 esvg::render::Segment::Segment() {
-	p0 = vec2(0,0);
-	p1 = vec2(0,0);
+	p0 = Vector2f(0,0);
+	p1 = Vector2f(0,0);
 	direction = 0;
 }
 
-esvg::render::Segment::Segment(const vec2& _p0, const vec2& _p1) {
+esvg::render::Segment::Segment(const Vector2f& _p0, const Vector2f& _p1) {
 	// segment register all time the lower at P0n then we need to register the sens of the path
 	p0 = _p0;
 	p1 = _p1;
@@ -30,7 +30,7 @@ void esvg::render::Segment::createDirection() {
 	if (p0.y() < p1.y()) {
 		direction = 1; // direction like clock
 	} else {
-		vec2 tmp(p0);
+		Vector2f tmp(p0);
 		p0 = p1;
 		p1 = tmp;
 		direction = -1; // direction like anti-clock

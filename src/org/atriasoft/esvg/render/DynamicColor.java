@@ -23,9 +23,9 @@ namespace esvg {
 					// nothing to do ...
 				}
 				virtual ~DynamicColor() {};
-				virtual etk::Color<float,4> getColor(const ivec2& _pos) const = 0;
+				virtual etk::Color<float,4> getColor(const Vector2i& _pos) const = 0;
 				virtual void generate(esvg::Document* _document) = 0;
-				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort) = 0;
+				virtual void setViewPort(const etk::Pair<Vector2f, Vector2f>& _viewPort) = 0;
 		};
 		class DynamicColorUni : public esvg::render::DynamicColor {
 			public:
@@ -35,13 +35,13 @@ namespace esvg {
 				  m_color(_color) {
 					
 				}
-				virtual etk::Color<float,4> getColor(const ivec2& _pos) const {
+				virtual etk::Color<float,4> getColor(const Vector2i& _pos) const {
 					return m_color;
 				}
 				virtual void generate(esvg::Document* _document) {
 					// nothing to do ...
 				}
-				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort) {
+				virtual void setViewPort(const etk::Pair<Vector2f, Vector2f>& _viewPort) {
 					// nothing to do ...
 				};
 		};
@@ -52,26 +52,26 @@ namespace esvg {
 				esvg::gradientUnits m_unit;
 				etk::String m_colorName;
 				mat2x3 m_matrix;
-				etk::Pair<vec2, vec2> m_viewPort;
-				vec2 m_pos1; // in radius ==> center
-				vec2 m_pos2; // in radius ==> radius end position
-				vec2 m_focal; // Specific radius
-				vec2 m_axeX;
-				vec2 m_axeY;
-				vec2 m_baseSize;
+				etk::Pair<Vector2f, Vector2f> m_viewPort;
+				Vector2f m_pos1; // in radius ==> center
+				Vector2f m_pos2; // in radius ==> radius end position
+				Vector2f m_focal; // Specific radius
+				Vector2f m_axeX;
+				Vector2f m_axeY;
+				Vector2f m_baseSize;
 				float m_focalLength;
 				bool m_clipOut;
 				bool m_centerIsFocal;
-				etk::Vector<etk::Pair<float, etk::Color<float,4>>> m_data;
+				List<etk::Pair<float, etk::Color<float,4>>> m_data;
 			public:
 				DynamicColorSpecial(const etk::String& _link, const mat2x3& _mtx);
-				virtual etk::Color<float,4> getColor(const ivec2& _pos) const;
+				virtual etk::Color<float,4> getColor(const Vector2i& _pos) const;
 			private:
-				etk::Color<float,4> getColorLinear(const ivec2& _pos) const;
-				etk::Color<float,4> getColorRadial(const ivec2& _pos) const;
+				etk::Color<float,4> getColorLinear(const Vector2i& _pos) const;
+				etk::Color<float,4> getColorRadial(const Vector2i& _pos) const;
 			public:
 				virtual void generate(esvg::Document* _document);
-				virtual void setViewPort(const etk::Pair<vec2, vec2>& _viewPort);
+				virtual void setViewPort(const etk::Pair<Vector2f, Vector2f>& _viewPort);
 		};
 		
 		ememory::SharedPtr<DynamicColor> createColor(etk::Pair<etk::Color<float,4>, etk::String> _color, const mat2x3& _mtx);

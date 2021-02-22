@@ -13,8 +13,8 @@
 
 esvg::LinearGradient::LinearGradient(PaintState _parentPaintState) :
   esvg::Base(_parentPaintState),
-  m_pos1(vec2(50,50), esvg::distance_pourcent),
-  m_pos2(vec2(50,50), esvg::distance_pourcent),
+  m_pos1(Vector2f(50,50), esvg::distance_pourcent),
+  m_pos2(Vector2f(50,50), esvg::distance_pourcent),
   m_unit(gradientUnits_objectBoundingBox),
   m_spread(spreadMethod_pad) {
 	
@@ -25,7 +25,7 @@ esvg::LinearGradient::~LinearGradient() {
 }
 
 
-bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, vec2& _sizeMax) {
+bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
 	//m_paint.strokeWidth = 1;
 	if (_element.exist() == false) {
@@ -147,7 +147,7 @@ const esvg::Dimension& esvg::LinearGradient::getPosition2() {
 	return m_pos2;
 }
 
-const etk::Vector<etk::Pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors(esvg::Document* _document) {
+const List<etk::Pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors(esvg::Document* _document) {
 	if (m_href == "") {
 		return m_data;
 	}

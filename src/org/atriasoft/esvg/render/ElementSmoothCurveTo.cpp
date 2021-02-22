@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementSmoothCurveTo::ElementSmoothCurveTo(bool _relative, const vec2& _pos2, const vec2& _pos):
+esvg::render::ElementSmoothCurveTo::ElementSmoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos):
   Element(esvg::render::path_smoothCurveTo, _relative) {
 	m_pos = _pos;
 	m_pos2 = _pos2;

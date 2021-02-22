@@ -13,7 +13,7 @@ namespace esvg {
 	namespace render {
 		class ElementBezierCurveTo : public esvg::render::Element {
 			public:
-				ElementBezierCurveTo(bool _relative, const vec2& _pos1, const vec2& _pos);
+				ElementBezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

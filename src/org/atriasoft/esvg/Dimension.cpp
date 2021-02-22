@@ -27,7 +27,7 @@ esvg::Dimension::Dimension() :
 	// notinh to do ...
 }
 
-esvg::Dimension::Dimension(const vec2& _size, enum esvg::distance _type) :
+esvg::Dimension::Dimension(const Vector2f& _size, enum esvg::distance _type) :
   m_data(0,0),
   m_type(esvg::distance_pixel) {
 	set(_size, _type);
@@ -66,7 +66,7 @@ void esvg::Dimension::set(etk::String _config) {
 		Log.verbose("default dimention type for: '" << _config << "' ==> pixel");
 		return;
 	}
-	vec2 tmp = _config;
+	Vector2f tmp = _config;
 	set(tmp, type);
 	Log.verbose(" config dimention : \"" << _config << "\"  == > " << *this );
 }
@@ -116,7 +116,7 @@ void esvg::Dimension::set(etk::String _configX, etk::String _configY) {
 	enum distance typeY = parseType(_configY);
 	float valueY = etk::string_to_float(_configY);
 	// TODO : Check difference ...
-	set(vec2(valueX, valueY), typeX);
+	set(Vector2f(valueX, valueY), typeX);
 	Log.verbose(" config dimention : '" << _configX << "' '" << _configY << "'  == > " << *this );
 }
 
@@ -169,7 +169,7 @@ esvg::Dimension::operator etk::String() const {
 	return str;
 }
 
-void esvg::Dimension::set(const vec2& _size, enum esvg::distance _type) {
+void esvg::Dimension::set(const Vector2f& _size, enum esvg::distance _type) {
 	m_data = _size;
 	m_type = _type;
 	switch(_type) {
@@ -192,26 +192,26 @@ void esvg::Dimension::set(const vec2& _size, enum esvg::distance _type) {
 	}
 }
 
-vec2 esvg::Dimension::getPixel(const vec2& _upperSize) const {
+Vector2f esvg::Dimension::getPixel(const Vector2f& _upperSize) const {
 	switch(m_type) {
 		case esvg::distance_pourcent:
-			return vec2(_upperSize.x()*m_data.x()*0.01f, _upperSize.y()*m_data.y()*0.01f);
+			return Vector2f(_upperSize.x()*m_data.x()*0.01f, _upperSize.y()*m_data.y()*0.01f);
 		case esvg::distance_pixel:
 			return m_data;
 		case esvg::distance_meter:
-			return vec2(m_data.x()*meterToMillimeter*basicRatio, m_data.y()*meterToMillimeter*basicRatio);
+			return Vector2f(m_data.x()*meterToMillimeter*basicRatio, m_data.y()*meterToMillimeter*basicRatio);
 		case esvg::distance_centimeter:
-			return vec2(m_data.x()*centimeterToMillimeter*basicRatio, m_data.y()*centimeterToMillimeter*basicRatio);
+			return Vector2f(m_data.x()*centimeterToMillimeter*basicRatio, m_data.y()*centimeterToMillimeter*basicRatio);
 		case esvg::distance_millimeter:
-			return vec2(m_data.x()*basicRatio, m_data.y()*basicRatio);
+			return Vector2f(m_data.x()*basicRatio, m_data.y()*basicRatio);
 		case esvg::distance_kilometer:
-			return vec2(m_data.x()*kilometerToMillimeter*basicRatio, m_data.y()*kilometerToMillimeter*basicRatio);
+			return Vector2f(m_data.x()*kilometerToMillimeter*basicRatio, m_data.y()*kilometerToMillimeter*basicRatio);
 		case esvg::distance_inch:
-			return vec2(m_data.x()*inchToMillimeter*basicRatio, m_data.y()*inchToMillimeter*basicRatio);
+			return Vector2f(m_data.x()*inchToMillimeter*basicRatio, m_data.y()*inchToMillimeter*basicRatio);
 		case esvg::distance_foot:
-			return vec2(m_data.x()*footToMillimeter*basicRatio, m_data.y()*footToMillimeter*basicRatio);
+			return Vector2f(m_data.x()*footToMillimeter*basicRatio, m_data.y()*footToMillimeter*basicRatio);
 	}
-	return vec2(128.0f, 128.0f);
+	return Vector2f(128.0f, 128.0f);
 }
 
 etk::Stream& esvg::operator <<(etk::Stream& _os, enum esvg::distance _obj) {

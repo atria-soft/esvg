@@ -29,7 +29,7 @@ namespace esvg {
 	 */
 	class Dimension {
 		private:
-			vec2 m_data;
+			Vector2f m_data;
 			enum distance m_type;
 		public:
 			/**
@@ -41,7 +41,7 @@ namespace esvg {
 			 * @param[in] _size Requested dimention
 			 * @param[in] _type Unit of the Dimention
 			 */
-			Dimension(const vec2& _size, enum esvg::distance _type=esvg::distance_pixel);
+			Dimension(const Vector2f& _size, enum esvg::distance _type=esvg::distance_pixel);
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
@@ -75,7 +75,7 @@ namespace esvg {
 			 * @brief get the current dimention.
 			 * @return dimention requested.
 			 */
-			const vec2& getValue() const {
+			const Vector2f& getValue() const {
 				return m_data;
 			}
 			/**
@@ -90,7 +90,7 @@ namespace esvg {
 			 * @param[in] _size Dimention to set
 			 * @param[in] _type Type of unit requested.
 			 */
-			void set(const vec2& _size, enum distance _type);
+			void set(const Vector2f& _size, enum distance _type);
 			
 		public:
 			/**
@@ -110,7 +110,7 @@ namespace esvg {
 			 * @param[in] _upperSize Size in pixel of the upper value
 			 * @return dimention in Pixel
 			 */
-			vec2 getPixel(const vec2& _upperSize) const;
+			Vector2f getPixel(const Vector2f& _upperSize) const;
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
