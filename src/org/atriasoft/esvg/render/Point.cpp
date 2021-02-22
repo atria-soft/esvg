@@ -1,0 +1,31 @@
+/** @file
+ * @author Edouard DUPIN
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * @license MPL v2.0 (see license file)
+ */
+
+#include <esvg/render/Point.hpp>
+#include <esvg/debug.hpp>
+
+void esvg::render::Point::setEndPath() {
+	if (m_type == esvg::render::Point::type::interpolation) {
+		Log.warning("Request stop path of an interpolate Point");
+		m_type = esvg::render::Point::type::stop;
+		return;
+	}
+	if (m_type == esvg::render::Point::type::stop) {
+		Log.warning("Request stop path of an STOP Point");
+		return;
+	}
+	if (m_type == esvg::render::Point::type::start) {
+		m_type = esvg::render::Point::type::single;
+		return;
+	}
+	m_type = esvg::render::Point::type::stop;
+}
+
+void esvg::render::Point::normalize(const vec2& _nextPoint) {
+	m_delta = _nextPoint - m_pos;
+	m_len = m_delta.length();
+}
+

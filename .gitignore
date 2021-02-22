@@ -1,0 +1,17 @@
+/bin/
+/Operator/
+/DrawerProperties/
+*.pdfd
+*.dbc
+SchedulerConfig.txt
+scenicView.properties
+ScenariumConfig.txt
+*.class
+*~
+*.bck
+build.number
+/extern/
+/out/
+/.settings/
+/junit/
+/target/
