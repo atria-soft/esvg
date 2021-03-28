@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +12,9 @@
 
 namespace esvg {
 	namespace render {
-		class ElementBezierCurveTo : public esvg::render::Element {
+		class ElementBezierCurveTo  extends  esvg::render::Element {
 			public:
-				ElementBezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos);
+				ElementBezierCurveTo(boolean _relative, const Vector2f& _pos1, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

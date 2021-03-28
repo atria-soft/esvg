@@ -11,36 +11,10 @@
 
 const float esvg::kappa90(0.5522847493f);
 
-esvg::PaintState::PaintState() :
-  fill(etk::Pair<etk::Color<float,4>, etk::String>(etk::color::black, "")),
-  stroke(etk::Pair<etk::Color<float,4>, etk::String>(etk::color::none, "")),
-  strokeWidth(1.0f),
-  flagEvenOdd(false),
-  lineCap(esvg::cap_butt),
-  lineJoin(esvg::join_miter),
-  miterLimit(4.0f),
-  viewPort(Vector2f(0.0f,0.0f), Vector2f(0.0f,0.0f)),
-  opacity(1.0) {
-	
-}
-
-void esvg::PaintState::clear() {
-	fill = etk::Pair<etk::Color<float,4>, etk::String>(etk::color::black, "");
-	stroke = etk::Pair<etk::Color<float,4>, etk::String>(etk::color::none, "");
-	strokeWidth = 1.0;
-	viewPort.first.setValue(0.0f,0.0f);
-	viewPort.first.setValue(0.0f,0.0f);
-	flagEvenOdd = false;
-	lineJoin = esvg::join_miter;
-	lineCap = esvg::cap_butt;
-	miterLimit = 4.0f;
-	opacity = 1.0;
-}
-
 
 esvg::Base::Base(PaintState _parentPaintState) {
 	// copy the parent painting properties ...
-	m_paint = _parentPaintState;
+	this.paint = _parentPaintState;
 }
 
 etk::String extractTransformData(const etk::String& _value, const etk::String& _base) {
@@ -97,7 +71,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		double matrix[6];
 		if (sscanf(data.c_str(), "%lf %lf %lf %lf %lf %lf", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5]) == 6) {
-			m_transformMatrix = mat2x3(matrix);
+			this.transformMatrix = mat2x3(matrix);
 			// find a matrix : simply exit ...
 			return;
 		} else {
@@ -108,10 +82,10 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
+			this.transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
 			Log.verbose("Translate : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
-			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, 0));
+			this.transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, 0));
 			Log.verbose("Translate : " << xxx << ", " << 0);
 		} else {
 			Log.error("Parsing translate() with wrong data ... '" << data << "'");
@@ -121,10 +95,10 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 	if (data.size() != 0) {
 		float xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f", &xxx, &yyy) == 2) {
-			m_transformMatrix *= etk::mat2x3Scale(Vector2f(xxx, yyy));
+			this.transformMatrix *= etk::mat2x3Scale(Vector2f(xxx, yyy));
 			Log.verbose("Scale : " << xxx << ", " << yyy);
 		} else if (sscanf(data.c_str(), "%f", &xxx) == 1) {
-			m_transformMatrix *= etk::mat2x3Scale(xxx);
+			this.transformMatrix *= etk::mat2x3Scale(xxx);
 			Log.verbose("Scale : " << xxx << ", " << xxx);
 		} else {
 			Log.error("Parsing scale() with wrong data ... '" << data << "'");
@@ -135,13 +109,13 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		float angle, xxx, yyy;
 		if (sscanf(data.c_str(), "%f %f %f", &angle, &xxx, &yyy) == 3) {
 			angle = angle / 180 * M_PI;
-			m_transformMatrix *= etk::mat2x3Translate(Vector2f(-xxx, -yyy));
-			m_transformMatrix *= etk::mat2x3Rotate(angle);
-			m_transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
+			this.transformMatrix *= etk::mat2x3Translate(Vector2f(-xxx, -yyy));
+			this.transformMatrix *= etk::mat2x3Rotate(angle);
+			this.transformMatrix *= etk::mat2x3Translate(Vector2f(xxx, yyy));
 		} else if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2x3Rotate(angle);
+			this.transformMatrix *= etk::mat2x3Rotate(angle);
 		} else {
 			Log.error("Parsing rotate() with wrong data ... '" << data << "'");
 		}
@@ -152,7 +126,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("skewX : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2x3Skew(Vector2f(angle, 0.0f));
+			this.transformMatrix *= etk::mat2x3Skew(Vector2f(angle, 0.0f));
 		} else {
 			Log.error("Parsing skewX() with wrong data ... '" << data << "'");
 		}
@@ -163,7 +137,7 @@ void esvg::Base::parseTransform(const exml::Element& _element) {
 		if (sscanf(data.c_str(), "%f", &angle) == 1) {
 			angle = angle / 180 * M_PI;
 			Log.verbose("skewY : " << angle << "rad, " << (angle/M_PI*180) << "°");
-			m_transformMatrix *= etk::mat2x3Skew(Vector2f(0.0f, angle));
+			this.transformMatrix *= etk::mat2x3Skew(Vector2f(0.0f, angle));
 		} else {
 			Log.error("Parsing skewY() with wrong data ... '" << data << "'");
 		}
@@ -196,7 +170,7 @@ void esvg::Base::parsePosition(const exml::Element& _element, Vector2f &_pos, Ve
 }
 
 
-etk::Pair<float, enum esvg::distance> esvg::Base::parseLength2(const etk::String& _dataInput) {
+Pair<float, enum esvg::distance> esvg::Base::parseLength2(const etk::String& _dataInput) {
 	Log.verbose(" lenght : '" << _dataInput << "'");
 	float n = _dataInput.to<float>();
 	etk::String unit;
@@ -246,12 +220,12 @@ etk::Pair<float, enum esvg::distance> esvg::Base::parseLength2(const etk::String
 
 
 float esvg::Base::parseLength(const etk::String& _dataInput) {
-	etk::Pair<float, enum esvg::distance> value = parseLength2(_dataInput);
+	Pair<float, enum esvg::distance> value = parseLength2(_dataInput);
 	Log.verbose(" lenght : '" << value.first << "' => unit=" << value.second);
 	float font_size = 20.0f;
 	switch (value.second) {
 		case esvg::distance_pourcent:
-			return value.first;// / 100.0 * m_paint.viewPort.x();
+			return value.first;// / 100.0 * this.paint.viewPort.x();
 		case esvg::distance_element:
 			return value.first * font_size;
 		case esvg::distance_ex:
@@ -277,29 +251,29 @@ void esvg::Base::parsePaintAttr(const exml::Element& _element) {
 		return;
 	}
 	/*
-	bool fillNone = false;
-	bool strokeNone = false;
+	boolean fillNone = false;
+	boolean strokeNone = false;
 	*/
 	etk::String content;
 	// ---------------- get unique ID ----------------
-	m_id = _element.attributes["id"];
+	this.id = _element.attributes["id"];
 	// ---------------- stroke ----------------
 	content = _element.attributes["stroke"];
 	if (content == "none") {
-		m_paint.stroke = etk::Pair<etk::Color<float,4>, etk::String>(etk::color::none, "");
+		this.paint.stroke = Pair<etk::Color<float,4>, etk::String>(etk::color::none, "");
 	} else {
 		if (content.size()!=0) {
-			m_paint.stroke = parseColor(content);
+			this.paint.stroke = parseColor(content);
 		}
 		content = _element.attributes["stroke-width"];
 		if (content.size()!=0) {
-			m_paint.strokeWidth = parseLength(content);
+			this.paint.strokeWidth = parseLength(content);
 		}
 		content = _element.attributes["stroke-opacity"];
 		if (content.size()!=0) {
 			float opacity = parseLength(content);
 			opacity = etk::avg(0.0f, opacity, 1.0f);
-			m_paint.stroke.first.setA(opacity);
+			this.paint.stroke.first.setA(opacity);
 		}
 		
 		content = _element.attributes["stroke-dasharray"];
@@ -313,55 +287,55 @@ void esvg::Base::parsePaintAttr(const exml::Element& _element) {
 		content = _element.attributes["stroke-linecap"];
 		if (content.size()!=0) {
 			if (content == "butt" ) {
-				m_paint.lineCap = esvg::cap_butt;
+				this.paint.lineCap = esvg::cap_butt;
 			} else if (content == "round" ) {
-				m_paint.lineCap = esvg::cap_round;
+				this.paint.lineCap = esvg::cap_round;
 			} else if (content == "square" ) {
-				m_paint.lineCap = esvg::cap_square;
+				this.paint.lineCap = esvg::cap_square;
 			} else {
-				m_paint.lineCap = esvg::cap_butt;
+				this.paint.lineCap = esvg::cap_butt;
 				Log.error("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
 			}
 		}
 		content = _element.attributes["stroke-linejoin"];
 		if (content.size()!=0) {
 			if (content == "miter" ) {
-				m_paint.lineJoin = esvg::join_miter;
+				this.paint.lineJoin = esvg::join_miter;
 			} else if (content == "round" ) {
-				m_paint.lineJoin = esvg::join_round;
+				this.paint.lineJoin = esvg::join_round;
 			} else if (content == "bevel" ) {
-				m_paint.lineJoin = esvg::join_bevel;
+				this.paint.lineJoin = esvg::join_bevel;
 			} else {
-				m_paint.lineJoin = esvg::join_miter;
+				this.paint.lineJoin = esvg::join_miter;
 				Log.error("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
 			}
 		}
 		content = _element.attributes["stroke-miterlimit"];
 		if (content.size()!=0) {
 			float tmp = parseLength(content);
-			m_paint.miterLimit = etk::max(0.0f, tmp);
+			this.paint.miterLimit = etk::max(0.0f, tmp);
 		}
 	}
 	// ---------------- FILL ----------------
 	content = _element.attributes["fill"];
 	if (content == "none") {
-		m_paint.fill = etk::Pair<etk::Color<float,4>, etk::String>(etk::color::none, "");
+		this.paint.fill = Pair<etk::Color<float,4>, etk::String>(etk::color::none, "");
 	} else {
 		if (content.size()!=0) {
-			m_paint.fill = parseColor(content);
+			this.paint.fill = parseColor(content);
 		}
 		content = _element.attributes["fill-opacity"];
 		if (content.size()!=0) {
 			float opacity = parseLength(content);
 			opacity = etk::avg(0.0f, opacity, 1.0f);
-			m_paint.fill.first.setA(opacity);
+			this.paint.fill.first.setA(opacity);
 		}
 		content = _element.attributes["fill-rule"];
 		if (content.size()!=0) {
 			if (content == "nonzero") {
-				m_paint.flagEvenOdd = false;
+				this.paint.flagEvenOdd = false;
 			} else if (content == "evenodd" ) {
-				m_paint.flagEvenOdd = true;
+				this.paint.flagEvenOdd = true;
 			} else {
 				Log.error("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
 			}
@@ -369,14 +343,14 @@ void esvg::Base::parsePaintAttr(const exml::Element& _element) {
 		// ---------------- opacity ----------------
 		content = _element.attributes["opacity"];
 		if (content.size()!=0) {
-			m_paint.opacity = parseLength(content);
-			m_paint.opacity = etk::avg(0.0f, m_paint.opacity, 1.0f);
+			this.paint.opacity = parseLength(content);
+			this.paint.opacity = etk::avg(0.0f, this.paint.opacity, 1.0f);
 		}
 	}
 }
 
-etk::Pair<etk::Color<float,4>, etk::String> esvg::Base::parseColor(const etk::String& _inputData) {
-	etk::Pair<etk::Color<float,4>, etk::String> localColor(etk::color::white, "");
+Pair<etk::Color<float,4>, etk::String> esvg::Base::parseColor(const etk::String& _inputData) {
+	Pair<etk::Color<float,4>, etk::String> localColor(etk::color::white, "");
 	
 	if(    _inputData.size() > 4
 	    && _inputData[0] == 'u'
@@ -385,27 +359,27 @@ etk::Pair<etk::Color<float,4>, etk::String> esvg::Base::parseColor(const etk::St
 	    && _inputData[3] == '(') {
 		if (_inputData[4] == '#') {
 			etk::String color(_inputData.begin() + 5, _inputData.end()-1);
-			localColor = etk::Pair<etk::Color<float,4>, etk::String>(etk::color::none, color);
+			localColor = Pair<etk::Color<float,4>, etk::String>(etk::color::none, color);
 		} else {
 			Log.error("Problem in parsing the color : \"" << _inputData << "\"  == > url(XXX) is not supported now ...");
 		}
 	} else {
-		localColor = etk::Pair<etk::Color<float,4>, etk::String>(_inputData, "");
+		localColor = Pair<etk::Color<float,4>, etk::String>(_inputData, "");
 	}
 	Log.verbose("Parse color : \"" << _inputData << "\"  == > " << localColor.first << " " << localColor.second);
 	return localColor;
 }
 
-bool esvg::Base::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Base::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// TODO : UNDERSTAND why nothing is done here ...
 	// Parse basic elements (ID...):
-	m_id = _element.attributes["id"];
+	this.id = _element.attributes["id"];
 	_sizeMax = Vector2f(0.0f, 0.0f);
 	return false;
 }
 
 
-const char * esvg::Base::spacingDist(int32_t _spacing) {
+const char * esvg::Base::spacingDist(int _spacing) {
 	static const char *tmpValue = "                                                                                ";
 	if (_spacing>20) {
 		_spacing = 20;
@@ -413,27 +387,27 @@ const char * esvg::Base::spacingDist(int32_t _spacing) {
 	return tmpValue + 20*4 - _spacing*4;
 }
 
-void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::Base::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.warning(spacingDist(_level) << "DRAW esvg::Base ... ==> No drawing availlable");
 }
 
 
 
 const etk::String& esvg::Base::getId() const {
-	return m_id;
+	return this.id;
 }
 
 void esvg::Base::setId(const etk::String& _newId) {
 	// TODO : Check if it is UNIQUE ...
-	m_id = _newId;
+	this.id = _newId;
 }
 
 
 void esvg::Base::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                 int32_t _recurtionMax,
+                                 int _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
-                                 int32_t _level) {
+                                 int _level) {
 	
 }
 

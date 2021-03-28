@@ -17,9 +17,9 @@ esvg::Polyline::~Polyline() {
 	
 }
 
-bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
-	m_paint.strokeWidth = 1;
+	this.paint.strokeWidth = 1;
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -27,7 +27,7 @@ bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTran
 	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= _parentTrans;
+	this.transformMatrix *= _parentTrans;
 	
 	etk::String sss1 = _element.attributes["points"];
 	if (sss1.size() == 0) {
@@ -39,9 +39,9 @@ bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTran
 	const char* sss = sss1.c_str();
 	while ('\0' != sss[0]) {
 		Vector2f pos;
-		int32_t n;
-		if (sscanf(sss, "%f,%f %n", &pos.m_floats[0], &pos.m_floats[1], &n) == 2) {
-			m_listPoint.pushBack(pos);
+		int n;
+		if (sscanf(sss, "%f,%f %n", &pos.this.floats[0], &pos.this.floats[1], &n) == 2) {
+			this.listPoint.pushBack(pos);
 			_sizeMax.setValue(etk::max(_sizeMax.x(), pos.x()),
 			                  etk::max(_sizeMax.y(), pos.y()));
 			sss += n;
@@ -52,28 +52,28 @@ bool esvg::Polyline::parseXML(const exml::Element& _element, mat2x3& _parentTran
 	return true;
 }
 
-void esvg::Polyline::display(int32_t _spacing) {
-	Log.debug(spacingDist(_spacing) << "Polyline nbPoint=" << m_listPoint.size());
+void esvg::Polyline::display(int _spacing) {
+	Log.debug(spacingDist(_spacing) << "Polyline nbPoint=" << this.listPoint.size());
 }
 
 
 esvg::render::Path esvg::Polyline::createPath() {
 	esvg::render::Path out;
 	out.clear();
-	out.moveTo(false, m_listPoint[0]);
-	for(size_t iii=1; iii< m_listPoint.size(); iii++) {
-		out.lineTo(false, m_listPoint[iii]);
+	out.moveTo(false, this.listPoint[0]);
+	for(size_t iii=1; iii< this.listPoint.size(); iii++) {
+		out.lineTo(false, this.listPoint[iii]);
 	}
 	out.stop();
 	return out;
 }
 
-void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW esvg::Polyline");
 	
 	esvg::render::Path listElement = createPath();
 	
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -85,10 +85,10 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
-	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
+	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(this.paint.fill, mtx);
 	ememory::SharedPtr<esvg::render::DynamicColor> colorStroke;
-	if (m_paint.strokeWidth > 0.0f) {
-		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
+	if (this.paint.strokeWidth > 0.0f) {
+		colorStroke = esvg::render::createColor(this.paint.stroke, mtx);
 	}
 	// Check if we need to display background
 	if (colorFill != null) {
@@ -103,10 +103,10 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 	// check if we need to display stroke:
 	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
-		                                          m_paint.strokeWidth,
-		                                          m_paint.lineCap,
-		                                          m_paint.lineJoin,
-		                                          m_paint.miterLimit);
+		                                          this.paint.strokeWidth,
+		                                          this.paint.lineCap,
+		                                          this.paint.lineJoin,
+		                                          this.paint.miterLimit);
 		colorStroke->setViewPort(listSegmentStroke.getViewPort());
 		listSegmentStroke.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
@@ -119,7 +119,7 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 	                  colorFill,
 	                  tmpStroke,
 	                  colorStroke,
-	                  m_paint.opacity);
+	                  this.paint.opacity);
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
@@ -128,21 +128,21 @@ void esvg::Polyline::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int3
 
 
 void esvg::Polyline::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                     int32_t _recurtionMax,
+                                     int _recurtionMax,
                                      float _threshold,
                                      mat2x3& _basicTrans,
-                                     int32_t _level) {
+                                     int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW Shape esvg::Polyline");
 	esvg::render::Path listElement = createPath();
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
-	for (auto &it : listPoints.m_data) {
+	for (auto &it : listPoints.this.data) {
 		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
-			listPoint.pushBack(itDot.m_pos);
+			listPoint.pushBack(itDot.this.pos);
 		}
 		_out.pushBack(listPoint);
 	}

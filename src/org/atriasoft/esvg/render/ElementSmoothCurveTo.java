@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -11,9 +12,9 @@
 
 namespace esvg {
 	namespace render {
-		class ElementSmoothCurveTo : public esvg::render::Element {
+		class ElementSmoothCurveTo  extends  esvg::render::Element {
 			public:
-				ElementSmoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos);
+				ElementSmoothCurveTo(boolean _relative, const Vector2f& _pos2, const Vector2f& _pos);
 			public:
 				virtual etk::String display() const;
 		};

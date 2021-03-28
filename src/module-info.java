@@ -7,4 +7,5 @@ open module org.atriasoft.esvg {
 	exports org.atriasoft.esvg.render;
 	
 	requires transitive io.scenarium.logger;
+	requires transitive org.atriasoft.etk;
 }

@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,19 +6,15 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <esvg/render/Element.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<esvg/render/Element.hpp>
 
-namespace esvg {
-	namespace render {
-		class ElementLineToV : public esvg::render::Element {
+namespace esvg{namespace render{
+class ElementLineToV extends esvg::render::Element
+{
 			public:
-				ElementLineToV(bool _relative, float _posY);
-			public:
-				virtual etk::String display() const;
+	
+	ElementLineToV(boolean _relative, float _posY);public:
+	
+	virtual etk::String display() const;
 		};
-	}
-}
-
-
+}}

@@ -20,10 +20,10 @@
 #include <esvg/RadialGradient.hpp>
 
 esvg::Document::Document() {
-	m_uri = "";
-	m_version = "0.0";
-	m_loadOK = false;
-	m_size.setValue(0,0);
+	this.uri = "";
+	this.version = "0.0";
+	this.loadOK = false;
+	this.size.setValue(0,0);
 }
 
 esvg::Document::~Document() {
@@ -33,48 +33,48 @@ esvg::Document::~Document() {
 
 
 void esvg::Document::displayDebug() {
-	Log.debug("Main SVG: size=" << m_size);
+	Log.debug("Main SVG: size=" << this.size);
 	Log.debug("    refs:");
-	for (size_t iii=0; iii<m_refList.size(); iii++) {
-		if (m_refList[iii] != null) {
-			m_refList[iii]->display(2);
+	for (size_t iii=0; iii<this.refList.size(); iii++) {
+		if (this.refList[iii] != null) {
+			this.refList[iii]->display(2);
 		}
 	}
 	Log.debug("    Nodes:");
-	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (m_subElementList[iii] != null) {
-			m_subElementList[iii]->display(2);
+	for (size_t iii=0; iii<this.subElementList.size(); iii++) {
+		if (this.subElementList[iii] != null) {
+			this.subElementList[iii]->display(2);
 		}
 	}
 }
 
 
-void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
-	for (size_t iii=0; iii<m_subElementList.size(); iii++) {
-		if (m_subElementList[iii] != null) {
-			m_subElementList[iii]->draw(_myRenderer, _basicTrans);
+void esvg::Document::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
+	for (size_t iii=0; iii<this.subElementList.size(); iii++) {
+		if (this.subElementList[iii] != null) {
+			this.subElementList[iii]->draw(_myRenderer, _basicTrans);
 		}
 	}
 }
 
 // FOR TEST only ...
-void esvg::Document::generateAnImage(const etk::Uri& _uri, bool _visualDebug) {
-	generateAnImage(m_size, _uri, _visualDebug);
+void esvg::Document::generateAnImage(const etk::Uri& _uri, boolean _visualDebug) {
+	generateAnImage(this.size, _uri, _visualDebug);
 }
-void esvg::Document::generateAnImage(const Vector2i& _size, const etk::Uri& _uri, bool _visualDebug) {
+void esvg::Document::generateAnImage(const Vector2i& _size, const etk::Uri& _uri, boolean _visualDebug) {
 	Vector2i sizeRender = _size;
 	if (sizeRender.x() <= 0) {
-		sizeRender.setX(m_size.x());
+		sizeRender.setX(this.size.x());
 	}
 	if (sizeRender.y() <= 0) {
-		sizeRender.setY(m_size.y());
+		sizeRender.setY(this.size.y());
 	}
 	Log.debug("Generate size " << sizeRender);
 	
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(sizeRender, this, _visualDebug);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(Vector2f(sizeRender.x()/m_size.x(), sizeRender.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(sizeRender.x()/this.size.x(), sizeRender.y()/this.size.y()));
 	
 	draw(*renderedElement, basicTrans);
 	
@@ -90,16 +90,16 @@ void esvg::Document::generateAnImage(const Vector2i& _size, const etk::Uri& _uri
 
 List<etk::Color<float,4>> esvg::Document::renderImageFloatRGBA(Vector2i& _size) {
 	if (_size.x() <= 0) {
-		_size.setX(m_size.x());
+		_size.setX(this.size.x());
 	}
 	if (_size.y() <= 0) {
-		_size.setY(m_size.y());
+		_size.setY(this.size.y());
 	}
 	Log.debug("Generate size " << _size);
 	ememory::SharedPtr<esvg::Renderer> renderedElement = ememory::makeShared<esvg::Renderer>(_size, this);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/this.size.x(), _size.y()/this.size.y()));
 	draw(*renderedElement, basicTrans);
 	
 	// direct return the generated data ...
@@ -140,73 +140,73 @@ List<etk::Color<uint8_t,3>> esvg::Document::renderImageU8RGB(Vector2i& _size) {
 }
 
 void esvg::Document::clear() {
-	m_uri = "";
-	m_version = "0.0";
-	m_loadOK = true;
-	m_paint.clear();
-	m_size.setValue(0,0);
+	this.uri = "";
+	this.version = "0.0";
+	this.loadOK = true;
+	this.paint.clear();
+	this.size.setValue(0,0);
 }
 
 
-bool esvg::Document::parse(const etk::String& _data) {
+boolean esvg::Document::parse(const etk::String& _data) {
 	clear();
 	exml::Document doc;
 	if (doc.parse(_data) == false) {
-		Log.error("Error occured when loading SVG: " << m_uri);
-		m_loadOK = false;
-		return m_loadOK;
+		Log.error("Error occured when loading SVG: " << this.uri);
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	if (doc.nodes.size() == 0) {
-		Log.error("(l ?) No nodes in the SVG file ... '" << m_uri << "'");
-		m_loadOK = false;
-		return m_loadOK;
+		Log.error("(l ?) No nodes in the SVG file ... '" << this.uri << "'");
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	exml::Element root = doc.nodes["svg"];
 	if (root.exist() == false) {
-		Log.error("(l ?) main node not find: 'svg' in '" << m_uri << "'");
-		m_loadOK = false;
-		return m_loadOK;
+		Log.error("(l ?) main node not find: 'svg' in '" << this.uri << "'");
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	cleanStyleProperty(root);
-	m_loadOK = parseXMLData(root);
-	return m_loadOK;
+	this.loadOK = parseXMLData(root);
+	return this.loadOK;
 }
 
-bool esvg::Document::generate(etk::String& _data) {
+boolean esvg::Document::generate(etk::String& _data) {
 	return false;
 }
 
-bool esvg::Document::load(const etk::Uri& _uri) {
+boolean esvg::Document::load(const etk::Uri& _uri) {
 	clear();
-	m_uri = _uri;
+	this.uri = _uri;
 	exml::Document doc;
-	if (doc.load(m_uri) == false) {
-		Log.error("Error occured when loading SVG : " << m_uri);
-		m_loadOK = false;
-		return m_loadOK;
+	if (doc.load(this.uri) == false) {
+		Log.error("Error occured when loading SVG : " << this.uri);
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	if (doc.nodes.size() == 0) {
-		Log.error("(l ?) No nodes in the SVG file ... '" << m_uri << "'");
-		m_loadOK = false;
-		return m_loadOK;
+		Log.error("(l ?) No nodes in the SVG file ... '" << this.uri << "'");
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	exml::Element root = doc.nodes["svg"];
 	if (root.exist() == false) {
-		Log.error("(l ?) main node not find: 'svg' in '" << m_uri << "'");
-		m_loadOK = false;
-		return m_loadOK;
+		Log.error("(l ?) main node not find: 'svg' in '" << this.uri << "'");
+		this.loadOK = false;
+		return this.loadOK;
 	}
 	cleanStyleProperty(root);
-	m_loadOK = parseXMLData(root);
-	return m_loadOK;
+	this.loadOK = parseXMLData(root);
+	return this.loadOK;
 }
 
-bool esvg::Document::store(const etk::Uri& _uri) {
+boolean esvg::Document::store(const etk::Uri& _uri) {
 	Log.todo("not implemented store in SVG...");
 	return false;
 }
 
-bool esvg::Document::cleanStyleProperty(const exml::Element& _root) {
+boolean esvg::Document::cleanStyleProperty(const exml::Element& _root) {
 	// for each nodes:
 	for(auto it: _root.nodes) {
 		exml::Element child = it.toElement();
@@ -237,16 +237,16 @@ bool esvg::Document::cleanStyleProperty(const exml::Element& _root) {
 	return true;
 }
 
-bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference) {
+boolean esvg::Document::parseXMLData(const exml::Element& _root, boolean _isReference) {
 	// get the svg version :
-	m_version = _root.attributes["version"];
+	this.version = _root.attributes["version"];
 	// parse ...
 	Vector2f pos(0,0);
 	if (_isReference == false) {
 		parseTransform(_root);
-		parsePosition(_root, pos, m_size);
+		parsePosition(_root, pos, this.size);
 		parsePaintAttr(_root);
-		Log.verbose("parsed .ROOT trans: " << m_transformMatrix);
+		Log.verbose("parsed .ROOT trans: " << this.transformMatrix);
 	} else {
 		Log.verbose("Parse Reference section ... (no attibute)");
 	}
@@ -261,49 +261,49 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 		}
 		ememory::SharedPtr<esvg::Base> elementParser;
 		if (child.getValue() == "g") {
-			elementParser = ememory::makeShared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(this.paint);
 		} else if (child.getValue() == "a") {
 			Log.info("Note : 'a' balise is parsed like a g balise ...");
-			elementParser = ememory::makeShared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(this.paint);
 		} else if (child.getValue() == "title") {
-			m_title = "TODO : set the title here ...";
+			this.title = "TODO : set the title here ...";
 			continue;
 		} else if (child.getValue() == "path") {
-			elementParser = ememory::makeShared<esvg::Path>(m_paint);
+			elementParser = ememory::makeShared<esvg::Path>(this.paint);
 		} else if (child.getValue() == "rect") {
-			elementParser = ememory::makeShared<esvg::Rectangle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Rectangle>(this.paint);
 		} else if (child.getValue() == "circle") {
-			elementParser = ememory::makeShared<esvg::Circle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Circle>(this.paint);
 		} else if (child.getValue() == "ellipse") {
-			elementParser = ememory::makeShared<esvg::Ellipse>(m_paint);
+			elementParser = ememory::makeShared<esvg::Ellipse>(this.paint);
 		} else if (child.getValue() == "line") {
-			elementParser = ememory::makeShared<esvg::Line>(m_paint);
+			elementParser = ememory::makeShared<esvg::Line>(this.paint);
 		} else if (child.getValue() == "polyline") {
-			elementParser = ememory::makeShared<esvg::Polyline>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polyline>(this.paint);
 		} else if (child.getValue() == "polygon") {
-			elementParser = ememory::makeShared<esvg::Polygon>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polygon>(this.paint);
 		} else if (child.getValue() == "text") {
-			elementParser = ememory::makeShared<esvg::Text>(m_paint);
+			elementParser = ememory::makeShared<esvg::Text>(this.paint);
 		} else if (child.getValue() == "radialGradient") {
 			if (_isReference == false) {
 				Log.error("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
-				elementParser = ememory::makeShared<esvg::RadialGradient>(m_paint);
+				elementParser = ememory::makeShared<esvg::RadialGradient>(this.paint);
 			}
 		} else if (child.getValue() == "linearGradient") {
 			if (_isReference == false) {
 				Log.error("'" << child.getValue() << "' node must not be defined outside a defs Section");
 				continue;
 			} else {
-				elementParser = ememory::makeShared<esvg::LinearGradient>(m_paint);
+				elementParser = ememory::makeShared<esvg::LinearGradient>(this.paint);
 			}
 		} else if (child.getValue() == "defs") {
 			if (_isReference == true) {
 				Log.error("'" << child.getValue() << "' node must not be defined in a defs Section");
 				continue;
 			} else {
-				bool retRefs = parseXMLData(child, true);
+				boolean retRefs = parseXMLData(child, true);
 				// TODO : Use retRefs ...
 				continue;
 			}
@@ -320,7 +320,7 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 			Log.error("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
-		if (elementParser->parseXML(child, m_transformMatrix, size) == false) {
+		if (elementParser->parseXML(child, this.transformMatrix, size) == false) {
 			Log.error("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' Sub Parsing ERROR");
 			elementParser.reset();
 			continue;
@@ -333,16 +333,16 @@ bool esvg::Document::parseXMLData(const exml::Element& _root, bool _isReference)
 		}
 		// add element in the system
 		if (_isReference == false) {
-			m_subElementList.pushBack(elementParser);
+			this.subElementList.pushBack(elementParser);
 		} else {
-			m_refList.pushBack(elementParser);
+			this.refList.pushBack(elementParser);
 		}
 	}
-	if (    m_size.x() == 0
-	     || m_size.y()==0) {
-		m_size.setValue((int32_t)maxSize.x(), (int32_t)maxSize.y());
+	if (    this.size.x() == 0
+	     || this.size.y()==0) {
+		this.size.setValue((int)maxSize.x(), (int)maxSize.y());
 	} else {
-		m_size.setValue((int32_t)m_size.x(), (int32_t)m_size.y());
+		this.size.setValue((int)this.size.x(), (int)this.size.y());
 	}
 	if (_isReference == false) {
 		displayDebug();
@@ -357,7 +357,7 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _
 		Log.error("request a reference with no name ... ");
 		return null;
 	}
-	for (auto &it : m_refList) {
+	for (auto &it : this.refList) {
 		if (it == null) {
 			continue;
 		}
@@ -372,27 +372,27 @@ ememory::SharedPtr<esvg::Base> esvg::Document::getReference(const etk::String& _
 List<etk::Vector<Vector2f>> esvg::Document::getLines(Vector2f _size) {
 	List<etk::Vector<Vector2f>> out;
 	if (_size.x() <= 0) {
-		_size.setX(m_size.x());
+		_size.setX(this.size.x());
 	}
 	if (_size.y() <= 0) {
-		_size.setY(m_size.y());
+		_size.setY(this.size.y());
 	}
 	Log.debug("lineification size " << _size);
 	// create the first element matrix modification ...
 	mat2x3 basicTrans;
-	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/m_size.x(), _size.y()/m_size.y()));
+	basicTrans *= etk::mat2x3Scale(Vector2f(_size.x()/this.size.x(), _size.y()/this.size.y()));
 	drawShapePoints(out, 10, 0.25f, basicTrans);
 	return out;
 }
 
 
 void esvg::Document::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                     int32_t _recurtionMax,
+                                     int _recurtionMax,
                                      float _threshold,
                                      mat2x3& _basicTrans,
-                                     int32_t _level) {
+                                     int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW shape esvg::Document");
-	for (auto &it : m_subElementList) {
+	for (auto &it : this.subElementList) {
 		if (it != null) {
 			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
 		}

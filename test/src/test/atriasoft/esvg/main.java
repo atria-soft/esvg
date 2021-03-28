@@ -9,13 +9,13 @@
 #include <etest/etest.hpp>
 #include <etk/etk.hpp>
 
-bool g_visualDebug = false;
+boolean g_visualDebug = false;
 
 
 int main(int _argc, const char *_argv[]) {
 	etest::init(_argc, _argv);
 	etk::init(_argc, _argv);
-	for (int32_t iii=0; iii<_argc ; ++iii) {
+	for (int iii=0; iii<_argc ; ++iii) {
 		etk::String data = _argv[iii];
 		#ifdef DEBUG
 		if (data == "--visual-test") {

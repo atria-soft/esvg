@@ -8,59 +8,59 @@
 #include <esvg/render/Element.hpp>
 
 void esvg::render::Path::clear() {
-	m_listElement.clear();
+	this.listElement.clear();
 }
 
 void esvg::render::Path::stop() {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementStop>());
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementStop>());
 }
 
-void esvg::render::Path::close(bool _relative) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementClose>(_relative));
+void esvg::render::Path::close(boolean _relative) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementClose>(_relative));
 }
 
-void esvg::render::Path::moveTo(bool _relative, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementMoveTo>(_relative, _pos));
+void esvg::render::Path::moveTo(boolean _relative, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementMoveTo>(_relative, _pos));
 }
 
-void esvg::render::Path::lineTo(bool _relative, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementLineTo>(_relative, _pos));
+void esvg::render::Path::lineTo(boolean _relative, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementLineTo>(_relative, _pos));
 }
 
-void esvg::render::Path::lineToH(bool _relative, float _posX) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementLineToH>(_relative, _posX));
+void esvg::render::Path::lineToH(boolean _relative, float _posX) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementLineToH>(_relative, _posX));
 }
 
-void esvg::render::Path::lineToV(bool _relative, float _posY) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementLineToV>(_relative, _posY));
+void esvg::render::Path::lineToV(boolean _relative, float _posY) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementLineToV>(_relative, _posY));
 }
 
-void esvg::render::Path::curveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementCurveTo>(_relative, _pos1, _pos2, _pos));
+void esvg::render::Path::curveTo(boolean _relative, const Vector2f& _pos1, const Vector2f& _pos2, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementCurveTo>(_relative, _pos1, _pos2, _pos));
 }
 
-void esvg::render::Path::smoothCurveTo(bool _relative, const Vector2f& _pos2, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementSmoothCurveTo>(_relative, _pos2, _pos));
+void esvg::render::Path::smoothCurveTo(boolean _relative, const Vector2f& _pos2, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementSmoothCurveTo>(_relative, _pos2, _pos));
 }
 
-void esvg::render::Path::bezierCurveTo(bool _relative, const Vector2f& _pos1, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierCurveTo>(_relative, _pos1, _pos));
+void esvg::render::Path::bezierCurveTo(boolean _relative, const Vector2f& _pos1, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierCurveTo>(_relative, _pos1, _pos));
 }
 
-void esvg::render::Path::bezierSmoothCurveTo(bool _relative, const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierSmoothCurveTo>(_relative, _pos));
+void esvg::render::Path::bezierSmoothCurveTo(boolean _relative, const Vector2f& _pos) {
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementBezierSmoothCurveTo>(_relative, _pos));
 }
 
-void esvg::render::Path::ellipticTo(bool _relative,
+void esvg::render::Path::ellipticTo(boolean _relative,
                                     const Vector2f& _radius,
                                     float _angle,
-                                    bool _largeArcFlag,
-                                    bool _sweepFlag,
+                                    boolean _largeArcFlag,
+                                    boolean _sweepFlag,
                                     const Vector2f& _pos) {
-	m_listElement.pushBack(ememory::makeShared<esvg::render::ElementElliptic>(_relative, _radius, _angle, _largeArcFlag, _sweepFlag, _pos));
+	this.listElement.pushBack(ememory::makeShared<esvg::render::ElementElliptic>(_relative, _radius, _angle, _largeArcFlag, _sweepFlag, _pos));
 }
 
-static const char* spacingDist(int32_t _spacing) {
+static const char* spacingDist(int _spacing) {
 	static const char *tmpValue = "                                                                                ";
 	if (_spacing>20) {
 		_spacing = 20;
@@ -68,9 +68,9 @@ static const char* spacingDist(int32_t _spacing) {
 	return tmpValue + 20*4 - _spacing*4;
 }
 
-void esvg::render::Path::display(int32_t _spacing) {
+void esvg::render::Path::display(int _spacing) {
 	Log.debug(spacingDist(_spacing) << "Path");
-	for(auto &it : m_listElement) {
+	for(auto &it : this.listElement) {
 		if (it == null) {
 			continue;
 		}
@@ -80,13 +80,13 @@ void esvg::render::Path::display(int32_t _spacing) {
 
 
 void interpolateCubicBezier(List<esvg::render::Point>& _listPoint,
-                            int32_t _recurtionMax,
+                            int _recurtionMax,
                             float _threshold,
                             Vector2f _pos1,
                             Vector2f _pos2,
                             Vector2f _pos3,
                             Vector2f _pos4,
-                            int32_t _level,
+                            int _level,
                             enum esvg::render::Point::type _type) {
 	if (_level > _recurtionMax) {
 		return;
@@ -122,16 +122,16 @@ static float vectorAngle(Vector2f _uuu, Vector2f _vvv) {
 	return atan2(_uuu.cross(_vvv), _uuu.dot(_vvv));
 }
 
-esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, int32_t _recurtionMax, float _threshold) {
+esvg::render::PointList esvg::render::Path::generateListPoints(int _level, int _recurtionMax, float _threshold) {
 	Log.verbose(spacingDist(_level) << "Generate List Points ... from a path");
 	esvg::render::PointList out;
 	List<esvg::render::Point> tmpListPoint;
 	Vector2f lastPosition(0.0f, 0.0f);
 	Vector2f lastAngle(0.0f, 0.0f);
-	int32_t lastPointId = -1;
-	bool PathStart = false;
+	int lastPointId = -1;
+	boolean PathStart = false;
 	// Foreach element, we move in the path:
-	for(auto &it : m_listElement) {
+	for(auto &it : this.listElement) {
 		if (it == null) {
 			continue;
 		}
@@ -156,13 +156,13 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						Log.warning(spacingDist(_level+1) << " Request path close of not starting path ...");
 					} else {
 						// find the previous tart of the path ...
-						tmpListPoint.front().m_type = esvg::render::Point::type::join;
+						tmpListPoint.front().this.type = esvg::render::Point::type::join;
 						// Remove the last point if it is the same position...
-						Vector2f delta = (tmpListPoint.front().m_pos - tmpListPoint.back().m_pos).absolute();
+						Vector2f delta = (tmpListPoint.front().this.pos - tmpListPoint.back().this.pos).absolute();
 						if (    delta.x() <= 0.00001
 						     && delta.y() <= 0.00001) {
 							tmpListPoint.popBack();
-							Log.verbose("        Remove point Z property : " << tmpListPoint.back().m_pos << " with delta=" << delta);
+							Log.verbose("        Remove point Z property : " << tmpListPoint.back().this.pos << " with delta=" << delta);
 						}
 						out.addList(tmpListPoint);
 						tmpListPoint.clear();
@@ -338,11 +338,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 				}
 				{
 					ememory::SharedPtr<esvg::render::ElementElliptic> tmpIt(ememory::dynamicPointerCast<esvg::render::ElementElliptic>(it));
-					float angle = tmpIt->m_angle * (M_PI / 180.0);
+					float angle = tmpIt->this.angle * (M_PI / 180.0);
 					Log.todo(spacingDist(_level+1) << " Elliptic arc: radius=" << tmpIt->getPos1());
-					Log.todo(spacingDist(_level+1) << "               angle=" << tmpIt->m_angle);
-					Log.todo(spacingDist(_level+1) << "               m_largeArcFlag=" << tmpIt->m_largeArcFlag);
-					Log.todo(spacingDist(_level+1) << "               m_sweepFlag=" << tmpIt->m_sweepFlag);
+					Log.todo(spacingDist(_level+1) << "               angle=" << tmpIt->this.angle);
+					Log.todo(spacingDist(_level+1) << "               this.largeArcFlag=" << tmpIt->this.largeArcFlag);
+					Log.todo(spacingDist(_level+1) << "               this.sweepFlag=" << tmpIt->this.sweepFlag);
 					
 					
 					Vector2f lastPosStore(lastPosition);
@@ -350,11 +350,11 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						lastPosition = Vector2f(0.0f, 0.0f);
 					}
 					Vector2f pos = lastPosition + it->getPos();
-					float rotationX = tmpIt->m_angle * (M_PI / 180.0);
+					float rotationX = tmpIt->this.angle * (M_PI / 180.0);
 					Vector2f radius = tmpIt->getPos1();
 					
 					#ifdef DEBUG
-						m_debugInformation.addSegment(lastPosStore, pos);
+						this.debugInformation.addSegment(lastPosStore, pos);
 					#endif
 					Vector2f delta = lastPosStore - pos;
 					float ddd = delta.length();
@@ -400,7 +400,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 								sss = sqrtf(ssa / ssb);
 							#endif
 						}
-						if (tmpIt->m_largeArcFlag == tmpIt->m_sweepFlag) {
+						if (tmpIt->this.largeArcFlag == tmpIt->this.sweepFlag) {
 							sss *= -1.0f;
 						}
 						Vector2f centerPrime(sss * radius.x() * deltaPrim.y() / radius.y(),
@@ -409,15 +409,15 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						mat2x3 matrix = etk::mat2x3Rotate(rotationX);
 						Vector2f center = (lastPosStore + pos)*0.5f + matrix*centerPrime;
 						#ifdef DEBUG
-							m_debugInformation.addSegment(center-Vector2f(3.0,3.0), center+Vector2f(3.0,3.0));
-							m_debugInformation.addSegment(center-Vector2f(3.0,-3.0), center+Vector2f(3.0,-3.0));
+							this.debugInformation.addSegment(center-Vector2f(3.0,3.0), center+Vector2f(3.0,3.0));
+							this.debugInformation.addSegment(center-Vector2f(3.0,-3.0), center+Vector2f(3.0,-3.0));
 						#endif
 						// Calculate theta1, and delta theta.
 						Vector2f vectorA = (deltaPrim - centerPrime) / radius;
 						Vector2f vectorB = (deltaPrim + centerPrime) / radius * -1.0f;
 						#ifdef DEBUG
-							m_debugInformation.addSegment(center, center+vectorA*radius.x());
-							m_debugInformation.addSegment(center, center+vectorB*radius.y());
+							this.debugInformation.addSegment(center, center+vectorA*radius.x());
+							this.debugInformation.addSegment(center, center+vectorB*radius.y());
 						#endif
 						// Initial angle
 						float theta1 = vectorAngle(Vector2f(1.0f,0.0f), vectorA);
@@ -426,10 +426,10 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// special case of invert angle...
 						if (    (    deltaTheta == float(M_PI)
 						          || deltaTheta == -float(M_PI))
-						     && tmpIt->m_sweepFlag == false) {
+						     && tmpIt->this.sweepFlag == false) {
 							deltaTheta *= -1.0f;
 						}
-						if (tmpIt->m_largeArcFlag == true) {
+						if (tmpIt->this.largeArcFlag == true) {
 							// Choose large arc
 							if (deltaTheta > 0.0f) {
 								deltaTheta -= 2.0f*M_PI;
@@ -442,9 +442,9 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						// Split arc into max 90 degree segments.
 						// The loop assumes an iteration per end point (including start and end), this +1.
 						#ifndef __STDCPP_LLVM__
-							int32_t ndivs = int32_t(etk::abs(deltaTheta) / (M_PI*0.5f)) + 1;
+							int ndivs = int(etk::abs(deltaTheta) / (M_PI*0.5f)) + 1;
 						#else
-							int32_t ndivs = int32_t(fabs(deltaTheta) / (M_PI*0.5f)) + 1;
+							int ndivs = int(fabs(deltaTheta) / (M_PI*0.5f)) + 1;
 						#endif
 						float hda = (deltaTheta / float(ndivs)) * 0.5f;
 						#ifndef __STDCPP_LLVM__
@@ -457,7 +457,7 @@ esvg::render::PointList esvg::render::Path::generateListPoints(int32_t _level, i
 						}
 						Vector2f pointPosPrevious(0.0,0.0);
 						Vector2f tangentPrevious(0.0,0.0);
-						for (int32_t iii=0; iii<=ndivs; ++iii) {
+						for (int iii=0; iii<=ndivs; ++iii) {
 							float a = theta1 + deltaTheta * (float(iii)/(float)ndivs);
 							#ifndef __STDCPP_LLVM__
 								delta = Vector2f(etk::cos(a), etk::sin(a));

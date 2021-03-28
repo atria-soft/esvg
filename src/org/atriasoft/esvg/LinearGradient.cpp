@@ -13,10 +13,10 @@
 
 esvg::LinearGradient::LinearGradient(PaintState _parentPaintState) :
   esvg::Base(_parentPaintState),
-  m_pos1(Vector2f(50,50), esvg::distance_pourcent),
-  m_pos2(Vector2f(50,50), esvg::distance_pourcent),
-  m_unit(gradientUnits_objectBoundingBox),
-  m_spread(spreadMethod_pad) {
+  this.pos1(Vector2f(50,50), esvg::distance_pourcent),
+  this.pos2(Vector2f(50,50), esvg::distance_pourcent),
+  this.unit(gradientUnits_objectBoundingBox),
+  this.spread(spreadMethod_pad) {
 	
 }
 
@@ -25,39 +25,39 @@ esvg::LinearGradient::~LinearGradient() {
 }
 
 
-bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	// line must have a minimum size...
-	//m_paint.strokeWidth = 1;
+	//this.paint.strokeWidth = 1;
 	if (_element.exist() == false) {
 		return false;
 	}
 	
 	// ---------------- get unique ID ----------------
-	m_id = _element.attributes["id"];
+	this.id = _element.attributes["id"];
 	
 	//parseTransform(_element);
 	//parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= _parentTrans;
+	this.transformMatrix *= _parentTrans;
 	
 	etk::String contentX = _element.attributes["x1"];
 	etk::String contentY = _element.attributes["y1"];
 	if (    contentX != ""
 	     && contentY != "") {
-		m_pos1.set(contentX, contentY);
+		this.pos1.set(contentX, contentY);
 	}
 	contentX = _element.attributes["x2"];
 	contentY = _element.attributes["y2"];
 	if (    contentX != ""
 	     && contentY != "") {
-		m_pos2.set(contentX, contentY);
+		this.pos2.set(contentX, contentY);
 	}
 	contentX = _element.attributes["gradientUnits"];
 	if (contentX == "userSpaceOnUse") {
-		m_unit = gradientUnits_userSpaceOnUse;
+		this.unit = gradientUnits_userSpaceOnUse;
 	} else {
-		m_unit = gradientUnits_objectBoundingBox;
+		this.unit = gradientUnits_objectBoundingBox;
 		if (    contentX.size() != 0
 		     && contentX != "objectBoundingBox") {
 			Log.error("Parsing error of 'gradientUnits' ==> not suported value: '" << contentX << "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
@@ -65,20 +65,20 @@ bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 	}
 	contentX = _element.attributes["spreadMethod"];
 	if (contentX == "reflect") {
-		m_spread = spreadMethod_reflect;
+		this.spread = spreadMethod_reflect;
 	} else if (contentX == "repeat") {
-		m_spread = spreadMethod_repeat;
+		this.spread = spreadMethod_repeat;
 	} else {
-		m_spread = spreadMethod_pad;
+		this.spread = spreadMethod_pad;
 		if (    contentX.size() != 0
 		     && contentX != "pad") {
 			Log.error("Parsing error of 'spreadMethod' ==> not suported value: '" << contentX << "' not in : {reflect/repeate/pad} use pad");
 		}
 	}
 	// note: xlink:href is incompatible with subNode "stop"
-	m_href = _element.attributes["xlink:href"];
-	if (m_href.size() != 0) {
-		m_href = etk::String(m_href.begin()+1, m_href.end());
+	this.href = _element.attributes["xlink:href"];
+	if (this.href.size() != 0) {
+		this.href = etk::String(this.href.begin()+1, this.href.end());
 	}
 	// parse all sub node :
 	for(const auto it : _element.nodes) {
@@ -92,7 +92,7 @@ bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 			etk::Color<float,4> stopColor = etk::color::none;
 			etk::String content = child.attributes["offset"];
 			if (content.size()!=0) {
-				etk::Pair<float, enum esvg::distance> tmp = parseLength2(content);
+				Pair<float, enum esvg::distance> tmp = parseLength2(content);
 				if (tmp.second == esvg::distance_pixel) {
 					// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
 					offset = tmp.first*100.0f;
@@ -114,58 +114,58 @@ bool esvg::LinearGradient::parseXML(const exml::Element& _element, mat2x3& _pare
 				stopColor.setA(opacity);
 				Log.verbose(" opacity : '" << content << "'  == > " << stopColor);
 			}
-			m_data.pushBack(etk::Pair<float, etk::Color<float,4>>(offset, stopColor));
+			this.data.pushBack(Pair<float, etk::Color<float,4>>(offset, stopColor));
 		} else {
 			Log.error("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [stop]");
 		}
 	}
-	if (m_data.size() != 0) {
-		if (m_href != "") {
+	if (this.data.size() != 0) {
+		if (this.href != "") {
 			Log.error("(l " << _element.getPos() << ") node can not have an xlink:href element with sub node named: stop ==> removing href");
-			m_href = "";
+			this.href = "";
 		}
 	}
 	return true;
 }
 
-void esvg::LinearGradient::display(int32_t _spacing) {
-	Log.debug(spacingDist(_spacing) << "LinearGradient " << m_pos1 << " to " << m_pos2);
-	for (auto &it : m_data) {
+void esvg::LinearGradient::display(int _spacing) {
+	Log.debug(spacingDist(_spacing) << "LinearGradient " << this.pos1 << " to " << this.pos2);
+	for (auto &it : this.data) {
 		Log.debug(spacingDist(_spacing+1) << "STOP: offset=" << it.first << " color=" << it.second);
 	}
 }
 
-void esvg::LinearGradient::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::LinearGradient::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW esvg::LinearGradient");
 }
 
 const esvg::Dimension& esvg::LinearGradient::getPosition1() {
-	return m_pos1;
+	return this.pos1;
 }
 
 const esvg::Dimension& esvg::LinearGradient::getPosition2() {
-	return m_pos2;
+	return this.pos2;
 }
 
-const List<etk::Pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors(esvg::Document* _document) {
-	if (m_href == "") {
-		return m_data;
+const List<Pair<float, etk::Color<float,4>>>& esvg::LinearGradient::getColors(esvg::Document* _document) {
+	if (this.href == "") {
+		return this.data;
 	}
 	if (_document == null) {
 		Log.error("Get null input for document");
-		return m_data;
+		return this.data;
 	}
-	ememory::SharedPtr<esvg::Base> base = _document->getReference(m_href);
+	ememory::SharedPtr<esvg::Base> base = _document->getReference(this.href);
 	if (base == null) {
-		Log.error("Can not get base : '" << m_href << "'");
-		return m_data;
+		Log.error("Can not get base : '" << this.href << "'");
+		return this.data;
 	}
 	ememory::SharedPtr<esvg::RadialGradient> gradientR = ememory::dynamicPointerCast<esvg::RadialGradient>(base);
 	if (gradientR == null) {
 		ememory::SharedPtr<esvg::LinearGradient> gradientL = ememory::dynamicPointerCast<esvg::LinearGradient>(base);
 		if (gradientL == null) {
-			Log.error("Can not cast in a linear/radial gradient: '" << m_href << "' ==> wrong type");
-			return m_data;
+			Log.error("Can not cast in a linear/radial gradient: '" << this.href << "' ==> wrong type");
+			return this.data;
 		}
 		return gradientL->getColors(_document);
 	}

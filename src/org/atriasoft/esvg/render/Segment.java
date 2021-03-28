@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,23 +6,20 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <etk/math/Matrix2x3.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<etk/math/Matrix2x3.hpp>
 
-namespace esvg {
-	namespace render {
-		class Segment {
-			public:
+namespace esvg{namespace render{
+class Segment {
+	public:
 				// TODO: Update List to support not having it ...
 				Segment();
-				Segment(const Vector2f& _p0, const Vector2f& _p1);
+	
+	Segment(const Vector2f& _p0, const Vector2f& _p1);
 				Vector2f p0;
 				Vector2f p1;
-				int32_t direction;
-				void applyMatrix(const mat2x3& _transformationMatrix);
-				void createDirection();
-		};
-	}
-}
-
+				int direction;
+	
+	void applyMatrix(const mat2x3& _transformationMatrix);
+	
+	void createDirection();
+};}}

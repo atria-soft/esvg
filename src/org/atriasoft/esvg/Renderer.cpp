@@ -9,26 +9,26 @@
 #include <etk/uri/Uri.hpp>
 #include <etk/uri/provider/provider.hpp>
 
-esvg::Renderer::Renderer(const Vector2i& _size, esvg::Document* _document, bool _visualDebug) :
+esvg::Renderer::Renderer(const Vector2i& _size, esvg::Document* _document, boolean _visualDebug) :
 #ifdef DEBUG
-  m_visualDebug(_visualDebug),
-  m_factor(1),
+  this.visualDebug(_visualDebug),
+  this.factor(1),
 #endif
-  m_interpolationRecurtionMax(10),
-  m_interpolationThreshold(0.25f),
-  m_nbSubScanLine(8),
-  m_document(_document) {
+  this.interpolationRecurtionMax(10),
+  this.interpolationThreshold(0.25f),
+  this.nbSubScanLine(8),
+  this.document(_document) {
 	#ifdef DEBUG
-		if (m_visualDebug == true) {
-			m_factor = 20;
+		if (this.visualDebug == true) {
+			this.factor = 20;
 		}
 	#endif
 	setSize(_size);
 }
 
 esvg::Renderer::~Renderer() {
-	m_buffer.clear();
-	m_size = Vector2i(0,0);
+	this.buffer.clear();
+	this.size = Vector2i(0,0);
 }
 
 etk::Color<float,4> esvg::Renderer::mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration) {
@@ -59,16 +59,16 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
                            ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
                            float _opacity) {
 	if (_colorFill != null) {
-		//_colorFill->setViewPort(etk::Pair<Vector2f, Vector2f>(Vector2f(0,0), Vector2f(sizeX, sizeY)));
-		_colorFill->generate(m_document);
+		//_colorFill->setViewPort(Pair<Vector2f, Vector2f>(Vector2f(0,0), Vector2f(sizeX, sizeY)));
+		_colorFill->generate(this.document);
 	}
 	if (_colorStroke != null) {
-		//_colorStroke->setViewPort(etk::Pair<Vector2f, Vector2f>(Vector2f(0,0), Vector2f(sizeX, sizeY)));
-		_colorStroke->generate(m_document);
+		//_colorStroke->setViewPort(Pair<Vector2f, Vector2f>(Vector2f(0,0), Vector2f(sizeX, sizeY)));
+		_colorStroke->generate(this.document);
 	}
 	// all together
-	for (int32_t yyy=0; yyy<m_size.y(); ++yyy) {
-		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
+	for (int yyy=0; yyy<this.size.y(); ++yyy) {
+		for (int xxx=0; xxx<this.size.x(); ++xxx) {
 			Vector2i pos(xxx, yyy);
 			float valueFill = _weightFill.get(pos);
 			float valueStroke = _weightStroke.get(pos);
@@ -88,14 +88,14 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			etk::Color<float,4> intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
 			intermediateColor.setA(intermediateColor.a() * _opacity);
 			#if DEBUG
-				for (int32_t deltaY=0; deltaY<m_factor; ++deltaY) {
-					for (int32_t deltaX=0; deltaX<m_factor; ++deltaX) {
-						int32_t id = m_size.x()*m_factor*(yyy*m_factor+deltaY) + (xxx*m_factor+deltaX);
-						m_buffer[id] = mergeColor(m_buffer[id], intermediateColor);
+				for (int deltaY=0; deltaY<this.factor; ++deltaY) {
+					for (int deltaX=0; deltaX<this.factor; ++deltaX) {
+						int id = this.size.x()*this.factor*(yyy*this.factor+deltaY) + (xxx*this.factor+deltaX);
+						this.buffer[id] = mergeColor(this.buffer[id], intermediateColor);
 					}
 				}
 			#else
-				m_buffer[m_size.x()*yyy + xxx] = mergeColor(m_buffer[m_size.x()*yyy + xxx], intermediateColor);
+				this.buffer[this.size.x()*yyy + xxx] = mergeColor(this.buffer[this.size.x()*yyy + xxx], intermediateColor);
 			#endif
 		}
 	}
@@ -105,28 +105,28 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 		if (tmpColor != null) {
 			esvg::render::SegmentList listSegment;
 			// Display bounding box
-			listSegment.addSegment(esvg::render::Point(tmpColor->m_viewPort.first),
-			                       esvg::render::Point(Vector2f(tmpColor->m_viewPort.first.x(), tmpColor->m_viewPort.second.y()) ),
+			listSegment.addSegment(esvg::render::Point(tmpColor->this.viewPort.first),
+			                       esvg::render::Point(Vector2f(tmpColor->this.viewPort.first.x(), tmpColor->this.viewPort.second.y()) ),
 			                       false);
-			listSegment.addSegment(esvg::render::Point(Vector2f(tmpColor->m_viewPort.first.x(), tmpColor->m_viewPort.second.y()) ),
-			                       esvg::render::Point(tmpColor->m_viewPort.second),
+			listSegment.addSegment(esvg::render::Point(Vector2f(tmpColor->this.viewPort.first.x(), tmpColor->this.viewPort.second.y()) ),
+			                       esvg::render::Point(tmpColor->this.viewPort.second),
 			                       false);
-			listSegment.addSegment(esvg::render::Point(tmpColor->m_viewPort.second),
-			                       esvg::render::Point(Vector2f(tmpColor->m_viewPort.second.x(), tmpColor->m_viewPort.first.y()) ),
+			listSegment.addSegment(esvg::render::Point(tmpColor->this.viewPort.second),
+			                       esvg::render::Point(Vector2f(tmpColor->this.viewPort.second.x(), tmpColor->this.viewPort.first.y()) ),
 			                       false);
-			listSegment.addSegment(esvg::render::Point(Vector2f(tmpColor->m_viewPort.second.x(), tmpColor->m_viewPort.first.y()) ),
-			                       esvg::render::Point(tmpColor->m_viewPort.first),
+			listSegment.addSegment(esvg::render::Point(Vector2f(tmpColor->this.viewPort.second.x(), tmpColor->this.viewPort.first.y()) ),
+			                       esvg::render::Point(tmpColor->this.viewPort.first),
 			                       false);
-			listSegment.applyMatrix(tmpColor->m_matrix);
+			listSegment.applyMatrix(tmpColor->this.matrix);
 			// display the gradient axis
-			listSegment.addSegment(esvg::render::Point(tmpColor->m_pos1),
-			                       esvg::render::Point(tmpColor->m_pos2),
+			listSegment.addSegment(esvg::render::Point(tmpColor->this.pos1),
+			                       esvg::render::Point(tmpColor->this.pos2),
 			                       false);
 			/*
-				mat2x3 m_matrix;
-				etk::Pair<Vector2f, Vector2f> m_viewPort;
-				Vector2f m_pos1;
-				Vector2f m_pos2;
+				mat2x3 this.matrix;
+				Pair<Vector2f, Vector2f> this.viewPort;
+				Vector2f this.pos1;
+				Vector2f this.pos2;
 			*/
 			addDebugSegment(listSegment);
 		}
@@ -135,17 +135,17 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 
 #ifdef DEBUG
 	void esvg::Renderer::addDebugSegment(const esvg::render::SegmentList& _listSegment) {
-		if (m_visualDebug == false) {
+		if (this.visualDebug == false) {
 			return;
 		}
-		Vector2i dynamicSize = m_size * m_factor;
+		Vector2i dynamicSize = this.size * this.factor;
 		// for each lines:
-		for (int32_t yyy=0; yyy<dynamicSize.y(); ++yyy) {
+		for (int yyy=0; yyy<dynamicSize.y(); ++yyy) {
 			// Reduce the number of lines in the subsampling parsing:
 			List<esvg::render::Segment> availlableSegmentPixel;
-			for (auto &it : _listSegment.m_data) {
-				if (    it.p0.y() * m_factor <= float(yyy+1)
-				     && it.p1.y() * m_factor >= float(yyy)) {
+			for (auto &it : _listSegment.this.data) {
+				if (    it.p0.y() * this.factor <= float(yyy+1)
+				     && it.p1.y() * this.factor >= float(yyy)) {
 					availlableSegmentPixel.pushBack(it);
 				}
 			}
@@ -154,40 +154,40 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			List<esvg::render::Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
-				if (    it.p0.y() * m_factor <= subSamplingCenterPos
-				     && it.p1.y() * m_factor >= subSamplingCenterPos ) {
+				if (    it.p0.y() * this.factor <= subSamplingCenterPos
+				     && it.p1.y() * this.factor >= subSamplingCenterPos ) {
 					availlableSegment.pushBack(it);
 				}
 			}
 			// x position, angle
-			List<etk::Pair<float, float>> listPosition;
+			List<Pair<float, float>> listPosition;
 			for (auto &it : availlableSegment) {
-				Vector2f delta = it.p0 * m_factor - it.p1 * m_factor;
+				Vector2f delta = it.p0 * this.factor - it.p1 * this.factor;
 				// x = coefficent*y+bbb;
 				float coefficient = delta.x()/delta.y();
-				float bbb = it.p0.x() * m_factor - coefficient*it.p0.y() * m_factor;
+				float bbb = it.p0.x() * this.factor - coefficient*it.p0.y() * this.factor;
 				float xpos = coefficient * subSamplingCenterPos + bbb;
 				if (    xpos >= 0
 				     && xpos < dynamicSize.x()
 				     && yyy >= 0
 				     && yyy < dynamicSize.y() ) {
 					if (it.direction == 1.0f) {
-						m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::blue;
+						this.buffer[(dynamicSize.x()*yyy + int(xpos))] = etk::color::blue;
 					} else {
-						m_buffer[(dynamicSize.x()*yyy + int32_t(xpos))] = etk::color::darkRed;
+						this.buffer[(dynamicSize.x()*yyy + int(xpos))] = etk::color::darkRed;
 					}
 				}
 			}
 		}
 		// for each colomn:
-		for (int32_t xxx=0; xxx<dynamicSize.x(); ++xxx) {
+		for (int xxx=0; xxx<dynamicSize.x(); ++xxx) {
 			// Reduce the number of lines in the subsampling parsing:
 			List<esvg::render::Segment> availlableSegmentPixel;
-			for (auto &it : _listSegment.m_data) {
-				if (    (    it.p0.x() * m_factor <= float(xxx+1)
-				          && it.p1.x() * m_factor >= float(xxx) )
-				     || (    it.p0.x() * m_factor >= float(xxx+1)
-				          && it.p1.x() * m_factor <= float(xxx) ) ) {
+			for (auto &it : _listSegment.this.data) {
+				if (    (    it.p0.x() * this.factor <= float(xxx+1)
+				          && it.p1.x() * this.factor >= float(xxx) )
+				     || (    it.p0.x() * this.factor >= float(xxx+1)
+				          && it.p1.x() * this.factor <= float(xxx) ) ) {
 					availlableSegmentPixel.pushBack(it);
 				}
 			}
@@ -196,32 +196,32 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 			List<esvg::render::Segment> availlableSegment;
 			// find in the subList ...
 			for (auto &it : availlableSegmentPixel) {
-				if (    (    it.p0.x() * m_factor <= subSamplingCenterPos
-				          && it.p1.x() * m_factor >= subSamplingCenterPos)
-				     || (    it.p0.x() * m_factor >= subSamplingCenterPos
-				          && it.p1.x() * m_factor <= subSamplingCenterPos) ) {
+				if (    (    it.p0.x() * this.factor <= subSamplingCenterPos
+				          && it.p1.x() * this.factor >= subSamplingCenterPos)
+				     || (    it.p0.x() * this.factor >= subSamplingCenterPos
+				          && it.p1.x() * this.factor <= subSamplingCenterPos) ) {
 					availlableSegment.pushBack(it);
 				}
 			}
 			// x position, angle
-			List<etk::Pair<float, float>> listPosition;
+			List<Pair<float, float>> listPosition;
 			for (auto &it : availlableSegment) {
-				Vector2f delta = it.p0 * m_factor - it.p1 * m_factor;
+				Vector2f delta = it.p0 * this.factor - it.p1 * this.factor;
 				// x = coefficent*y+bbb;
 				if (delta.x() == 0) {
 					continue;
 				}
 				float coefficient = delta.y()/delta.x();
-				float bbb = it.p0.y() * m_factor - coefficient*it.p0.x() * m_factor;
+				float bbb = it.p0.y() * this.factor - coefficient*it.p0.x() * this.factor;
 				float ypos = coefficient * subSamplingCenterPos + bbb;
 				if (    ypos >= 0
 				     && ypos < dynamicSize.y()
 				     && xxx >= 0
 				     && xxx < dynamicSize.y() ) {
 					if (it.direction == 1.0f) {
-						m_buffer[(dynamicSize.x()*int32_t(ypos) + xxx)] = etk::color::blue;
+						this.buffer[(dynamicSize.x()*int(ypos) + xxx)] = etk::color::blue;
 					} else {
-						m_buffer[(dynamicSize.x()*int32_t(ypos) + xxx)] = etk::color::darkRed;
+						this.buffer[(dynamicSize.x()*int(ypos) + xxx)] = etk::color::darkRed;
 					}
 				}
 			}
@@ -231,7 +231,7 @@ void esvg::Renderer::print(const esvg::render::Weight& _weightFill,
 
 
 void esvg::Renderer::writePPM(const etk::Uri& _uri) {
-	if (m_buffer.size() == 0) {
+	if (this.buffer.size() == 0) {
 		return;
 	}
 	auto fileIo = etk::uri::get(_uri);
@@ -243,18 +243,18 @@ void esvg::Renderer::writePPM(const etk::Uri& _uri) {
 		Log.error("Can not open (r) the file : " << _uri);
 		return;
 	}
-	int32_t sizeX = m_size.x();
-	int32_t sizeY = m_size.y();
+	int sizeX = this.size.x();
+	int sizeY = this.size.y();
 	#if DEBUG
-		sizeX *= m_factor;
-		sizeY *= m_factor;
+		sizeX *= this.factor;
+		sizeY *= this.factor;
 	#endif
-	Log.debug("Generate ppm : " << m_size << " debug size=" << Vector2i(sizeX,sizeY));
+	Log.debug("Generate ppm : " << this.size << " debug size=" << Vector2i(sizeX,sizeY));
 	char tmpValue[1024];
 	sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
 	fileIo->write(tmpValue,1,sizeof(tmpValue));
-	for (int32_t iii=0 ; iii<sizeX*sizeY; iii++) {
-		etk::Color<uint8_t,3> tmp = m_buffer[iii];
+	for (int iii=0 ; iii<sizeX*sizeY; iii++) {
+		etk::Color<uint8_t,3> tmp = this.buffer[iii];
 		fileIo->write(&tmp, 1, 3);
 	}
 	fileIo->close();
@@ -264,39 +264,39 @@ extern "C" {
 	#pragma pack(push,1)
 	struct bitmapFileHeader {
 		int16_t bfType;
-		int32_t bfSize;
-		int32_t bfReserved;
-		int32_t bfOffBits;
+		int bfSize;
+		int bfReserved;
+		int bfOffBits;
 	};
 	struct bitmapInfoHeader {
-		int32_t biSize;
-		int32_t biWidth;
-		int32_t biHeight;
+		int biSize;
+		int biWidth;
+		int biHeight;
 		int16_t biPlanes;
 		int16_t biBitCount;
-		int32_t biCompression;
-		int32_t biSizeImage;
-		int32_t biXPelsPerMeter;
-		int32_t biYPelsPerMeter;
+		int biCompression;
+		int biSizeImage;
+		int biXPelsPerMeter;
+		int biYPelsPerMeter;
 		#ifndef PLOPPP
-		int32_t biClrUsed;
-		int32_t biClrImportant;
+		int biClrUsed;
+		int biClrImportant;
 		#else
 		// https://en.wikipedia.org/wiki/BMP_file_format / example 2
-		int32_t biPaletteNumber;
-		int32_t biImportantColor;
-		int32_t biBitMaskRed;
-		int32_t biBitMaskGreen;
-		int32_t biBitMaskBlue;
-		int32_t biBitMaskAlpha;
-		int32_t biLCSColorSpace;
-		int32_t biUnused[16];
+		int biPaletteNumber;
+		int biImportantColor;
+		int biBitMaskRed;
+		int biBitMaskGreen;
+		int biBitMaskBlue;
+		int biBitMaskAlpha;
+		int biLCSColorSpace;
+		int biUnused[16];
 		#endif
 	};
 	#pragma pack(pop)
 }
 void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
-	if (m_buffer.size() == 0) {
+	if (this.buffer.size() == 0) {
 		return;
 	}
 	auto fileIo = etk::uri::get(_uri);
@@ -311,11 +311,11 @@ void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
 	struct bitmapFileHeader fileHeader;
 	struct bitmapInfoHeader infoHeader;
 	
-	int32_t sizeX = m_size.x();
-	int32_t sizeY = m_size.y();
+	int sizeX = this.size.x();
+	int sizeY = this.size.y();
 	#if DEBUG
-		sizeX *= m_factor;
-		sizeY *= m_factor;
+		sizeX *= this.factor;
+		sizeY *= this.factor;
 	#endif
 	
 	fileHeader.bfType = 0x4D42;
@@ -348,7 +348,7 @@ void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
 	infoHeader.biBitMaskBlue =0x0000FF00;
 	infoHeader.biBitMaskAlpha = 0x000000FF;
 	infoHeader.biLCSColorSpace = 0x73524742; // "Win "
-	for (int32_t jjj=0; jjj<16; ++jjj) {
+	for (int jjj=0; jjj<16; ++jjj) {
 		infoHeader.biUnused[jjj] = 0;
 	}
 	infoHeader.biUnused[12] = 0x00000002;
@@ -358,9 +358,9 @@ void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
 	fileIo->write(&infoHeader, sizeof(struct bitmapInfoHeader), 1);
 	
 	uint8_t data[16];
-	for(int32_t yyy=sizeY-1; yyy>=0; --yyy) {
-		for(int32_t xxx=0; xxx<sizeX; ++xxx) {
-			const etk::Color<uint8_t,4>& tmpColor = m_buffer[sizeX*yyy + xxx];
+	for(int yyy=sizeY-1; yyy>=0; --yyy) {
+		for(int xxx=0; xxx<sizeX; ++xxx) {
+			const etk::Color<uint8_t,4>& tmpColor = this.buffer[sizeX*yyy + xxx];
 			uint8_t* pointer = data;
 			#ifndef PLOPPP
 			*pointer++ = tmpColor.a();
@@ -381,47 +381,47 @@ void esvg::Renderer::writeBMP(const etk::Uri& _uri) {
 
 
 void esvg::Renderer::setSize(const Vector2i& _size) {
-	m_size = _size;
-	m_buffer.resize(m_size.x() * m_size.y()
+	this.size = _size;
+	this.buffer.resize(this.size.x() * this.size.y()
 	#if DEBUG
-	  * m_factor * m_factor
+	  * this.factor * this.factor
 	#endif
 	  , etk::color::none);
 }
 
 const Vector2i& esvg::Renderer::getSize() const {
-	return m_size;
+	return this.size;
 }
 
 List<etk::Color<float,4>> esvg::Renderer::getData() {
-	return m_buffer;
+	return this.buffer;
 }
 
 
 
 
-void esvg::Renderer::setInterpolationRecurtionMax(int32_t _value) {
-	m_interpolationRecurtionMax = etk::avg(1, _value, 200);
+void esvg::Renderer::setInterpolationRecurtionMax(int _value) {
+	this.interpolationRecurtionMax = etk::avg(1, _value, 200);
 }
 
-int32_t esvg::Renderer::getInterpolationRecurtionMax() const {
-	return m_interpolationRecurtionMax;
+int esvg::Renderer::getInterpolationRecurtionMax() const {
+	return this.interpolationRecurtionMax;
 }
 
 void esvg::Renderer::setInterpolationThreshold(float _value) {
-	m_interpolationThreshold = etk::avg(0.0f, _value, 20000.0f);
+	this.interpolationThreshold = etk::avg(0.0f, _value, 20000.0f);
 }
 
 float esvg::Renderer::getInterpolationThreshold() const {
-	return m_interpolationThreshold;
+	return this.interpolationThreshold;
 }
 
-void esvg::Renderer::setNumberSubScanLine(int32_t _value) {
-	m_nbSubScanLine = etk::avg(1, _value, 200);
+void esvg::Renderer::setNumberSubScanLine(int _value) {
+	this.nbSubScanLine = etk::avg(1, _value, 200);
 }
 
-int32_t esvg::Renderer::getNumberSubScanLine() const {
-	return m_nbSubScanLine;
+int esvg::Renderer::getNumberSubScanLine() const {
+	return this.nbSubScanLine;
 }
 
 

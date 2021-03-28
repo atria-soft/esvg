@@ -7,12 +7,12 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementMoveTo::ElementMoveTo(bool _relative, const Vector2f& _pos):
+esvg::render::ElementMoveTo::ElementMoveTo(boolean _relative, const Vector2f& _pos):
   Element(esvg::render::path_moveTo, _relative) {
-	m_pos = _pos;
+	this.pos = _pos;
 }
 
 
 etk::String esvg::render::ElementMoveTo::display() const {
-	return etk::String("pos=") + etk::toString(m_pos);
+	return etk::String("pos=") + etk::toString(this.pos);
 }

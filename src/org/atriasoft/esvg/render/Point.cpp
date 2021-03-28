@@ -8,24 +8,24 @@
 #include <esvg/debug.hpp>
 
 void esvg::render::Point::setEndPath() {
-	if (m_type == esvg::render::Point::type::interpolation) {
+	if (this.type == esvg::render::Point::type::interpolation) {
 		Log.warning("Request stop path of an interpolate Point");
-		m_type = esvg::render::Point::type::stop;
+		this.type = esvg::render::Point::type::stop;
 		return;
 	}
-	if (m_type == esvg::render::Point::type::stop) {
+	if (this.type == esvg::render::Point::type::stop) {
 		Log.warning("Request stop path of an STOP Point");
 		return;
 	}
-	if (m_type == esvg::render::Point::type::start) {
-		m_type = esvg::render::Point::type::single;
+	if (this.type == esvg::render::Point::type::start) {
+		this.type = esvg::render::Point::type::single;
 		return;
 	}
-	m_type = esvg::render::Point::type::stop;
+	this.type = esvg::render::Point::type::stop;
 }
 
 void esvg::render::Point::normalize(const Vector2f& _nextPoint) {
-	m_delta = _nextPoint - m_pos;
-	m_len = m_delta.length();
+	this.delta = _nextPoint - this.pos;
+	this.len = this.delta.length();
 }
 

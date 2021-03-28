@@ -12,4 +12,4 @@
 
 #pragma once
 
-extern bool g_visualDebug;
+extern boolean g_visualDebug;

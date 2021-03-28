@@ -1,13 +1,13 @@
+package org.atriasoft.esvg;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
 
-#include <esvg/debug.hpp>
-
-int esvg::getLogId() {
-	static int g_val = elog::registerInstance("esvg");
-	return g_val;
+public enum JoinMode {
+	MITER,
+	ROUND,
+	BEVEL
 }
-

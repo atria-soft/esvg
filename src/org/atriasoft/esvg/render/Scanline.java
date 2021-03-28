@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,25 +6,26 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>
 
-namespace esvg {
-	namespace render {
-		class Scanline {
-			private:
-				List<float> m_data;
+namespace esvg{namespace render{
+class Scanline {
+	private:
+				List<float> this.data;
 			public:
 				// constructor :
-				Scanline(size_t _size=32);
+				Scanline(final size_t _size=32);
 				// destructor
-				~Scanline() { };
-			public:
+	~
+	
+	Scanline() {};
+	
+	public:
 				size_t size() const;
-				void clear(float _fill);
-				float get(int32_t _pos) const;
-				void set(int32_t _pos, float _newColor);
-		};
-	}
-}
-
+	
+	void clear(float _fill);
+	
+	float get(final int _pos) const;
+	
+	void set(int _pos, float _newColor);
+};}}

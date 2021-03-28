@@ -17,7 +17,7 @@ esvg::Ellipse::~Ellipse() {
 	
 }
 
-bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -25,77 +25,77 @@ bool esvg::Ellipse::parseXML(const exml::Element& _element, mat2x3& _parentTrans
 	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= _parentTrans;
+	this.transformMatrix *= _parentTrans;
 	
-	m_c.setValue(0,0);
-	m_r.setValue(0,0);
+	this.c.setValue(0,0);
+	this.r.setValue(0,0);
 	
 	etk::String content = _element.attributes["cx"];
 	if (content.size()!=0) {
-		m_c.setX(parseLength(content));
+		this.c.setX(parseLength(content));
 	}
 	content = _element.attributes["cy"];
 	if (content.size()!=0) {
-		m_c.setY(parseLength(content));
+		this.c.setY(parseLength(content));
 	}
 	content = _element.attributes["rx"];
 	if (content.size()!=0) {
-		m_r.setX(parseLength(content));
+		this.r.setX(parseLength(content));
 	} else {
 		Log.error("(l "<<_element.getPos()<<") Ellipse \"rx\" is not present");
 		return false;
 	}
 	content = _element.attributes["ry"];
 	if (content.size()!=0) {
-		m_r.setY(parseLength(content));
+		this.r.setY(parseLength(content));
 	} else {
 		Log.error("(l "<<_element.getPos()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
-	_sizeMax.setValue(m_c.x() + m_r.x(), m_c.y() + m_r.y());
+	_sizeMax.setValue(this.c.x() + this.r.x(), this.c.y() + this.r.y());
 	
 	return true;
 }
 
-void esvg::Ellipse::display(int32_t _spacing) {
-	Log.debug(spacingDist(_spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+void esvg::Ellipse::display(int _spacing) {
+	Log.debug(spacingDist(_spacing) << "Ellipse c=" << this.c << " r=" << this.r);
 }
 
 
 esvg::render::Path esvg::Ellipse::createPath() {
 	esvg::render::Path out;
 	out.clear();
-	out.moveTo(false, m_c + Vector2f(m_r.x(), 0.0f));
+	out.moveTo(false, this.c + Vector2f(this.r.x(), 0.0f));
 	out.curveTo(false,
-	            m_c + Vector2f(m_r.x(),                m_r.y()*esvg::kappa90),
-	            m_c + Vector2f(m_r.x()*esvg::kappa90,  m_r.y()),
-	            m_c + Vector2f(0.0f,                   m_r.y()));
+	            this.c + Vector2f(this.r.x(),                this.r.y()*esvg::kappa90),
+	            this.c + Vector2f(this.r.x()*esvg::kappa90,  this.r.y()),
+	            this.c + Vector2f(0.0f,                   this.r.y()));
 	out.curveTo(false,
-	            m_c + Vector2f(-m_r.x()*esvg::kappa90, m_r.y()),
-	            m_c + Vector2f(-m_r.x(),               m_r.y()*esvg::kappa90),
-	            m_c + Vector2f(-m_r.x(),               0.0f));
+	            this.c + Vector2f(-this.r.x()*esvg::kappa90, this.r.y()),
+	            this.c + Vector2f(-this.r.x(),               this.r.y()*esvg::kappa90),
+	            this.c + Vector2f(-this.r.x(),               0.0f));
 	out.curveTo(false,
-	            m_c + Vector2f(-m_r.x(),               -m_r.y()*esvg::kappa90),
-	            m_c + Vector2f(-m_r.x()*esvg::kappa90, -m_r.y()),
-	            m_c + Vector2f(0.0f,                   -m_r.y()));
+	            this.c + Vector2f(-this.r.x(),               -this.r.y()*esvg::kappa90),
+	            this.c + Vector2f(-this.r.x()*esvg::kappa90, -this.r.y()),
+	            this.c + Vector2f(0.0f,                   -this.r.y()));
 	out.curveTo(false,
-	            m_c + Vector2f(m_r.x()*esvg::kappa90,  -m_r.y()),
-	            m_c + Vector2f(m_r.x(),                -m_r.y()*esvg::kappa90),
-	            m_c + Vector2f(m_r.x(),                0.0f));
+	            this.c + Vector2f(this.r.x()*esvg::kappa90,  -this.r.y()),
+	            this.c + Vector2f(this.r.x(),                -this.r.y()*esvg::kappa90),
+	            this.c + Vector2f(this.r.x(),                0.0f));
 	out.close();
 	return out;
 }
 
-void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW esvg::Ellipse");
-	if (    m_r.x()<=0.0f
-	     || m_r.y()<=0.0f) {
-		Log.verbose(spacingDist(_level+1) << "Too small radius" << m_r);
+	if (    this.r.x()<=0.0f
+	     || this.r.y()<=0.0f) {
+		Log.verbose(spacingDist(_level+1) << "Too small radius" << this.r);
 		return;
 	}
 	esvg::render::Path listElement = createPath();
 	
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
@@ -107,10 +107,10 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
-	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
+	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(this.paint.fill, mtx);
 	ememory::SharedPtr<esvg::render::DynamicColor> colorStroke;
-	if (m_paint.strokeWidth > 0.0f) {
-		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
+	if (this.paint.strokeWidth > 0.0f) {
+		colorStroke = esvg::render::createColor(this.paint.stroke, mtx);
 	}
 	// Check if we need to display background
 	if (colorFill != null) {
@@ -125,10 +125,10 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 	// check if we need to display stroke:
 	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
-		                                          m_paint.strokeWidth,
-		                                          m_paint.lineCap,
-		                                          m_paint.lineJoin,
-		                                          m_paint.miterLimit);
+		                                          this.paint.strokeWidth,
+		                                          this.paint.lineCap,
+		                                          this.paint.lineJoin,
+		                                          this.paint.miterLimit);
 		colorStroke->setViewPort(listSegmentStroke.getViewPort());
 		listSegmentStroke.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
@@ -141,7 +141,7 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 	                  colorFill,
 	                  tmpStroke,
 	                  colorStroke,
-	                  m_paint.opacity);
+	                  this.paint.opacity);
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
@@ -150,21 +150,21 @@ void esvg::Ellipse::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32
 
 
 void esvg::Ellipse::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                    int32_t _recurtionMax,
+                                    int _recurtionMax,
                                     float _threshold,
                                     mat2x3& _basicTrans,
-                                    int32_t _level) {
+                                    int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW Shape esvg::Ellipse");
 	esvg::render::Path listElement = createPath();
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	esvg::render::PointList listPoints;
 	listPoints = listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
-	for (auto &it : listPoints.m_data) {
+	for (auto &it : listPoints.this.data) {
 		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
-			listPoint.pushBack(itDot.m_pos);
+			listPoint.pushBack(itDot.this.pos);
 		}
 		_out.pushBack(listPoint);
 	}

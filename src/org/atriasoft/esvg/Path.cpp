@@ -38,11 +38,11 @@ const char * extractCmd(const char* _input, char& _cmd, List<float>& _outputList
 	if (_input[1] == '\0') {
 		return &_input[1];
 	}
-	int32_t iii=1;
+	int iii=1;
 	// extract every float separated by a ' ' or a ','
 	float element;
 	char spacer[10];
-	int32_t nbElementRead;
+	int nbElementRead;
 	while(    sscanf(&_input[iii], "%1[, ]%f%n", spacer, &element, &nbElementRead) == 2
 	       || sscanf(&_input[iii], "%f%n", &element, &nbElementRead) == 1) {
 		Log.verbose("Find element : " << element);
@@ -58,7 +58,7 @@ const char * extractCmd(const char* _input, char& _cmd, List<float>& _outputList
 }
 etk::String cleanBadSpaces(const etk::String& _input) {
 	etk::String out;
-	bool haveSpace = false;
+	boolean haveSpace = false;
 	for (auto &it : _input) {
 		if (    it == ' '
 		     || it == '\t'
@@ -76,7 +76,7 @@ etk::String cleanBadSpaces(const etk::String& _input) {
 	return out;
 }
 
-bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -84,7 +84,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 	parsePaintAttr(_element);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= _parentTrans;
+	this.transformMatrix *= _parentTrans;
 	
 	
 	etk::String elementXML1 = _element.attributes["d"];
@@ -102,7 +102,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 	for( const char *sss=extractCmd(elementXML, command, listDot);
 	     sss != null;
 	     sss=extractCmd(sss, command, listDot) ) {
-		bool relative = false;
+		boolean relative = false;
 		switch(command) {
 			case 'm': // Move to (relative)
 				relative = true;
@@ -113,11 +113,11 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				if (listDot.size() >= 2) {
-					m_listElement.moveTo(relative,
+					this.listElement.moveTo(relative,
 					                     Vector2f(listDot[0], listDot[1]));
 				}
 				for (size_t iii=2; iii<listDot.size(); iii+=2) {
-					m_listElement.lineTo(relative,
+					this.listElement.lineTo(relative,
 					                     Vector2f(listDot[iii], listDot[iii+1]));
 				}
 				break;
@@ -130,7 +130,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=2) {
-					m_listElement.lineTo(relative,
+					this.listElement.lineTo(relative,
 					                     Vector2f(listDot[iii], listDot[iii+1]));
 				}
 				break;
@@ -144,7 +144,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=1) {
-					m_listElement.lineToV(relative,
+					this.listElement.lineToV(relative,
 					                      listDot[iii]);
 				}
 				break;
@@ -158,7 +158,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=1) {
-					m_listElement.lineToH(relative,
+					this.listElement.lineToH(relative,
 					                      listDot[iii]);
 				}
 				break;
@@ -172,7 +172,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=4) {
-					m_listElement.bezierCurveTo(relative,
+					this.listElement.bezierCurveTo(relative,
 					                            Vector2f(listDot[iii],listDot[iii+1]),
 					                            Vector2f(listDot[iii+2],listDot[iii+3]));
 				}
@@ -187,7 +187,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=2) {
-					m_listElement.bezierSmoothCurveTo(relative,
+					this.listElement.bezierSmoothCurveTo(relative,
 					                                  Vector2f(listDot[iii],listDot[iii+1]));
 				}
 				break;
@@ -201,7 +201,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=6) {
-					m_listElement.curveTo(relative,
+					this.listElement.curveTo(relative,
 					                      Vector2f(listDot[iii],listDot[iii+1]),
 					                      Vector2f(listDot[iii+2],listDot[iii+3]),
 					                      Vector2f(listDot[iii+4],listDot[iii+5]));
@@ -217,7 +217,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=4) {
-					m_listElement.smoothCurveTo(relative,
+					this.listElement.smoothCurveTo(relative,
 					                            Vector2f(listDot[iii],listDot[iii+1]),
 					                            Vector2f(listDot[iii+2],listDot[iii+3]));
 				}
@@ -232,15 +232,15 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					break;
 				}
 				for (size_t iii=0; iii<listDot.size(); iii+=7) {
-					bool largeArcFlag = true;
-					bool sweepFlag = true;
+					boolean largeArcFlag = true;
+					boolean sweepFlag = true;
 					if (listDot[iii+3] == 0.0f) {
 						largeArcFlag = false;
 					}
 					if (listDot[iii+4] == 0.0f) {
 						sweepFlag = false;
 					}
-					m_listElement.ellipticTo(relative,
+					this.listElement.ellipticTo(relative,
 					                         Vector2f(listDot[iii], listDot[iii+1]),
 					                         listDot[iii+2],
 					                         largeArcFlag,
@@ -256,7 +256,7 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 					Log.warning("the PATH command "<< command << " has not the good number of element = " << listDot.size() );
 					break;
 				}
-				m_listElement.close(relative);
+				this.listElement.close(relative);
 				break;
 			default:
 				ESVG_ERROR ("Unknow error : \"" << command << "\"");
@@ -266,18 +266,18 @@ bool esvg::Path::parseXML(const exml::Element& _element, mat2x3& _parentTrans, V
 	return true;
 }
 
-void esvg::Path::display(int32_t _spacing) {
-	m_listElement.display(_spacing);
+void esvg::Path::display(int _spacing) {
+	this.listElement.display(_spacing);
 }
 
-void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW esvg::Path");
 	
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
-	listPoints = m_listElement.generateListPoints(_level,
+	listPoints = this.listElement.generateListPoints(_level,
 	                                              _myRenderer.getInterpolationRecurtionMax(),
 	                                              _myRenderer.getInterpolationThreshold());
 	//listPoints.applyMatrix(mtx);
@@ -285,10 +285,10 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 	esvg::render::SegmentList listSegmentStroke;
 	esvg::render::Weight tmpFill;
 	esvg::render::Weight tmpStroke;
-	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(m_paint.fill, mtx);
+	ememory::SharedPtr<esvg::render::DynamicColor> colorFill = esvg::render::createColor(this.paint.fill, mtx);
 	ememory::SharedPtr<esvg::render::DynamicColor> colorStroke;
-	if (m_paint.strokeWidth > 0.0f) {
-		colorStroke = esvg::render::createColor(m_paint.stroke, mtx);
+	if (this.paint.strokeWidth > 0.0f) {
+		colorStroke = esvg::render::createColor(this.paint.stroke, mtx);
 	}
 	// Check if we need to display background
 	if (colorFill != null) {
@@ -301,10 +301,10 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 	// check if we need to display stroke:
 	if (colorStroke != null) {
 		listSegmentStroke.createSegmentListStroke(listPoints,
-		                                          m_paint.strokeWidth,
-		                                          m_paint.lineCap,
-		                                          m_paint.lineJoin,
-		                                          m_paint.miterLimit);
+		                                          this.paint.strokeWidth,
+		                                          this.paint.lineCap,
+		                                          this.paint.lineJoin,
+		                                          this.paint.miterLimit);
 		colorStroke->setViewPort(listSegmentStroke.getViewPort());
 		listSegmentStroke.applyMatrix(mtx);
 		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
@@ -315,33 +315,33 @@ void esvg::Path::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t 
 	                  colorFill,
 	                  tmpStroke,
 	                  colorStroke,
-	                  m_paint.opacity);
+	                  this.paint.opacity);
 	#ifdef DEBUG
 		_myRenderer.addDebugSegment(listSegmentFill);
 		_myRenderer.addDebugSegment(listSegmentStroke);
-		m_listElement.m_debugInformation.applyMatrix(mtx);
-		_myRenderer.addDebugSegment(m_listElement.m_debugInformation);
+		this.listElement.this.debugInformation.applyMatrix(mtx);
+		_myRenderer.addDebugSegment(this.listElement.this.debugInformation);
 	#endif
 }
 
 
 void esvg::Path::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                 int32_t _recurtionMax,
+                                 int _recurtionMax,
                                  float _threshold,
                                  mat2x3& _basicTrans,
-                                 int32_t _level) {
+                                 int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW Shape esvg::Path");
 	
-	mat2x3 mtx = m_transformMatrix;
+	mat2x3 mtx = this.transformMatrix;
 	mtx *= _basicTrans;
 	
 	esvg::render::PointList listPoints;
-	listPoints = m_listElement.generateListPoints(_level, _recurtionMax, _threshold);
+	listPoints = this.listElement.generateListPoints(_level, _recurtionMax, _threshold);
 	listPoints.applyMatrix(mtx);
-	for (auto &it : listPoints.m_data) {
+	for (auto &it : listPoints.this.data) {
 		List<Vector2f> listPoint;
 		for (auto &itDot : it) {
-			listPoint.pushBack(itDot.m_pos);
+			listPoint.pushBack(itDot.this.pos);
 		}
 		_out.pushBack(listPoint);
 	}

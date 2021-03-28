@@ -26,7 +26,7 @@ esvg::Group::~Group() {
 	
 }
 
-bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	if (_element.exist() == false) {
 		return false;
 	}
@@ -36,12 +36,12 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 	parseTransform(_element);
 	parsePosition(_element, pos, size);
 	parsePaintAttr(_element);
-	Log.verbose("parsed G1.   trans : " << m_transformMatrix);
+	Log.verbose("parsed G1.   trans : " << this.transformMatrix);
 	
 	// add the property of the parrent modifications ...
-	m_transformMatrix *= _parentTrans;
+	this.transformMatrix *= _parentTrans;
 	
-	Log.verbose("parsed G2.   trans : " << m_transformMatrix);
+	Log.verbose("parsed G2.   trans : " << this.transformMatrix);
 	
 	_sizeMax.setValue(0,0);
 	Vector2f tmpPos(0,0);
@@ -54,25 +54,25 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 		}
 		ememory::SharedPtr<esvg::Base> elementParser;
 		if (child.getValue() == "g") {
-			elementParser = ememory::makeShared<esvg::Group>(m_paint);
+			elementParser = ememory::makeShared<esvg::Group>(this.paint);
 		} else if (child.getValue() == "a") {
 			// TODO ...
 		} else if (child.getValue() == "path") {
-			elementParser = ememory::makeShared<esvg::Path>(m_paint);
+			elementParser = ememory::makeShared<esvg::Path>(this.paint);
 		} else if (child.getValue() == "rect") {
-			elementParser = ememory::makeShared<esvg::Rectangle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Rectangle>(this.paint);
 		} else if (child.getValue() == "circle") {
-			elementParser = ememory::makeShared<esvg::Circle>(m_paint);
+			elementParser = ememory::makeShared<esvg::Circle>(this.paint);
 		} else if (child.getValue() == "ellipse") {
-			elementParser = ememory::makeShared<esvg::Ellipse>(m_paint);
+			elementParser = ememory::makeShared<esvg::Ellipse>(this.paint);
 		} else if (child.getValue() == "line") {
-			elementParser = ememory::makeShared<esvg::Line>(m_paint);
+			elementParser = ememory::makeShared<esvg::Line>(this.paint);
 		} else if (child.getValue() == "polyline") {
-			elementParser = ememory::makeShared<esvg::Polyline>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polyline>(this.paint);
 		} else if (child.getValue() == "polygon") {
-			elementParser = ememory::makeShared<esvg::Polygon>(m_paint);
+			elementParser = ememory::makeShared<esvg::Polygon>(this.paint);
 		} else if (child.getValue() == "text") {
-			elementParser = ememory::makeShared<esvg::Text>(m_paint);
+			elementParser = ememory::makeShared<esvg::Text>(this.paint);
 		} else {
 			Log.error("(l " << child.getPos() << ") node not suported : '" << child.getValue() << "' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
 		}
@@ -80,7 +80,7 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 			Log.error("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' allocation error or not supported ...");
 			continue;
 		}
-		if (elementParser->parseXML(child, m_transformMatrix, tmpPos) == false) {
+		if (elementParser->parseXML(child, this.transformMatrix, tmpPos) == false) {
 			Log.error("(l " << child.getPos() << ") error on node: '" << child.getValue() << "' Sub Parsing ERROR");
 			elementParser.reset();
 			continue;
@@ -88,16 +88,16 @@ bool esvg::Group::parseXML(const exml::Element& _element, mat2x3& _parentTrans, 
 		_sizeMax.setValue(etk::max(_sizeMax.x(), tmpPos.x()),
 		                  etk::max(_sizeMax.y(), tmpPos.y()));
 		// add element in the system
-		m_subElementList.pushBack(elementParser);
+		this.subElementList.pushBack(elementParser);
 	}
 	return true;
 }
 
-void esvg::Group::display(int32_t _spacing) {
-	Log.debug(spacingDist(_spacing) << "Group (START) fill=" << m_paint.fill.first << "/" << m_paint.fill.second
-	                                << " stroke=" << m_paint.stroke.first << "/" << m_paint.stroke.second
-	                                << " stroke-width=" << m_paint.strokeWidth );
-	for (auto &it : m_subElementList) {
+void esvg::Group::display(int _spacing) {
+	Log.debug(spacingDist(_spacing) << "Group (START) fill=" << this.paint.fill.first << "/" << this.paint.fill.second
+	                                << " stroke=" << this.paint.stroke.first << "/" << this.paint.stroke.second
+	                                << " stroke-width=" << this.paint.strokeWidth );
+	for (auto &it : this.subElementList) {
 		if (it != null) {
 			it->display(_spacing+1);
 		}
@@ -105,9 +105,9 @@ void esvg::Group::display(int32_t _spacing) {
 	Log.debug(spacingDist(_spacing) << "Group (STOP)");
 }
 
-void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) {
+void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW esvg::group");
-	for (auto &it : m_subElementList) {
+	for (auto &it : this.subElementList) {
 		if (it != null) {
 			it->draw(_myRenderer, _basicTrans, _level+1);
 		}
@@ -115,12 +115,12 @@ void esvg::Group::draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t
 }
 
 void esvg::Group::drawShapePoints(List<etk::Vector<Vector2f>>& _out,
-                                  int32_t _recurtionMax,
+                                  int _recurtionMax,
                                   float _threshold,
                                   mat2x3& _basicTrans,
-                                  int32_t _level) {
+                                  int _level) {
 	Log.verbose(spacingDist(_level) << "DRAW shape esvg::group");
-	for (auto &it : m_subElementList) {
+	for (auto &it : this.subElementList) {
 		if (it != null) {
 			it->drawShapePoints(_out, _recurtionMax, _threshold, _basicTrans, _level+1);
 		}

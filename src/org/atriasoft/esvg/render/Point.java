@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -22,24 +23,24 @@ namespace esvg {
 				};
 			public:
 				// TODO : Clean all element here ...
-				Vector2f m_pos; //!< position of the point
-				enum esvg::render::Point::type m_type;
-				Vector2f m_miterAxe;
-				Vector2f m_orthoAxePrevious;
-				Vector2f m_orthoAxeNext;
-				Vector2f m_posPrevious;
-				Vector2f m_posNext;
-				Vector2f m_delta;
-				float m_len;
+				Vector2f this.pos; //!< position of the point
+				enum esvg::render::Point::type this.type;
+				Vector2f this.miterAxe;
+				Vector2f this.orthoAxePrevious;
+				Vector2f this.orthoAxeNext;
+				Vector2f this.posPrevious;
+				Vector2f this.posNext;
+				Vector2f this.delta;
+				float this.len;
 				// TODO: Update List to support not having it ...
 				Point() :
-				  m_pos(0,0),
-				  m_type(esvg::render::Point::type::join) {
+				  this.pos(0,0),
+				  this.type(esvg::render::Point::type::join) {
 					// nothing to do ...
 				}
 				Point(const Vector2f& _pos, enum esvg::render::Point::type _type = esvg::render::Point::type::join) :
-				  m_pos(_pos),
-				  m_type(_type) {
+				  this.pos(_pos),
+				  this.type(_type) {
 					// nothing to do ...
 				}
 				void setEndPath();

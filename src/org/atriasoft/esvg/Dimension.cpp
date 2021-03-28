@@ -22,20 +22,20 @@ static const float millimeterToKilometer = 1000000.0f;
 static const float basicRatio = 72.0f / 25.4f;
 
 esvg::Dimension::Dimension() :
-  m_data(0,0),
-  m_type(esvg::distance_pixel) {
+  this.data(0,0),
+  this.type(esvg::distance_pixel) {
 	// notinh to do ...
 }
 
 esvg::Dimension::Dimension(const Vector2f& _size, enum esvg::distance _type) :
-  m_data(0,0),
-  m_type(esvg::distance_pixel) {
+  this.data(0,0),
+  this.type(esvg::distance_pixel) {
 	set(_size, _type);
 }
 
 void esvg::Dimension::set(etk::String _config) {
-	m_data.setValue(0,0);
-	m_type = esvg::distance_pixel;
+	this.data.setValue(0,0);
+	this.type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
 	if (etk::end_with(_config, "%", false) == true) {
 		type = esvg::distance_pourcent;
@@ -106,8 +106,8 @@ static enum esvg::distance parseType(etk::String& _config) {
 
 
 void esvg::Dimension::set(etk::String _configX, etk::String _configY) {
-	m_data.setValue(0,0);
-	m_type = esvg::distance_pixel;
+	this.data.setValue(0,0);
+	this.type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
 	// First Parse X
 	enum distance typeX = parseType(_configX);
@@ -170,8 +170,8 @@ esvg::Dimension::operator etk::String() const {
 }
 
 void esvg::Dimension::set(const Vector2f& _size, enum esvg::distance _type) {
-	m_data = _size;
-	m_type = _type;
+	this.data = _size;
+	this.type = _type;
 	switch(_type) {
 		case esvg::distance_pourcent:
 		case esvg::distance_pixel:
@@ -193,23 +193,23 @@ void esvg::Dimension::set(const Vector2f& _size, enum esvg::distance _type) {
 }
 
 Vector2f esvg::Dimension::getPixel(const Vector2f& _upperSize) const {
-	switch(m_type) {
+	switch(this.type) {
 		case esvg::distance_pourcent:
-			return Vector2f(_upperSize.x()*m_data.x()*0.01f, _upperSize.y()*m_data.y()*0.01f);
+			return Vector2f(_upperSize.x()*this.data.x()*0.01f, _upperSize.y()*this.data.y()*0.01f);
 		case esvg::distance_pixel:
-			return m_data;
+			return this.data;
 		case esvg::distance_meter:
-			return Vector2f(m_data.x()*meterToMillimeter*basicRatio, m_data.y()*meterToMillimeter*basicRatio);
+			return Vector2f(this.data.x()*meterToMillimeter*basicRatio, this.data.y()*meterToMillimeter*basicRatio);
 		case esvg::distance_centimeter:
-			return Vector2f(m_data.x()*centimeterToMillimeter*basicRatio, m_data.y()*centimeterToMillimeter*basicRatio);
+			return Vector2f(this.data.x()*centimeterToMillimeter*basicRatio, this.data.y()*centimeterToMillimeter*basicRatio);
 		case esvg::distance_millimeter:
-			return Vector2f(m_data.x()*basicRatio, m_data.y()*basicRatio);
+			return Vector2f(this.data.x()*basicRatio, this.data.y()*basicRatio);
 		case esvg::distance_kilometer:
-			return Vector2f(m_data.x()*kilometerToMillimeter*basicRatio, m_data.y()*kilometerToMillimeter*basicRatio);
+			return Vector2f(this.data.x()*kilometerToMillimeter*basicRatio, this.data.y()*kilometerToMillimeter*basicRatio);
 		case esvg::distance_inch:
-			return Vector2f(m_data.x()*inchToMillimeter*basicRatio, m_data.y()*inchToMillimeter*basicRatio);
+			return Vector2f(this.data.x()*inchToMillimeter*basicRatio, this.data.y()*inchToMillimeter*basicRatio);
 		case esvg::distance_foot:
-			return Vector2f(m_data.x()*footToMillimeter*basicRatio, m_data.y()*footToMillimeter*basicRatio);
+			return Vector2f(this.data.x()*footToMillimeter*basicRatio, this.data.y()*footToMillimeter*basicRatio);
 	}
 	return Vector2f(128.0f, 128.0f);
 }
@@ -268,30 +268,30 @@ namespace etk {
 	template<> etk::UString toUString<esvg::Dimension>(const esvg::Dimension& _obj) {
 		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::String& _value) {
+	template<> boolean frothis.string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::String& _value) {
 		_variableRet = esvg::Dimension(_value);
 		return true;
 	}
-	template<> bool from_string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::UString& _value) {
-		return from_string(_variableRet, etk::toString(_value));
+	template<> boolean frothis.string<esvg::Dimension>(esvg::Dimension& _variableRet, const etk::UString& _value) {
+		return frothis.string(_variableRet, etk::toString(_value));
 	}
 };
 
 esvg::Dimension1D::Dimension1D() :
-  m_data(0.0f),
-  m_type(esvg::distance_pixel) {
+  this.data(0.0f),
+  this.type(esvg::distance_pixel) {
 	// notinh to do ...
 }
 
 esvg::Dimension1D::Dimension1D(float _size, enum esvg::distance _type) :
-  m_data(0.0f),
-  m_type(esvg::distance_pixel) {
+  this.data(0.0f),
+  this.type(esvg::distance_pixel) {
 	set(_size, _type);
 }
 
 void esvg::Dimension1D::set(etk::String _config) {
-	m_data = 0;
-	m_type = esvg::distance_pixel;
+	this.data = 0;
+	this.type = esvg::distance_pixel;
 	enum distance type = esvg::distance_pixel;
 	if (etk::end_with(_config, "%", false) == true) {
 		type = esvg::distance_pourcent;
@@ -375,8 +375,8 @@ esvg::Dimension1D::operator etk::String() const {
 }
 
 void esvg::Dimension1D::set(float _size, enum esvg::distance _type) {
-	m_data = _size;
-	m_type = _type;
+	this.data = _size;
+	this.type = _type;
 	switch(_type) {
 		case esvg::distance_pourcent:
 		case esvg::distance_pixel:
@@ -398,23 +398,23 @@ void esvg::Dimension1D::set(float _size, enum esvg::distance _type) {
 }
 
 float esvg::Dimension1D::getPixel(float _upperSize) const {
-	switch(m_type) {
+	switch(this.type) {
 		case esvg::distance_pourcent:
-			return _upperSize*m_data*0.01f;
+			return _upperSize*this.data*0.01f;
 		case esvg::distance_pixel:
-			return m_data;
+			return this.data;
 		case esvg::distance_meter:
-			return m_data*meterToMillimeter*basicRatio;
+			return this.data*meterToMillimeter*basicRatio;
 		case esvg::distance_centimeter:
-			return m_data*centimeterToMillimeter*basicRatio;
+			return this.data*centimeterToMillimeter*basicRatio;
 		case esvg::distance_millimeter:
-			return m_data*basicRatio;
+			return this.data*basicRatio;
 		case esvg::distance_kilometer:
-			return m_data*kilometerToMillimeter*basicRatio;
+			return this.data*kilometerToMillimeter*basicRatio;
 		case esvg::distance_inch:
-			return m_data*inchToMillimeter*basicRatio;
+			return this.data*inchToMillimeter*basicRatio;
 		case esvg::distance_foot:
-			return m_data*footToMillimeter*basicRatio;
+			return this.data*footToMillimeter*basicRatio;
 	}
 	return 128.0f;
 }
@@ -431,12 +431,12 @@ namespace etk {
 	template<> etk::UString toUString<esvg::Dimension1D>(const esvg::Dimension1D& _obj) {
 		return etk::toUString(etk::toString(_obj));
 	}
-	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::String& _value) {
+	template<> boolean frothis.string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::String& _value) {
 		_variableRet = esvg::Dimension1D(_value);
 		return true;
 	}
-	template<> bool from_string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::UString& _value) {
-		return from_string(_variableRet, etk::toString(_value));
+	template<> boolean frothis.string<esvg::Dimension1D>(esvg::Dimension1D& _variableRet, const etk::UString& _value) {
+		return frothis.string(_variableRet, etk::toString(_value));
 	}
 };
 

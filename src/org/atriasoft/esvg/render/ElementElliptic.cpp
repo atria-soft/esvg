@@ -7,25 +7,25 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementElliptic::ElementElliptic(bool _relative,
-                                               const Vector2f& _radius, // in m_vec1
+esvg::render::ElementElliptic::ElementElliptic(boolean _relative,
+                                               const Vector2f& _radius, // in this.vec1
                                                float _angle,
-                                               bool _largeArcFlag,
-                                               bool _sweepFlag,
+                                               boolean _largeArcFlag,
+                                               boolean _sweepFlag,
                                                const Vector2f& _pos):
   Element(esvg::render::path_elliptic, _relative) {
-	m_pos1 = _radius;
-	m_pos = _pos;
-	m_angle = _angle;
-	m_largeArcFlag = _largeArcFlag;
-	m_sweepFlag = _sweepFlag;
+	this.pos1 = _radius;
+	this.pos = _pos;
+	this.angle = _angle;
+	this.largeArcFlag = _largeArcFlag;
+	this.sweepFlag = _sweepFlag;
 }
 
 
 etk::String esvg::render::ElementElliptic::display() const {
-	return etk::String("pos=") + etk::toString(m_pos)
-	       + " radius=" + etk::toString(m_pos1)
-	       + " angle=" + etk::toString(m_angle)
-	       + " largeArcFlag=" + etk::toString(m_largeArcFlag)
-	       + " sweepFlag=" + etk::toString(m_sweepFlag);
+	return etk::String("pos=") + etk::toString(this.pos)
+	       + " radius=" + etk::toString(this.pos1)
+	       + " angle=" + etk::toString(this.angle)
+	       + " largeArcFlag=" + etk::toString(this.largeArcFlag)
+	       + " sweepFlag=" + etk::toString(this.sweepFlag);
 }

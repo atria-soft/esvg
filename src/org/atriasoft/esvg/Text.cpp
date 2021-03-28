@@ -15,13 +15,13 @@ esvg::Text::~Text() {
 	
 }
 
-bool esvg::Text::parse(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
+boolean esvg::Text::parse(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) {
 	_sizeMax.setValue(0,0);
 	Log.error("NOT IMPLEMENTED");
 	return false;
 }
 
-void esvg::Text::display(int32_t _spacing) {
+void esvg::Text::display(int _spacing) {
 	Log.debug(spacingDist(_spacing) << "Text");
 }
 

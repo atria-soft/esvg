@@ -7,7 +7,7 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementClose::ElementClose(bool _relative):
+esvg::render::ElementClose::ElementClose(boolean _relative):
   Element(esvg::render::path_close, _relative) {
 	
 }

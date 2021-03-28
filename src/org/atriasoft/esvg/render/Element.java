@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,84 +6,69 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>
 
-namespace esvg {
-	namespace render {
-		enum path {
-			path_stop,
-			path_close,
-			path_moveTo,
-			path_lineTo,
-			path_lineToH,
-			path_lineToV,
-			path_curveTo,
-			path_smoothCurveTo,
-			path_bezierCurveTo,
-			path_bezierSmoothCurveTo,
-			path_elliptic
-		};
-		class Element {
-			public:
-				Element(enum path _type, bool _relative=false) :
-				  m_cmd(_type),
-				  m_relative(_relative) {
+namespace esvg{namespace render{
+class Element {
+	public:
+				Element(enum path _type, boolean _relative=false) :
+				  this.cmd(_type),
+				  this.relative(_relative) {
 					
 				}
 				virtual ~Element() { }
 			private:
-				enum path m_cmd;
+				enum path this.cmd;
 			public:
 				enum path getType() const {
-					return m_cmd;
+					return this.cmd;
 				}
 			protected:
-				bool m_relative;
+				boolean this.relative;
 			public:
-				bool getRelative() const {
-					return m_relative;
+				boolean getRelative() const {
+					return this.relative;
 				}
-				void setRelative(bool _relative) {
-					m_relative = _relative;
+				void setRelative(boolean _relative) {
+					this.relative = _relative;
 				}
 			protected:
-				Vector2f m_pos;
+				Vector2f this.pos;
 			public:
 				const Vector2f& getPos() const {
-					return m_pos;
+					return this.pos;
 				}
 				void setPos(const Vector2f& _val) {
-					m_pos = _val;
+					this.pos = _val;
 				}
 			protected:
-				Vector2f m_pos1;
+				Vector2f this.pos1;
 			public:
 				const Vector2f& getPos1() const {
-					return m_pos1;
+					return this.pos1;
 				}
 				void setPos1(const Vector2f& _val) {
-					m_pos1 = _val;
+					this.pos1 = _val;
 				}
 			protected:
-				Vector2f m_pos2;
+				Vector2f this.pos2;
 			public:
 				const Vector2f& getPos2() const {
-					return m_pos2;
+					return this.pos2;
 				}
 				void setPos2(const Vector2f& _val) {
-					m_pos2 = _val;
+					this.pos2 = _val;
 				}
 			public:
 				virtual etk::String display() const = 0;
 		};
 	}
 	/**
-	 * @brief Debug operator To display the curent element in a Human redeable information
+	 * Debug operator To display the curent element in a Human redeable information
 	 */
 	etk::Stream& operator <<(etk::Stream& _os, const esvg::render::Element& _obj);
 	/**
-	 * @brief Debug operator To display the curent element in a Human redeable information
+	 * Debug operator To display the curent element in a Human redeable information
 	 */
 	etk::Stream& operator <<(etk::Stream& _os, enum esvg::render::path _obj);
 }
@@ -99,3 +85,17 @@ namespace esvg {
 #include <esvg/render/ElementBezierSmoothCurveTo.hpp>
 #include <esvg/render/ElementElliptic.hpp>
 
+;
+		enum path {
+			path_stop,
+			path_close,
+			path_moveTo,
+			path_lineTo,
+			path_lineToH,
+			path_lineToV,
+			path_curveTo,
+			path_smoothCurveTo,
+			path_bezierCurveTo,
+			path_bezierSmoothCurveTo,
+			path_elliptic
+		}

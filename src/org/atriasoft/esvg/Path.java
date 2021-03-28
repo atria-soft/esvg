@@ -1,3 +1,4 @@
+package org.atriasoft.esvg;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,24 +6,29 @@
  */
 #pragma once
 
-#include <esvg/Base.hpp>
-#include <esvg/render/Path.hpp>
+#include<esvg/Base.hpp>#include<esvg/render/Path.hpp>
 
-namespace esvg {
-	class Path : public esvg::Base {
+namespace esvg{
+class Path extends esvg::Base
+{
 		public:
-			esvg::render::Path m_listElement;
+			esvg::render::Path this.listElement;
 		public:
-			Path(PaintState _parentPaintState);
-			~Path();
-			bool parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) override;
-			void display(int32_t _spacing) override;
-			void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int32_t _level) override;
-			void drawShapePoints(List<List<Vector2f>>& _out,
-			                     int32_t _recurtionMax,
+	
+	Path(PaintState _parentPaintState);~
+	
+	Path();
+	
+	boolean parseXML(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax) override;
+	
+	void display(final int _spacing) override;
+	
+	void draw(esvg::Renderer& _myRenderer, mat2x3& _basicTrans, int _level) override;
+	
+	void drawShapePoints(final List<List<Vector2f>>& _out,
+			                     int _recurtionMax,
 			                     float _threshold,
 			                     mat2x3& _basicTrans,
-			                     int32_t _level=1) override;
+			                     int _level=1) override;
 	};
 }
-

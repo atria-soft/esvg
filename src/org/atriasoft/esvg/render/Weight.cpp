@@ -9,12 +9,12 @@
 #include <etk/algorithm.hpp>
 
 esvg::render::Weight::Weight() :
-  m_size(0,0)  {
+  this.size(0,0)  {
 	
 }
 
 esvg::render::Weight::Weight(const Vector2i& _size) :
-  m_size(_size) {
+  this.size(_size) {
 	resize(_size);
 }
 
@@ -23,79 +23,79 @@ esvg::render::Weight::~Weight() {
 }
 
 void esvg::render::Weight::resize(const Vector2i& _size) {
-	m_size = _size;
+	this.size = _size;
 	float tmp(0);
-	m_data.resize(m_size.x()*m_size.y(), tmp);
-	if ((uint32_t)m_size.x()*m_size.y() > m_data.size()) {
+	this.data.resize(this.size.x()*this.size.y(), tmp);
+	if ((uint)this.size.x()*this.size.y() > this.data.size()) {
 		Log.warning("Wrong weigth buffer size ...");
 		return;
 	}
 }
 
 const Vector2i& esvg::render::Weight::getSize() const {
-	return m_size;
+	return this.size;
 }
 
-int32_t esvg::render::Weight::getWidth() const {
-	return m_size.x();
+int esvg::render::Weight::getWidth() const {
+	return this.size.x();
 }
 
-int32_t esvg::render::Weight::getHeight() const {
-	return m_size.y();
+int esvg::render::Weight::getHeight() const {
+	return this.size.y();
 }
 
 void esvg::render::Weight::clear(float _fill) {
-	for (int32_t iii=0; iii<m_size.x()*m_size.y(); iii++) {
-		m_data[iii] = _fill;
+	for (int iii=0; iii<this.size.x()*this.size.y(); iii++) {
+		this.data[iii] = _fill;
 	}
 }
 
 float esvg::render::Weight::get(const Vector2i& _pos) const {
-	if (    _pos.x()>=0 && _pos.x()<m_size.x()
-	     && _pos.y()>=0 && _pos.y()<m_size.y()) {
-		return m_data[_pos.x()+_pos.y()*m_size.x()];
+	if (    _pos.x()>=0 && _pos.x()<this.size.x()
+	     && _pos.y()>=0 && _pos.y()<this.size.y()) {
+		return this.data[_pos.x()+_pos.y()*this.size.x()];
 	}
 	return 0;
 }
 
 void esvg::render::Weight::set(const Vector2i& _pos, float _newColor) {
-	if (    _pos.x()>=0 && _pos.x()<m_size.x()
-	     && _pos.y()>=0 && _pos.y()<m_size.y()) {
-		m_data[_pos.x()+_pos.y()*m_size.x()] = _newColor;
+	if (    _pos.x()>=0 && _pos.x()<this.size.x()
+	     && _pos.y()>=0 && _pos.y()<this.size.y()) {
+		this.data[_pos.x()+_pos.y()*this.size.x()] = _newColor;
 	}
 }
 
-void esvg::render::Weight::set(int32_t _posY, const esvg::render::Scanline& _data) {
+void esvg::render::Weight::set(int _posY, const esvg::render::Scanline& _data) {
 	if (    _posY>=0
-	     && _posY<m_size.y()) {
-		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
-			m_data[xxx+_posY*m_size.x()] = _data.get(xxx);
+	     && _posY<this.size.y()) {
+		for (int xxx=0; xxx<this.size.x(); ++xxx) {
+			this.data[xxx+_posY*this.size.x()] = _data.get(xxx);
 		}
 	}
 }
 
-void esvg::render::Weight::append(int32_t _posY, const esvg::render::Scanline& _data) {
+void esvg::render::Weight::append(int _posY, const esvg::render::Scanline& _data) {
 	if (    _posY>=0
-	     && _posY<m_size.y()) {
-		for (int32_t xxx=0; xxx<m_size.x(); ++xxx) {
-			m_data[xxx+_posY*m_size.x()] += _data.get(xxx);
+	     && _posY<this.size.y()) {
+		for (int xxx=0; xxx<this.size.x(); ++xxx) {
+			this.data[xxx+_posY*this.size.x()] += _data.get(xxx);
 		}
 	}
 }
 
-bool sortXPosFunction(const etk::Pair<float,int32_t>& _e1, const etk::Pair<float,int32_t>& _e2) {
+boolean sortXPosFunction(const Pair<float,int>& _e1, const Pair<float,int>& _e2) {
 	return _e1.first < _e2.first;
 }
 
 
-void esvg::render::Weight::generate(Vector2i _size, int32_t _subSamplingCount, const esvg::render::SegmentList& _listSegment) {
+void esvg::render::Weight::generate(Vector2i _size, int _subSamplingCount, const esvg::render::SegmentList& _listSegment) {
 	resize(_size);
 	// for each lines:
-	for (int32_t yyy=0; yyy<_size.y(); ++yyy) {
+	for (int yyy=0; yyy<_size.y(); ++yyy) {
 		Log.verbose("Weighting ... " << yyy << " / " << _size.y());
 		// Reduce the number of lines in the subsampling parsing:
 		List<Segment> availlableSegmentPixel;
-		for (auto &it : _listSegment.m_data) {
+		for (auto &it : _listSegment.this.data) {
 			if (    it.p0.y() < float(yyy+1)
 			     && it.p1.y() > float(yyy)) {
 				availlableSegmentPixel.pushBack(it);
@@ -107,7 +107,7 @@ void esvg::render::Weight::generate(Vector2i _size, int32_t _subSamplingCount, c
 		Log.verbose("          Find Basic segments " << availlableSegmentPixel.size());
 		// This represent the pondaration on the subSampling
 		float deltaSize = 1.0f/_subSamplingCount;
-		for (int32_t kkk=0; kkk<_subSamplingCount ; ++kkk) {
+		for (int kkk=0; kkk<_subSamplingCount ; ++kkk) {
 			Log.verbose("    Scanline ... " << kkk << " / " << _subSamplingCount);
 			Scanline scanline(_size.x());
 			//find all the segment that cross the middle of the line of the center of the pixel line:
@@ -135,57 +135,57 @@ void esvg::render::Weight::generate(Vector2i _size, int32_t _subSamplingCount, c
 				Log.verbose("        Availlable Segment " << it.p0 << " -> " << it.p1 << " dir=" << it.direction);
 			}
 			// x position, angle
-			List<etk::Pair<float, int32_t>> listPosition;
+			List<Pair<float, int>> listPosition;
 			for (auto &it : availlableSegment) {
 				Vector2f delta = it.p0 - it.p1;
 				// x = coefficent*y+bbb;
 				float coefficient = delta.x()/delta.y();
 				float bbb = it.p0.x() - coefficient*it.p0.y();
 				float xpos = coefficient * subSamplingCenterPos + bbb;
-				listPosition.pushBack(etk::Pair<float,int32_t>(xpos, it.direction));
+				listPosition.pushBack(Pair<float,int>(xpos, it.direction));
 			}
 			Log.verbose("        List position " << listPosition.size());
 			// now we order position of the xPosition:
 			etk::algorithm::quickSort(listPosition, sortXPosFunction);
 			// move through all element in the point:
-			int32_t lastState = 0;
+			int lastState = 0;
 			float currentValue = 0.0f;
-			int32_t lastPos = -1;
-			int32_t currentPos = -1;
+			int lastPos = -1;
+			int currentPos = -1;
 			float lastX = 0.0f;
 			// *      |                \---------------/              |
 			// * current pos
 			//                         * pos ...
 			// TODO : Code the Odd/even and non-zero ...
 			for (auto &it : listPosition) {
-				if (currentPos != int32_t(it.first)) {
+				if (currentPos != int(it.first)) {
 					// fill to the new pos -1:
 					#if __CPP_VERSION__ >= 2011 && !defined(__TARGET_OS__MacOs) && !defined(__TARGET_OS__IOs)
 						float endValue = float(etk::min(1,etk::abs(lastState))) * deltaSize;
 					#else
 						float endValue = float(etk::min(1,abs(lastState))) * deltaSize;
 					#endif
-					for (int32_t iii=currentPos+1; iii<int32_t(it.first); ++iii) {
+					for (int iii=currentPos+1; iii<int(it.first); ++iii) {
 						scanline.set(iii, endValue);
 					}
-					currentPos = int32_t(it.first);
+					currentPos = int(it.first);
 					currentValue = endValue;
 				}
-				int32_t oldState = lastState;
+				int oldState = lastState;
 				lastState += it.second;
 				if (oldState == 0) {
 					// nothing to draw before ...
-					float ratio = 1.0f - (it.first - float(int32_t(it.first)));
+					float ratio = 1.0f - (it.first - float(int(it.first)));
 					currentValue += ratio * deltaSize;
 				} else if (lastState == 0) {
 					// something new to draw ...
-					float ratio = 1.0f - (it.first - float(int32_t(it.first)));
+					float ratio = 1.0f - (it.first - float(int(it.first)));
 					currentValue -= ratio * deltaSize;
 				} else {
 					// nothing to do ...
 				}
 				
-				if (currentPos == int32_t(it.first)) {
+				if (currentPos == int(it.first)) {
 					scanline.set(currentPos, currentValue);
 				}
 			}
@@ -193,7 +193,7 @@ void esvg::render::Weight::generate(Vector2i _size, int32_t _subSamplingCount, c
 			if (lastState != 0) {
 				// just past the last state to the end of the image ...
 				Log.error("end of Path whith no end ... " << currentPos << " -> " << _size.x());
-				for (int32_t xxx=currentPos; xxx<_size.x(); ++xxx) {
+				for (int xxx=currentPos; xxx<_size.x(); ++xxx) {
 					scanline.set(xxx, 100.0);
 				}
 			}

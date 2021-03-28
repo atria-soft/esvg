@@ -7,12 +7,12 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementLineToH::ElementLineToH(bool _relative, float _posX):
+esvg::render::ElementLineToH::ElementLineToH(boolean _relative, float _posX):
   Element(esvg::render::path_lineToH, _relative) {
-	m_pos = Vector2f(_posX, 0.0f);
+	this.pos = Vector2f(_posX, 0.0f);
 }
 
 
 etk::String esvg::render::ElementLineToH::display() const {
-	return etk::String("posX=") + etk::toString(m_pos.x());
+	return etk::String("posX=") + etk::toString(this.pos.x());
 }

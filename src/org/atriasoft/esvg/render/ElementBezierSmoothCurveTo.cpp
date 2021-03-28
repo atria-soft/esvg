@@ -7,12 +7,12 @@
 #include <esvg/render/Element.hpp>
 #include <esvg/debug.hpp>
 
-esvg::render::ElementBezierSmoothCurveTo::ElementBezierSmoothCurveTo(bool _relative, const Vector2f& _pos):
+esvg::render::ElementBezierSmoothCurveTo::ElementBezierSmoothCurveTo(boolean _relative, const Vector2f& _pos):
   Element(esvg::render::path_bezierSmoothCurveTo, _relative) {
-	m_pos = _pos;
+	this.pos = _pos;
 }
 
 
 etk::String esvg::render::ElementBezierSmoothCurveTo::display() const {
-	return etk::String("pos=") + etk::toString(m_pos);
+	return etk::String("pos=") + etk::toString(this.pos);
 }

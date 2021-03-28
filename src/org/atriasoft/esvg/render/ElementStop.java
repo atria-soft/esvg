@@ -1,3 +1,4 @@
+package org.atriasoft.esvg.render;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,18 +6,14 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <esvg/render/Element.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<esvg/render/Element.hpp>
 
-namespace esvg {
-	namespace render {
-		class ElementStop : public esvg::render::Element {
+namespace esvg{namespace render{
+class ElementStop extends esvg::render::Element
+{
 			public:
 				ElementStop();
 			public:
 				virtual etk::String display() const;
 		};
-	}
-}
-
+}}

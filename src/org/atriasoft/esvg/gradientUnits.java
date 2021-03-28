@@ -1,3 +1,4 @@
+package org.atriasoft.esvg;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,16 +6,15 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/Stream.hpp>
+#include<etk/types.hpp>#include<etk/Stream.hpp>
 
-namespace esvg {
-	enum gradientUnits {
-		gradientUnits_userSpaceOnUse,
-		gradientUnits_objectBoundingBox
-	};
-	/**
-	 * @brief Debug operator To display the curent element in a Human redeable information
+namespace esvg{enum esvg::gradientUnits _obj);
+};/**
+	 * Debug operator To display the curent element in a Human redeable information
 	 */
-	etk::Stream& operator <<(etk::Stream& _os, enum esvg::gradientUnits _obj);
+etk::Stream&operator<<(etk::Stream&_os,
+
+enum gradientUnits {
+	gradientUnits_userSpaceOnUse,
+	gradientUnits_objectBoundingBox
 }

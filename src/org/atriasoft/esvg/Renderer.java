@@ -1,3 +1,4 @@
+package org.atriasoft.esvg;
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
@@ -5,69 +6,78 @@
  */
 #pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <etk/Color.hpp>
-#include <esvg/render/Weight.hpp>
-#include <esvg/render/DynamicColor.hpp>
-#include <etk/uri/uri.hpp>
+#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<etk/Color.hpp>#include<esvg/render/Weight.hpp>#include<esvg/render/DynamicColor.hpp>#include<etk/uri/uri.hpp>
 
-namespace esvg {
-	class Document;
-	class Renderer {
+namespace esvg{
+class Document;
+class Renderer {
 		#ifdef DEBUG
+		
 		private:
-			bool m_visualDebug;
-			int32_t m_factor;
+			boolean this.visualDebug;
+			int this.factor;
 		#endif
 		public:
-			Renderer(const Vector2i& _size, esvg::Document* _document, bool _visualDebug=false);
+			Renderer(const Vector2i& _size, esvg::Document* _document, boolean _visualDebug=false);
 			~Renderer();
 		protected:
-			Vector2i m_size;
+			Vector2i this.size;
 		public:
-			void setSize(const Vector2i& _size);
+		
+		void setSize(const Vector2i& _size);
 			const Vector2i& getSize() const;
 		protected:
-			List<etk::Color<float,4>> m_buffer;
+			List<etk::Color<float,4>> this.buffer;
 		public:
 			List<etk::Color<float,4>> getData();
 		protected:
-			int32_t m_interpolationRecurtionMax;
+			int this.interpolationRecurtionMax;
 		public:
-			void setInterpolationRecurtionMax(int32_t _value);
-			int32_t getInterpolationRecurtionMax() const;
+		
+		void setInterpolationRecurtionMax(int _value);
+		
+		int getInterpolationRecurtionMax() const;
 		protected:
-			float m_interpolationThreshold;
+			float this.interpolationThreshold;
 		public:
-			void setInterpolationThreshold(float _value);
-			float getInterpolationThreshold() const;
+		
+		void setInterpolationThreshold(float _value);
+		
+		float getInterpolationThreshold() const;
 		protected:
-			int32_t m_nbSubScanLine;
+			int this.nbSubScanLine;
 		public:
-			void setNumberSubScanLine(int32_t _value);
-			int32_t getNumberSubScanLine() const;
+		
+		void setNumberSubScanLine(int _value);
+		
+		int getNumberSubScanLine() const;
 		public:
-			void writePPM(const etk::Uri& _uri);
-			void writeBMP(const etk::Uri& _uri);
+		
+		void writePPM(const etk::Uri& _uri);
+		
+		void writeBMP(const etk::Uri& _uri);
 		protected:
 			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
 		public:
-			void print(const esvg::render::Weight& _weightFill,
+		
+		void print(const esvg::render::Weight& _weightFill,
 			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorFill,
 			           const esvg::render::Weight& _weightStroke,
 			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
 			           float _opacity);
 			#ifdef DEBUG
-			void addDebugSegment(const esvg::render::SegmentList& _listSegment);
-			void addDebug(const List<etk::Pair<Vector2f,Vector2f>>& _info);
+		
+		void addDebugSegment(const esvg::render::SegmentList& _listSegment);
+		
+		void addDebug(const List<Pair<Vector2f,Vector2f>>& _info);
 			#endif
 		protected:
-			esvg::Document* m_document;
+			esvg::Document* this.document;
 		public:
-			esvg::Document* getMainDocument() {
-				return m_document;
+			esvg::Document*
+		
+		getMainDocument() {
+				return this.document;
 			}
 	};
 }
-
