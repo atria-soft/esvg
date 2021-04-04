@@ -1,20 +1,13 @@
 package org.atriasoft.esvg.render;
-/** @file
- * @author Edouard DUPIN
- * @copyright 2011, Edouard DUPIN, all right reserved
- * @license MPL v2.0 (see license file)
- */
-#pragma once
 
-#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<esvg/render/Element.hpp>
-
-namespace esvg{namespace render{
-class ElementLineToV extends esvg::render::Element
-{
-			public:
+public class ElementLineToV extends Element {
+	public ElementLineToV(final boolean relative, final float posY) {
+		super(PathType.lineToV, relative);
+		this.pos = this.pos.withX(posY);
+	}
 	
-	ElementLineToV(boolean _relative, float _posY);public:
-	
-	virtual etk::String display() const;
-		};
-}}
+	@Override
+	public String display() {
+		return "posY=" + this.pos;
+	}
+}

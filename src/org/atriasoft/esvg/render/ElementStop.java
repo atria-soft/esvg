@@ -1,19 +1,12 @@
 package org.atriasoft.esvg.render;
-/** @file
- * @author Edouard DUPIN
- * @copyright 2011, Edouard DUPIN, all right reserved
- * @license MPL v2.0 (see license file)
- */
-#pragma once
 
-#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<esvg/render/Element.hpp>
-
-namespace esvg{namespace render{
-class ElementStop extends esvg::render::Element
-{
-			public:
-				ElementStop();
-			public:
-				virtual etk::String display() const;
-		};
-}}
+public class ElementStop extends Element {
+	ElementStop() {
+		super(PathType.stop, false);
+	}
+	
+	@Override
+	public String display() {
+		return "";
+	}
+}

@@ -21,12 +21,17 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/atriasoft-etk">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/scenarium-logger">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/atriasoft-etk">
+	<classpathentry combineaccessrules="false" kind="src" path="/atriasoft-exml">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

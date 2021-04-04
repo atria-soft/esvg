@@ -8,4 +8,5 @@ open module org.atriasoft.esvg {
 	
 	requires transitive io.scenarium.logger;
 	requires transitive org.atriasoft.etk;
+	requires transitive org.atriasoft.exml;
 }

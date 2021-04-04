@@ -1,0 +1,449 @@
+package org.atriasoft.esvg;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.atriasoft.esvg.internal.Log;
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.util.Dynamic;
+import org.atriasoft.etk.math.Matrix2x3f;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.exml.Exml;
+import org.atriasoft.exml.exception.ExmlBuilderException;
+import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
+import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.exml.model.XmlNode;
+
+public class EsvgDocument extends Base {
+	private boolean loadOK = false;
+	private List<Base> refList;
+	private Vector2f size = Vector2f.ZERO;
+	private List<Base> subElementList;
+	private String title = ""; //!< sub-element list
+	private Uri uri = null; //!< reference elements ...
+	private String version = "0.0";
+	
+	public EsvgDocument() {
+		
+	}
+	
+	/**
+	 * change all style in a xml atribute
+	 */
+	public boolean cleanStyleProperty(final XmlElement root) {
+		// for each nodes:
+		for (XmlNode it : root.getNodes()) {
+			if (!(it instanceof XmlElement child)) {
+				continue;
+			}
+			// get attribute style:
+			if (child.existAttribute("style")) {
+				String content = child.getAttribute("style", "");
+				if (content.length() != 0) {
+					String[] listStyle = content.split(";");
+					for (String it1 : listStyle) {
+						String[] value = it1.split(":");
+						if (value.length != 2) {
+							Log.error("parsing style with a wrong patern : " + it1 + " missing ':'");
+							continue;
+						}
+						// TODO Check if the attibute already exist ...
+						child.setAttribute(value[0], value[1]);
+					}
+				}
+				// remove attribute style:
+				child.removeAttribute("style");
+			}
+			// sub-parsing ...
+			cleanStyleProperty(child);
+		}
+		return true;
+	}
+	
+	public void clear() {
+		this.uri = null;
+		this.version = "0.0";
+		this.loadOK = true;
+		this.paint.clear();
+		this.size = Vector2f.ZERO;
+	}
+	
+	/**
+			 * Display all the node in the svg file.
+			 */
+	public void displayDebug() {
+		Log.debug("Main SVG: size=" + this.size);
+		Log.debug("    refs:");
+		for (int iii = 0; iii < this.refList.size(); iii++) {
+			if (this.refList.get(iii) != null) {
+				this.refList.get(iii).display(2);
+			}
+		}
+		Log.debug("    Nodes:");
+		for (int iii = 0; iii < this.subElementList.size(); iii++) {
+			if (this.subElementList.get(iii) != null) {
+				this.subElementList.get(iii).display(2);
+			}
+		}
+	}
+	
+	@Override
+	protected void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
+		for (int iii = 0; iii < this.subElementList.size(); iii++) {
+			if (this.subElementList.get(iii) != null) {
+				this.subElementList.get(iii).draw(myRenderer, basicTrans);
+			}
+		}
+	}
+	
+	@Override
+	protected void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
+		Log.verbose(spacingDist(level) + "DRAW shape EsvgDocument");
+		for (Base it : this.subElementList) {
+			if (it != null) {
+				it.drawShapePoints(out, recurtionMax, threshold, basicTrans, level + 1);
+			}
+		}
+	}
+	
+	/**
+	 * generate a string that contain the created SVG
+	 * @param data Data where the svg is stored
+	 * @return false : An error occured
+	 * @return true : Parsing is OK
+	 */
+	public boolean generate(final String data) {
+		return false;
+	}
+	
+	public void generateAnImage(final Uri uri) {
+		generateAnImage(uri, false);
+	}
+	
+	public void generateAnImage(final Uri uri, final boolean visualDebug) {
+		generateAnImage(new Vector2i((int) this.size.x(), (int) this.size.y()), uri, visualDebug);
+	}
+	
+	public void generateAnImage(final Vector2i size, final Uri uri) {
+		generateAnImage(size, uri, false);
+	}
+	
+	public void generateAnImage(final Vector2i size, final Uri uri, final boolean visualDebug) {
+		Vector2i sizeRender = size;
+		if (sizeRender.x() <= 0) {
+			sizeRender = sizeRender.withX((int) this.size.x());
+		}
+		if (sizeRender.y() <= 0) {
+			sizeRender = sizeRender.withY((int) this.size.y());
+		}
+		Log.debug("Generate size " + sizeRender);
+		
+		Renderer renderedElement = new Renderer(sizeRender, this, visualDebug);
+		// create the first element matrix modification ...
+		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(sizeRender.x() / this.size.x(), sizeRender.y() / this.size.y())));
+		
+		draw(renderedElement, basicTrans);
+		
+		if (uri.getExtention().equals("ppm")) {
+			renderedElement.writePPM(uri);
+		} else {
+			Log.error("Can not store with this extention : " + uri + " not in .bmp/.ppm");
+		}
+	}
+	
+	// TODO remove this fucntion : use generic function ...
+	public Vector2f getDefinedSize() {
+		return this.size;
+	}
+	
+	public List<List<Vector2f>> getLines() {
+		return getLines(new Vector2f(256, 256));
+	}
+	
+	public List<List<Vector2f>> getLines(Vector2f size) {
+		List<List<Vector2f>> out = new ArrayList<>();
+		if (size.x() <= 0) {
+			size = size.withX(this.size.x());
+		}
+		if (size.y() <= 0) {
+			size = size.withY(this.size.y());
+		}
+		Log.debug("lineification size " + size);
+		// create the first element matrix modification ...
+		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
+		drawShapePoints(out, 10, 0.25f, basicTrans);
+		return out;
+	}
+	
+	public Base getReference(final String name) {
+		if (name == "") {
+			Log.error("request a reference with no name ... ");
+			return null;
+		}
+		for (Base it : this.refList) {
+			if (it == null) {
+				continue;
+			}
+			if (it.getId() == name) {
+				return it;
+			}
+		}
+		Log.error("Can not find reference name : '" + name + "'");
+		return null;
+	}
+	
+	public boolean isLoadOk() {
+		return this.loadOK;
+	}
+	
+	/*
+	//! @previous
+	public List<Color> renderImageFloatRGB(final Vector2i size) {
+		List<Color> data = renderImageFloatRGBA(size);
+		// Reduce scope:
+		List<Color<float,3>> out;
+		out.resize(data.size());
+		for (sizet iii=0; iii<data.size(); ++iii) {
+			out[iii] = data[iii];
+		}
+		return out;
+	}
+	
+	//! @previous
+	public List<Color<uint8t,4>> renderImageU8RGBA(final Vector2i size) {
+		List<Color> data = renderImageFloatRGBA(size);
+		// Reduce scope:
+		List<Color<uint8t,4>> out;
+		out.resize(data.size());
+		for (sizet iii=0; iii<data.size(); ++iii) {
+			out[iii] = data[iii];
+		}
+		return out;
+	}
+	
+	//! @previous
+	public List<Color<uint8t,3>> renderImageU8RGB(final Vector2i size) {
+		List<Color> data = renderImageFloatRGBA(size);
+		// Reduce scope:
+		List<Color<uint8t,3>> out;
+		out.resize(data.size());
+		for (sizet iii=0; iii<data.size(); ++iii) {
+			out[iii] = data[iii];
+		}
+		return out;
+	}
+	*/
+	/**
+	 * Load the file that might contain the svg
+	 * @param uri File of the svg
+	 * @return false : An error occured
+	 * @return true : Parsing is OK
+	 */
+	public boolean load(final Uri uri) {
+		clear();
+		this.uri = uri;
+		XmlNode doc = null;
+		try {
+			doc = Exml.parse(uri);
+		} catch (ExmlBuilderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		if (doc instanceof XmlElement elem && elem.existNode("svg")) {
+			try {
+				if (elem.getNode("svg") instanceof XmlElement rootElement) {
+					cleanStyleProperty(rootElement);
+					this.loadOK = parseXMLData(rootElement);
+				}
+			} catch (ExmlNodeDoesNotExist e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return this.loadOK;
+	}
+	
+	/**
+	 * parse a string that contain an svg stream
+	 * @param data Data to parse
+	 * @return false : An error occured
+	 * @return true : Parsing is OK
+	 */
+	public boolean parse(final String data) {
+		clear();
+		this.uri = null;
+		XmlNode doc = null;
+		try {
+			doc = Exml.parse(data);
+		} catch (ExmlBuilderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		if (doc instanceof XmlElement elem && elem.existNode("svg")) {
+			try {
+				if (elem.getNode("svg") instanceof XmlElement rootElement) {
+					cleanStyleProperty(rootElement);
+					this.loadOK = parseXMLData(rootElement);
+				}
+			} catch (ExmlNodeDoesNotExist e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return this.loadOK;
+	}
+	
+	public boolean parseXMLData(final XmlElement root) {
+		return parseXMLData(root, false);
+	}
+	
+	public boolean parseXMLData(final XmlElement root, final boolean isReference) {
+		// get the svg version :
+		this.version = root.getAttribute("version", "");
+		// parse ...
+		Vector2f pos = Vector2f.ZERO;
+		if (!isReference) {
+			parseTransform(root);
+			pos = parseXmlPosition(root);
+			this.size = parseXmlSize(root);
+			parsePaintAttr(root);
+			Log.verbose("parsed .ROOT trans: " + this.transformMatrix);
+		} else {
+			Log.verbose("Parse Reference section ... (no attibute)");
+		}
+		
+		Vector2f maxSize = Vector2f.ZERO;
+		Dynamic<Vector2f> size = new Dynamic<>(Vector2f.ZERO);
+		// parse all sub node:
+		for (XmlNode it : root.getNodes()) {
+			if (!(it instanceof XmlElement child)) {
+				// comment can be here...
+				continue;
+			}
+			Base elementParser = null;
+			if (child.getValue().equals("g")) {
+				elementParser = new Group(this.paint);
+			} else if (child.getValue().equals("a")) {
+				Log.info("Note : 'a' balise is parsed like a g balise ...");
+				elementParser = new Group(this.paint);
+			} else if (child.getValue().equals("title")) {
+				this.title = "TODO : set the title here ...";
+				continue;
+			} else if (child.getValue().equals("path")) {
+				elementParser = new Path(this.paint);
+			} else if (child.getValue().equals("rect")) {
+				elementParser = new Rectangle(this.paint);
+			} else if (child.getValue().equals("circle")) {
+				elementParser = new Circle(this.paint);
+			} else if (child.getValue().equals("ellipse")) {
+				elementParser = new Ellipse(this.paint);
+			} else if (child.getValue().equals("line")) {
+				elementParser = new Line(this.paint);
+			} else if (child.getValue().equals("polyline")) {
+				elementParser = new Polyline(this.paint);
+			} else if (child.getValue().equals("polygon")) {
+				elementParser = new Polygon(this.paint);
+			} else if (child.getValue().equals("text")) {
+				elementParser = new Text(this.paint);
+			} else if (child.getValue().equals("radialGradient")) {
+				if (!isReference) {
+					Log.error("'" + child.getValue() + "' node must not be defined outside a defs Section");
+					continue;
+				}
+				elementParser = new RadialGradient(this.paint);
+			} else if (child.getValue().equals("linearGradient")) {
+				if (!isReference) {
+					Log.error("'" + child.getValue() + "' node must not be defined outside a defs Section");
+					continue;
+				}
+				elementParser = new LinearGradient(this.paint);
+			} else if (child.getValue().equals("defs")) {
+				if (isReference) {
+					Log.error("'" + child.getValue() + "' node must not be defined in a defs Section");
+					continue;
+				}
+				boolean retRefs = parseXMLData(child, true);
+				// TODO Use retRefs ...
+				continue;
+			} else if (child.getValue().equals("sodipodi:namedview")) {
+				// Node ignore : generaly inkscape data
+				continue;
+			} else if (child.getValue().equals("metadata")) {
+				// Node ignore : generaly inkscape data
+				continue;
+			} else {
+				Log.error("node not suported : '" + child.getValue() + "' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+			}
+			if (elementParser == null) {
+				Log.error("error on node: '" + child.getValue() + "' allocation error or not supported ...");
+				continue;
+			}
+			if (!elementParser.parseXML(child, this.transformMatrix, size)) {
+				Log.error("error on node: '" + child.getValue() + "' Sub Parsing ERROR");
+				elementParser = null;
+				continue;
+			}
+			if (maxSize.x() < size.value.x()) {
+				maxSize = maxSize.withX(size.value.x());
+			}
+			if (maxSize.y() < size.value.y()) {
+				maxSize = maxSize.withY(size.value.y());
+			}
+			// add element in the system
+			if (!isReference) {
+				this.subElementList.add(elementParser);
+			} else {
+				this.refList.add(elementParser);
+			}
+		}
+		if (this.size.x() == 0 || this.size.y() == 0) {
+			this.size = Vector2f.clipInt(maxSize);
+		} else {
+			this.size = Vector2f.clipInt(this.size);
+		}
+		if (!isReference) {
+			displayDebug();
+		}
+		return true;
+	}
+	
+	/**
+	 * Generate Image in a specific format.
+	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
+	 * @return Vector of the data used to display (simple vector: generic to transmit)
+	 */
+	public Color[][] renderImageFloatRGBA(Vector2i size) {
+		if (size.x() <= 0) {
+			size = size.withX((int) this.size.x());
+		}
+		if (size.y() <= 0) {
+			size = size.withY((int) this.size.y());
+		}
+		Log.debug("Generate size " + size);
+		Renderer renderedElement = new Renderer(size, this);
+		// create the first element matrix modification ...
+		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
+		draw(renderedElement, basicTrans);
+		
+		// direct return the generated data ...
+		return renderedElement.getData();
+	}
+	
+	/**
+	 * Store the SVG in the file
+	 * @param uri File of the svg
+	 * @return false : An error occured
+	 * @return true : Parsing is OK
+	 */
+	public boolean store(final Uri uri) {
+		Log.todo("not implemented store in SVG...");
+		return false;
+	}
+	
+}

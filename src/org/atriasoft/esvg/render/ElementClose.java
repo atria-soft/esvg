@@ -1,19 +1,22 @@
 package org.atriasoft.esvg.render;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
 
-#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<esvg/render/Element.hpp>
-
-namespace esvg{namespace render{
-class ElementClose extends esvg::render::Element
-{
-			public:
-				ElementClose(boolean _relative=false);
-			public:
-				virtual etk::String display() const;
-		};
-}}
+public class ElementClose extends Element {
+	ElementClose() {
+		super(PathType.close, false);
+	}
+	
+	ElementClose(final boolean relative) {
+		super(PathType.close, relative);
+	}
+	
+	@Override
+	public String display() {
+		return "";
+	}
+}

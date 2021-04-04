@@ -1,25 +1,31 @@
 package org.atriasoft.esvg;
 
+import org.atriasoft.esvg.internal.Log;
+import org.atriasoft.etk.math.Matrix2x3f;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.util.Dynamic;
+import org.atriasoft.exml.model.XmlElement;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
 
-class Text extends Base {
-	public Text(final PaintState _parentPaintState) {
-		super(_parentPaintState);
+public class Text extends Base {
+	public Text(final PaintState parentPaintState) {
+		super(parentPaintState);
 	}
 	
 	@Override
-		public boolean parse(const exml::Element& _element, mat2x3& _parentTrans, Vector2f& _sizeMax)
-		_sizeMax.setValue(0,0);
-		Log.error("NOT IMPLEMENTED");
-		return false;
-}
+	public void display(final int spacing) {
+		Log.debug(spacingDist(spacing) + "Text");
+	}
 	
 	@Override
-	public void display(final int _spacing) {
-		Log.debug(spacingDist(_spacing) << "Text");
+	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+		sizeMax.value = Vector2f.ZERO;
+		Log.error("NOT IMPLEMENTED");
+		return false;
 	}
 }

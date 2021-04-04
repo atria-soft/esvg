@@ -1,23 +1,22 @@
 package org.atriasoft.esvg.render;
+
+import org.atriasoft.etk.math.Vector2f;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <esvg/render/Element.hpp>
-
-namespace esvg {
-	namespace render {
-		class ElementBezierCurveTo  extends  esvg::render::Element {
-			public:
-				ElementBezierCurveTo(boolean _relative, const Vector2f& _pos1, const Vector2f& _pos);
-			public:
-				virtual etk::String display() const;
-		};
+public class ElementBezierCurveTo extends Element {
+	public ElementBezierCurveTo(final boolean relative, final Vector2f pos1, final Vector2f pos) {
+		super(PathType.bezierCurveTo, relative);
+		this.pos = pos;
+		this.pos1 = pos1;
+	}
+	
+	@Override
+	public String display() {
+		return "pos=" + this.pos + " pos1=" + this.pos1;
 	}
 }
-

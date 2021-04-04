@@ -1,32 +1,29 @@
 package org.atriasoft.esvg.render;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
+import org.atriasoft.etk.math.Vector2f;
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <esvg/render/Element.hpp>
-
-namespace esvg {
-	namespace render {
-		class ElementElliptic  extends  esvg::render::Element {
-			public:
-				float this.angle;
-				boolean this.largeArcFlag;
-				boolean this.sweepFlag;
-			public:
-				ElementElliptic(boolean _relative,
-				                const Vector2f& _radius, // in this.pos1
-				                float _angle,
-				                boolean _largeArcFlag,
-				                boolean _sweepFlag,
-				                const Vector2f& _pos);
-			public:
-				virtual etk::String display() const;
-		};
+public class ElementElliptic extends Element {
+	public float angle;
+	public boolean largeArcFlag;
+	public boolean sweepFlag;
+	
+	public ElementElliptic(final boolean relative, final Vector2f radius, // in this.pos1
+			final float angle, final boolean largeArcFlag, final boolean sweepFlag, final Vector2f pos) {
+		super(PathType.elliptic, relative);
+		this.pos1 = radius;
+		this.pos = pos;
+		this.angle = angle;
+		this.largeArcFlag = largeArcFlag;
+		this.sweepFlag = sweepFlag;
+	}
+	
+	@Override
+	public String display() {
+		return "pos=" + this.pos + " radius=" + this.pos1 + " angle=" + this.angle + " largeArcFlag=" + this.largeArcFlag + " sweepFlag=" + this.sweepFlag;
 	}
 }
-

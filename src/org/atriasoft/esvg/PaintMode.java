@@ -6,7 +6,7 @@ package org.atriasoft.esvg;
 public enum PaintMode {
 	NONE, //!< No painting.
 	COLOR, //!< Painting a color.
-	GRADIENT_LINEAR, //!< Painting a linear gradient.
-	GRADIENT_RADIAL; //!< Painting a radial gradient.
+	GRADIENTLINEAR, //!< Painting a linear gradient.
+	GRADIENTRADIAL; //!< Painting a radial gradient.
 
 }

@@ -1,83 +1,301 @@
 package org.atriasoft.esvg;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.atriasoft.esvg.render.DynamicColor;
+import org.atriasoft.esvg.render.DynamicColorSpecial;
+import org.atriasoft.esvg.render.Point;
+import org.atriasoft.esvg.render.Segment;
+import org.atriasoft.esvg.render.SegmentList;
+import org.atriasoft.esvg.render.Weight;
+import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Uri;
+import org.atriasoft.etk.math.FMath;
+import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
 
-#include<etk/types.hpp>#include<etk/math/Vector2D.hpp>#include<etk/Color.hpp>#include<esvg/render/Weight.hpp>#include<esvg/render/DynamicColor.hpp>#include<etk/uri/uri.hpp>
-
-namespace esvg{
-class Document;
-class Renderer {
-		#ifdef DEBUG
-		
-		private:
-			boolean this.visualDebug;
-			int this.factor;
-		#endif
-		public:
-			Renderer(const Vector2i& _size, esvg::Document* _document, boolean _visualDebug=false);
-			~Renderer();
-		protected:
-			Vector2i this.size;
-		public:
-		
-		void setSize(const Vector2i& _size);
-			const Vector2i& getSize() const;
-		protected:
-			List<etk::Color<float,4>> this.buffer;
-		public:
-			List<etk::Color<float,4>> getData();
-		protected:
-			int this.interpolationRecurtionMax;
-		public:
-		
-		void setInterpolationRecurtionMax(int _value);
-		
-		int getInterpolationRecurtionMax() const;
-		protected:
-			float this.interpolationThreshold;
-		public:
-		
-		void setInterpolationThreshold(float _value);
-		
-		float getInterpolationThreshold() const;
-		protected:
-			int this.nbSubScanLine;
-		public:
-		
-		void setNumberSubScanLine(int _value);
-		
-		int getNumberSubScanLine() const;
-		public:
-		
-		void writePPM(const etk::Uri& _uri);
-		
-		void writeBMP(const etk::Uri& _uri);
-		protected:
-			etk::Color<float,4> mergeColor(etk::Color<float,4> _base, etk::Color<float,4> _integration);
-		public:
-		
-		void print(const esvg::render::Weight& _weightFill,
-			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorFill,
-			           const esvg::render::Weight& _weightStroke,
-			           ememory::SharedPtr<esvg::render::DynamicColor>& _colorStroke,
-			           float _opacity);
-			#ifdef DEBUG
-		
-		void addDebugSegment(const esvg::render::SegmentList& _listSegment);
-		
-		void addDebug(const List<Pair<Vector2f,Vector2f>>& _info);
-			#endif
-		protected:
-			esvg::Document* this.document;
-		public:
-			esvg::Document*
-		
-		getMainDocument() {
-				return this.document;
+public class Renderer {
+	private static final boolean DEBUG_MODE = false;
+	protected Color[][] buffer; // for debug
+	protected EsvgDocument document; // for debug
+	
+	private int factor = 1;
+	
+	protected int interpolationRecurtionMax = 10;
+	
+	protected float interpolationThreshold = 0.25f;
+	protected int nbSubScanLine = 8;
+	protected Vector2i size;
+	private final boolean visualDebug = false;
+	
+	public Renderer(final Vector2i size, final EsvgDocument document) {
+		this(size, document, false);
+	}
+	
+	public Renderer(final Vector2i size, final EsvgDocument document, final boolean visualDebug) {
+		this.size = size;
+		this.document = document;
+		if (Renderer.DEBUG_MODE) {
+			if (this.visualDebug) {
+				this.factor = 20;
 			}
-	};
+		}
+		setSize(size);
+	}
+	
+	void addDebugSegment(final SegmentList listSegment) {
+		if (!this.visualDebug) {
+			return;
+		}
+		Vector2i dynamicSize = this.size.multiply(this.factor);
+		// for each lines:
+		for (int yyy = 0; yyy < dynamicSize.y(); ++yyy) {
+			// Reduce the number of lines in the subsampling parsing:
+			List<Segment> availlableSegmentPixel = new ArrayList<>();
+			for (Segment it : listSegment.data) {
+				if (it.p0.y() * this.factor <= yyy + 1 && it.p1.y() * this.factor >= (yyy)) {
+					availlableSegmentPixel.add(it);
+				}
+			}
+			//find all the segment that cross the middle of the line of the center of the pixel line:
+			float subSamplingCenterPos = yyy + 0.5f;
+			List<Segment> availlableSegment = new ArrayList<>();
+			// find in the subList ...
+			for (Segment it : availlableSegmentPixel) {
+				if (it.p0.y() * this.factor <= subSamplingCenterPos && it.p1.y() * this.factor >= subSamplingCenterPos) {
+					availlableSegment.add(it);
+				}
+			}
+			// x position, angle
+			for (Segment it : availlableSegment) {
+				Vector2f delta = it.p0.multiply(this.factor).less(it.p1.multiply(this.factor));
+				// x = coefficent*y+bbb;
+				float coefficient = delta.x() / delta.y();
+				float bbb = it.p0.x() * this.factor - coefficient * it.p0.y() * this.factor;
+				float xpos = coefficient * subSamplingCenterPos + bbb;
+				if (xpos >= 0 && xpos < dynamicSize.x() && yyy >= 0 && yyy < dynamicSize.y()) {
+					if (it.direction == 1.0f) {
+						this.buffer[yyy][(int) (xpos)] = Color.BLUE;
+					} else {
+						this.buffer[yyy][(int) (xpos)] = Color.DARK_RED;
+					}
+				}
+			}
+		}
+		// for each colomn:
+		for (int xxx = 0; xxx < dynamicSize.x(); ++xxx) {
+			// Reduce the number of lines in the subsampling parsing:
+			List<Segment> availlableSegmentPixel = new ArrayList<>();
+			for (Segment it : listSegment.data) {
+				if ((it.p0.x() * this.factor <= xxx + 1 && it.p1.x() * this.factor >= (xxx)) || (it.p0.x() * this.factor >= xxx + 1 && it.p1.x() * this.factor <= (xxx))) {
+					availlableSegmentPixel.add(it);
+				}
+			}
+			//find all the segment that cross the middle of the line of the center of the pixel line:
+			float subSamplingCenterPos = xxx + 0.5f;
+			List<Segment> availlableSegment = new ArrayList<>();
+			// find in the subList ...
+			for (Segment it : availlableSegmentPixel) {
+				if ((it.p0.x() * this.factor <= subSamplingCenterPos && it.p1.x() * this.factor >= subSamplingCenterPos)
+						|| (it.p0.x() * this.factor >= subSamplingCenterPos && it.p1.x() * this.factor <= subSamplingCenterPos)) {
+					availlableSegment.add(it);
+				}
+			}
+			// x position, angle
+			for (Segment it : availlableSegment) {
+				Vector2f delta = it.p0.multiply(this.factor).less(it.p1.multiply(this.factor));
+				// x = coefficent*y+bbb;
+				if (delta.x() == 0) {
+					continue;
+				}
+				float coefficient = delta.y() / delta.x();
+				float bbb = it.p0.y() * this.factor - coefficient * it.p0.x() * this.factor;
+				float ypos = coefficient * subSamplingCenterPos + bbb;
+				if (ypos >= 0 && ypos < dynamicSize.y() && xxx >= 0 && xxx < dynamicSize.y()) {
+					if (it.direction == 1.0f) {
+						this.buffer[(int) (ypos)][xxx] = Color.BLUE;
+					} else {
+						this.buffer[(int) (ypos)][xxx] = Color.DARK_RED;
+					}
+				}
+			}
+		}
+	}
+	
+	Color[][] getData() {
+		return this.buffer;
+	}
+	
+	int getInterpolationRecurtionMax() {
+		return this.interpolationRecurtionMax;
+	}
+	
+	float getInterpolationThreshold() {
+		return this.interpolationThreshold;
+	}
+	
+	public EsvgDocument getMainDocument() {
+		return this.document;
+	}
+	
+	int getNumberSubScanLine() {
+		return this.nbSubScanLine;
+	}
+	
+	Vector2i getSize() {
+		return this.size;
+	}
+	
+	protected Color mergeColor(final Color base, final Color integration) {
+		/*
+		if (integration.a() < base.a()) {
+			result = integration;
+			integration = base;
+			base = result;
+		}
+		*/
+		float r = (integration.a() * integration.r() + base.a() * (1.0f - integration.a()) * base.r());
+		float g = (integration.a() * integration.g() + base.a() * (1.0f - integration.a()) * base.g());
+		float b = (integration.a() * integration.b() + base.a() * (1.0f - integration.a()) * base.b());
+		float a = (integration.a() + base.a() * (1.0f - integration.a()));
+		if (a != 0.0f) {
+			float reverse = 1.0f / a;
+			r *= reverse;
+			g *= reverse;
+			b *= reverse;
+		}
+		return new Color(r, g, b, a);
+	}
+	
+	public void print(final Weight weightFill, final DynamicColor colorFill, final Weight weightStroke, final DynamicColor colorStroke, final float opacity) {
+		if (colorFill != null) {
+			//colorFill.setViewPort(Pair<Vector2f, Vector2f>(new Vector2f(0,0), Vector2f(sizeX, sizeY)));
+			colorFill.generate(this.document);
+		}
+		if (colorStroke != null) {
+			//colorStroke.setViewPort(Pair<Vector2f, Vector2f>(new Vector2f(0,0), Vector2f(sizeX, sizeY)));
+			colorStroke.generate(this.document);
+		}
+		// all together
+		for (int yyy = 0; yyy < this.size.y(); ++yyy) {
+			for (int xxx = 0; xxx < this.size.x(); ++xxx) {
+				
+				Vector2i pos = new Vector2i(xxx, yyy);
+				float valueFill = weightFill.get(pos);
+				float valueStroke = weightStroke.get(pos);
+				// calculate merge of stroke and fill value:
+				Color intermediateColorFill = Color.NONE;
+				
+				Color intermediateColorStroke = Color.NONE;
+				if (colorFill != null && valueFill != 0.0f) {
+					intermediateColorFill = colorFill.getColor(pos);
+					intermediateColorFill = intermediateColorFill.withA(intermediateColorFill.a() * valueFill);
+				}
+				if (colorStroke != null && valueStroke != 0.0f) {
+					intermediateColorStroke = colorStroke.getColor(pos);
+					intermediateColorStroke = intermediateColorStroke.withA(intermediateColorStroke.a() * valueStroke);
+				}
+				Color intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
+				intermediateColor = intermediateColor.withA(intermediateColor.a() * opacity);
+				if (Renderer.DEBUG_MODE) {
+					for (int deltaY = 0; deltaY < this.factor; ++deltaY) {
+						for (int deltaX = 0; deltaX < this.factor; ++deltaX) {
+							int idx = xxx * this.factor + deltaX;
+							int idy = yyy * this.factor + deltaY;
+							this.buffer[idy][idx] = mergeColor(this.buffer[idy][idx], intermediateColor);
+						}
+					}
+				} else {
+					this.buffer[yyy][xxx] = mergeColor(this.buffer[yyy][xxx], intermediateColor);
+				}
+			}
+		}
+		
+		if (Renderer.DEBUG_MODE) {
+			
+			// display the gradient position:
+			DynamicColorSpecial tmpColor = (DynamicColorSpecial) (colorFill);
+			
+			if (tmpColor != null) {
+				SegmentList listSegment = new SegmentList();
+				// Display bounding box
+				listSegment.addSegment(new Point(tmpColor.viewPort.first), new Point(new Vector2f(tmpColor.viewPort.first.x(), tmpColor.viewPort.second.y())), false);
+				listSegment.addSegment(new Point(new Vector2f(tmpColor.viewPort.first.x(), tmpColor.viewPort.second.y())), new Point(tmpColor.viewPort.second), false);
+				listSegment.addSegment(new Point(tmpColor.viewPort.second), new Point(new Vector2f(tmpColor.viewPort.second.x(), tmpColor.viewPort.first.y())), false);
+				listSegment.addSegment(new Point(new Vector2f(tmpColor.viewPort.second.x(), tmpColor.viewPort.first.y())), new Point(tmpColor.viewPort.first), false);
+				listSegment.applyMatrix(tmpColor.matrix);
+				// display the gradient axis
+				listSegment.addSegment(new Point(tmpColor.pos1), new Point(tmpColor.pos2), false);
+				/*
+					Matrix2x3f this.matrix;
+					Pair<Vector2f, Vector2f> this.viewPort;
+					Vector2f this.pos1;
+					Vector2f this.pos2;
+				*/
+				addDebugSegment(listSegment);
+			}
+		}
+	}
+	
+	public void setInterpolationRecurtionMax(final int value) {
+		this.interpolationRecurtionMax = FMath.avg(1, value, 200);
+	}
+	
+	void setInterpolationThreshold(final float value) {
+		this.interpolationThreshold = FMath.avg(0.0f, value, 20000.0f);
+	}
+	
+	void setNumberSubScanLine(final int value) {
+		this.nbSubScanLine = FMath.avg(1, value, 200);
+	}
+	
+	public void setSize(final Vector2i size) {
+		this.size = size;
+		if (Renderer.DEBUG_MODE) {
+			this.buffer = new Color[this.size.x()][this.size.y()];
+		} else {
+			this.buffer = new Color[this.size.x() * this.factor][this.size.y() * this.factor];
+		}
+		Arrays.fill(this.buffer, Color.NONE);
+	}
+	
+	void writePPM(final Uri uri) {
+		/*
+		if (this.buffer.length == 0) {
+			return;
+		}
+		auto fileIo = uri::get(uri);
+		if (fileIo == null) {
+			Log.error("Can not create the uri: " + uri);
+			return;
+		}
+		if (fileIo.open(io::OpenMode::Write) == false) {
+			Log.error("Can not open (r) the file : " + uri);
+			return;
+		}
+		int sizeX = this.size.x();
+		int sizeY = this.size.y();
+		if (Renderer.DEBUG_MODE) {
+			sizeX *= this.factor;
+			sizeY *= this.factor;
+		}
+		Log.debug("Generate ppm : " + this.size + " debug size=" + (new Vector2i(sizeX,sizeY)));
+		char tmpValue[1024];
+		sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
+		fileIo.write(tmpValue,1,sizeof(tmpValue));
+		for (int iii=0 ; iii<sizeX*sizeY; iii++) {
+			Color tmp = this.buffer[iii];
+			fileIo.write(&tmp, 1, 3);
+		}
+		fileIo.close();
+		*/
+	}
 }

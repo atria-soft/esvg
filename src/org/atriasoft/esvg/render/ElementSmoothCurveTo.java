@@ -1,23 +1,22 @@
 package org.atriasoft.esvg.render;
+
 /** @file
  * @author Edouard DUPIN
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-#pragma once
+import org.atriasoft.etk.math.Vector2f;
 
-#include <etk/types.hpp>
-#include <etk/math/Vector2D.hpp>
-#include <esvg/render/Element.hpp>
-
-namespace esvg {
-	namespace render {
-		class ElementSmoothCurveTo  extends  esvg::render::Element {
-			public:
-				ElementSmoothCurveTo(boolean _relative, const Vector2f& _pos2, const Vector2f& _pos);
-			public:
-				virtual etk::String display() const;
-		};
+public class ElementSmoothCurveTo extends Element {
+	public ElementSmoothCurveTo(final boolean relative, final Vector2f pos2, final Vector2f pos) {
+		super(PathType.moveTo, relative);
+		this.pos = pos;
+		this.pos2 = pos2;
+		
+	}
+	
+	@Override
+	public String display() {
+		return "pos=" + this.pos + " pos2=" + this.pos2;
 	}
 }
-
