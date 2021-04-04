@@ -11,13 +11,13 @@ import org.atriasoft.etk.math.Vector2f;
 public abstract class Element {
 	protected PathType cmd;
 	
-	protected Vector2f pos;
+	protected Vector2f pos = Vector2f.ZERO;
 	
-	protected Vector2f pos1;
+	protected Vector2f pos1 = Vector2f.ZERO;
 	
-	protected Vector2f pos2;
+	protected Vector2f pos2 = Vector2f.ZERO;
 	
-	protected boolean relative;
+	protected boolean relative = false;
 	
 	public Element(final PathType type) {
 		this.cmd = type;

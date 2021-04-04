@@ -29,12 +29,12 @@ public class PointList {
 	}
 	
 	public void display() {
-		Log.verbose(" Display list of points : size=" + this.data.size());
+		Log.warning(" Display list of points : size=" + this.data.size());
 		for (List<Point> it : this.data) {
-			Log.verbose("    Find List " + it.size() + " members");
+			Log.warning("    Find List " + it.size() + " members");
 			for (int iii = 0; iii < it.size(); ++iii) {
 				Point elem = it.get(iii);
-				Log.verbose("        [" + iii + "] Find " + elem.type + " " + elem.pos);
+				Log.warning("        [" + iii + "] Find " + elem.type + " " + elem.pos);
 			}
 		}
 	}

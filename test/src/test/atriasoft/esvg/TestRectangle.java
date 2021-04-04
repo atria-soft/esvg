@@ -11,8 +11,8 @@ class TestRectangle {
 				+ "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglecornedfill.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglecornedfill.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedfill.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedfill.png"));
 	}
 	
 	@Test
@@ -21,8 +21,8 @@ class TestRectangle {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglecornedfillandstroke.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglecornedfillandstroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedfillandstroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedfillandstroke.png"));
 	}
 	
 	@Test
@@ -31,8 +31,8 @@ class TestRectangle {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' rx='20' ry='20' stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglecornedstroke.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglecornedstroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedstroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglecornedstroke.png"));
 	}
 	
 	@Test
@@ -40,8 +40,8 @@ class TestRectangle {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<rect x='12.5' y='12.5' width='75' height='50' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglefill.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglefill.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglefill.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglefill.png"));
 	}
 	
 	@Test
@@ -50,8 +50,8 @@ class TestRectangle {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglefillandstroke.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglefillandstroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglefillandstroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglefillandstroke.png"));
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ class TestRectangle {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestRectanglestroke.svg"), data);
-		doc.generateAnImage(new Uri("TestRectanglestroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestRectanglestroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestRectanglestroke.png"));
 	}
 }

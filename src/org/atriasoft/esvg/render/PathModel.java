@@ -92,12 +92,12 @@ public class PathModel {
 	}
 	
 	public void display(final int spacing) {
-		Log.debug(PathModel.spacingDist(spacing) + "Path");
+		Log.warning(PathModel.spacingDist(spacing) + "Path");
 		for (Element it : this.listElement) {
 			if (it == null) {
 				continue;
 			}
-			Log.debug(PathModel.spacingDist(spacing + 1) + it);
+			Log.warning(PathModel.spacingDist(spacing + 1) + it);
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class PathModel {
 						} else {
 							tmpListPoint.get(tmpListPoint.size() - 1).setEndPath();
 							out.addList(tmpListPoint);
-							tmpListPoint.clear();
+							tmpListPoint = new ArrayList<>();
 						}
 					}
 					lastAngle = Vector2f.ZERO;
@@ -153,7 +153,7 @@ public class PathModel {
 								Log.verbose("        Remove point Z property : " + tmpListPoint.get(tmpListPoint.size() - 1).pos + " with delta=" + delta);
 							}
 							out.addList(tmpListPoint);
-							tmpListPoint.clear();
+							tmpListPoint = new ArrayList<>();
 						}
 					}
 					lastAngle = Vector2f.ZERO;
@@ -164,7 +164,7 @@ public class PathModel {
 					if (tmpListPoint.size() != 0) {
 						tmpListPoint.get(tmpListPoint.size() - 1).setEndPath();
 						out.addList(tmpListPoint);
-						tmpListPoint.clear();
+						tmpListPoint = new ArrayList<>();
 					}
 					// create a new one
 					if (!it.getRelative()) {
@@ -413,7 +413,7 @@ public class PathModel {
 			Log.verbose("Auto-end PATH");
 			tmpListPoint.get(tmpListPoint.size() - 1).setEndPath();
 			out.addList(tmpListPoint);
-			tmpListPoint.clear();
+			tmpListPoint = new ArrayList<>();
 		}
 		out.display();
 		return out;

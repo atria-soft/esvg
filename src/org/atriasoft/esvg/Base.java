@@ -57,9 +57,9 @@ public class Base {
 	
 	protected String id; //!< unique ID of the element.
 	
-	protected PaintState paint;
+	protected PaintState paint = new PaintState();
 	
-	protected Matrix2x3f transformMatrix; //!< specific render of the curent element
+	protected Matrix2x3f transformMatrix = Matrix2x3f.IDENTITY; //!< specific render of the curent element
 	
 	public Base() {
 		this.paint = new PaintState();
@@ -232,7 +232,7 @@ public class Base {
 		this.id = element.getAttribute("id", "");
 		// ---------------- stroke ----------------
 		content = element.getAttribute("stroke", "");
-		if (content == "none") {
+		if (content.equals("none")) {
 			this.paint.stroke = new Pair<>(Color.NONE, "");
 		} else {
 			if (content.length() != 0) {
@@ -251,7 +251,7 @@ public class Base {
 			
 			content = element.getAttribute("stroke-dasharray", "");
 			if (content.length() != 0) {
-				if (content == "none") {
+				if (content.equals("none")) {
 					// OK, Nothing to do ...
 				} else {
 					Log.todo(" 'stroke-dasharray' not implemented ...");
@@ -259,11 +259,11 @@ public class Base {
 			}
 			content = element.getAttribute("stroke-linecap", "");
 			if (content.length() != 0) {
-				if (content == "butt") {
+				if (content.equals("butt")) {
 					this.paint.lineCap = CapMode.BUTT;
-				} else if (content == "round") {
+				} else if (content.equals("round")) {
 					this.paint.lineCap = CapMode.ROUND;
-				} else if (content == "square") {
+				} else if (content.equals("square")) {
 					this.paint.lineCap = CapMode.SQUARE;
 				} else {
 					this.paint.lineCap = CapMode.BUTT;
@@ -272,11 +272,11 @@ public class Base {
 			}
 			content = element.getAttribute("stroke-linejoin", "");
 			if (content.length() != 0) {
-				if (content == "miter") {
+				if (content.equals("miter")) {
 					this.paint.lineJoin = JoinMode.MITER;
-				} else if (content == "round") {
+				} else if (content.equals("round")) {
 					this.paint.lineJoin = JoinMode.ROUND;
-				} else if (content == "bevel") {
+				} else if (content.equals("bevel")) {
 					this.paint.lineJoin = JoinMode.BEVEL;
 				} else {
 					this.paint.lineJoin = JoinMode.MITER;
@@ -291,7 +291,7 @@ public class Base {
 		}
 		// ---------------- FILL ----------------
 		content = element.getAttribute("fill", "");
-		if (content == "none") {
+		if (content.equals("none")) {
 			this.paint.fill = new Pair<>(Color.NONE, "");
 		} else {
 			if (content.length() != 0) {
@@ -305,9 +305,9 @@ public class Base {
 			}
 			content = element.getAttribute("fill-rule", "");
 			if (content.length() != 0) {
-				if (content == "nonzero") {
+				if (content.equals("nonzero")) {
 					this.paint.flagEvenOdd = false;
-				} else if (content == "evenodd") {
+				} else if (content.equals("evenodd")) {
 					this.paint.flagEvenOdd = true;
 				} else {
 					Log.error("not know fill-rule value : \"" + content + "\", not in [nonzero,evenodd]");

@@ -10,8 +10,8 @@ class TestPolygon {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<polygon points='50,10 90,50 10,80' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestPolygonfill.svg"), data);
-		doc.generateAnImage(new Uri("TestPolygonfill.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPolygonfill.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPolygonfill.png"));
 	}
 	
 	@Test
@@ -20,8 +20,8 @@ class TestPolygon {
 				+ "	<polygon points='50,10 90,50 10,80' stroke='green' stroke-width='3' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestPolygonfillandstroke.svg"), data);
-		doc.generateAnImage(new Uri("TestPolygonfillandstroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPolygonfillandstroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPolygonfillandstroke.png"));
 	}
 	
 	@Test
@@ -30,7 +30,7 @@ class TestPolygon {
 				+ "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestPolygonstroke.svg"), data);
-		doc.generateAnImage(new Uri("TestPolygonstroke.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPolygonstroke.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPolygonstroke.png"));
 	}
 }

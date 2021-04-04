@@ -70,7 +70,7 @@ public class Rectangle extends Base {
 		
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
-		
+		listElement.display(2);
 		PointList listPoints = new PointList();
 		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(), myRenderer.getInterpolationThreshold());
 		//listPoints.applyMatrix(mtx);

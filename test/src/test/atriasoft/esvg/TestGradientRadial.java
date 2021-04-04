@@ -14,8 +14,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='50' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialcircle.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialcircle.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialcircle.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialcircle.png"));
 	}
 	
 	@Test
@@ -27,8 +27,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialfull.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialfull.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialfull.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialfull.png"));
 	}
 	
 	@Test
@@ -40,8 +40,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialpartial.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialpartial.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialpartial.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialpartial.png"));
 	}
 	
 	@Test
@@ -53,8 +53,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitBoxspreadNone.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitBoxspreadNone.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadNone.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadNone.png"));
 	}
 	
 	@Test
@@ -66,8 +66,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitBoxspreadPad.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitBoxspreadPad.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadPad.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadPad.png"));
 	}
 	
 	@Test
@@ -79,8 +79,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitBoxspreadReflect.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitBoxspreadReflect.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadReflect.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadReflect.png"));
 	}
 	
 	@Test
@@ -92,8 +92,8 @@ class TestGradientRadial {
 				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitBoxspreadRepeat.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitBoxspreadRepeat.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadRepeat.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitBoxspreadRepeat.png"));
 	}
 	
 	@Test
@@ -105,8 +105,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadNone.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadNone.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadNone.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadNone.png"));
 	}
 	
 	@Test
@@ -118,8 +118,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadPad.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadPad.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadPad.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadPad.png"));
 	}
 	
 	@Test
@@ -131,8 +131,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadPadunCenter.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadPadunCenter.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadPadunCenter.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadPadunCenter.png"));
 	}
 	
 	@Test
@@ -144,8 +144,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadReflect.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadReflect.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadReflect.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadReflect.png"));
 	}
 	
 	@Test
@@ -157,8 +157,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadReflectunCenter.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadReflectunCenter.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadReflectunCenter.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadReflectunCenter.png"));
 	}
 	
 	@Test
@@ -170,8 +170,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadRepeat.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadRepeat.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeat.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeat.png"));
 	}
 	
 	@Test
@@ -183,8 +183,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadRepeatout.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadRepeatout.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatout.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatout.png"));
 	}
 	
 	@Test
@@ -196,8 +196,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadRepeatunCenter.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadRepeatunCenter.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatunCenter.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatunCenter.png"));
 	}
 	
 	@Test
@@ -209,8 +209,8 @@ class TestGradientRadial {
 				+ "	</defs>\n" + "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestGradientRadialunitUserspreadRepeatunCenter2.svg"), data);
-		doc.generateAnImage(new Uri("TestGradientRadialunitUserspreadRepeatunCenter2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatunCenter2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestGradientRadialunitUserspreadRepeatunCenter2.png"));
 	}
 	
 }

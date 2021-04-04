@@ -18,9 +18,9 @@ import org.atriasoft.exml.model.XmlNode;
 
 public class EsvgDocument extends Base {
 	private boolean loadOK = false;
-	private List<Base> refList;
+	private final List<Base> refList = new ArrayList<>();
 	private Vector2f size = Vector2f.ZERO;
-	private List<Base> subElementList;
+	private final List<Base> subElementList = new ArrayList<>();
 	private String title = ""; //!< sub-element list
 	private Uri uri = null; //!< reference elements ...
 	private String version = "0.0";
@@ -105,51 +105,6 @@ public class EsvgDocument extends Base {
 			if (it != null) {
 				it.drawShapePoints(out, recurtionMax, threshold, basicTrans, level + 1);
 			}
-		}
-	}
-	
-	/**
-	 * generate a string that contain the created SVG
-	 * @param data Data where the svg is stored
-	 * @return false : An error occured
-	 * @return true : Parsing is OK
-	 */
-	public boolean generate(final String data) {
-		return false;
-	}
-	
-	public void generateAnImage(final Uri uri) {
-		generateAnImage(uri, false);
-	}
-	
-	public void generateAnImage(final Uri uri, final boolean visualDebug) {
-		generateAnImage(new Vector2i((int) this.size.x(), (int) this.size.y()), uri, visualDebug);
-	}
-	
-	public void generateAnImage(final Vector2i size, final Uri uri) {
-		generateAnImage(size, uri, false);
-	}
-	
-	public void generateAnImage(final Vector2i size, final Uri uri, final boolean visualDebug) {
-		Vector2i sizeRender = size;
-		if (sizeRender.x() <= 0) {
-			sizeRender = sizeRender.withX((int) this.size.x());
-		}
-		if (sizeRender.y() <= 0) {
-			sizeRender = sizeRender.withY((int) this.size.y());
-		}
-		Log.debug("Generate size " + sizeRender);
-		
-		Renderer renderedElement = new Renderer(sizeRender, this, visualDebug);
-		// create the first element matrix modification ...
-		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(sizeRender.x() / this.size.x(), sizeRender.y() / this.size.y())));
-		
-		draw(renderedElement, basicTrans);
-		
-		if (uri.getExtention().equals("ppm")) {
-			renderedElement.writePPM(uri);
-		} else {
-			Log.error("Can not store with this extention : " + uri + " not in .bmp/.ppm");
 		}
 	}
 	
@@ -418,32 +373,29 @@ public class EsvgDocument extends Base {
 	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
 	 * @return Vector of the data used to display (simple vector: generic to transmit)
 	 */
-	public Color[][] renderImageFloatRGBA(Vector2i size) {
-		if (size.x() <= 0) {
-			size = size.withX((int) this.size.x());
-		}
-		if (size.y() <= 0) {
-			size = size.withY((int) this.size.y());
+	public Color[][] renderImageFloatRGBA(final Vector2i size) {
+		return renderImageFloatRGBA(size, false);
+	}
+	
+	public Color[][] renderImageFloatRGBA(Vector2i size, final boolean visualDebug) {
+		if (size == null) {
+			size = new Vector2i((int) this.size.x(), (int) this.size.y());
+		} else {
+			if (size.x() <= 0) {
+				size = size.withX((int) this.size.x());
+			}
+			if (size.y() <= 0) {
+				size = size.withY((int) this.size.y());
+			}
 		}
 		Log.debug("Generate size " + size);
-		Renderer renderedElement = new Renderer(size, this);
+		Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
 		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
 		draw(renderedElement, basicTrans);
 		
 		// direct return the generated data ...
 		return renderedElement.getData();
-	}
-	
-	/**
-	 * Store the SVG in the file
-	 * @param uri File of the svg
-	 * @return false : An error occured
-	 * @return true : Parsing is OK
-	 */
-	public boolean store(final Uri uri) {
-		Log.todo("not implemented store in SVG...");
-		return false;
 	}
 	
 }

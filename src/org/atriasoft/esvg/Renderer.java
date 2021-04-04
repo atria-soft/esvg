@@ -1,7 +1,6 @@
 package org.atriasoft.esvg;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.atriasoft.esvg.render.DynamicColor;
@@ -11,10 +10,10 @@ import org.atriasoft.esvg.render.Segment;
 import org.atriasoft.esvg.render.SegmentList;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.util.ArraysTools;
 
 /** @file
  * @author Edouard DUPIN
@@ -23,7 +22,7 @@ import org.atriasoft.etk.math.Vector2i;
  */
 
 public class Renderer {
-	private static final boolean DEBUG_MODE = false;
+	private static final boolean DEBUG_MODE = true;
 	protected Color[][] buffer; // for debug
 	protected EsvgDocument document; // for debug
 	
@@ -222,9 +221,7 @@ public class Renderer {
 		if (Renderer.DEBUG_MODE) {
 			
 			// display the gradient position:
-			DynamicColorSpecial tmpColor = (DynamicColorSpecial) (colorFill);
-			
-			if (tmpColor != null) {
+			if (colorFill instanceof DynamicColorSpecial tmpColor) {
 				SegmentList listSegment = new SegmentList();
 				// Display bounding box
 				listSegment.addSegment(new Point(tmpColor.viewPort.first), new Point(new Vector2f(tmpColor.viewPort.first.x(), tmpColor.viewPort.second.y())), false);
@@ -264,38 +261,7 @@ public class Renderer {
 		} else {
 			this.buffer = new Color[this.size.x() * this.factor][this.size.y() * this.factor];
 		}
-		Arrays.fill(this.buffer, Color.NONE);
+		ArraysTools.fill2(this.buffer, Color.NONE);
 	}
 	
-	void writePPM(final Uri uri) {
-		/*
-		if (this.buffer.length == 0) {
-			return;
-		}
-		auto fileIo = uri::get(uri);
-		if (fileIo == null) {
-			Log.error("Can not create the uri: " + uri);
-			return;
-		}
-		if (fileIo.open(io::OpenMode::Write) == false) {
-			Log.error("Can not open (r) the file : " + uri);
-			return;
-		}
-		int sizeX = this.size.x();
-		int sizeY = this.size.y();
-		if (Renderer.DEBUG_MODE) {
-			sizeX *= this.factor;
-			sizeY *= this.factor;
-		}
-		Log.debug("Generate ppm : " + this.size + " debug size=" + (new Vector2i(sizeX,sizeY)));
-		char tmpValue[1024];
-		sprintf(tmpValue, "P6 %d %d 255 ", sizeX, sizeY);
-		fileIo.write(tmpValue,1,sizeof(tmpValue));
-		for (int iii=0 ; iii<sizeX*sizeY; iii++) {
-			Color tmp = this.buffer[iii];
-			fileIo.write(&tmp, 1, 3);
-		}
-		fileIo.close();
-		*/
-	}
 }

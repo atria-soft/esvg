@@ -1,7 +1,6 @@
 package org.atriasoft.esvg.render;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.util.ArraysTools;
 import org.atriasoft.etk.util.Pair;
 
 public class Weight {
@@ -34,7 +34,7 @@ public class Weight {
 	}
 	
 	public void clear(final float fill) {
-		Arrays.fill(this.data, fill);
+		ArraysTools.fill2(this.data, fill);
 	}
 	
 	public void generate(final Vector2i size, final int subSamplingCount, final SegmentList listSegment) {
@@ -92,7 +92,7 @@ public class Weight {
 				}
 				Log.verbose("        List position " + listPosition.size());
 				// now we order position of the xPosition:
-				Collections.sort(listPosition, (e1, e2) -> ((int) (e2.first - e1.first)));
+				Collections.sort(listPosition, (e1, e2) -> ((int) (e1.first - e2.first)));
 				
 				// move through all element in the point:
 				int lastState = 0;
@@ -144,6 +144,9 @@ public class Weight {
 	}
 	
 	public float get(final Vector2i pos) {
+		if (this.data == null) {
+			return 0;
+		}
 		return this.data[pos.y()][pos.x()];
 	}
 	

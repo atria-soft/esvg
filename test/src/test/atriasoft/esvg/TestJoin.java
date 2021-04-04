@@ -12,8 +12,8 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelCornerCasePath.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelCornerCasePath.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelCornerCasePath.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelCornerCasePath.png"));
 	}
 	
 	@Test
@@ -22,8 +22,8 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelLeft1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelLeft1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft1.png"));
 	}
 	
 	@Test
@@ -32,8 +32,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelLeft2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelLeft2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft2.png"));
 	}
 	
 	@Test
@@ -42,8 +42,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelLeft3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelLeft3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft3.png"));
 	}
 	
 	@Test
@@ -52,8 +52,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelLeft4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelLeft4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft4.png"));
 	}
 	
 	@Test
@@ -62,8 +62,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelRight1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelRight1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight1.png"));
 	}
 	
 	@Test
@@ -72,8 +72,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelRight2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelRight2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight2.png"));
 	}
 	
 	@Test
@@ -82,8 +82,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelRight3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelRight3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight3.png"));
 	}
 	
 	@Test
@@ -92,8 +92,8 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinbevelRight4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinbevelRight4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight4.png"));
 	}
 	
 	@Test
@@ -103,8 +103,8 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterCornerCasePath.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterCornerCasePath.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePath.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePath.png"));
 	}
 	
 	@Test
@@ -114,8 +114,8 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter' stroke-miterlimit='0.3'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterCornerCasePathLimit.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterCornerCasePathLimit.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePathLimit.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePathLimit.png"));
 	}
 	
 	@Test
@@ -124,8 +124,8 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLeft1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLeft1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft1.png"));
 	}
 	
 	@Test
@@ -134,8 +134,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLeft2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLeft2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft2.png"));
 	}
 	
 	@Test
@@ -144,8 +144,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLeft3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLeft3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft3.png"));
 	}
 	
 	// ------------------------------------------------------ Round test -----------------------------------------------------
@@ -156,8 +156,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLeft4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLeft4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft4.png"));
 	}
 	
 	@Test
@@ -166,8 +166,8 @@ class TestJoin {
 				+ "	<polyline points='10,10 25,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLimit1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLimit1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit1.png"));
 	}
 	
 	@Test
@@ -176,8 +176,8 @@ class TestJoin {
 				+ "	<polyline points='10,10 50,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLimit2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLimit2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit2.png"));
 	}
 	
 	@Test
@@ -186,8 +186,8 @@ class TestJoin {
 				+ "	<polyline points='10,10 75,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLimit3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLimit3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit3.png"));
 	}
 	
 	@Test
@@ -196,8 +196,8 @@ class TestJoin {
 				+ "	<polyline points='10,10 90,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterLimit4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterLimit4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit4.png"));
 	}
 	
 	@Test
@@ -206,8 +206,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterRight1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterRight1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight1.png"));
 	}
 	
 	@Test
@@ -216,8 +216,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterRight2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterRight2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight2.png"));
 	}
 	
 	@Test
@@ -226,8 +226,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterRight3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterRight3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight3.png"));
 	}
 	
 	@Test
@@ -236,8 +236,8 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinmiterRight4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinmiterRight4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight4.png"));
 	}
 	
 	// ------------------------------------------------------ Bevel test -----------------------------------------------------
@@ -249,8 +249,8 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundCornerCasePath.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundCornerCasePath.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundCornerCasePath.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundCornerCasePath.png"));
 	}
 	
 	@Test
@@ -259,8 +259,8 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundLeft1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundLeft1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft1.png"));
 	}
 	
 	@Test
@@ -269,8 +269,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundLeft2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundLeft2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft2.png"));
 	}
 	
 	@Test
@@ -279,8 +279,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundLeft3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundLeft3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft3.png"));
 	}
 	
 	@Test
@@ -289,8 +289,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundLeft4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundLeft4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft4.png"));
 	}
 	
 	@Test
@@ -299,8 +299,8 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundRight1.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundRight1.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight1.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight1.png"));
 	}
 	
 	@Test
@@ -309,8 +309,8 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundRight2.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundRight2.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight2.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight2.png"));
 	}
 	
 	@Test
@@ -319,8 +319,8 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundRight3.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundRight3.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight3.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight3.png"));
 	}
 	
 	@Test
@@ -329,7 +329,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestJoinroundRight4.svg"), data);
-		doc.generateAnImage(new Uri("TestJoinroundRight4.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight4.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight4.png"));
 	}
 }

@@ -117,7 +117,7 @@ class TestStyle {
 				+ "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri("TestExternworddown.svg"), data);
-		doc.generateAnImage(new Uri("TestExternworddown.bmp"), ConfigTest.VISUAL_DEBUG);
+		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestExternworddown.svg"), data.replace("'", "\""));
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestExternworddown.png"));
 	}
 }
