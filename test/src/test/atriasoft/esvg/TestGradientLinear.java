@@ -7,11 +7,20 @@ import org.junit.jupiter.api.Test;
 class TestGradientLinear {
 	@Test
 	public void testTestGradientLinearDiag1() {
-		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" + "<svg height='100' width='100'>\n" + "	<defs>\n"
-				+ "		<linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'>\n" + "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
-				+ "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n" + "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
-				+ "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n" + "		</linearGradient>\n" + "	</defs>\n"
-				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n" + "</svg>\n";
+		//@formatter:off
+		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+				+ "<svg height='100' width='100'>\n"
+				+ "	<defs>\n"
+				+ "		<linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'>\n"
+				+ "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+				+ "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+				+ "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+				+ "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+				+ "		</linearGradient>\n"
+				+ "	</defs>\n"
+				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+				+ "</svg>\n";
+		//@formatter:on
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
 		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientLineardiag1.svg"), data.replace("'", "\""));
@@ -20,10 +29,18 @@ class TestGradientLinear {
 	
 	@Test
 	public void testTestGradientLinearDiag1Partiel() {
-		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" + "<svg height='100' width='100'>\n" + "	<defs>\n"
-				+ "		<linearGradient id='grad2' x1='40%' y1='40%' x2='70%' y2='70%'>\n" + "			<stop offset='0%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
-				+ "			<stop offset='100%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n" + "		</linearGradient>\n" + "	</defs>\n"
-				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n" + "</svg>\n";
+		//@formatter:off
+		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+				+ "<svg height='100' width='100'>\n"
+				+ "	<defs>\n"
+				+ "		<linearGradient id='grad2' x1='40%' y1='40%' x2='70%' y2='70%'>\n"
+				+ "			<stop offset='0%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+				+ "			<stop offset='100%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+				+ "		</linearGradient>\n"
+				+ "	</defs>\n"
+				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad2)' />\n"
+				+ "</svg>\n";
+		//@formatter:on
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
 		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientLineardiag1Partiel.svg"), data.replace("'", "\""));
@@ -97,11 +114,20 @@ class TestGradientLinear {
 	
 	@Test
 	public void testTestGradientLinearHorizontal() {
-		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" + "<svg height='100' width='100'>\n" + "	<defs>\n"
-				+ "		<linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='0%'>\n" + "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
-				+ "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n" + "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
-				+ "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n" + "		</linearGradient>\n" + "	</defs>\n"
-				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n" + "</svg>\n";
+		//@formatter:off
+		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
+				+ "<svg height='100' width='100'>\n"
+				+ "	<defs>\n"
+				+ "		<linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='0%'>\n"
+				+ "			<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />\n"
+				+ "			<stop offset='45%' style='stop-color:rgb(0,255,0);stop-opacity:1' />\n"
+				+ "			<stop offset='55%' style='stop-color:rgb(0,0,255);stop-opacity:1' />\n"
+				+ "			<stop offset='100%' style='stop-color:rgb(255,0,255);stop-opacity:1' />\n"
+				+ "		</linearGradient>\n"
+				+ "	</defs>\n"
+				+ "	<ellipse cx='50' cy='50' rx='50' ry='20' fill='url(#grad1)' />\n"
+				+ "</svg>\n";
+		//@formatter:on
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
 		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestGradientLinearhorizontal.svg"), data.replace("'", "\""));

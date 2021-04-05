@@ -5,6 +5,7 @@ import org.atriasoft.etk.util.Pair;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.esvg.EsvgDocument;
+import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
 
 /** @file
@@ -20,6 +21,7 @@ public interface DynamicColor {
 			return null;
 		}
 		if (color.second.isEmpty()) {
+			Log.error("use stroke color :" + color);
 			return new DynamicColorUni(color.first);
 		}
 		return new DynamicColorSpecial(color.second, mtx);

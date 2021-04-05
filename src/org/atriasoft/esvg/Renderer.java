@@ -22,7 +22,7 @@ import org.atriasoft.etk.util.ArraysTools;
  */
 
 public class Renderer {
-	private static final boolean DEBUG_MODE = true;
+	private static final boolean DEBUG_MODE = false;
 	protected Color[][] buffer; // for debug
 	protected EsvgDocument document; // for debug
 	
@@ -205,8 +205,8 @@ public class Renderer {
 				Color intermediateColor = mergeColor(intermediateColorFill, intermediateColorStroke);
 				intermediateColor = intermediateColor.withA(intermediateColor.a() * opacity);
 				if (Renderer.DEBUG_MODE) {
-					for (int deltaY = 0; deltaY < this.factor; ++deltaY) {
-						for (int deltaX = 0; deltaX < this.factor; ++deltaX) {
+					for (int deltaY = 0; deltaY < this.factor; deltaY++) {
+						for (int deltaX = 0; deltaX < this.factor; deltaX++) {
 							int idx = xxx * this.factor + deltaX;
 							int idy = yyy * this.factor + deltaY;
 							this.buffer[idy][idx] = mergeColor(this.buffer[idy][idx], intermediateColor);
@@ -257,9 +257,9 @@ public class Renderer {
 	public void setSize(final Vector2i size) {
 		this.size = size;
 		if (Renderer.DEBUG_MODE) {
-			this.buffer = new Color[this.size.x()][this.size.y()];
+			this.buffer = new Color[this.size.y()][this.size.x()];
 		} else {
-			this.buffer = new Color[this.size.x() * this.factor][this.size.y() * this.factor];
+			this.buffer = new Color[this.size.y() * this.factor][this.size.x() * this.factor];
 		}
 		ArraysTools.fill2(this.buffer, Color.NONE);
 	}

@@ -1,5 +1,6 @@
 package org.atriasoft.esvg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.esvg.internal.Log;
@@ -15,7 +16,7 @@ import org.atriasoft.exml.model.XmlNode;
  * @license MPL v2.0 (see license file)
  */
 public class Group extends Base {
-	private List<Base> subElementList; //!< sub elements ...
+	private final List<Base> subElementList = new ArrayList<>(); //!< sub elements ...
 	
 	public Group(final PaintState parentPaintState) {
 		super(parentPaintState);
@@ -25,7 +26,7 @@ public class Group extends Base {
 	public void display(final int spacing) {
 		Log.debug(spacingDist(spacing) + "Group (START) fill=" + this.paint.fill.first + "/" + this.paint.fill.second + " stroke=" + this.paint.stroke.first + "/" + this.paint.stroke.second
 				+ " stroke-width=" + this.paint.strokeWidth);
-		for (Base it : this.subElementList) {
+		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.display(spacing + 1);
 			}

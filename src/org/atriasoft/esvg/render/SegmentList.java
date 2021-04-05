@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.util.Pair;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix2x3f;
@@ -50,8 +51,10 @@ public class SegmentList {
 		this.data.add(new Segment(pos0.pos, pos1.pos));
 	}
 	
-	// TODO is it really needed...
 	void addSegment(final Vector2f pos0, final Vector2f pos1) {
+		if (pos0.y() == pos1.y()) {
+			return;
+		}
 		this.data.add(new Segment(pos0, pos1));
 	}
 	
@@ -77,7 +80,7 @@ public class SegmentList {
 			//     normal edge             *                 end path                            
 			//      (mitter)             * | *                      * * * * * * * * * * * * *    
 			//                         *   |<--*----this                            |       *    
-			//                       *     |     *                          this -.|       *    
+			//                       *     |     *                          this -->|       *    
 			//                     *       *       *                                |       *    
 			//                   *       . | .       *              . . . . . . . . *       *    
 			//                 *       .   |   .       *                            |       *    
@@ -103,32 +106,32 @@ public class SegmentList {
 					//Log.debug("JOIN : val : prev/curr/next : " + itListPoint.get(idPevious).pos + "/" + itListPoint.get(idCurrent).pos + "/" + itListPoint.get(idNext).pos);
 					Vector2f vecA = itListPoint.get(idCurrent).pos.less(itListPoint.get(idPevious).pos);
 					//Log.debug("JOIN : vecA : " + vecA);
-					vecA.safeNormalize();
+					vecA = vecA.safeNormalize();
 					Vector2f vecB = itListPoint.get(idNext).pos.less(itListPoint.get(idCurrent).pos);
 					//Log.debug("JOIN : vecB : " + vecB);
-					vecB.safeNormalize();
+					vecB = vecB.safeNormalize();
 					Vector2f vecC = vecA.less(vecB);
 					//Log.debug("JOIN : vecC : " + vecC);
 					if (vecC.isZero()) {
 						// special case: 1 line ...
 						itListPoint.get(idCurrent).miterAxe = new Vector2f(vecA.y(), vecA.x());
 					} else {
-						vecC.safeNormalize();
+						vecC = vecC.safeNormalize();
 						itListPoint.get(idCurrent).miterAxe = vecC;
 					}
 					itListPoint.get(idCurrent).posPrevious = itListPoint.get(idPevious).pos;
 					itListPoint.get(idCurrent).posNext = itListPoint.get(idNext).pos;
 					vecB = itListPoint.get(idNext).pos.less(itListPoint.get(idCurrent).pos);
-					vecB.safeNormalize();
+					vecB = vecB.safeNormalize();
 					itListPoint.get(idCurrent).orthoAxeNext = new Vector2f(vecB.y(), -vecB.x());
 					vecB = itListPoint.get(idCurrent).pos.less(itListPoint.get(idPevious).pos);
-					vecB.safeNormalize();
+					vecB = vecB.safeNormalize();
 					itListPoint.get(idCurrent).orthoAxePrevious = new Vector2f(vecB.y(), -vecB.x());
 					//Log.debug("JOIN : miterAxe " + itListPoint.get(idCurrent).miterAxe);
 				} else if (itListPoint.get(idCurrent).type == PointType.start) {
 					itListPoint.get(idCurrent).posNext = itListPoint.get(idNext).pos;
 					Vector2f vecB = itListPoint.get(idNext).pos.less(itListPoint.get(idCurrent).pos);
-					vecB.safeNormalize();
+					vecB = vecB.safeNormalize();
 					itListPoint.get(idCurrent).miterAxe = new Vector2f(vecB.y(), -vecB.x());
 					itListPoint.get(idCurrent).orthoAxePrevious = itListPoint.get(idCurrent).miterAxe;
 					itListPoint.get(idCurrent).orthoAxeNext = itListPoint.get(idCurrent).miterAxe;
@@ -139,7 +142,7 @@ public class SegmentList {
 					}
 					itListPoint.get(idCurrent).posPrevious = itListPoint.get(idPevious).pos;
 					Vector2f vecA = itListPoint.get(idCurrent).pos.less(itListPoint.get(idPevious).pos);
-					vecA.safeNormalize();
+					vecA = vecA.safeNormalize();
 					itListPoint.get(idCurrent).miterAxe = new Vector2f(vecA.y(), -vecA.x());
 					itListPoint.get(idCurrent).orthoAxePrevious = itListPoint.get(idCurrent).miterAxe;
 					itListPoint.get(idCurrent).orthoAxeNext = itListPoint.get(idCurrent).miterAxe;
@@ -150,35 +153,35 @@ public class SegmentList {
 			// create segment list:
 			boolean haveStartLine = false;
 			
-			Vector2f leftPoint = Vector2f.ZERO;
+			Dynamic<Vector2f> leftPoint = new Dynamic<Vector2f>(Vector2f.ZERO);
 			
-			Vector2f rightPoint = Vector2f.ZERO;
+			Dynamic<Vector2f> rightPoint = new Dynamic<Vector2f>(Vector2f.ZERO);
 			if (itListPoint.size() > 0) {
 				if (itListPoint.get(0).type == PointType.join) {
 					Point it = itListPoint.get(itListPoint.size() - 1);
-					// Calculate the perpendiculary axis ...
-					leftPoint = it.pos.add(it.orthoAxePrevious.multiply(width * 0.5f));
-					rightPoint = it.pos.less(it.orthoAxePrevious.multiply(width * 0.5f));
+					// Calculate the perpendicular axis ...
+					leftPoint.value = it.pos.add(it.orthoAxePrevious.multiply(width * 0.5f));
+					rightPoint.value = it.pos.less(it.orthoAxePrevious.multiply(width * 0.5f));
 					// cyclic path...
 					if (it.type == PointType.interpolation) {
-						leftPoint = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-						rightPoint = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+						leftPoint.value = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+						rightPoint.value = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 					} else if (it.type == PointType.join) {
-						// Calculate the perpendiculary axis ...
-						leftPoint = it.pos.add(it.orthoAxePrevious.multiply(width * 0.5f));
-						rightPoint = it.pos.less(it.orthoAxePrevious.multiply(width * 0.5f));
+						// Calculate the perpendicular axis ...
+						leftPoint.value = it.pos.add(it.orthoAxePrevious.multiply(width * 0.5f));
+						rightPoint.value = it.pos.less(it.orthoAxePrevious.multiply(width * 0.5f));
 						// project on the miter Axis ...
 						switch (join) {
 							case MITER: {
-								Vector2f left = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-								Vector2f right = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+								Vector2f left = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+								Vector2f right = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 								// Check the miter limit:
 								float limitRight = (left.less(it.pos)).length() / width * 2.0f;
 								float limitLeft = (right.less(it.pos)).length() / width * 2.0f;
 								Log.verbose("    miter Limit: " + limitRight + " " + limitLeft + " <= " + miterLimit);
 								if (limitRight <= miterLimit && limitLeft <= miterLimit) {
-									leftPoint = left;
-									rightPoint = right;
+									leftPoint.value = left;
+									rightPoint.value = right;
 									break;
 								}
 							}
@@ -188,11 +191,11 @@ public class SegmentList {
 								Vector2f axeNext = (it.posNext.less(it.pos)).safeNormalize();
 								float cross = axePrevious.cross(axeNext);
 								if (cross > 0.0f) {
-									rightPoint = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-									leftPoint = it.pos.add(it.orthoAxeNext.multiply(width * 0.5f));
+									rightPoint.value = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+									leftPoint.value = it.pos.add(it.orthoAxeNext.multiply(width * 0.5f));
 								} else {
-									leftPoint = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-									rightPoint = it.pos.less(it.orthoAxeNext.multiply(width * 0.5f));
+									leftPoint.value = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+									rightPoint.value = it.pos.less(it.orthoAxeNext.multiply(width * 0.5f));
 								}
 								break;
 							}
@@ -215,7 +218,7 @@ public class SegmentList {
 						if (haveStartLine) {
 							// close previous :
 							Log.warning(" find a non close path ...");
-							addSegment(leftPoint, rightPoint);
+							addSegment(leftPoint.value, rightPoint.value);
 						}
 						haveStartLine = true;
 						startStopPoint(leftPoint, rightPoint, it, cap, width, true);
@@ -231,35 +234,35 @@ public class SegmentList {
 						break;
 					case interpolation: {
 						Log.verbose("Find interpolation " + it.pos);
-						Vector2f left = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-						Vector2f right = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+						Vector2f left = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+						Vector2f right = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 						//Draw from previous point:
-						addSegment(leftPoint, left);
+						addSegment(leftPoint.value, left);
 						Log.verbose("    segment :" + leftPoint + " . " + left);
-						addSegment(right, rightPoint);
+						addSegment(right, rightPoint.value);
 						Log.verbose("    segment :" + right + " . " + rightPoint);
-						leftPoint = left;
-						rightPoint = right;
+						leftPoint.value = left;
+						rightPoint.value = right;
 					}
 						break;
 					case join:
 						Log.verbose("Find join " + it.pos);
 						switch (join) {
 							case MITER: {
-								Vector2f left = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
-								Vector2f right = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+								Vector2f left = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+								Vector2f right = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 								// Check the miter limit:
 								float limitRight = left.less(it.pos).length() / width * 2.0f;
 								float limitLeft = right.less(it.pos).length() / width * 2.0f;
 								Log.verbose("    miter Limit: " + limitRight + " " + limitLeft + " <= " + miterLimit);
 								if (limitRight <= miterLimit && limitLeft <= miterLimit) {
 									//Draw from previous point:
-									addSegment(leftPoint, left);
+									addSegment(leftPoint.value, left);
 									Log.verbose("    segment :" + leftPoint + " . " + left);
-									addSegment(right, rightPoint);
+									addSegment(right, rightPoint.value);
 									Log.verbose("    segment :" + right + " . " + rightPoint);
-									leftPoint = left;
-									rightPoint = right;
+									leftPoint.value = left;
+									rightPoint.value = right;
 									break;
 								}
 								Log.verbose("    Find miter Limit ... ==> create BEVEL");
@@ -270,11 +273,11 @@ public class SegmentList {
 								Vector2f axeNext = (it.posNext.less(it.pos)).safeNormalize();
 								float cross = axePrevious.cross(axeNext);
 								if (cross > 0.0f) {
-									Vector2f right = SegmentList.getIntersect(rightPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+									Vector2f right = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 									Vector2f left1 = it.pos.add(it.orthoAxePrevious.multiply(width * 0.5f));
 									Vector2f left2 = it.pos.add(it.orthoAxeNext.multiply(width * 0.5f));
 									//Draw from previous point:
-									addSegment(leftPoint, left1);
+									addSegment(leftPoint.value, left1);
 									Log.verbose("    segment :" + leftPoint + " . " + left1);
 									if (join != JoinMode.ROUND) {
 										// Miter and bevel:
@@ -283,18 +286,18 @@ public class SegmentList {
 									} else {
 										createSegmentListStroke(left1, left2, it.pos, width, false);
 									}
-									addSegment(right, rightPoint);
+									addSegment(right, rightPoint.value);
 									Log.verbose("    segment :" + right + " . " + rightPoint);
-									leftPoint = left2;
-									rightPoint = right;
+									leftPoint.value = left2;
+									rightPoint.value = right;
 								} else {
-									Vector2f left = SegmentList.getIntersect(leftPoint, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
+									Vector2f left = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious), it.pos, it.miterAxe);
 									Vector2f right1 = it.pos.less(it.orthoAxePrevious.multiply(width * 0.5f));
 									Vector2f right2 = it.pos.less(it.orthoAxeNext.multiply(width * 0.5f));
 									//Draw from previous point:
-									addSegment(leftPoint, left);
+									addSegment(leftPoint.value, left);
 									Log.verbose("    segment :" + leftPoint + " . " + left);
-									addSegment(right1, rightPoint);
+									addSegment(right1, rightPoint.value);
 									Log.verbose("    segment :" + right1 + " . " + rightPoint);
 									if (join != JoinMode.ROUND) {
 										// Miter and bevel:
@@ -303,8 +306,8 @@ public class SegmentList {
 									} else {
 										createSegmentListStroke(right1, right2, it.pos, width, true);
 									}
-									leftPoint = left;
-									rightPoint = right2;
+									leftPoint.value = left;
+									rightPoint.value = right2;
 								}
 							}
 								break;
@@ -369,26 +372,26 @@ public class SegmentList {
 		return out;
 	}
 	
-	private void startStopPoint(Vector2f leftPoint, Vector2f rightPoint, final Point point, final CapMode cap, final float width, final boolean isStart) {
+	private void startStopPoint(final Dynamic<Vector2f> leftPoint, final Dynamic<Vector2f> rightPoint, final Point point, final CapMode cap, final float width, final boolean isStart) {
 		switch (cap) {
 			case BUTT: {
 				Vector2f left = point.pos.add(point.miterAxe.multiply(width * 0.5f));
 				Vector2f right = point.pos.less(point.miterAxe.multiply(width * 0.5f));
 				if (!isStart) {
 					//Draw from previous point:
-					addSegment(leftPoint, left);
+					addSegment(leftPoint.value, left);
 					Log.verbose("    segment :" + leftPoint + " . " + left);
-					addSegment(right, rightPoint);
+					addSegment(right, rightPoint.value);
 					Log.verbose("    segment :" + right + " . " + rightPoint);
 				}
-				leftPoint = left;
-				rightPoint = right;
+				leftPoint.value = left;
+				rightPoint.value = right;
 			}
 				if (!isStart) {
-					addSegment(leftPoint, rightPoint);
+					addSegment(leftPoint.value, rightPoint.value);
 					Log.verbose("    segment :" + leftPoint + " . " + rightPoint);
 				} else {
-					addSegment(rightPoint, leftPoint);
+					addSegment(rightPoint.value, leftPoint.value);
 					Log.verbose("    segment :" + rightPoint + " . " + leftPoint);
 				}
 				break;
@@ -398,21 +401,21 @@ public class SegmentList {
 					Vector2f right = point.pos.less(point.miterAxe.multiply(width * 0.5f));
 					if (!isStart) {
 						//Draw from previous point:
-						addSegment(leftPoint, left);
+						addSegment(leftPoint.value, left);
 						Log.verbose("    segment :" + leftPoint + " . " + left);
-						addSegment(right, rightPoint);
+						addSegment(right, rightPoint.value);
 						Log.verbose("    segment :" + right + " . " + rightPoint);
 					}
-					leftPoint = left;
-					rightPoint = right;
+					leftPoint.value = left;
+					rightPoint.value = right;
 				}
 				int nbDot = (int) width;
 				if (nbDot <= 2) {
 					nbDot = 2;
 				}
-				leftPoint = point.pos.add(point.miterAxe.multiply(width * 0.5f));
-				rightPoint = point.pos.less(point.miterAxe.multiply(width * 0.5f));
-				createSegmentListStroke(leftPoint, rightPoint, point.pos, width, isStart);
+				leftPoint.value = point.pos.add(point.miterAxe.multiply(width * 0.5f));
+				rightPoint.value = point.pos.less(point.miterAxe.multiply(width * 0.5f));
+				createSegmentListStroke(leftPoint.value, rightPoint.value, point.pos, width, isStart);
 			}
 				break;
 			case SQUARE: {
@@ -428,21 +431,19 @@ public class SegmentList {
 				left = tmpMat.multiply(left);
 				right = tmpMat.multiply(right);
 				if (!isStart) {
-					if (!isStart) {
-						//Draw from previous point:
-						addSegment(leftPoint, left);
-						Log.verbose("    segment :" + leftPoint + " . " + left);
-						addSegment(right, rightPoint);
-						Log.verbose("    segment :" + right + " . " + rightPoint);
-					}
+					//Draw from previous point:
+					addSegment(leftPoint.value, left);
+					Log.verbose("    segment :" + leftPoint + " . " + left);
+					addSegment(right, rightPoint.value);
+					Log.verbose("    segment :" + right + " . " + rightPoint);
 				}
-				leftPoint = left;
-				rightPoint = right;
+				leftPoint.value = left;
+				rightPoint.value = right;
 				if (!isStart) {
-					addSegment(leftPoint, rightPoint);
+					addSegment(leftPoint.value, rightPoint.value);
 					Log.verbose("    segment :" + leftPoint + " . " + rightPoint);
 				} else {
-					addSegment(rightPoint, leftPoint);
+					addSegment(rightPoint.value, leftPoint.value);
 					Log.verbose("    segment :" + rightPoint + " . " + leftPoint);
 				}
 				Log.verbose("    segment :" + leftPoint + " . " + rightPoint);

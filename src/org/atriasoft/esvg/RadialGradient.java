@@ -52,7 +52,7 @@ public class RadialGradient extends Base {
 	}
 	
 	public List<Pair<Float, Color>> getColors(final EsvgDocument document) {
-		if (this.href == "") {
+		if (this.href.isEmpty()) {
 			return this.data;
 		}
 		if (document == null) {
@@ -100,20 +100,20 @@ public class RadialGradient extends Base {
 		
 		String contentX = element.getAttribute("cx", "");
 		String contentY = element.getAttribute("cy", "");
-		if (contentX != "" && contentY != "") {
-			this.center = new Dimension(new Vector2f(Float.parseFloat(contentX), Float.parseFloat(contentY)));
+		if (!contentX.isEmpty() && !contentY.isEmpty()) {
+			this.center = Dimension.valueOf(contentX, contentY);
 		}
 		contentX = element.getAttribute("r", "");
 		if (contentX != "") {
-			this.radius = new Dimension1D(Float.parseFloat(contentX));
+			this.radius = Dimension1D.valueOf(contentX);
 		}
 		contentX = element.getAttribute("fx", "");
 		contentY = element.getAttribute("fy", "");
-		if (contentX != "" && contentY != "") {
-			this.focal = new Dimension(new Vector2f(Float.parseFloat(contentX), Float.parseFloat(contentY)));
+		if (!contentX.isEmpty() && !contentY.isEmpty()) {
+			this.focal = Dimension.valueOf(contentX, contentY);
 		}
 		contentX = element.getAttribute("gradientUnits", "");
-		if (contentX == "userSpaceOnUse") {
+		if (contentX.equals("userSpaceOnUse")) {
 			this.unit = GradientUnits.gradientUnitsuserSpaceOnUse;
 		} else {
 			this.unit = GradientUnits.gradientUnitsobjectBoundingBox;
@@ -122,13 +122,13 @@ public class RadialGradient extends Base {
 			}
 		}
 		contentX = element.getAttribute("spreadMethod", "");
-		if (contentX == "reflect") {
+		if (contentX.equals("reflect")) {
 			this.spread = SpreadMethod.REFLECT;
-		} else if (contentX == "repeat") {
+		} else if (contentX.equals("repeat")) {
 			this.spread = SpreadMethod.REPEAT;
 		} else {
 			this.spread = SpreadMethod.PAD;
-			if (contentX.length() != 0 && contentX != "pad") {
+			if (contentX.length() != 0 && !contentX.equals("pad")) {
 				Log.error("Parsing error of 'spreadMethod' ==> not suported value: '" + contentX + "' not in : {reflect/repeate/pad} use pad");
 			}
 		}
@@ -140,7 +140,7 @@ public class RadialGradient extends Base {
 		// parse all sub node :
 		for (XmlNode it : element.getNodes()) {
 			if (it instanceof XmlElement child) {
-				if (child.getValue() == "stop") {
+				if (child.getValue().equals("stop")) {
 					float offset = 100;
 					Color stopColor = Color.NONE;
 					String content = child.getAttribute("offset", "");
@@ -174,7 +174,7 @@ public class RadialGradient extends Base {
 			}
 		}
 		if (this.data.size() != 0) {
-			if (this.href != "") {
+			if (!this.href.isEmpty()) {
 				Log.error("node can not have an xlink:href element with sub node named: stop ==> removing href");
 				this.href = "";
 			}

@@ -133,7 +133,7 @@ public class EsvgDocument extends Base {
 	}
 	
 	public Base getReference(final String name) {
-		if (name == "") {
+		if (name.isEmpty()) {
 			Log.error("request a reference with no name ... ");
 			return null;
 		}
@@ -141,7 +141,7 @@ public class EsvgDocument extends Base {
 			if (it == null) {
 				continue;
 			}
-			if (it.getId() == name) {
+			if (it.getId().equals(name)) {
 				return it;
 			}
 		}

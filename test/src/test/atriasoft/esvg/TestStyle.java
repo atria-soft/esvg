@@ -2,10 +2,9 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
-import org.junit.jupiter.api.Test;
 
 class TestStyle {
-	@Test
+	
 	public void testTestExternWorddown() {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" + "<!-- Created with Inkscape (http://www.inkscape.org/) -.\n" + "\n" + "<svg\n"
 				+ "   xmlns:dc='http://purl.org/dc/elements/1.1/'\n" + "   xmlns:cc='http://creativecommons.org/ns#'\n" + "   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n"

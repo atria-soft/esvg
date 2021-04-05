@@ -149,8 +149,8 @@ public class PathModel {
 							// Remove the last point if it is the same position...
 							Vector2f delta = (tmpListPoint.get(0).pos.less(tmpListPoint.get(tmpListPoint.size() - 1).pos)).abs();
 							if (delta.x() <= 0.00001 && delta.y() <= 0.00001) {
-								tmpListPoint.remove(tmpListPoint.size() - 1);
 								Log.verbose("        Remove point Z property : " + tmpListPoint.get(tmpListPoint.size() - 1).pos + " with delta=" + delta);
+								tmpListPoint.remove(tmpListPoint.size() - 1);
 							}
 							out.addList(tmpListPoint);
 							tmpListPoint = new ArrayList<>();

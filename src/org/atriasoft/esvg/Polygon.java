@@ -23,7 +23,7 @@ import org.atriasoft.esvg.internal.Log;
  */
 
 public class Polygon extends Base {
-	private List<Vector2f> listPoint; //!< list of all point of the polygone
+	private final List<Vector2f> listPoint = new ArrayList<>(); //!< list of all point of the polygone
 	
 	public Polygon(final PaintState parentPaintState) {
 		super(parentPaintState);

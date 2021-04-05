@@ -50,7 +50,7 @@ public class LinearGradient extends Base {
 	}
 	
 	public List<Pair<Float, Color>> getColors(final EsvgDocument document) {
-		if (this.href == "") {
+		if (this.href.isEmpty()) {
 			return this.data;
 		}
 		if (document == null) {
@@ -99,16 +99,16 @@ public class LinearGradient extends Base {
 			
 			String contentX = element.getAttribute("x1", "");
 			String contentY = element.getAttribute("y1", "");
-			if (contentX != "" && contentY != "") {
-				this.pos1 = new Dimension(new Vector2f(Float.parseFloat(contentX), Float.parseFloat(contentY)));
+			if (!contentX.isEmpty() && !contentY.isEmpty()) {
+				this.pos1 = Dimension.valueOf(contentX, contentY);
 			}
 			contentX = element.getAttribute("x2", "");
 			contentY = element.getAttribute("y2", "");
-			if (contentX != "" && contentY != "") {
-				this.pos2 = new Dimension(new Vector2f(Float.parseFloat(contentX), Float.parseFloat(contentY)));
+			if (!contentX.isEmpty() && !contentY.isEmpty()) {
+				this.pos2 = Dimension.valueOf(contentX, contentY);
 			}
 			contentX = element.getAttribute("gradientUnits", "");
-			if (contentX == "userSpaceOnUse") {
+			if (contentX.equals("userSpaceOnUse")) {
 				this.unit = GradientUnits.gradientUnitsuserSpaceOnUse;
 			} else {
 				this.unit = GradientUnits.gradientUnitsobjectBoundingBox;
@@ -117,13 +117,13 @@ public class LinearGradient extends Base {
 				}
 			}
 			contentX = element.getAttribute("spreadMethod", "");
-			if (contentX == "reflect") {
+			if (contentX.equals("reflect")) {
 				this.spread = SpreadMethod.REFLECT;
-			} else if (contentX == "repeat") {
+			} else if (contentX.equals("repeat")) {
 				this.spread = SpreadMethod.REPEAT;
 			} else {
 				this.spread = SpreadMethod.PAD;
-				if (contentX.length() != 0 && contentX != "pad") {
+				if (contentX.length() != 0 && !contentX.equals("pad")) {
 					Log.error("Parsing error of 'spreadMethod' ==> not suported value: '" + contentX + "' not in : {reflect/repeate/pad} use pad");
 				}
 			}
@@ -135,7 +135,7 @@ public class LinearGradient extends Base {
 			// parse all sub node :
 			for (XmlNode it : element.getNodes()) {
 				if (it instanceof XmlElement child) {
-					if (child.getValue() == "stop") {
+					if (child.getValue().equals("stop")) {
 						float offset = 100;
 						Color stopColor = Color.NONE;
 						String content = child.getAttribute("offset", "");
@@ -169,7 +169,7 @@ public class LinearGradient extends Base {
 				}
 			}
 			if (this.data.size() != 0) {
-				if (this.href != "") {
+				if (!this.href.isEmpty()) {
 					Log.error(" node can not have an xlink:href element with sub node named: stop ==> removing href");
 					this.href = "";
 				}

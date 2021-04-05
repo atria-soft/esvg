@@ -29,4 +29,20 @@ public class PaintState {
 		this.miterLimit = 4.0f;
 		this.opacity = 1.0f;
 	}
+	
+	@Override
+	protected PaintState clone() {
+		PaintState out = new PaintState();
+		out.fill = this.fill;
+		out.stroke = this.stroke;
+		out.strokeWidth = this.strokeWidth;
+		out.viewPort = this.viewPort;
+		out.flagEvenOdd = this.flagEvenOdd;
+		out.lineJoin = this.lineJoin;
+		out.lineCap = this.lineCap;
+		out.miterLimit = this.miterLimit;
+		out.opacity = this.opacity;
+		return out;
+	}
+	
 }

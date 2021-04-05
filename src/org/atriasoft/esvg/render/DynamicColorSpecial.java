@@ -65,7 +65,7 @@ public class DynamicColorSpecial implements DynamicColor {
 			distToIntersection = FMath.sqrt(radius * radius - distToCenter * distToCenter);
 		}
 		// normalize...
-		v1.safeNormalize();
+		v1 = v1.safeNormalize();
 		v1 = v1.multiply(distToIntersection);
 		return new Pair<>(midpt.add(v1), midpt.less(v1));
 	}
@@ -396,7 +396,7 @@ public class DynamicColorSpecial implements DynamicColor {
 				// nothing to do ...
 				break;
 			case REFLECT:
-				ratio -= ((int) (ratio) >> 1) + 1;
+				ratio -= (((int) (ratio)) >> 1) + 1;
 				if (ratio > 1.0f) {
 					ratio = 2.0f - ratio;
 				}

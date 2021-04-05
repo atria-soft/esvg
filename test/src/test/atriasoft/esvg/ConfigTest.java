@@ -10,11 +10,14 @@ import org.atriasoft.etk.Uri;
 import com.pngencoder.PngEncoder;
 
 public class ConfigTest {
-	public static final String BASE_PATH = "./";//"~/dev/workspace-game/atriasoft/esvg/";
+	public static final String BASE_PATH = "./testResult/";//"~/dev/workspace-game/atriasoft/esvg/";
 	public static final boolean VISUAL_DEBUG = true;
 	
 	public static void generateAnImage(final EsvgDocument doc, final Uri uri) {
 		Color[][] data = doc.renderImageFloatRGBA(null, ConfigTest.VISUAL_DEBUG);
+		if (data.length == 0) {
+			Log.critical("No data generated ...");
+		}
 		BufferedImage bufferedImage = new BufferedImage(data[0].length, data.length, BufferedImage.TYPE_INT_ARGB);
 		for (int yyy = 0; yyy < data.length; yyy++) {
 			for (int xxx = 0; xxx < data[yyy].length; xxx++) {

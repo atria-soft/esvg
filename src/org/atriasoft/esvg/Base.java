@@ -67,7 +67,7 @@ public class Base {
 	
 	Base(final PaintState parentPaintState) {
 		// copy the parent painting properties ...
-		this.paint = parentPaintState;
+		this.paint = parentPaintState.clone();
 	}
 	
 	void display(final int spacing) {}
@@ -119,14 +119,14 @@ public class Base {
 		Pair<Color, String> localColor = new Pair<>(Color.WHITE, "");
 		if (inputData.length() > 4 && inputData.charAt(0) == 'u' && inputData.charAt(1) == 'r' && inputData.charAt(2) == 'l' && inputData.charAt(3) == '(') {
 			if (inputData.charAt(4) == '#') {
-				String color = inputData.substring(5);
+				String color = inputData.substring(5, inputData.length() - 1);
 				localColor = new Pair<>(Color.NONE, color);
 			} else {
 				Log.error("Problem in parsing the color : '" + inputData + "'  == > url(XXX) is not supported now ...");
 			}
 		} else {
 			try {
-				localColor = new Pair<>(Color.valueOf(inputData), "");
+				localColor = new Pair<>(Color.valueOf256(inputData), "");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -169,50 +169,48 @@ public class Base {
 		}
 	}
 	
-	Pair<Float, Distance> parseLength2(final String dataInput) {
-		Log.verbose(" lenght : '" + dataInput + "'");
-		float n = Float.parseFloat(dataInput);
-		String unit = "";
-		for (int iii = 0; iii < dataInput.length(); ++iii) {
-			if ((dataInput.charAt(iii) >= '0' && dataInput.charAt(iii) <= '9') || dataInput.charAt(iii) == '+' || dataInput.charAt(iii) == '-' || dataInput.charAt(iii) == '.') {
-				continue;
-			}
-			unit = dataInput.substring(iii);
-			break;
+	Pair<Float, Distance> parseLength2(String config) {
+		
+		Distance type = Distance.PIXEL;
+		if (config.endsWith("%")) {
+			type = Distance.POURCENT;
+			config = config.substring(0, config.length() - 1);
+		} else if (config.endsWith("px")) {
+			type = Distance.PIXEL;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("ft")) {
+			type = Distance.FOOT;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("in")) {
+			type = Distance.INCH;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("km")) {
+			type = Distance.KILOMETER;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("mm")) {
+			type = Distance.MILLIMETER;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("cm")) {
+			type = Distance.CENTIMETER;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("m")) {
+			type = Distance.METER;
+			config = config.substring(0, config.length() - 1);
+		} else if (config.endsWith("em")) {
+			type = Distance.ELEMENT;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("ex")) {
+			type = Distance.EX;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("pt")) {
+			type = Distance.POINT;
+			config = config.substring(0, config.length() - 2);
+		} else if (config.endsWith("pc")) {
+			type = Distance.PC;
+			config = config.substring(0, config.length() - 2);
 		}
-		Log.verbose(" lenght : '" + n + "' => unit=" + unit);
-		// note : ";" is for the parsing of the style elements ...
-		if (unit.length() == 0) {
-			return new Pair<>(n, Distance.PIXEL);
-		}
-		if (unit.charAt(0) == '%') { // xxx %
-			return new Pair<>(n, Distance.POURCENT);
-		}
-		if (unit.charAt(0) == 'e' && unit.charAt(1) == 'm') { // xxx em
-			return new Pair<>(n, Distance.ELEMENT);
-		}
-		if (unit.charAt(0) == 'e' && unit.charAt(1) == 'x') { // xxx ex
-			return new Pair<>(n, Distance.EX);
-		}
-		if (unit.charAt(0) == 'p' && unit.charAt(1) == 'x') { // xxx px
-			return new Pair<>(n, Distance.PIXEL);
-		}
-		if (unit.charAt(0) == 'p' && unit.charAt(1) == 't') { // xxx pt
-			return new Pair<>(n, Distance.POINT);
-		}
-		if (unit.charAt(0) == 'p' && unit.charAt(1) == 'c') { // xxx pc
-			return new Pair<>(n, Distance.PC);
-		}
-		if (unit.charAt(0) == 'm' && unit.charAt(1) == 'm') { // xxx mm
-			return new Pair<>(n, Distance.MILLIMETER);
-		}
-		if (unit.charAt(0) == 'c' && unit.charAt(1) == 'm') { // xxx cm
-			return new Pair<>(n, Distance.CENTIMETER);
-		}
-		if (unit.charAt(0) == 'i' && unit.charAt(1) == 'n') { // xxx in
-			return new Pair<>(n, Distance.INCH);
-		}
-		return new Pair<>(0.0f, Distance.PIXEL);
+		final float tmp = Float.parseFloat(config);
+		return new Pair<>(tmp, type);
 	}
 	
 	/**
@@ -237,6 +235,7 @@ public class Base {
 		} else {
 			if (content.length() != 0) {
 				this.paint.stroke = parseColor(content);
+				Log.error("Parse color : " + this.paint.stroke);
 			}
 			content = element.getAttribute("stroke-width", "");
 			if (content.length() != 0) {
