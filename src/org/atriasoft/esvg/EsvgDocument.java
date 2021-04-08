@@ -368,6 +368,32 @@ public class EsvgDocument extends Base {
 		return true;
 	}
 	
+	/*
+	public float[][] renderImageFloat(final Vector2i size) {
+		return renderImageFloat(size, false);
+	}
+	
+	public float[][] renderImageFloat(Vector2i size, final boolean visualDebug) {
+		if (size == null) {
+			size = new Vector2i((int) this.size.x(), (int) this.size.y());
+		} else {
+			if (size.x() <= 0) {
+				size = size.withX((int) this.size.x());
+			}
+			if (size.y() <= 0) {
+				size = size.withY((int) this.size.y());
+			}
+		}
+		Log.debug("Generate size " + size);
+		Renderer renderedElement = new Renderer(size, this, visualDebug);
+		// create the first element matrix modification ...
+		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
+		draw(renderedElement, basicTrans);
+		
+		// direct return the generated data ...
+		return renderedElement.getData();
+	}
+	*/
 	/**
 	 * Generate Image in a specific format.
 	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate

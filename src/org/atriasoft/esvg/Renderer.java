@@ -20,7 +20,6 @@ import org.atriasoft.etk.util.ArraysTools;
  * @copyright 2011, Edouard DUPIN, all right reserved
  * @license MPL v2.0 (see license file)
  */
-
 public class Renderer {
 	private static final boolean DEBUG_MODE = false;
 	protected Color[][] buffer; // for debug

@@ -97,4 +97,5 @@ class TestPath {
 		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathstroke.svg"), data.replace("'", "\""));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathstroke.png"));
 	}
+	
 }

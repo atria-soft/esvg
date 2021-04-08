@@ -3,10 +3,13 @@ package org.atriasoft.esvg.render;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.esvg.CapMode;
+import org.atriasoft.esvg.JoinMode;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.math.Vector2i;
 
 /** @file
  * @author Edouard DUPIN
@@ -99,6 +102,32 @@ public class PathModel {
 			}
 			Log.warning(PathModel.spacingDist(spacing + 1) + it);
 		}
+	}
+	
+	public Weight drawFill(final Vector2i size, final Matrix2x3f basicTrans, final int level, final RenderingConfig config) {
+		PointList listPoints = new PointList();
+		listPoints = generateListPoints(level, config.recurtionMax(), config.interpolationThreshold());
+		SegmentList listSegment = new SegmentList();
+		Weight weight = new Weight();
+		// Check if we need to display background
+		listSegment.createSegmentList(listPoints);
+		listSegment.applyMatrix(basicTrans);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		weight.generate(size, config.numberOfScanline(), listSegment);
+		return weight;
+	}
+	
+	public Weight drawStroke(final Vector2i size, final Matrix2x3f basicTrans, final int level, final float strokeWidth, final RenderingConfig config) {
+		PointList listPoints = new PointList();
+		listPoints = generateListPoints(level, config.recurtionMax(), config.interpolationThreshold());
+		SegmentList listSegment = new SegmentList();
+		Weight weight = new Weight();
+		// Check if we need to display background
+		listSegment.createSegmentListStroke(listPoints, strokeWidth, CapMode.BUTT, JoinMode.MITER, 4.0f);
+		listSegment.applyMatrix(basicTrans);
+		// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+		weight.generate(size, config.numberOfScanline(), listSegment);
+		return weight;
 	}
 	
 	public void ellipticTo(final boolean relative, final Vector2f radius, final float angle, final boolean largeArcFlag, final boolean sweepFlag, final Vector2f pos) {

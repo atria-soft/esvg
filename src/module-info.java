@@ -4,6 +4,7 @@
 
 open module org.atriasoft.esvg {
 	exports org.atriasoft.esvg;
+	exports org.atriasoft.esvg.font;
 	exports org.atriasoft.esvg.render;
 	
 	requires transitive io.scenarium.logger;

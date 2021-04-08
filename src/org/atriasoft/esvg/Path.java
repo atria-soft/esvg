@@ -12,7 +12,6 @@ import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.SegmentList;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
-import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.parser.Tools;
@@ -39,21 +38,200 @@ public class Path extends Base {
 		
 	}
 	
-	private static String cleanBadSpaces(final String input) {
-		StringBuilder out = new StringBuilder(input.length());
-		boolean haveSpace = false;
-		for (char it : input.toCharArray()) {
-			if (it == ' ' || it == '\t' || it == '\r') {
-				haveSpace = true;
-			} else {
-				if (haveSpace) {
-					haveSpace = false;
-					out.append(' ');
-				}
-				out.append(it);
+	public static PathModel createPathModel(final String d) {
+		PathModel out = new PathModel();
+		Log.verbose("Parse Path : \"" + d + "\"");
+		List<String> commandsSplited = Path.splitCommand(d);
+		String[] listDot = null;
+		
+		// TODO REWORK this, can be done with a simple split and search in a list...
+		for (Command sss = Path.extractCmd(commandsSplited, 0); sss != null; sss = Path.extractCmd(commandsSplited, sss.offset())) {
+			boolean relative = false;
+			listDot = sss.listElem();
+			
+			//			Log.verbose("Find new command : '" + sss.cmd + "'");
+			//			if (listDot != null) {
+			//				for (int jjj = 0; jjj < listDot.length; jjj++) {
+			//					Log.verbose("            ->  '" + listDot[jjj] + "'");
+			//				}
+			//			} else {
+			//				Log.verbose("            ->  no elements");
+			//			}
+			switch (sss.cmd) {
+				case 'm': // Move to (relative)
+					relative = true;
+				case 'M': // Move to (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					if (listDot.length % 2 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " must be a multiple of 2");
+						break;
+					}
+					// 2 Elements ...
+					if (listDot.length >= 2) {
+						out.moveTo(relative, new Vector2f(Float.parseFloat(listDot[0]), Float.parseFloat(listDot[1])));
+					}
+					for (int iii = 2; iii < listDot.length; iii += 2) {
+						out.lineTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])));
+					}
+					break;
+				case 'l': // Line to (relative)
+					relative = true;
+				case 'L': // Line to (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					if (listDot.length % 2 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " must be a multiple of 2");
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii += 2) {
+						out.lineTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])));
+					}
+					break;
+				
+				case 'v': // Vertical Line to (relative)
+					relative = true;
+				case 'V': // Vertical Line to (absolute)
+					// 1 Element ...
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii++) {
+						out.lineToV(relative, Float.parseFloat(listDot[iii]));
+					}
+					break;
+				
+				case 'h': // Horizantal Line to (relative)
+					relative = true;
+				case 'H': // Horizantal Line to (absolute)
+					// 1 Element ...
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii++) {
+						out.lineToH(relative, Float.parseFloat(listDot[iii]));
+					}
+					break;
+				
+				case 'q': // Quadratic Bezier curve (relative)
+					relative = true;
+				case 'Q': // Quadratic Bezier curve (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					// 4 Elements ...
+					if (listDot.length % 4 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length + " (must have 4 numbers)");
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii += 4) {
+						out.bezierCurveTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])),
+								new Vector2f(Float.parseFloat(listDot[iii + 2]), Float.parseFloat(listDot[iii + 3])));
+					}
+					break;
+				
+				case 't': // smooth quadratic Bezier curve to (relative)
+					relative = true;
+				case 'T': // smooth quadratic Bezier curve to (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					// 4 Elements ...
+					if (listDot.length % 2 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length + " (must have 2 numbers)");
+						break;
+					}
+					// 2 Elements ...
+					for (int iii = 0; iii < listDot.length; iii += 2) {
+						out.bezierSmoothCurveTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])));
+					}
+					break;
+				
+				case 'c': // curve to (relative)
+					relative = true;
+				case 'C': // curve to (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					// 6 Elements ...
+					if (listDot.length % 6 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length + "(Must be a multiple of 6)");
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii += 6) {
+						out.curveTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])),
+								new Vector2f(Float.parseFloat(listDot[iii + 2]), Float.parseFloat(listDot[iii + 3])),
+								new Vector2f(Float.parseFloat(listDot[iii + 4]), Float.parseFloat(listDot[iii + 5])));
+					}
+					break;
+				
+				case 's': // smooth curve to (relative)
+					relative = true;
+				case 'S': // smooth curve to (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					// 4 Elements ...
+					if (listDot.length % 4 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length + "(Must be a multiple of 4)");
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii += 4) {
+						out.smoothCurveTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])),
+								new Vector2f(Float.parseFloat(listDot[iii + 2]), Float.parseFloat(listDot[iii + 3])));
+					}
+					break;
+				
+				case 'a': // elliptical Arc (relative)
+					relative = true;
+				case 'A': // elliptical Arc (absolute)
+					if (listDot == null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						break;
+					}
+					// 4 element ff,ff f i,i ff,ff  Elements ...
+					if (listDot.length % 7 != 0) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
+						break;
+					}
+					for (int iii = 0; iii < listDot.length; iii += 7) {
+						boolean largeArcFlag = true;
+						boolean sweepFlag = true;
+						if (Integer.parseInt(listDot[iii + 3]) == 0) {
+							largeArcFlag = false;
+						}
+						if (Integer.parseInt(listDot[iii + 4]) == 0) {
+							sweepFlag = false;
+						}
+						out.ellipticTo(relative, new Vector2f(Float.parseFloat(listDot[iii]), Float.parseFloat(listDot[iii + 1])), Float.parseFloat(listDot[iii + 2]), largeArcFlag, sweepFlag,
+								new Vector2f(Float.parseFloat(listDot[iii + 5]), Float.parseFloat(listDot[iii + 6])));
+					}
+					break;
+				case 'z': // closepath (relative)
+					relative = true;
+				case 'Z': // closepath (absolute)
+					// 0 Element ...
+					if (listDot != null) {
+						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
+						break;
+					}
+					out.close(relative);
+					break;
+				default:
+					Log.error("Unknow error : '" + sss.cmd + "'");
 			}
 		}
-		return out.toString();
+		return out;
 	}
 	
 	//return the next char position ... (after 'X' or NULL)
@@ -67,12 +245,12 @@ public class Path extends Base {
 		//			Log.warning("        -[" + iii + "] '" + input.get(iii) + "'");
 		//		}
 		if (input.get(offset).length() != 1) {
-			Log.error("Error in the SVG Path : '" + input.get(offset) + "' [" + offset);
+			Log.error("Error in the SVG Path : '" + input.get(offset) + "' [" + Integer.toString(offset));
 			return null;
 		}
 		char cmd = input.get(offset).charAt(0);
 		if (!((cmd <= 'Z' && cmd >= 'A') || (cmd <= 'z' && cmd >= 'a'))) {
-			Log.error("Error in the SVG Path : '" + cmd + "' [" + offset);
+			Log.error("Error in the SVG Path : '" + cmd + "' [" + Integer.toString(offset));
 			return null;
 		}
 		//Log.verbose("Find command : " + cmd);
@@ -89,13 +267,47 @@ public class Path extends Base {
 		}
 		int length = iii - (offset + 1);
 		if (length == 0) {
-			return new Command(cmd, null, iii + 1);
+			return new Command(cmd, null, iii);
 		}
 		String[] outputList = new String[length];
 		for (int jjj = 0; jjj < length; jjj++) {
 			outputList[jjj] = input.get(offset + 1 + jjj);
 		}
 		return new Command(cmd, outputList, iii);
+	}
+	
+	static List<String> splitCommand(final String data) {
+		List<String> out = new ArrayList<>();
+		StringBuilder tmpString = new StringBuilder(20);
+		boolean isNumber = false;
+		for (char it : data.toCharArray()) {
+			// ',' is here beause some people oprefer the ' ' instead of ','
+			if (it == ' ' || it == '\t' || it == '\r' || it == '\n' || it == ',') {
+				String elements = tmpString.toString();
+				if (!elements.isEmpty()) {
+					out.add(elements);
+				}
+				tmpString.setLength(0);
+				isNumber = false;
+			} else if (Tools.checkNumber(it, true) || it == '.') {
+				isNumber = true;
+				tmpString.append(it);
+			} else if ((it <= 'Z' && it >= 'A') || (it <= 'z' && it >= 'a')) {
+				if (isNumber) {
+					out.add(tmpString.toString());
+					tmpString.setLength(0);
+				}
+				isNumber = false;
+				out.add(Character.toString(it));
+			} else {
+				Log.error("Can not parse path : '" + it + "'");
+			}
+		}
+		String elements = tmpString.toString();
+		if (!elements.isEmpty()) {
+			out.add(elements);
+		}
+		return out;
 	}
 	
 	public PathModel listElement = new PathModel();
@@ -186,219 +398,8 @@ public class Path extends Base {
 			Log.warning("path: missing 'd' attribute or empty");
 			return false;
 		}
-		Log.verbose("Parse Path : \"" + elementXML1 + "\"");
-		List<String> commandsSplited = splitCommand(elementXML1);
-		String[] listDot = null;
-		
-		// TODO REWORK this, can be done with a simple split and search in a list...
-		for (Command sss = Path.extractCmd(commandsSplited, 0); sss != null; sss = Path.extractCmd(commandsSplited, sss.offset())) {
-			boolean relative = false;
-			listDot = sss.listElem();
-			
-			Log.error("Find new command : '" + sss.cmd + "'");
-			if (listDot != null) {
-				for (int jjj = 0; jjj < listDot.length; jjj++) {
-					Log.error("            ->  '" + listDot[jjj] + "'");
-				}
-			} else {
-				Log.error("            ->  no elements");
-			}
-			switch (sss.cmd) {
-				case 'm': // Move to (relative)
-					relative = true;
-				case 'M': // Move to (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					// 2 Elements ...
-					if (listDot.length >= 1) {
-						this.listElement.moveTo(relative, Vector2f.valueOf(listDot[0]));
-					}
-					for (int iii = 1; iii < listDot.length; iii++) {
-						this.listElement.lineTo(relative, Vector2f.valueOf(listDot[iii]));
-					}
-					break;
-				case 'l': // Line to (relative)
-					relative = true;
-				case 'L': // Line to (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii++) {
-						this.listElement.lineTo(relative, Vector2f.valueOf(listDot[iii]));
-					}
-					break;
-				
-				case 'v': // Vertical Line to (relative)
-					relative = true;
-				case 'V': // Vertical Line to (absolute)
-					// 1 Element ...
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii++) {
-						this.listElement.lineToV(relative, Float.parseFloat(listDot[iii]));
-					}
-					break;
-				
-				case 'h': // Horizantal Line to (relative)
-					relative = true;
-				case 'H': // Horizantal Line to (absolute)
-					// 1 Element ...
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii++) {
-						this.listElement.lineToH(relative, Float.parseFloat(listDot[iii]));
-					}
-					break;
-				
-				case 'q': // Quadratic Bezier curve (relative)
-					relative = true;
-				case 'Q': // Quadratic Bezier curve (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					// 4 Elements ...
-					if (listDot.length % 2 != 0) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii += 2) {
-						this.listElement.bezierCurveTo(relative, Vector2f.valueOf(listDot[iii]), Vector2f.valueOf(listDot[iii + 1]));
-					}
-					break;
-				
-				case 't': // smooth quadratic Bezier curve to (relative)
-					relative = true;
-				case 'T': // smooth quadratic Bezier curve to (absolute)
-					// 2 Elements ...
-					for (int iii = 0; iii < listDot.length; iii++) {
-						this.listElement.bezierSmoothCurveTo(relative, Vector2f.valueOf(listDot[iii]));
-					}
-					break;
-				
-				case 'c': // curve to (relative)
-					relative = true;
-				case 'C': // curve to (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					// 6 Elements ...
-					if (listDot.length % 3 != 0) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii += 3) {
-						this.listElement.curveTo(relative, Vector2f.valueOf(listDot[iii]), Vector2f.valueOf(listDot[iii + 1]), Vector2f.valueOf(listDot[iii + 2]));
-					}
-					break;
-				
-				case 's': // smooth curve to (relative)
-					relative = true;
-				case 'S': // smooth curve to (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					// 4 Elements ...
-					if (listDot.length % 2 != 0) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii += 2) {
-						this.listElement.smoothCurveTo(relative, Vector2f.valueOf(listDot[iii]), Vector2f.valueOf(listDot[iii + 1]));
-					}
-					break;
-				
-				case 'a': // elliptical Arc (relative)
-					relative = true;
-				case 'A': // elliptical Arc (absolute)
-					if (listDot == null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
-						break;
-					}
-					// 4 element ff,ff f i,i ff,ff  Elements ...
-					if (listDot.length % 4 != 0) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
-						break;
-					}
-					for (int iii = 0; iii < listDot.length; iii += 7) {
-						boolean largeArcFlag = true;
-						boolean sweepFlag = true;
-						Vector2i tmp = Vector2i.valueOf(listDot[iii + 2]);
-						if (tmp.x() == 0) {
-							largeArcFlag = false;
-						}
-						if (tmp.y() == 0) {
-							sweepFlag = false;
-						}
-						this.listElement.ellipticTo(relative, Vector2f.valueOf(listDot[iii]), Float.parseFloat(listDot[iii + 1]), largeArcFlag, sweepFlag, Vector2f.valueOf(listDot[iii + 3]));
-					}
-					break;
-				case 'z': // closepath (relative)
-					relative = true;
-				case 'Z': // closepath (absolute)
-					// 0 Element ...
-					if (listDot != null) {
-						Log.warning("the PATH command " + sss.cmd + " has not the good number of element = " + listDot.length);
-						break;
-					}
-					this.listElement.close(relative);
-					break;
-				default:
-					Log.error("Unknow error : '" + sss.cmd + "'");
-			}
-		}
-		
-		return true;
-	}
-	
-	List<String> splitCommand(final String data) {
-		List<String> out = new ArrayList<>();
-		StringBuilder tmpString = new StringBuilder(20);
-		boolean isText = false;
-		boolean isNumber = false;
-		for (char it : data.toCharArray()) {
-			if (it == ' ' || it == '\t' || it == '\r') {
-				String elements = tmpString.toString();
-				if (!elements.isEmpty()) {
-					out.add(elements);
-				}
-				tmpString.setLength(0);
-				isText = false;
-				isNumber = false;
-			} else if (Tools.checkNumber(it, true) || it == ',' || it == '.') {
-				if (isText) {
-					out.add(tmpString.toString());
-					tmpString.setLength(0);
-				}
-				isText = false;
-				isNumber = true;
-				tmpString.append(it);
-			} else if ((it <= 'Z' && it >= 'A') || (it <= 'z' && it >= 'a')) {
-				if (isNumber) {
-					out.add(tmpString.toString());
-					tmpString.setLength(0);
-				}
-				isText = true;
-				isNumber = false;
-				tmpString.append(it);
-			} else {
-				Log.error("Can not parse path : '" + it + "'");
-			}
-		}
-		String elements = tmpString.toString();
-		if (!elements.isEmpty()) {
-			out.add(elements);
-		}
-		return out;
+		this.listElement = Path.createPathModel(elementXML1);
+		return this.listElement != null;
 	}
 	
 }

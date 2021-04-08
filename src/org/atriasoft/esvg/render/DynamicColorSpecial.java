@@ -257,7 +257,7 @@ public class DynamicColorSpecial implements DynamicColor {
 					}
 					break;
 				case REFLECT:
-					ratio -= ((int) (ratio) >> 1) + 1;
+					ratio -= ((int) (ratio)) / 2 * 2.0f;
 					if (ratio > 1.0f) {
 						ratio = 2.0f - ratio;
 					}
@@ -305,7 +305,7 @@ public class DynamicColorSpecial implements DynamicColor {
 					break;
 				case REFLECT:
 					ratio = FMath.abs(ratio);
-					ratio -= ((int) (ratio) >> 1) + 1;
+					ratio -= ((int) (ratio)) / 2 * 2.0f;
 					if (ratio > 1.0f) {
 						ratio = 2.0f - ratio;
 					}
@@ -396,8 +396,8 @@ public class DynamicColorSpecial implements DynamicColor {
 				// nothing to do ...
 				break;
 			case REFLECT:
-				ratio -= (((int) (ratio)) >> 1) + 1;
-				if (ratio > 1.0f) {
+				ratio -= ((int) (ratio)) / 2 * 2.0f;
+				while (ratio > 1.0f) {
 					ratio = 2.0f - ratio;
 				}
 				break;

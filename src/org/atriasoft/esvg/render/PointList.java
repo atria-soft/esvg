@@ -34,7 +34,7 @@ public class PointList {
 			Log.warning("    Find List " + it.size() + " members");
 			for (int iii = 0; iii < it.size(); ++iii) {
 				Point elem = it.get(iii);
-				Log.warning("        [" + iii + "] Find " + elem.type + " " + elem.pos);
+				Log.verbose("        [" + iii + "] Find " + elem.type + " " + elem.pos);
 			}
 		}
 	}

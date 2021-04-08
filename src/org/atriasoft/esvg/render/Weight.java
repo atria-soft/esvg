@@ -37,6 +37,15 @@ public class Weight {
 		ArraysTools.fill2(this.data, fill);
 	}
 	
+	public void fusion(final Weight redered, final int offsetXXX, final int offsetYYY) {
+		for (int yyy = 0; yyy < redered.getHeight(); yyy++) {
+			for (int xxx = 0; xxx < redered.getWidth(); xxx++) {
+				this.data[offsetYYY + yyy][offsetXXX + xxx] = FMath.avg(0.0f, this.data[offsetYYY + yyy][offsetXXX + xxx] + redered.get(xxx, yyy), 1.0f);
+			}
+		}
+		
+	}
+	
 	public void generate(final Vector2i size, final int subSamplingCount, final SegmentList listSegment) {
 		resize(size);
 		// for each lines:
@@ -141,6 +150,13 @@ public class Weight {
 				append(yyy, scanline);
 			}
 		}
+	}
+	
+	public float get(final int xxx, final int yyy) {
+		if (this.data == null) {
+			return 0;
+		}
+		return this.data[yyy][xxx];
 	}
 	
 	public float get(final Vector2i pos) {
