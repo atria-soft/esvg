@@ -10,6 +10,7 @@ open module org.atriasoft.esvg {
 	requires transitive io.scenarium.logger;
 	requires transitive org.atriasoft.etk;
 	requires transitive org.atriasoft.exml;
-	requires com.pngencoder;
+	requires org.atriasoft.pngencoder;
 	requires java.desktop;
+	requires org.atriasoft.egami;
 }

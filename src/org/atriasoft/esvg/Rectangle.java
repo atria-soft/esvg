@@ -30,6 +30,19 @@ public class Rectangle extends Base {
 		super(parentPaintState);
 	}
 	
+	public Rectangle(final Vector2f position, final Vector2f size, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.position = position;
+		this.size = size;
+	}
+	
+	public Rectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.position = position;
+		this.size = size;
+		this.roundedCorner = roundedCorner;
+	}
+	
 	private PathModel createPath() {
 		PathModel out = new PathModel();
 		out.clear();

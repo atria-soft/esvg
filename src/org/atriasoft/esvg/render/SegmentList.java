@@ -1,6 +1,7 @@
 package org.atriasoft.esvg.render;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.atriasoft.etk.math.Vector2f;
@@ -34,11 +35,6 @@ public class SegmentList {
 	public SegmentList() {}
 	
 	public void addSegment(final Point pos0, final Point pos1) {
-		// Skip horizontal Segments
-		if (pos0.pos.y() == pos1.pos.y()) {
-			// remove /0 operation
-			return;
-		}
 		this.data.add(new Segment(pos0.pos, pos1.pos));
 	}
 	
@@ -61,6 +57,17 @@ public class SegmentList {
 	public void applyMatrix(final Matrix2x3f transformationMatrix) {
 		for (Segment it : this.data) {
 			it.applyMatrix(transformationMatrix);
+		}
+	}
+	
+	public void clearHorizontals() {
+		// TODO Auto-generated method stub
+		Iterator<Segment> itr = this.data.iterator();
+		while (itr.hasNext()) {
+			Segment seg = itr.next();
+			if (seg.p0.y() == seg.p1.y()) {
+				itr.remove();
+			}
 		}
 	}
 	

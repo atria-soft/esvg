@@ -14,7 +14,7 @@ public class ElementElliptic extends Element {
 	
 	public ElementElliptic(final boolean relative, final Vector2f radius, // in this.pos1
 			final float angle, final boolean largeArcFlag, final boolean sweepFlag, final Vector2f pos) {
-		super(PathType.elliptic, relative);
+		super(PathType.ELLIPTIC, relative);
 		this.pos1 = radius;
 		this.pos = pos;
 		this.angle = angle;

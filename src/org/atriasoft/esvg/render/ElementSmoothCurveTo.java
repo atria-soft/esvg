@@ -9,7 +9,7 @@ import org.atriasoft.etk.math.Vector2f;
 
 public class ElementSmoothCurveTo extends Element {
 	public ElementSmoothCurveTo(final boolean relative, final Vector2f pos2, final Vector2f pos) {
-		super(PathType.moveTo, relative);
+		super(PathType.MOVE_TO, relative);
 		this.pos = pos;
 		this.pos2 = pos2;
 		

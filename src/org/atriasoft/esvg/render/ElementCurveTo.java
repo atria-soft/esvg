@@ -10,7 +10,7 @@ import org.atriasoft.etk.math.Vector2f;
 
 public class ElementCurveTo extends Element {
 	public ElementCurveTo(final boolean relative, final Vector2f pos1, final Vector2f pos2, final Vector2f pos) {
-		super(PathType.curveTo, relative);
+		super(PathType.CURVE_TO, relative);
 		this.pos = pos;
 		this.pos1 = pos1;
 		this.pos2 = pos2;

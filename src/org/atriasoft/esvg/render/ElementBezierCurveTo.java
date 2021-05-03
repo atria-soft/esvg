@@ -10,7 +10,7 @@ import org.atriasoft.etk.math.Vector2f;
 
 public class ElementBezierCurveTo extends Element {
 	public ElementBezierCurveTo(final boolean relative, final Vector2f pos1, final Vector2f pos) {
-		super(PathType.bezierCurveTo, relative);
+		super(PathType.BEZIER_CURVE_TO, relative);
 		this.pos = pos;
 		this.pos1 = pos1;
 	}

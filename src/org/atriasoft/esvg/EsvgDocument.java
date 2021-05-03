@@ -3,8 +3,8 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.internal.Log;
-import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.math.Matrix2x3f;
@@ -27,6 +27,14 @@ public class EsvgDocument extends Base {
 	
 	public EsvgDocument() {
 		
+	}
+	
+	public EsvgDocument(final Vector2i size) {
+		this.size = new Vector2f(size.x(), size.y());
+	}
+	
+	public void addElement(final Base elem) {
+		this.subElementList.add(elem);
 	}
 	
 	/**
@@ -399,11 +407,11 @@ public class EsvgDocument extends Base {
 	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
 	 * @return Vector of the data used to display (simple vector: generic to transmit)
 	 */
-	public Color[][] renderImageFloatRGBA(final Vector2i size) {
+	public ImageFloatRGBA renderImageFloatRGBA(final Vector2i size) {
 		return renderImageFloatRGBA(size, false);
 	}
 	
-	public Color[][] renderImageFloatRGBA(Vector2i size, final boolean visualDebug) {
+	public ImageFloatRGBA renderImageFloatRGBA(Vector2i size, final boolean visualDebug) {
 		if (size == null) {
 			size = new Vector2i((int) this.size.x(), (int) this.size.y());
 		} else {

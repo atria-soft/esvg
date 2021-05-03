@@ -23,6 +23,58 @@ import org.atriasoft.exml.model.XmlNode;
 
 // https://www.w3.org/TR/SVGTiny12/fonts.html
 
+/*
+                             |            |          |            |            
+                             |            |          |            |            
+                             |            |          |            |            
+                      Y      |            |          |            |            
+                      ^      |------------|          |------------|            
+                      |                                                        
+    advance.y:   /->  |                                                        
+                 |    |                                                        
+                 |    |                                                        
+ sizeTex.x /->   |    |         |------------|          |------------|         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |     A      |          |     G      |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           |     |    |         |            |          |            |         
+           \->   |    |         |------------|          |------------|         
+        /-->     |    |                                                        
+        \-->     \->  |                                                        
+  bearing.y           |                                                        
+                      |>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   X    
+                           <------------------------> : advance.x              
+                                <------------> : sizeTexture.x                 
+                           <---> : bearing.x                                 
+                       
+
+                                                                          
+                                                                          
+                                                                          
+                                                         _               
+                              *----------------------*   ^ ==> calculateFontRealHeight(fontSize);              
+                              |                      |   |   ^ ==> getAscent(fontSize);                  
+                              |                      |   |   |    _              
+                              |          /\          |   |   |    ^ ==> Font Height (height of a capital letter) = fontSize            
+                              |         /  \         |   |   |    |                                                         
+                              |        /    \        |   |   |    | 
+                              |       /------\       |   |   |    |             
+                              |      /        \      |   |   |    |             
+                              |     /          \     |   |___|____|________________________==> render line
+                              |                      |   |                ^    
+                              |                      |   |                |    
+                              |                      |   |                |==> getDescent(fontSize);     
+                              |                      |   |                |    
+                              *----------------------*   |                |    
+                                                                          
+                                        
+*/
+
 public class EsvgFont {
 	
 	/**
@@ -57,20 +109,12 @@ public class EsvgFont {
 			Log.error("can not load Node <font> in svg document");
 			return null;
 		}
+		
+		font.horizAdvX = Integer.parseInt(fontElement.getAttribute("horiz-adv-x", "100"));
+		
 		int nbGlyph = 0;
 		for (XmlNode values : fontElement.getNodes()) {
-			if (values.getValue().equals("glyph")) {
-				nbGlyph++;
-				Log.info("find flyph: " + nbGlyph);
-				Glyph tmp = Glyph.valueOf(values.toElement());
-				if (tmp != null) {
-					font.glyphs.put(tmp.getUnicodeValue(), tmp);
-				}
-			} else if (values.getValue().equals("hkern")) {
-				// check later ...
-			} else if (values.getValue().equals("missing-glyph")) {
-				font.missingGlyph = Glyph.valueOf(values.toElement());
-			} else if (values.getValue().equals("font-face")) {
+			if (values.getValue().equals("font-face")) {
 				if (values instanceof XmlElement fontFace) {
 					font.fontFamily = fontFace.getAttribute("font-family", "unknown");
 					font.fontStretch = fontFace.getAttribute("font-stretch", "normal");
@@ -103,6 +147,22 @@ public class EsvgFont {
 					int stop = Integer.parseInt(tmpSplit[1], 16);
 					font.unicodeRange = new Pair<>(start, stop);
 				}
+			}
+		}
+		for (XmlNode values : fontElement.getNodes()) {
+			if (values.getValue().equals("glyph")) {
+				nbGlyph++;
+				//Log.info("find flyph: " + nbGlyph);
+				Glyph tmp = Glyph.valueOf(values.toElement(), font);
+				if (tmp != null) {
+					font.glyphs.put(tmp.getUnicodeValue(), tmp);
+				}
+			} else if (values.getValue().equals("hkern")) {
+				// check later ...
+			} else if (values.getValue().equals("missing-glyph")) {
+				font.missingGlyph = Glyph.valueOf(values.toElement(), font);
+			} else if (values.getValue().equals("font-face")) {
+				// already done ...
 			} else {
 				Log.warning("unsupported node name :" + values.getValue());
 			}
@@ -136,6 +196,7 @@ public class EsvgFont {
 						for (Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
 							if (entry.getValue().getName().equals(g1Splited[iii])) {
 								entry.getValue().addKerning(elementsKerning);
+								font.hasKerning = true;
 								break;
 							}
 						}
@@ -157,9 +218,10 @@ public class EsvgFont {
 	private String fontStretch = "normal";
 	private int fontWeight = 400;
 	private final Map<Integer, Glyph> glyphs = new HashMap<>();
+	private boolean hasKerning = false;
 	// The horizontal advance after rendering the glyph in horizontal orientation. If the attribute is not specified, the effect is as if the attribute were set to the value of the font's 'horiz-adv-x' attribute.
 	// Glyph widths are required to be non-negative, even if the glyph is typically rendered right-to-left, as in Hebrew and Arabic scripts.
-	private final int horizAdvX = 0;
+	private int horizAdvX = 100;
 	private Glyph missingGlyph = null;
 	private int[] panose1 = { 2, 2, 6, 3, 5, 4, 5, 2, 3, 4 };
 	private int underlinePosition = -150;
@@ -177,6 +239,31 @@ public class EsvgFont {
 	public int calculateFontRealHeight(final int fontSize) {
 		return fontSize * this.unitsPerEm / this.capHeight;
 		
+	}
+	
+	public float calculateFontSizeWithHeight(final float fontHeight) {
+		return fontHeight * this.capHeight / this.unitsPerEm;
+	}
+	
+	public Vector2f calculateRenderOffset(final int fontSize) {
+		int realSize = calculateFontRealHeight(fontSize);
+		float deltaY = realSize * this.ascent / this.unitsPerEm;
+		return new Vector2f(0, deltaY);
+	}
+	
+	public float calculateSclaleFactor(final int fontSize) {
+		int realSize = calculateFontRealHeight(fontSize);
+		return (float) realSize / (float) this.unitsPerEm;
+	}
+	
+	public int calculateWidth(final int uVal, final int fontSize) {
+		Glyph glyph = getGlyph(uVal);
+		if (glyph == null) {
+			return 0;
+		}
+		int realSize = calculateFontRealHeight(fontSize);
+		float scale = (float) realSize / (float) this.unitsPerEm;
+		return (int) (glyph.getHorizAdvX() * scale);
 	}
 	
 	public int calculateWidth(final String uVal, final int fontSize) {
@@ -203,6 +290,20 @@ public class EsvgFont {
 		return out;
 	}
 	
+	/**
+	 * Get the rendering size of the specific glyph (size rendered in the Weight class). 
+	 * @param unicodeValue Unicode value to render
+	 * @param fontSize Size of the font
+	 * @return the size in pixel of the rendering elements
+	 */
+	public Vector2i calculateWidthRendering(final Integer unicodeValue, final int fontSize) {
+		return new Vector2i(calculateWidth(unicodeValue, fontSize), calculateFontRealHeight(fontSize));
+	}
+	
+	public int getDescent() {
+		return this.descent;
+	}
+	
 	public Glyph getGlyph(final int glyphIndex) {
 		Glyph out = this.glyphs.get(glyphIndex);
 		if (out == null) {
@@ -211,13 +312,36 @@ public class EsvgFont {
 		return out;
 	}
 	
+	public Glyph getGlyphNullIfMissing(final int glyphIndex) {
+		Glyph out = this.glyphs.get(glyphIndex);
+		if (out == null) {
+			return null;
+		}
+		return out;
+	}
+	
+	public int getHorizAdvX() {
+		return this.horizAdvX;
+	}
+	
+	/**
+	 * Get the number of available glyph in the Font
+	 * @return the glyph count.
+	 */
 	public int getNumGlyphs() {
 		return this.glyphs.size();
 	}
 	
+	public float getUnitsPerEm() {
+		return this.unitsPerEm;
+	}
+	
+	/**
+	 * Check if the font have some kerning data
+	 * @return true if kerning is availlable.
+	 */
 	public boolean hasKerning() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.hasKerning;
 	}
 	
 	public Weight render(final int uVal, final int fontSize) {
@@ -233,7 +357,7 @@ public class EsvgFont {
 		if (model == null) {
 			return null;
 		}
-		Weight data = glyph.getModel().drawFill(new Vector2i((int) (glyph.getHorizAdvX() * scale), realSize), transform, 8, config);
+		Weight data = glyph.getModel().drawFill(calculateWidthRendering(uVal, fontSize), transform, 8, config);
 		return data;
 	}
 	
@@ -269,7 +393,7 @@ public class EsvgFont {
 			Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent)).multiply(Matrix2x3f.createScale(scale));
 			PathModel model = glyph.getModel();
 			if (model != null) {
-				Weight redered = model.drawFill(new Vector2i((int) (glyph.getHorizAdvX() * scale), realSize), transform, 8, config);
+				Weight redered = model.drawFill(calculateWidthRendering((int) uVal, fontSize), transform, 8, config);
 				weight.fusion(redered, offsetWriting, 0);
 			}
 			offsetWriting += advenceXLocal;

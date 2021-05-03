@@ -155,7 +155,7 @@ public class PathModel {
 			}
 			Log.verbose(PathModel.spacingDist(level + 1) + " Draw : " + it.toString());
 			switch (it.getType()) {
-				case stop:
+				case STOP:
 					if (tmpListPoint.size() != 0) {
 						if (tmpListPoint.size() == 0) {
 							Log.warning(PathModel.spacingDist(level + 1) + " Request path stop of not starting path ...");
@@ -168,7 +168,7 @@ public class PathModel {
 					lastAngle = Vector2f.ZERO;
 					// nothing alse to do ...
 					break;
-				case close:
+				case CLOSE:
 					if (tmpListPoint.size() != 0) {
 						if (tmpListPoint.size() == 0) {
 							Log.warning(PathModel.spacingDist(level + 1) + " Request path close of not starting path ...");
@@ -188,7 +188,7 @@ public class PathModel {
 					lastAngle = Vector2f.ZERO;
 					// nothing alse to do ...
 					break;
-				case moveTo:
+				case MOVE_TO:
 					// stop last path
 					if (tmpListPoint.size() != 0) {
 						tmpListPoint.get(tmpListPoint.size() - 1).setEndPath();
@@ -203,7 +203,7 @@ public class PathModel {
 					tmpListPoint.add(new Point(lastPosition, PointType.start));
 					lastAngle = lastPosition;
 					break;
-				case lineTo:
+				case LINE_TO:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.start));
@@ -215,7 +215,7 @@ public class PathModel {
 					tmpListPoint.add(new Point(lastPosition, PointType.join));
 					lastAngle = lastPosition;
 					break;
-				case lineToH:
+				case LINE_TO_H:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.start));
@@ -227,7 +227,7 @@ public class PathModel {
 					tmpListPoint.add(new Point(lastPosition, PointType.join));
 					lastAngle = lastPosition;
 					break;
-				case lineToV:
+				case LINE_TO_V:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.start));
@@ -239,7 +239,7 @@ public class PathModel {
 					tmpListPoint.add(new Point(lastPosition, PointType.join));
 					lastAngle = lastPosition;
 					break;
-				case curveTo:
+				case CURVE_TO:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
@@ -256,7 +256,7 @@ public class PathModel {
 					lastAngle = pos2;
 				}
 					break;
-				case smoothCurveTo:
+				case SMOOTH_CURVE_TO:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
@@ -274,7 +274,7 @@ public class PathModel {
 					lastAngle = pos2;
 				}
 					break;
-				case bezierCurveTo:
+				case BEZIER_CURVE_TO:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
@@ -293,7 +293,7 @@ public class PathModel {
 					lastAngle = tmp1;
 				}
 					break;
-				case bezierSmoothCurveTo:
+				case BEZIER_SMOOTH_CURVE_TO:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
@@ -312,7 +312,7 @@ public class PathModel {
 					lastAngle = tmp1;
 				}
 					break;
-				case elliptic:
+				case ELLIPTIC:
 					// If no previous point, we need to create the last point has start ...
 					if (tmpListPoint.size() == 0) {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));

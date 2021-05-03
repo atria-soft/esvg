@@ -28,6 +28,12 @@ public class Line extends Base {
 		super(parentPaintState);
 	}
 	
+	public Line(final Vector2f startPos, final Vector2f stopPos, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.startPos = startPos;
+		this.stopPos = stopPos;
+	}
+	
 	private PathModel createPath() {
 		PathModel out = new PathModel();
 		out.clear();
@@ -52,8 +58,6 @@ public class Line extends Base {
 		
 		PointList listPoints = new PointList();
 		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(), myRenderer.getInterpolationThreshold());
-		//listPoints.applyMatrix(mtx);
-		SegmentList listSegmentFill = new SegmentList();
 		SegmentList listSegmentStroke = new SegmentList();
 		Weight tmpFill = new Weight();
 		Weight tmpStroke = new Weight();
@@ -74,9 +78,6 @@ public class Line extends Base {
 		}
 		// add on images:
 		myRenderer.print(tmpFill, colorFill, tmpStroke, colorStroke, this.paint.opacity);
-		//myRenderer.addDebugSegment(listSegmentFill);
-		//myRenderer.addDebugSegment(listSegmentStroke);
-		//myRenderer.addDebugSegment(listElement.debugInformation);
 	}
 	
 	@Override

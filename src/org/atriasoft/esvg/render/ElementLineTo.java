@@ -9,7 +9,7 @@ import org.atriasoft.etk.math.Vector2f;
 
 public class ElementLineTo extends Element {
 	public ElementLineTo(final boolean relative, final Vector2f pos) {
-		super(PathType.lineTo, relative);
+		super(PathType.LINE_TO, relative);
 		this.pos = pos;
 		
 	}

@@ -316,6 +316,11 @@ public class Path extends Base {
 		super(parentPaintState);
 	}
 	
+	public Path(final PathModel elements, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.listElement = elements;
+	}
+	
 	@Override
 	void display(final int spacing) {
 		this.listElement.display(spacing);

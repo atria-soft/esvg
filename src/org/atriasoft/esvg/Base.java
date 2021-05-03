@@ -59,7 +59,7 @@ public class Base {
 	
 	protected PaintState paint = new PaintState();
 	
-	protected Matrix2x3f transformMatrix = Matrix2x3f.IDENTITY; //!< specific render of the curent element
+	protected Matrix2x3f transformMatrix = Matrix2x3f.IDENTITY; //!< specific render of the current element
 	
 	public Base() {
 		this.paint = new PaintState();
@@ -369,30 +369,27 @@ public class Base {
 		if (data.length() != 0) {
 			float[] elements = FMath.getTableFloat(data, " ", 3);
 			if (elements != null) {
-				float angle = elements[0] / 180 * FMath.PI;
+				float angle = (float) Math.toRadians(elements[0]);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(-elements[1], -elements[2])));
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createRotate(angle));
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[1], elements[2])));
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
 			} else {
 				float elem = Float.parseFloat(data);
-				float angle = elem / 180 * FMath.PI;
-				Log.verbose("rotate : " + angle + "rad, " + (angle / FMath.PI * 180) + "0");
+				elem = (float) Math.toRadians(elem);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createRotate(elem));
 			}
 		}
 		data = Base.extractTransformData(inputString, "skewX");
 		if (data.length() != 0) {
 			float angle = Float.parseFloat(data);
-			angle = angle / 180 * FMath.PI;
-			Log.verbose("skewX : " + angle + "rad, " + (angle / FMath.PI * 180) + "0");
+			angle = (float) Math.toRadians(angle);
 			this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createSkew(new Vector2f(angle, 0.0f)));
 		}
 		data = Base.extractTransformData(inputString, "skewY");
 		if (data.length() != 0) {
 			float angle = Float.parseFloat(data);
-			angle = angle / 180 * FMath.PI;
-			Log.verbose("skewY : " + angle + "rad, " + (angle / FMath.PI * 180) + "0");
+			angle = (float) Math.toRadians(angle);
 			this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createSkew(new Vector2f(0.0f, angle)));
 		}
 	}

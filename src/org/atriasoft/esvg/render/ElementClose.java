@@ -8,11 +8,11 @@ package org.atriasoft.esvg.render;
 
 public class ElementClose extends Element {
 	ElementClose() {
-		super(PathType.close, false);
+		super(PathType.CLOSE, false);
 	}
 	
 	ElementClose(final boolean relative) {
-		super(PathType.close, relative);
+		super(PathType.CLOSE, relative);
 	}
 	
 	@Override

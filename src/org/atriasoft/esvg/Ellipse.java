@@ -28,6 +28,12 @@ public class Ellipse extends Base {
 		super(parentPaintState);
 	}
 	
+	public Ellipse(final Vector2f center, final Vector2f radius, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.c = center;
+		this.r = radius;
+	}
+	
 	PathModel createPath() {
 		PathModel out = new PathModel();
 		out.moveTo(false, this.c.add(this.r.x(), 0.0f));

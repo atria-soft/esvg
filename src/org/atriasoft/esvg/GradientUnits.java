@@ -6,5 +6,5 @@ package org.atriasoft.esvg;
  * @license MPL v2.0 (see license file)
  */
 public enum GradientUnits {
-	gradientUnitsobjectBoundingBox, gradientUnitsuserSpaceOnUse
+	GRADIENT_UNITS_OBJECT_BOUNDING_BOX, GRADIENT_UNITS_USER_SPACE_ON_USE
 }

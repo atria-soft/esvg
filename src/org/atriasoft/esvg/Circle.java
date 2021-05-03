@@ -29,6 +29,12 @@ public class Circle extends Base {
 		super(parentPaintState);
 	}
 	
+	public Circle(final Vector2f position, final float radius, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.position = position;
+		this.radius = radius;
+	}
+	
 	private PathModel createPath() {
 		PathModel out = new PathModel();
 		out.moveTo(false, this.position.addX(this.radius));

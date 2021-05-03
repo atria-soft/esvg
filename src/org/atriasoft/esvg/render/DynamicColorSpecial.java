@@ -241,7 +241,7 @@ public class DynamicColorSpecial implements DynamicColor {
 	
 	private Color getColorLinear(final Vector2i pos) {
 		float ratio = 0.0f;
-		if (this.unit == GradientUnits.gradientUnitsuserSpaceOnUse) {
+		if (this.unit == GradientUnits.GRADIENT_UNITS_USER_SPACE_ON_USE) {
 			Vector2f vectorBase = this.pos2.less(this.pos1);
 			Vector2f vectorOrtho = new Vector2f(vectorBase.y(), -vectorBase.x());
 			Vector2f intersec = DynamicColorSpecial.getIntersect(this.pos1, vectorBase, new Vector2f(pos.x(), pos.y()), vectorOrtho);

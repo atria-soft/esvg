@@ -1,5 +1,5 @@
 package org.atriasoft.esvg.render;
 
 public enum PathType {
-	bezierCurveTo, bezierSmoothCurveTo, close, curveTo, elliptic, lineTo, lineToH, lineToV, moveTo, smoothCurveTo, stop,
+	BEZIER_CURVE_TO, BEZIER_SMOOTH_CURVE_TO, CLOSE, CURVE_TO, ELLIPTIC, LINE_TO, LINE_TO_H, LINE_TO_V, MOVE_TO, SMOOTH_CURVE_TO, STOP,
 }

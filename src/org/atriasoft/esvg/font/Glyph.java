@@ -3,6 +3,7 @@ package org.atriasoft.esvg.font;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.Path;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.PathModel;
@@ -12,12 +13,20 @@ public class Glyph {
 	private static final boolean LAZY_MODE = true;
 	
 	public static Glyph valueOf(final XmlElement element) {
+		return Glyph.valueOf(element, null);
+	}
+	
+	public static Glyph valueOf(final XmlElement element, final EsvgFont font) {
 		if (element == null) {
 			return null;
 		}
 		String name = element.getAttribute("glyph-name", null);
 		Log.verbose("get glyph name = '" + name + "'");
-		int horizAdvX = Integer.parseInt(element.getAttribute("horiz-adv-x", "0"));
+		String tmpValue = element.getAttribute("horiz-adv-x", null);
+		int horizAdvX = font == null ? 100 : font.getHorizAdvX();
+		if (tmpValue != null && tmpValue.length() != 0) {
+			horizAdvX = Integer.parseInt(tmpValue);
+		}
 		Log.verbose("        horizAdvX= '" + horizAdvX + "'");
 		String unicode = element.getAttribute("unicode", null);
 		Log.verbose("        unicode= '" + unicode + "'");
@@ -63,6 +72,7 @@ public class Glyph {
 	private String name;
 	private final String path;
 	private String unicode;
+	
 	private int unicodeValue;
 	
 	public Glyph(final int horizAdvX, final PathModel model, final String name, final String unicode, final int unicodeValue) {
@@ -97,7 +107,7 @@ public class Glyph {
 		}
 		for (Kerning elem : this.kernings) {
 			if (elem.unicode() == unicodeValue) {
-				Log.info("Get kerning between : '" + (char) this.unicodeValue + "' and '" + (char) unicodeValue + "'  => " + elem.offset());
+				Log.verbose("Get kerning between : '" + (char) this.unicodeValue + "' and '" + (char) unicodeValue + "'  => " + elem.offset());
 				return elem.offset();
 			}
 		}

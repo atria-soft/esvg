@@ -30,6 +30,14 @@ public class PaintState {
 		this.opacity = 1.0f;
 	}
 	
+	public void clearFill() {
+		this.fill = new Pair<Color, String>(Color.NONE, "");
+	}
+	
+	public void clearStroke() {
+		this.stroke = new Pair<Color, String>(Color.NONE, "");
+	}
+	
 	@Override
 	protected PaintState clone() {
 		PaintState out = new PaintState();
@@ -43,6 +51,62 @@ public class PaintState {
 		out.miterLimit = this.miterLimit;
 		out.opacity = this.opacity;
 		return out;
+	}
+	
+	public Color getFill() {
+		return this.fill.first;
+	}
+	
+	public CapMode getLineCap() {
+		return this.lineCap;
+	}
+	
+	public JoinMode getLineJoin() {
+		return this.lineJoin;
+	}
+	
+	public float getMiterLimit() {
+		return this.miterLimit;
+	}
+	
+	public float getOpacity() {
+		return this.opacity;
+	}
+	
+	public Color getStroke() {
+		return this.stroke.first;
+	}
+	
+	public float getStrokeWidth() {
+		return this.strokeWidth;
+	}
+	
+	public void setFill(final Color color) {
+		this.fill = new Pair<Color, String>(color, "");
+	}
+	
+	public void setLineCap(final CapMode lineCap) {
+		this.lineCap = lineCap;
+	}
+	
+	public void setLineJoin(final JoinMode lineJoin) {
+		this.lineJoin = lineJoin;
+	}
+	
+	public void setMiterLimit(final float miterLimit) {
+		this.miterLimit = miterLimit;
+	}
+	
+	public void setOpacity(final float opacity) {
+		this.opacity = opacity;
+	}
+	
+	public void setStroke(final Color color) {
+		this.stroke = new Pair<Color, String>(color, "");
+	}
+	
+	public void setStrokeWidth(final float strokeWidth) {
+		this.strokeWidth = strokeWidth;
 	}
 	
 }

@@ -3,6 +3,7 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.DynamicColorSpecial;
 import org.atriasoft.esvg.render.Point;
@@ -13,7 +14,6 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.util.ArraysTools;
 
 /** @file
  * @author Edouard DUPIN
@@ -22,7 +22,7 @@ import org.atriasoft.etk.util.ArraysTools;
  */
 public class Renderer {
 	private static final boolean DEBUG_MODE = false;
-	protected Color[][] buffer; // for debug
+	protected ImageFloatRGBA buffer; // for debug
 	protected EsvgDocument document; // for debug
 	
 	private int factor = 1;
@@ -81,9 +81,9 @@ public class Renderer {
 				float xpos = coefficient * subSamplingCenterPos + bbb;
 				if (xpos >= 0 && xpos < dynamicSize.x() && yyy >= 0 && yyy < dynamicSize.y()) {
 					if (it.direction == 1.0f) {
-						this.buffer[yyy][(int) (xpos)] = Color.BLUE;
+						this.buffer.setColor((int) xpos, yyy, Color.BLUE);
 					} else {
-						this.buffer[yyy][(int) (xpos)] = Color.DARK_RED;
+						this.buffer.setColor((int) xpos, yyy, Color.DARK_RED);
 					}
 				}
 			}
@@ -119,16 +119,16 @@ public class Renderer {
 				float ypos = coefficient * subSamplingCenterPos + bbb;
 				if (ypos >= 0 && ypos < dynamicSize.y() && xxx >= 0 && xxx < dynamicSize.y()) {
 					if (it.direction == 1.0f) {
-						this.buffer[(int) (ypos)][xxx] = Color.BLUE;
+						this.buffer.setColor(xxx, (int) ypos, Color.BLUE);
 					} else {
-						this.buffer[(int) (ypos)][xxx] = Color.DARK_RED;
+						this.buffer.setColor(xxx, (int) ypos, Color.DARK_RED);
 					}
 				}
 			}
 		}
 	}
 	
-	Color[][] getData() {
+	ImageFloatRGBA getData() {
 		return this.buffer;
 	}
 	
@@ -208,11 +208,11 @@ public class Renderer {
 						for (int deltaX = 0; deltaX < this.factor; deltaX++) {
 							int idx = xxx * this.factor + deltaX;
 							int idy = yyy * this.factor + deltaY;
-							this.buffer[idy][idx] = mergeColor(this.buffer[idy][idx], intermediateColor);
+							this.buffer.mergeColor(idx, idy, intermediateColor);
 						}
 					}
 				} else {
-					this.buffer[yyy][xxx] = mergeColor(this.buffer[yyy][xxx], intermediateColor);
+					this.buffer.mergeColor(xxx, yyy, intermediateColor);
 				}
 			}
 		}
@@ -256,11 +256,10 @@ public class Renderer {
 	public void setSize(final Vector2i size) {
 		this.size = size;
 		if (Renderer.DEBUG_MODE) {
-			this.buffer = new Color[this.size.y()][this.size.x()];
+			this.buffer = new ImageFloatRGBA(this.size);
 		} else {
-			this.buffer = new Color[this.size.y() * this.factor][this.size.x() * this.factor];
+			this.buffer = new ImageFloatRGBA(this.size.multiply(this.factor));
 		}
-		ArraysTools.fill2(this.buffer, Color.NONE);
 	}
 	
 }

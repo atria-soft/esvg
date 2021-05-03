@@ -9,7 +9,7 @@ import org.atriasoft.etk.math.Vector2f;
 
 public class ElementMoveTo extends Element {
 	public ElementMoveTo(final boolean relative, final Vector2f pos) {
-		super(PathType.moveTo, relative);
+		super(PathType.MOVE_TO, relative);
 		this.pos = pos;
 		
 	}

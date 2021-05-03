@@ -28,7 +28,7 @@ public class RadialGradient extends Base {
 	private String href = ""; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
 	private Dimension1D radius = new Dimension1D(50, Distance.POURCENT); //!< Radius of the gradient
 	public SpreadMethod spread = SpreadMethod.PAD;
-	public GradientUnits unit = GradientUnits.gradientUnitsobjectBoundingBox;
+	public GradientUnits unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 	
 	public RadialGradient(final PaintState parentPaintState) {
 		super(parentPaintState);
@@ -114,9 +114,9 @@ public class RadialGradient extends Base {
 		}
 		contentX = element.getAttribute("gradientUnits", "");
 		if (contentX.equals("userSpaceOnUse")) {
-			this.unit = GradientUnits.gradientUnitsuserSpaceOnUse;
+			this.unit = GradientUnits.GRADIENT_UNITS_USER_SPACE_ON_USE;
 		} else {
-			this.unit = GradientUnits.gradientUnitsobjectBoundingBox;
+			this.unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 			if (contentX.length() != 0 && contentX != "objectBoundingBox") {
 				Log.error("Parsing error of 'gradientUnits' ==> not suported value: '" + contentX + "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
 			}

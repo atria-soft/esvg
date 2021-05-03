@@ -29,7 +29,7 @@ public class LinearGradient extends Base {
 	
 	public SpreadMethod spread = SpreadMethod.PAD; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
 	
-	public GradientUnits unit = GradientUnits.gradientUnitsobjectBoundingBox; //!< incompatible with href
+	public GradientUnits unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX; //!< incompatible with href
 	
 	public LinearGradient(final PaintState parentPaintState) {
 		super(parentPaintState);
@@ -109,9 +109,9 @@ public class LinearGradient extends Base {
 			}
 			contentX = element.getAttribute("gradientUnits", "");
 			if (contentX.equals("userSpaceOnUse")) {
-				this.unit = GradientUnits.gradientUnitsuserSpaceOnUse;
+				this.unit = GradientUnits.GRADIENT_UNITS_USER_SPACE_ON_USE;
 			} else {
-				this.unit = GradientUnits.gradientUnitsobjectBoundingBox;
+				this.unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 				if (contentX.length() != 0 && contentX != "objectBoundingBox") {
 					Log.error("Parsing error of 'gradientUnits' ==> not suported value: '" + contentX + "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
 				}
