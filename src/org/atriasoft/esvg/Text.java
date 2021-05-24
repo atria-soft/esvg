@@ -131,13 +131,17 @@ public class Text extends Base {
 					DynamicColor colorStroke = null;
 					if (this.paint.strokeWidth > 0.0f) {
 						colorStroke = DynamicColor.createColor(this.paint.stroke, mtx);
-						// check if we need to display stroke:
-						SegmentList listSegmentStroke = new SegmentList();
-						listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap, this.paint.lineJoin, this.paint.miterLimit);
-						colorStroke.setViewPort(listSegmentStroke.getViewPort());
-						listSegmentStroke.applyMatrix(mtx);
-						// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
-						tmpStroke.generate(myRenderer.getSize(), myRenderer.getNumberSubScanLine(), listSegmentStroke);
+						if (colorStroke == null) {
+							Log.warning("Color stroke is null: ...");
+						} else {
+							// check if we need to display stroke:
+							SegmentList listSegmentStroke = new SegmentList();
+							listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap, this.paint.lineJoin, this.paint.miterLimit);
+							colorStroke.setViewPort(listSegmentStroke.getViewPort());
+							listSegmentStroke.applyMatrix(mtx);
+							// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
+							tmpStroke.generate(myRenderer.getSize(), myRenderer.getNumberSubScanLine(), listSegmentStroke);
+						}
 					}
 					// add on images:
 					myRenderer.print(tmpFill, colorFill, tmpStroke, colorStroke, this.paint.opacity);

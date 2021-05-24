@@ -256,6 +256,35 @@ public class EsvgFont {
 		return (float) realSize / (float) this.unitsPerEm;
 	}
 	
+	public Vector2i calculateTextSize(final int fontSize, final String data) {
+		boolean withKerning = true;
+		int widthOut = calculateWidth(data, fontSize, withKerning);
+		
+		int realSize = calculateFontRealHeight(fontSize);
+		float scale = (float) realSize / (float) this.unitsPerEm;
+		
+		Weight weight = new Weight(new Vector2i(widthOut, realSize));
+		
+		int offsetWriting = 0;
+		int lastValue = 0;
+		for (char uVal : data.toCharArray()) {
+			Glyph glyph = getGlyph(uVal);
+			if (glyph == null) {
+				lastValue = uVal;
+				continue;
+			}
+			if (withKerning) {
+				offsetWriting -= glyph.getKerning(lastValue) * scale;
+				lastValue = uVal;
+			}
+			
+			float advenceXLocal = glyph.getHorizAdvX() * scale;
+			// No generation of output ...
+			offsetWriting += advenceXLocal;
+		}
+		return new Vector2i(offsetWriting, realSize);
+	}
+	
 	public int calculateWidth(final int uVal, final int fontSize) {
 		Glyph glyph = getGlyph(uVal);
 		if (glyph == null) {

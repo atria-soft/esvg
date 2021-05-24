@@ -1,9 +1,11 @@
 package org.atriasoft.esvg;
 
-import org.atriasoft.egami.ImageByteRGBA;
+import org.atriasoft.egami.ImageByte;
+import org.atriasoft.egami.ToolImage;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.etk.Color;
+import org.atriasoft.etk.Configs;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 
@@ -13,13 +15,17 @@ import org.atriasoft.etk.math.Vector2i;
  *
  */
 public class GraphicContext {
-	private EsvgDocument document;
+	private EsvgDocument document = new EsvgDocument();
 	PaintState paintState;
 	private PathModel path = null;
 	private Vector2i size = Vector2i.VALUE_32;
 	
 	public GraphicContext() {
 		clear();
+	}
+	
+	public Vector2i calculateTextSize(final String data) {
+		return FontCache.getFont(Configs.getConfigFonts().getName(), false, false).calculateTextSize(Configs.getConfigFonts().getSize(), data);
 	}
 	
 	public void circle(final Vector2f position, final float radius) {
@@ -83,6 +89,14 @@ public class GraphicContext {
 	
 	public float getStrokeWidth() {
 		return this.paintState.getStrokeWidth();
+	}
+	
+	public int getTextHeight() {
+		return getTextHeight(Configs.getConfigFonts().getSize());
+	}
+	
+	public int getTextHeight(final float height) {
+		return FontCache.getFont(Configs.getConfigFonts().getName(), false, false).calculateFontRealHeight((int) height);
 	}
 	
 	public void line(final Vector2f origin, final Vector2f destination) {
@@ -181,12 +195,8 @@ public class GraphicContext {
 		this.document.addElement(new Rectangle(position, width, this.paintState.clone()));
 	}
 	
-	public ImageByteRGBA render() {
-		return null;
-	}
-	
-	public String renderSvg() {
-		return null;
+	public ImageByte render() {
+		return ToolImage.convertImageByte(this.document.renderImageFloatRGBA(null));
 	}
 	
 	/**
@@ -249,7 +259,10 @@ public class GraphicContext {
 	
 	public void text(final Vector2f position, final float height, final String data) {
 		this.document.addElement(new Text(position, height, data, this.paintState.clone()));
-		
+	}
+	
+	public void text(final Vector2f position, final String data) {
+		this.document.addElement(new Text(position, Configs.getConfigFonts().getSize(), data, this.paintState.clone()));
 	}
 	
 }
