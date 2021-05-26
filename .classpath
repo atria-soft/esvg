@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry including="**/*.java" kind="src" output="out/eclipse/classes-test" path="test/src">
 		<attributes>
 			<attribute name="test" value="true"/>
