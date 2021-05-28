@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.esvg.internal.Log;
-import org.atriasoft.etk.util.Pair;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.util.Pair;
 
 public class PointList {
 	public List<List<Point>> data = new ArrayList<>();
@@ -29,9 +29,9 @@ public class PointList {
 	}
 	
 	public void display() {
-		Log.warning(" Display list of points : size=" + this.data.size());
+		Log.verbose(" Display list of points : size=" + this.data.size());
 		for (List<Point> it : this.data) {
-			Log.warning("    Find List " + it.size() + " members");
+			Log.verbose("    Find List " + it.size() + " members");
 			for (int iii = 0; iii < it.size(); ++iii) {
 				Point elem = it.get(iii);
 				Log.verbose("        [" + iii + "] Find " + elem.type + " " + elem.pos);

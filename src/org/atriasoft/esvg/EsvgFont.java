@@ -1,9 +1,9 @@
 package org.atriasoft.esvg;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.font.Kerning;
@@ -259,12 +259,12 @@ public class EsvgFont {
 	public Vector2i calculateTextSize(final int fontSize, final String data) {
 		boolean withKerning = true;
 		int widthOut = calculateWidth(data, fontSize, withKerning);
-		
+
 		int realSize = calculateFontRealHeight(fontSize);
+		return new Vector2i(widthOut, realSize);
+		/*
 		float scale = (float) realSize / (float) this.unitsPerEm;
-		
-		Weight weight = new Weight(new Vector2i(widthOut, realSize));
-		
+				
 		int offsetWriting = 0;
 		int lastValue = 0;
 		for (char uVal : data.toCharArray()) {
@@ -283,6 +283,7 @@ public class EsvgFont {
 			offsetWriting += advenceXLocal;
 		}
 		return new Vector2i(offsetWriting, realSize);
+		*/
 	}
 	
 	public int calculateWidth(final int uVal, final int fontSize) {
@@ -302,7 +303,8 @@ public class EsvgFont {
 	public int calculateWidth(final String data, final int fontSize, final boolean withKerning) {
 		int realSize = calculateFontRealHeight(fontSize);
 		float scale = (float) realSize / (float) this.unitsPerEm;
-		int out = 0;
+		//Log.error("scale =" + scale+ " font size = " + fontSize + "  realSize=" + realSize);
+		float offsetWriting = 0;
 		int lastValue = 0;
 		for (char uVal : data.toCharArray()) {
 			Glyph glyph = getGlyph(uVal);
@@ -311,12 +313,15 @@ public class EsvgFont {
 				continue;
 			}
 			if (withKerning) {
-				out -= glyph.getKerning(lastValue) * scale;
+				offsetWriting -= glyph.getKerning(lastValue) * scale;
 				lastValue = uVal;
 			}
-			out += glyph.getHorizAdvX() * scale;
+
+			float advenceXLocal = glyph.getHorizAdvX() * scale;
+			offsetWriting += advenceXLocal;
+			//Log.error("offset X =" + offsetWriting + " + " + advenceXLocal + "    " + uVal);
 		}
-		return out;
+		return (int)offsetWriting;
 	}
 	
 	/**
@@ -402,7 +407,7 @@ public class EsvgFont {
 		
 		Weight weight = new Weight(new Vector2i(widthOut, realSize));
 		
-		int offsetWriting = 0;
+		float offsetWriting = 0;
 		int lastValue = 0;
 		for (char uVal : data.toCharArray()) {
 			Glyph glyph = getGlyph(uVal);
@@ -423,7 +428,7 @@ public class EsvgFont {
 			PathModel model = glyph.getModel();
 			if (model != null) {
 				Weight redered = model.drawFill(calculateWidthRendering((int) uVal, fontSize), transform, 8, config);
-				weight.fusion(redered, offsetWriting, 0);
+				weight.fusion(redered, (int)offsetWriting, 0);
 			}
 			offsetWriting += advenceXLocal;
 			

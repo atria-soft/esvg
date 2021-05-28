@@ -94,6 +94,10 @@ public class GraphicContext {
 	public int getTextHeight() {
 		return getTextHeight(Configs.getConfigFonts().getSize());
 	}
+	public int getTextSize() {
+		return Configs.getConfigFonts().getSize();
+	}
+	
 	
 	public int getTextHeight(final float height) {
 		return FontCache.getFont(Configs.getConfigFonts().getName(), false, false).calculateFontRealHeight((int) height);
@@ -258,11 +262,11 @@ public class GraphicContext {
 	}
 	
 	public void text(final Vector2f position, final float height, final String data) {
-		this.document.addElement(new Text(position, height, data, this.paintState.clone()));
+		this.document.addElement(new Text(position, Configs.getConfigFonts().getName(), height, data, this.paintState.clone()));
 	}
 	
 	public void text(final Vector2f position, final String data) {
-		this.document.addElement(new Text(position, Configs.getConfigFonts().getSize(), data, this.paintState.clone()));
+		text(position, Configs.getConfigFonts().getSize(), data);
 	}
 	
 }

@@ -30,17 +30,23 @@ public class Text extends Base {
 	public Text(final PaintState parentPaintState) {
 		super(parentPaintState);
 	}
-	
+
 	public Text(final Vector2f position, final float fontSize, final String decoratedText, final PaintState parentPaintState) {
 		super(parentPaintState);
 		this.position = position;
 		this.fontSize = fontSize;
-		this.texts.add(new TextSpan(position, decoratedText, FontProperty.DEFAULT_FONT, parentPaintState.clone()));
+		this.texts.add(new TextSpan(position, decoratedText, FontProperty.DEFAULT_FONT.withSize(fontSize), parentPaintState.clone()));
+	}
+	public Text(final Vector2f position, final String fontName,final float fontSize, final String decoratedText, final PaintState parentPaintState) {
+		super(parentPaintState);
+		this.position = position;
+		this.fontSize = fontSize;
+		this.texts.add(new TextSpan(position, decoratedText, FontProperty.DEFAULT_FONT.withSize(fontSize).withFontName(fontName), parentPaintState.clone()));
 	}
 	
 	@Override
 	public void display(final int spacing) {
-		Log.debug(spacingDist(spacing) + "Text : ");
+		Log.verbose(spacingDist(spacing) + "Text : ");
 		for (TextSpan elem : this.texts) {
 			Log.debug(spacingDist(spacing + 1) + elem.toString());
 		}
@@ -48,7 +54,7 @@ public class Text extends Base {
 	
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		Log.warning(spacingDist(level) + "DRAW esvg::Text                   ==> position = " + this.position);
+		Log.verbose(spacingDist(level) + "DRAW esvg::Text                   ==> position = " + this.position);
 		if (this.texts.size() == 0) {
 			Log.verbose(spacingDist(level + 1) + "No text ...");
 			return;
@@ -65,19 +71,21 @@ public class Text extends Base {
 			
 			int realSize = font.calculateFontRealHeight((int) elem.fontState().fontSize());
 			float scale = realSize / font.getUnitsPerEm();
+			//Log.warning("elem.fontState() =" + elem.fontState());
+			//Log.warning("scale =" + scale + " font size = " + elem.fontState().fontSize() + "  realSize=" + realSize);
 			
 			float offsetWriting = 0;
 			int lastValue = 0;
 			for (char uVal : elem.text().toCharArray()) {
-				Log.warning(spacingDist(level) + "                                 elem.position = " + elem.position());
+				Log.verbose(spacingDist(level) + "                                 elem.position = " + elem.position());
 				Glyph glyph = font.getGlyph(uVal);
 				if (glyph == null) {
-					lastValue = uVal;
+					//lastValue = uVal;
 					continue;
 				}
 				if (withKerning) {
-					//offsetWriting -= glyph.getKerning(lastValue) * scale;
-					Log.info("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
+					offsetWriting -= glyph.getKerning(lastValue) * scale;
+					Log.verbose("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
 					lastValue = uVal;
 				}
 				
@@ -85,7 +93,7 @@ public class Text extends Base {
 				
 				//Matrix2x3f mtx = this.transformMatrix;
 				Vector2f tranlate = new Vector2f(elem.position().x() + offsetWriting, elem.position().y() - font.getDescent() * scale);
-				Log.warning("translate : " + tranlate);
+				Log.verbose("translate : " + tranlate);
 				Matrix2x3f translateGlyph = Matrix2x3f.createTranslate(tranlate);
 				Matrix2x3f scaleGlyph = Matrix2x3f.createScale(new Vector2f(scale, -scale));
 				
@@ -132,7 +140,7 @@ public class Text extends Base {
 					if (this.paint.strokeWidth > 0.0f) {
 						colorStroke = DynamicColor.createColor(this.paint.stroke, mtx);
 						if (colorStroke == null) {
-							Log.warning("Color stroke is null: ...");
+							Log.verbose("Color stroke is null: ...");
 						} else {
 							// check if we need to display stroke:
 							SegmentList listSegmentStroke = new SegmentList();
@@ -147,7 +155,7 @@ public class Text extends Base {
 					myRenderer.print(tmpFill, colorFill, tmpStroke, colorStroke, this.paint.opacity);
 				}
 				offsetWriting += advenceXLocal;
-				Log.error("offset X =" + offsetWriting + " + " + advenceXLocal + "    " + uVal);
+				//Log.warning("offset X =" + offsetWriting + " + " + advenceXLocal + "    " + uVal);
 			}
 		}
 	}
@@ -262,6 +270,19 @@ record FontProperty(
 		boolean bold,
 		boolean italic) {
 	public static final FontProperty DEFAULT_FONT = new FontProperty("FreeSans", 15, false, false);
+
+	public FontProperty withSize(final float fontSize) {
+		return new FontProperty(this.fontName, fontSize, this.bold, this.italic);
+	}
+	public FontProperty withFontName(final String fontName) {
+		return new FontProperty(fontName, this.fontSize, this.bold, this.italic);
+	}
+	public FontProperty withBold(final boolean bold) {
+		return new FontProperty(this.fontName, this.fontSize, bold, this.italic);
+	}
+	public FontProperty withSize(final boolean italic) {
+		return new FontProperty(this.fontName, this.fontSize, this.bold, italic);
+	}
 }
 
 record TextSpan(
