@@ -6,10 +6,10 @@ import java.util.List;
 import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.exml.Exml;
 import org.atriasoft.exml.exception.ExmlBuilderException;
 import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
@@ -416,13 +416,19 @@ public class EsvgDocument extends Base {
 			size = new Vector2i((int) this.size.x(), (int) this.size.y());
 		} else {
 			if (size.x() <= 0) {
-				size = size.withX((int) this.size.x());
+				size = size.withX((int) Math.abs(this.size.x()));
 			}
 			if (size.y() <= 0) {
-				size = size.withY((int) this.size.y());
+				size = size.withY((int) Math.abs(this.size.y()));
 			}
 		}
-		Log.debug("Generate size " + size);
+		if (size.x() <= 0) {
+			Log.error("Generate size " + size);
+		}
+		if (size.y() <= 0) {
+			Log.error("Generate size " + size);
+		}
+		Log.error("Generate size " + size);
 		Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
 		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
