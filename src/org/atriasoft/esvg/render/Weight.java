@@ -183,6 +183,14 @@ public class Weight {
 	// -----------------------------------------------
 	public void resize(final Vector2i size) {
 		this.size = size;
+		if (this.size.x() <= 0) {
+			Log.error("Error in the Weight size : " + this.size);
+			this.size = this.size.withX(1);
+		}
+		if (this.size.y() <= 0) {
+			Log.error("Error in the Weight size : " + this.size);
+			this.size = this.size.withY(1);
+		}
 		this.data = new float[this.size.y()][this.size.x()];
 		clear(0);
 	}
