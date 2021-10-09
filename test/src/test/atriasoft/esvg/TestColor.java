@@ -2,6 +2,8 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestColor {
@@ -11,7 +13,7 @@ class TestColor {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColorblending.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColorblending.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestColorblending.png"));
 	}
 	
@@ -21,7 +23,7 @@ class TestColor {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-opacity='0.5' stroke-width='3' fill='#F00' fill-opacity='0.5' opacity='0.7' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColorblendingandopacity.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColorblendingandopacity.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestColorblendingandopacity.png"));
 	}
 	
@@ -33,7 +35,7 @@ class TestColor {
 				+ "	<rect x='30'   y='30' width='20' height='20' stroke='orange' stroke-width='1' fill='violet'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColormultiplelayer.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColormultiplelayer.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestColormultiplelayer.png"));
 	}
 	
@@ -43,7 +45,7 @@ class TestColor {
 				+ "	<rect x='12.5' y='12.5' width='75' height='50' stroke='#0F0' stroke-width='3' fill='#F00' opacity='0.5' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColoropacity.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestColoropacity.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestColoropacity.png"));
 	}
 }

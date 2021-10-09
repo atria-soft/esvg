@@ -2,6 +2,8 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestLine {
@@ -11,7 +13,7 @@ class TestLine {
 				+ "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestLinestroke.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestLinestroke.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestLinestroke.png"));
 	}
 }

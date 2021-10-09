@@ -2,6 +2,8 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestPath {
@@ -13,7 +15,7 @@ class TestPath {
 				+ "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPatharc.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPatharc.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPatharc.png"));
 	}
 	
@@ -22,7 +24,7 @@ class TestPath {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<path d='m 50,50 q -30,1 -20,20 z'" + "	      fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathbezierCurveTo.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathbezierCurveTo.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathbezierCurveTo.png"));
 	}
 	
@@ -31,7 +33,7 @@ class TestPath {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<path d='m 50,50 t -20,30 t 30,-20 z'" + "	      fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathbezierSmoothCurveTo.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathbezierSmoothCurveTo.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathbezierSmoothCurveTo.png"));
 	}
 	
@@ -40,7 +42,7 @@ class TestPath {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<path d='m 50,50 c -30,0 -30,1 -20,20 z'" + "	      fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathcurveTo.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathcurveTo.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathcurveTo.png"));
 	}
 	
@@ -52,7 +54,7 @@ class TestPath {
 				+ "	   id='path3421'\n" + "	   inkscape:connector-curvature='0' />\n" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathendpathbordercase.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathendpathbordercase.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathendpathbordercase.png"));
 	}
 	
@@ -63,7 +65,7 @@ class TestPath {
 				+ "	      fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathfill.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathfill.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathfill.png"));
 	}
 	
@@ -74,7 +76,7 @@ class TestPath {
 				+ "	      stroke='green' stroke-width='3' fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathfillandstroke.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathfillandstroke.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathfillandstroke.png"));
 	}
 	
@@ -83,7 +85,7 @@ class TestPath {
 		String data = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" + "<svg height='100' width='100'>" + "	<path d='m 50,50 s -30,0 -20,20 z'" + "	      fill='red' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathsmoothCurveTo.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathsmoothCurveTo.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathsmoothCurveTo.png"));
 	}
 	
@@ -94,7 +96,7 @@ class TestPath {
 				+ "	      stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathstroke.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestPathstroke.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestPathstroke.png"));
 	}
 	

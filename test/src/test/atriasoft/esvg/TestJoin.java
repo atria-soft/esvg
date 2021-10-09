@@ -2,6 +2,8 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestJoin {
@@ -12,7 +14,7 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelCornerCasePath.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelCornerCasePath.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelCornerCasePath.png"));
 	}
 	
@@ -22,7 +24,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft1.png"));
 	}
 	
@@ -32,7 +34,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft2.png"));
 	}
 	
@@ -42,7 +44,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft3.png"));
 	}
 	
@@ -52,7 +54,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelLeft4.png"));
 	}
 	
@@ -62,7 +64,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight1.png"));
 	}
 	
@@ -72,7 +74,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight2.png"));
 	}
 	
@@ -82,7 +84,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight3.png"));
 	}
 	
@@ -92,7 +94,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='bevel'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinbevelRight4.png"));
 	}
 	
@@ -103,7 +105,7 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePath.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePath.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePath.png"));
 	}
 	
@@ -114,7 +116,7 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='miter' stroke-miterlimit='0.3'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePathLimit.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePathLimit.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterCornerCasePathLimit.png"));
 	}
 	
@@ -124,7 +126,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft1.png"));
 	}
 	
@@ -134,7 +136,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft2.png"));
 	}
 	
@@ -144,7 +146,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft3.png"));
 	}
 	
@@ -156,7 +158,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLeft4.png"));
 	}
 	
@@ -166,7 +168,7 @@ class TestJoin {
 				+ "	<polyline points='10,10 25,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit1.png"));
 	}
 	
@@ -176,7 +178,7 @@ class TestJoin {
 				+ "	<polyline points='10,10 50,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit2.png"));
 	}
 	
@@ -186,7 +188,7 @@ class TestJoin {
 				+ "	<polyline points='10,10 75,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit3.png"));
 	}
 	
@@ -196,7 +198,7 @@ class TestJoin {
 				+ "	<polyline points='10,10 90,25 10,40' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterLimit4.png"));
 	}
 	
@@ -206,7 +208,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight1.png"));
 	}
 	
@@ -216,7 +218,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight2.png"));
 	}
 	
@@ -226,7 +228,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight3.png"));
 	}
 	
@@ -236,7 +238,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='miter'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinmiterRight4.png"));
 	}
 	
@@ -249,7 +251,7 @@ class TestJoin {
 				+ "       stroke='green' stroke-width='5' fill='orange' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundCornerCasePath.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundCornerCasePath.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundCornerCasePath.png"));
 	}
 	
@@ -259,7 +261,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft1.png"));
 	}
 	
@@ -269,7 +271,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft2.png"));
 	}
 	
@@ -279,7 +281,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft3.png"));
 	}
 	
@@ -289,7 +291,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundLeft4.png"));
 	}
 	
@@ -299,7 +301,7 @@ class TestJoin {
 				+ "	<polyline points='20,20 50,50 20,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight1.png"));
 	}
 	
@@ -309,7 +311,7 @@ class TestJoin {
 				+ "	<polyline points='20,80 50,50 80,80' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight2.png"));
 	}
 	
@@ -319,7 +321,7 @@ class TestJoin {
 				+ "	<polyline points='80,80 50,50 80,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight3.png"));
 	}
 	
@@ -329,7 +331,7 @@ class TestJoin {
 				+ "	<polyline points='80,20 50,50 20,20' stroke='green' stroke-width='20' fill='none' stroke-linejoin='round'/>" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestJoinroundRight4.png"));
 	}
 }

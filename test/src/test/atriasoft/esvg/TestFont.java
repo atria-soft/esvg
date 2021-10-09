@@ -5,6 +5,8 @@ import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestFont {
@@ -16,7 +18,7 @@ class TestFont {
 				+ "	      stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError1.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError1.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestFontError1.png"));
 	}
 	
@@ -27,7 +29,7 @@ class TestFont {
 				+ "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError2.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError2.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestFontError2.png"));
 	}
 	
@@ -37,7 +39,7 @@ class TestFont {
 				+ "	<path d='M218 51q78 0 123.5 68t45.5 166q0 115 -103 115q-75 0 -122 -66.5t-47 -167.5q0 -115 103 -115z'" + "	      stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError3.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError3.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestFontError3.png"));
 	}
 	
@@ -51,7 +53,7 @@ class TestFont {
 				+ "q0 -41 29 -69.5t69 -28.5z'" + "	      stroke='green' stroke-width='3' />" + "</svg>";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError4.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestFontError4.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestFontError4.png"));
 	}
 	

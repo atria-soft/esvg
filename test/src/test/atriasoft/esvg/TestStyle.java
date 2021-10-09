@@ -3,6 +3,8 @@ package test.atriasoft.esvg;
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.etk.Uri;
 
+import org.junit.jupiter.api.Assertions;
+
 class TestStyle {
 	
 	public void testTestExternWorddown() {
@@ -116,7 +118,7 @@ class TestStyle {
 				+ "</svg>\n";
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestExternworddown.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestExternworddown.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestExternworddown.png"));
 	}
 }

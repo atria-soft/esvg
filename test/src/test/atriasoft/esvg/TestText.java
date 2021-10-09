@@ -2,8 +2,10 @@ package test.atriasoft.esvg;
 
 import org.atriasoft.esvg.Esvg;
 import org.atriasoft.esvg.EsvgDocument;
-import org.junit.jupiter.api.Test;
 import org.atriasoft.etk.Uri;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class TestText {
 	@Test
@@ -43,7 +45,7 @@ class TestText {
 		//@formatter:on
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestTextFull.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestTextFull.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestTextFull.png"));
 	}
 	
@@ -111,7 +113,7 @@ class TestText {
 		//@formatter:on
 		EsvgDocument doc = new EsvgDocument();
 		doc.parse(data);
-		Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestTextFull.svg"), data.replace("'", "\""));
+		Assertions.assertDoesNotThrow(()-> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "TestTextFull.svg"), data.replace("'", "\"")));
 		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "TestTextFull.png"));
 	}
 }

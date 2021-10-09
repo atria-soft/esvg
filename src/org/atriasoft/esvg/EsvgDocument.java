@@ -11,7 +11,7 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.exception.ExmlBuilderException;
+import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
@@ -210,7 +210,7 @@ public class EsvgDocument extends Base {
 		XmlNode doc = null;
 		try {
 			doc = Exml.parse(uri);
-		} catch (ExmlBuilderException e) {
+		} catch (ExmlException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -242,7 +242,7 @@ public class EsvgDocument extends Base {
 		XmlNode doc = null;
 		try {
 			doc = Exml.parse(data);
-		} catch (ExmlBuilderException e) {
+		} catch (ExmlException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
