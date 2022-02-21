@@ -428,7 +428,7 @@ public class EsvgDocument extends Base {
 		if (size.y() <= 0) {
 			Log.error("Generate size " + size);
 		}
-		Log.error("Generate size " + size);
+		Log.verbose("Generate size " + size);
 		Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
 		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
