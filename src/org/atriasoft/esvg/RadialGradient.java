@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.etk.util.Pair;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
-import org.atriasoft.etk.Dimension;
-import org.atriasoft.etk.Dimension1D;
+import org.atriasoft.etk.Dimension1f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
+import org.atriasoft.etk.util.Dynamic;
+import org.atriasoft.etk.util.Pair;
+import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.exml.model.XmlNode;
 
 /** @file
  * @author Edouard DUPIN
@@ -22,11 +22,11 @@ import org.atriasoft.etk.math.Vector2f;
  * @license MPL v2.0 (see license file)
  */
 public class RadialGradient extends Base {
-	private Dimension center = new Dimension(new Vector2f(50, 50), Distance.POURCENT); //!< gradient position cx cy
+	private Dimension2f center = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT); //!< gradient position cx cy
 	private final List<Pair<Float, Color>> data = new ArrayList<>(); //!< incompatible with href
-	private Dimension focal = new Dimension(new Vector2f(50, 50), Distance.POURCENT); //!< gradient Focal fx fy
+	private Dimension2f focal = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT); //!< gradient Focal fx fy
 	private String href = ""; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
-	private Dimension1D radius = new Dimension1D(50, Distance.POURCENT); //!< Radius of the gradient
+	private Dimension1f radius = new Dimension1f(50, Distance.POURCENT); //!< Radius of the gradient
 	public SpreadMethod spread = SpreadMethod.PAD;
 	public GradientUnits unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 	
@@ -47,7 +47,7 @@ public class RadialGradient extends Base {
 		Log.verbose(spacingDist(level) + "DRAW esvg::RadialGradient");
 	}
 	
-	public Dimension getCenter() {
+	public Dimension2f getCenter() {
 		return this.center;
 	}
 	
@@ -73,11 +73,11 @@ public class RadialGradient extends Base {
 		return this.data;
 	}
 	
-	public Dimension getFocal() {
+	public Dimension2f getFocal() {
 		return this.focal;
 	}
 	
-	public Dimension1D getRadius() {
+	public Dimension1f getRadius() {
 		return this.radius;
 	}
 	
@@ -101,16 +101,16 @@ public class RadialGradient extends Base {
 		String contentX = element.getAttribute("cx", "");
 		String contentY = element.getAttribute("cy", "");
 		if (!contentX.isEmpty() && !contentY.isEmpty()) {
-			this.center = Dimension.valueOf(contentX, contentY);
+			this.center = Dimension2f.valueOf(contentX, contentY);
 		}
 		contentX = element.getAttribute("r", "");
 		if (contentX != "") {
-			this.radius = Dimension1D.valueOf(contentX);
+			this.radius = Dimension1f.valueOf(contentX);
 		}
 		contentX = element.getAttribute("fx", "");
 		contentY = element.getAttribute("fy", "");
 		if (!contentX.isEmpty() && !contentY.isEmpty()) {
-			this.focal = Dimension.valueOf(contentX, contentY);
+			this.focal = Dimension2f.valueOf(contentX, contentY);
 		}
 		contentX = element.getAttribute("gradientUnits", "");
 		if (contentX.equals("userSpaceOnUse")) {
@@ -167,7 +167,7 @@ public class RadialGradient extends Base {
 						stopColor = stopColor.withA(opacity);
 						Log.verbose(" opacity : '" + content + "'  == > " + stopColor);
 					}
-					this.data.add(new Pair<Float, Color>(offset, stopColor));
+					this.data.add(new Pair<>(offset, stopColor));
 				} else {
 					Log.error("node not suported : '" + child.getValue() + "' must be [stop]");
 				}

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Matrix2x3f;
@@ -24,8 +24,8 @@ import org.atriasoft.exml.model.XmlNode;
 public class LinearGradient extends Base {
 	private final List<Pair<Float, Color>> data = new ArrayList<>(); //!< gradient position x1 y1
 	private String href = ""; //!< gradient position x2 y2
-	private Dimension pos1 = new Dimension(new Vector2f(50, 50), Distance.POURCENT);
-	private Dimension pos2 = new Dimension(new Vector2f(50, 50), Distance.POURCENT);
+	private Dimension2f pos1 = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT);
+	private Dimension2f pos2 = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT);
 	
 	public SpreadMethod spread = SpreadMethod.PAD; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
 	
@@ -71,11 +71,11 @@ public class LinearGradient extends Base {
 		return this.data;
 	}
 	
-	public Dimension getPosition1() {
+	public Dimension2f getPosition1() {
 		return this.pos1;
 	}
 	
-	public Dimension getPosition2() {
+	public Dimension2f getPosition2() {
 		return this.pos2;
 	}
 	
@@ -100,12 +100,12 @@ public class LinearGradient extends Base {
 			String contentX = element.getAttribute("x1", "");
 			String contentY = element.getAttribute("y1", "");
 			if (!contentX.isEmpty() && !contentY.isEmpty()) {
-				this.pos1 = Dimension.valueOf(contentX, contentY);
+				this.pos1 = Dimension2f.valueOf(contentX, contentY);
 			}
 			contentX = element.getAttribute("x2", "");
 			contentY = element.getAttribute("y2", "");
 			if (!contentX.isEmpty() && !contentY.isEmpty()) {
-				this.pos2 = Dimension.valueOf(contentX, contentY);
+				this.pos2 = Dimension2f.valueOf(contentX, contentY);
 			}
 			contentX = element.getAttribute("gradientUnits", "");
 			if (contentX.equals("userSpaceOnUse")) {
@@ -162,7 +162,7 @@ public class LinearGradient extends Base {
 							stopColor = stopColor.withA(opacity);
 							Log.verbose(" opacity : '" + content + "'  == > " + stopColor);
 						}
-						this.data.add(new Pair<Float, Color>(offset, stopColor));
+						this.data.add(new Pair<>(offset, stopColor));
 					} else {
 						Log.error(" node not suported : '" + child.getValue() + "' must be [stop]");
 					}

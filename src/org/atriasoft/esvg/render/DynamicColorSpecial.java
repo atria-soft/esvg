@@ -2,21 +2,21 @@ package org.atriasoft.esvg.render;
 
 import java.util.List;
 
-import org.atriasoft.esvg.SpreadMethod;
 import org.atriasoft.esvg.Base;
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.esvg.GradientUnits;
 import org.atriasoft.esvg.LinearGradient;
 import org.atriasoft.esvg.RadialGradient;
+import org.atriasoft.esvg.SpreadMethod;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
-import org.atriasoft.etk.Dimension;
-import org.atriasoft.etk.Dimension1D;
+import org.atriasoft.etk.Dimension1f;
+import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
+import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.util.Pair;
 
 public class DynamicColorSpecial implements DynamicColor {
@@ -119,12 +119,12 @@ public class DynamicColorSpecial implements DynamicColor {
 			Log.verbose("    viewport = {" + this.viewPort.first + "," + this.viewPort.second + "}");
 			Vector2f size = this.viewPort.second.less(this.viewPort.first);
 			
-			Dimension dimPos1 = gradient.getPosition1();
+			Dimension2f dimPos1 = gradient.getPosition1();
 			this.pos1 = dimPos1.getPixel(size);
 			if (dimPos1.getType() == Distance.POURCENT) {
 				this.pos1 = this.pos1.add(this.viewPort.first);
 			}
-			Dimension dimPos2 = gradient.getPosition2();
+			Dimension2f dimPos2 = gradient.getPosition2();
 			this.pos2 = dimPos2.getPixel(size);
 			if (dimPos2.getType() == Distance.POURCENT) {
 				this.pos2 = this.pos2.add(this.viewPort.first);
@@ -165,17 +165,17 @@ public class DynamicColorSpecial implements DynamicColor {
 			Log.verbose("    viewport = {" + this.viewPort.first + "," + this.viewPort.second + "}");
 			Vector2f size = this.viewPort.second.less(this.viewPort.first);
 			
-			Dimension dimCenter = gradient.getCenter();
+			Dimension2f dimCenter = gradient.getCenter();
 			Vector2f center = dimCenter.getPixel(size);
 			if (dimCenter.getType() == Distance.POURCENT) {
 				center = center.add(this.viewPort.first);
 			}
-			Dimension dimFocal = gradient.getFocal();
+			Dimension2f dimFocal = gradient.getFocal();
 			Vector2f focal = dimFocal.getPixel(size);
 			if (dimFocal.getType() == Distance.POURCENT) {
 				focal = focal.add(this.viewPort.first);
 			}
-			Dimension1D dimRadius = gradient.getRadius();
+			Dimension1f dimRadius = gradient.getRadius();
 			// in the basic vertion of the gradient the color is calculated with the ration in X and Y in the bonding box associated (it is rotate with the object)..
 			if (center == focal) {
 				this.centerIsFocal = true;
