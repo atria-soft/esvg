@@ -16,51 +16,58 @@ public class Log {
 	private static final boolean PRINT_VERBOSE = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.VERBOSE);
 	private static final boolean PRINT_WARNING = Logger.getNeedPrint(Log.LIB_NAME, LogLevel.WARNING);
 	
-	public static void critical(final String data) {
-		if (Log.PRINT_CRITICAL || Log.FORCE_ALL) {
-			Logger.critical(Log.LIB_NAME_DRAW, data);
+	public static void critical(final Exception e, final String data) {
+		e.printStackTrace();
+		if (PRINT_CRITICAL || FORCE_ALL) {
+			Logger.critical(LIB_NAME_DRAW, data + " : " + e.getMessage());
 		}
 	}
 	
-	public static void debug(final String data) {
-		if (Log.PRINT_DEBUG || Log.FORCE_ALL) {
-			Logger.debug(Log.LIB_NAME_DRAW, data);
+	public static void critical(final String data, final Object... objects) {
+		if (PRINT_CRITICAL || FORCE_ALL) {
+			Logger.critical(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void error(final String data) {
-		if (Log.PRINT_ERROR || Log.FORCE_ALL) {
-			Logger.error(Log.LIB_NAME_DRAW, data);
+	public static void debug(final String data, final Object... objects) {
+		if (PRINT_DEBUG || FORCE_ALL) {
+			Logger.debug(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void info(final String data) {
-		if (Log.PRINT_INFO || Log.FORCE_ALL) {
-			Logger.info(Log.LIB_NAME_DRAW, data);
+	public static void error(final String data, final Object... objects) {
+		if (PRINT_ERROR || FORCE_ALL) {
+			Logger.error(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void print(final String data) {
-		if (Log.PRINT_PRINT || Log.FORCE_ALL) {
-			Logger.print(Log.LIB_NAME_DRAW, data);
+	public static void info(final String data, final Object... objects) {
+		if (PRINT_INFO || FORCE_ALL) {
+			Logger.info(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void todo(final String data) {
-		if (Log.PRINT_TODO || Log.FORCE_ALL) {
-			Logger.todo(Log.LIB_NAME_DRAW, data);
+	public static void print(final String data, final Object... objects) {
+		if (PRINT_PRINT || FORCE_ALL) {
+			Logger.print(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void verbose(final String data) {
-		if (Log.PRINT_VERBOSE || Log.FORCE_ALL) {
-			Logger.verbose(Log.LIB_NAME_DRAW, data);
+	public static void todo(final String data, final Object... objects) {
+		if (PRINT_TODO || FORCE_ALL) {
+			Logger.todo(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
-	public static void warning(final String data) {
-		if (Log.PRINT_WARNING || Log.FORCE_ALL) {
-			Logger.warning(Log.LIB_NAME_DRAW, data);
+	public static void verbose(final String data, final Object... objects) {
+		if (PRINT_VERBOSE || FORCE_ALL) {
+			Logger.verbose(LIB_NAME_DRAW, data, objects);
+		}
+	}
+	
+	public static void warning(final String data, final Object... objects) {
+		if (PRINT_WARNING || FORCE_ALL) {
+			Logger.warning(LIB_NAME_DRAW, data, objects);
 		}
 	}
 	
