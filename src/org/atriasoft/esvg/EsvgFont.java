@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.font.Kerning;
 import org.atriasoft.esvg.internal.Log;
@@ -89,6 +90,10 @@ public class EsvgFont {
 		try {
 			doc = Exml.parse(uri);
 		} catch (final ExmlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (final AknotException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atriasoft.esvg.internal.Log;
+import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.esvg.render.Point;
 import org.atriasoft.esvg.render.PointList;
-import org.atriasoft.esvg.render.Weight;
-import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.SegmentList;
+import org.atriasoft.esvg.render.Weight;
+import org.atriasoft.etk.Tools;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.parser.Tools;
 
 /** @file
  * @author Edouard DUPIN
@@ -39,9 +39,9 @@ public class Path extends Base {
 	}
 	
 	public static PathModel createPathModel(final String d) {
-		PathModel out = new PathModel();
+		final PathModel out = new PathModel();
 		Log.verbose("Parse Path : \"" + d + "\"");
-		List<String> commandsSplited = Path.splitCommand(d);
+		final List<String> commandsSplited = Path.splitCommand(d);
 		String[] listDot = null;
 		
 		// TODO REWORK this, can be done with a simple split and search in a list...
@@ -248,7 +248,7 @@ public class Path extends Base {
 			Log.error("Error in the SVG Path : '" + input.get(offset) + "' [" + Integer.toString(offset));
 			return null;
 		}
-		char cmd = input.get(offset).charAt(0);
+		final char cmd = input.get(offset).charAt(0);
 		if (!((cmd <= 'Z' && cmd >= 'A') || (cmd <= 'z' && cmd >= 'a'))) {
 			Log.error("Error in the SVG Path : '" + cmd + "' [" + Integer.toString(offset));
 			return null;
@@ -259,17 +259,17 @@ public class Path extends Base {
 		}
 		int iii;
 		for (iii = offset + 1; iii < input.size(); iii++) {
-			char startElem = input.get(iii).charAt(0);
+			final char startElem = input.get(iii).charAt(0);
 			if ((startElem <= 'Z' && startElem >= 'A') || (startElem <= 'z' && startElem >= 'a')) {
 				// find end of elements
 				break;
 			}
 		}
-		int length = iii - (offset + 1);
+		final int length = iii - (offset + 1);
 		if (length == 0) {
 			return new Command(cmd, null, iii);
 		}
-		String[] outputList = new String[length];
+		final String[] outputList = new String[length];
 		for (int jjj = 0; jjj < length; jjj++) {
 			outputList[jjj] = input.get(offset + 1 + jjj);
 		}
@@ -277,13 +277,13 @@ public class Path extends Base {
 	}
 	
 	static List<String> splitCommand(final String data) {
-		List<String> out = new ArrayList<>();
-		StringBuilder tmpString = new StringBuilder(20);
+		final List<String> out = new ArrayList<>();
+		final StringBuilder tmpString = new StringBuilder(20);
 		boolean isNumber = false;
-		for (char it : data.toCharArray()) {
+		for (final char it : data.toCharArray()) {
 			// ',' is here beause some people oprefer the ' ' instead of ','
 			if (it == ' ' || it == '\t' || it == '\r' || it == '\n' || it == ',') {
-				String elements = tmpString.toString();
+				final String elements = tmpString.toString();
 				if (!elements.isEmpty()) {
 					out.add(elements);
 				}
@@ -303,7 +303,7 @@ public class Path extends Base {
 				Log.error("Can not parse path : '" + it + "'");
 			}
 		}
-		String elements = tmpString.toString();
+		final String elements = tmpString.toString();
 		if (!elements.isEmpty()) {
 			out.add(elements);
 		}
@@ -330,16 +330,16 @@ public class Path extends Base {
 	void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
 		Log.verbose(spacingDist(level) + "DRAW esvg::Path");
 		
-		Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
+		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 		
 		PointList listPoints = new PointList();
 		listPoints = this.listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(), myRenderer.getInterpolationThreshold());
 		//listPoints.applyMatrix(mtx);
-		SegmentList listSegmentFill = new SegmentList();
-		SegmentList listSegmentStroke = new SegmentList();
-		Weight tmpFill = new Weight();
-		Weight tmpStroke = new Weight();
-		DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
+		final SegmentList listSegmentFill = new SegmentList();
+		final SegmentList listSegmentStroke = new SegmentList();
+		final Weight tmpFill = new Weight();
+		final Weight tmpStroke = new Weight();
+		final DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
 		DynamicColor colorStroke = null;
 		if (this.paint.strokeWidth > 0.0f) {
 			colorStroke = DynamicColor.createColor(this.paint.stroke, mtx);
@@ -373,14 +373,14 @@ public class Path extends Base {
 	void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
 		Log.verbose(spacingDist(level) + "DRAW Shape esvg::Path");
 		
-		Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
+		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 		
 		PointList listPoints = new PointList();
 		listPoints = this.listElement.generateListPoints(level, recurtionMax, threshold);
 		listPoints.applyMatrix(mtx);
-		for (List<Point> it : listPoints.data) {
-			List<Vector2f> listPoint = new ArrayList<Vector2f>();
-			for (Point itDot : it) {
+		for (final List<Point> it : listPoints.data) {
+			final List<Vector2f> listPoint = new ArrayList<>();
+			for (final Point itDot : it) {
 				listPoint.add(itDot.pos);
 			}
 			out.add(listPoint);
@@ -398,7 +398,7 @@ public class Path extends Base {
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 		
-		String elementXML1 = element.getAttribute("d", "");
+		final String elementXML1 = element.getAttribute("d", "");
 		if (elementXML1.length() == 0) {
 			Log.warning("path: missing 'd' attribute or empty");
 			return false;
