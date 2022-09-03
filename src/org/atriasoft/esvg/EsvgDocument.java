@@ -3,6 +3,7 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Uri;
@@ -42,17 +43,17 @@ public class EsvgDocument extends Base {
 	 */
 	public boolean cleanStyleProperty(final XmlElement root) {
 		// for each nodes:
-		for (XmlNode it : root.getNodes()) {
-			if (!(it instanceof XmlElement child)) {
+		for (final XmlNode it : root.getNodes()) {
+			if (!(it instanceof final XmlElement child)) {
 				continue;
 			}
 			// get attribute style:
 			if (child.existAttribute("style")) {
-				String content = child.getAttribute("style", "");
+				final String content = child.getAttribute("style", "");
 				if (content.length() != 0) {
-					String[] listStyle = content.split(";");
-					for (String it1 : listStyle) {
-						String[] value = it1.split(":");
+					final String[] listStyle = content.split(";");
+					for (final String it1 : listStyle) {
+						final String[] value = it1.split(":");
 						if (value.length != 2) {
 							Log.error("parsing style with a wrong patern : " + it1 + " missing ':'");
 							continue;
@@ -109,7 +110,7 @@ public class EsvgDocument extends Base {
 	@Override
 	protected void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
 		Log.verbose(spacingDist(level) + "DRAW shape EsvgDocument");
-		for (Base it : this.subElementList) {
+		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.drawShapePoints(out, recurtionMax, threshold, basicTrans, level + 1);
 			}
@@ -126,7 +127,7 @@ public class EsvgDocument extends Base {
 	}
 	
 	public List<List<Vector2f>> getLines(Vector2f size) {
-		List<List<Vector2f>> out = new ArrayList<>();
+		final List<List<Vector2f>> out = new ArrayList<>();
 		if (size.x() <= 0) {
 			size = size.withX(this.size.x());
 		}
@@ -135,7 +136,7 @@ public class EsvgDocument extends Base {
 		}
 		Log.debug("lineification size " + size);
 		// create the first element matrix modification ...
-		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
+		final Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
 		drawShapePoints(out, 10, 0.25f, basicTrans);
 		return out;
 	}
@@ -145,7 +146,7 @@ public class EsvgDocument extends Base {
 			Log.error("request a reference with no name ... ");
 			return null;
 		}
-		for (Base it : this.refList) {
+		for (final Base it : this.refList) {
 			if (it == null) {
 				continue;
 			}
@@ -210,18 +211,18 @@ public class EsvgDocument extends Base {
 		XmlNode doc = null;
 		try {
 			doc = Exml.parse(uri);
-		} catch (ExmlException e) {
+		} catch (final ExmlException | AknotException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		if (doc instanceof XmlElement elem && elem.existNode("svg")) {
+		if (doc instanceof final XmlElement elem && elem.existNode("svg")) {
 			try {
-				if (elem.getNode("svg") instanceof XmlElement rootElement) {
+				if (elem.getNode("svg") instanceof final XmlElement rootElement) {
 					cleanStyleProperty(rootElement);
 					this.loadOK = parseXMLData(rootElement);
 				}
-			} catch (ExmlNodeDoesNotExist e) {
+			} catch (final ExmlNodeDoesNotExist e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
@@ -242,18 +243,18 @@ public class EsvgDocument extends Base {
 		XmlNode doc = null;
 		try {
 			doc = Exml.parse(data);
-		} catch (ExmlException e) {
+		} catch (final ExmlException | AknotException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		if (doc instanceof XmlElement elem && elem.existNode("svg")) {
+		if (doc instanceof final XmlElement elem && elem.existNode("svg")) {
 			try {
-				if (elem.getNode("svg") instanceof XmlElement rootElement) {
+				if (elem.getNode("svg") instanceof final XmlElement rootElement) {
 					cleanStyleProperty(rootElement);
 					this.loadOK = parseXMLData(rootElement);
 				}
-			} catch (ExmlNodeDoesNotExist e) {
+			} catch (final ExmlNodeDoesNotExist e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
@@ -282,10 +283,10 @@ public class EsvgDocument extends Base {
 		}
 		
 		Vector2f maxSize = Vector2f.ZERO;
-		Dynamic<Vector2f> size = new Dynamic<>(Vector2f.ZERO);
+		final Dynamic<Vector2f> size = new Dynamic<>(Vector2f.ZERO);
 		// parse all sub node:
-		for (XmlNode it : root.getNodes()) {
-			if (!(it instanceof XmlElement child)) {
+		for (final XmlNode it : root.getNodes()) {
+			if (!(it instanceof final XmlElement child)) {
 				// comment can be here...
 				continue;
 			}
@@ -331,7 +332,7 @@ public class EsvgDocument extends Base {
 					Log.error("'" + child.getValue() + "' node must not be defined in a defs Section");
 					continue;
 				}
-				boolean retRefs = parseXMLData(child, true);
+				final boolean retRefs = parseXMLData(child, true);
 				// TODO Use retRefs ...
 				continue;
 			} else if (child.getValue().equals("sodipodi:namedview")) {
@@ -429,9 +430,9 @@ public class EsvgDocument extends Base {
 			Log.error("Generate size " + size);
 		}
 		Log.verbose("Generate size " + size);
-		Renderer renderedElement = new Renderer(size, this, visualDebug);
+		final Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
-		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
+		final Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
 		draw(renderedElement, basicTrans);
 		
 		// direct return the generated data ...
