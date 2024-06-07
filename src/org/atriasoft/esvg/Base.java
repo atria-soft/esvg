@@ -2,7 +2,6 @@ package org.atriasoft.esvg;
 
 import java.util.List;
 
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Distance;
 import org.atriasoft.etk.math.FMath;
@@ -11,6 +10,8 @@ import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.util.Pair;
 import org.atriasoft.exml.model.XmlElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -19,6 +20,7 @@ import org.atriasoft.exml.model.XmlElement;
  */
 
 public class Base {
+	static final Logger LOGGER = LoggerFactory.getLogger(Base.class);
 	
 	public static float kappa90 = 0.5522847493f; //!< proportional lenght to the radius of a bezier handle for 90° arcs.
 	
@@ -30,7 +32,7 @@ public class Base {
 		}
 		posStart += base.length();
 		if (value.length() < posStart + 2) {
-			Log.error("Not enought spece in the String to have transform value for ' (' or '()' in '" + value + "'");
+			LOGGER.error("Not enought spece in the String to have transform value for ' (' or '()' in '" + value + "'");
 			return "";
 		}
 		if (value.charAt(posStart) == '(') {
@@ -39,19 +41,19 @@ public class Base {
 		} else if (value.charAt(posStart) == ' ' && value.charAt(posStart + 1) == '(') {
 			posStart += 2;
 		} else {
-			Log.error("Can not indexOf ' (' or '(' in '" + value.substring(posStart) + "' for '" + value + "'");
+			LOGGER.error("Can not indexOf ' (' or '(' in '" + value.substring(posStart) + "' for '" + value + "'");
 			return "";
 		}
 		if (value.length() < posStart + 1) {
-			Log.error("Not enought spece in the String to have transform value for ')' in '" + value + "'");
+			LOGGER.error("Not enought spece in the String to have transform value for ')' in '" + value + "'");
 			return "";
 		}
-		int posEnd = value.indexOf(')', posStart);
+		final int posEnd = value.indexOf(')', posStart);
 		if (posEnd == -1) {
-			Log.error("Missing element ')' in '" + value + "' for " + base);
+			LOGGER.error("Missing element ')' in '" + value + "' for " + base);
 			return "";
 		}
-		Log.verbose("indexOf : '" + value.substring(posStart, posEnd) + "' for " + base);
+		LOGGER.trace("indexOf : '" + value.substring(posStart, posEnd) + "' for " + base);
 		return value.substring(posStart, posEnd);
 	}
 	
@@ -83,10 +85,14 @@ public class Base {
 	 * @param level Level of the tree
 	 */
 	void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		Log.warning(spacingDist(level) + "DRAW esvg::Base ... ==> No drawing availlable");
+		LOGGER.warn(spacingDist(level) + "DRAW esvg::Base ... ==> No drawing availlable");
 	}
 	
-	public void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans) {
+	public void drawShapePoints(
+			final List<List<Vector2f>> out,
+			final int recurtionMax,
+			final float threshold,
+			final Matrix2x3f basicTrans) {
 		drawShapePoints(out, recurtionMax, threshold, basicTrans, 1);
 	}
 	
@@ -95,10 +101,15 @@ public class Base {
 	 * @param out where the lines are added
 	 * @param recurtionMax interpolation recurtion max
 	 * @param threshold threshold to stop recurtion
-	 * @param basicTrans Parant transformation of the environement   
+	 * @param basicTrans Parant transformation of the environement
 	 * @param level Level of the tree
 	 */
-	void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
+	void drawShapePoints(
+			final List<List<Vector2f>> out,
+			final int recurtionMax,
+			final float threshold,
+			final Matrix2x3f basicTrans,
+			final int level) {
 		
 	}
 	
@@ -117,22 +128,24 @@ public class Base {
 	 */
 	Pair<Color, String> parseColor(final String inputData) {
 		Pair<Color, String> localColor = new Pair<>(Color.WHITE, "");
-		if (inputData.length() > 4 && inputData.charAt(0) == 'u' && inputData.charAt(1) == 'r' && inputData.charAt(2) == 'l' && inputData.charAt(3) == '(') {
+		if (inputData.length() > 4 && inputData.charAt(0) == 'u' && inputData.charAt(1) == 'r'
+				&& inputData.charAt(2) == 'l' && inputData.charAt(3) == '(') {
 			if (inputData.charAt(4) == '#') {
-				String color = inputData.substring(5, inputData.length() - 1);
+				final String color = inputData.substring(5, inputData.length() - 1);
 				localColor = new Pair<>(Color.NONE, color);
 			} else {
-				Log.error("Problem in parsing the color : '" + inputData + "'  == > url(XXX) is not supported now ...");
+				LOGGER.error(
+						"Problem in parsing the color : '" + inputData + "'  == > url(XXX) is not supported now ...");
 			}
 		} else {
 			try {
 				localColor = new Pair<>(Color.valueOf256(inputData), "");
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		Log.verbose("Parse color : \"" + inputData + "\"  == > " + localColor.first + " " + localColor.second);
+		LOGGER.trace("Parse color : \"" + inputData + "\"  == > " + localColor.first + " " + localColor.second);
 		return localColor;
 	}
 	
@@ -142,31 +155,21 @@ public class Base {
 	 * @return standard number of pixels
 	 */
 	float parseLength(final String dataInput) {
-		Pair<Float, Distance> value = parseLength2(dataInput);
-		Log.verbose(" lenght : '" + value.first + "' => unit=" + value.second);
-		float fontsize = 20.0f;
-		switch (value.second) {
-			case POURCENT:
-				return value.first;// / 100.0 * this.paint.viewPort.x();
-			case ELEMENT:
-				return value.first * fontsize;
-			case EX:
-				return value.first / 2.0f * fontsize;
-			case PIXEL:
-				return value.first;
-			case POINT:
-				return value.first * 1.25f;
-			case PC:
-				return value.first * 15.0f;
-			case MILLIMETER:
-				return value.first * 3.543307f;
-			case CENTIMETER:
-				return value.first * 35.43307f;
-			case INCH:
-				return value.first * 90.0f;
-			default:
-				return 0.0f;
-		}
+		final Pair<Float, Distance> value = parseLength2(dataInput);
+		LOGGER.trace(" lenght : '" + value.first + "' => unit=" + value.second);
+		final float fontsize = 20.0f;
+		return switch (value.second) {
+			case POURCENT -> value.first; // / 100.0 * this.paint.viewPort.x();
+			case ELEMENT -> value.first * fontsize;
+			case EX -> value.first / 2.0f * fontsize;
+			case PIXEL -> value.first;
+			case POINT -> value.first * 1.25f;
+			case PC -> value.first * 15.0f;
+			case MILLIMETER -> value.first * 3.543307f;
+			case CENTIMETER -> value.first * 35.43307f;
+			case INCH -> value.first * 90.0f;
+			default -> 0.0f;
+		};
 	}
 	
 	Pair<Float, Distance> parseLength2(String config) {
@@ -235,7 +238,7 @@ public class Base {
 		} else {
 			if (content.length() != 0) {
 				this.paint.stroke = parseColor(content);
-				Log.error("Parse color : " + this.paint.stroke);
+				LOGGER.error("Parse color : " + this.paint.stroke);
 			}
 			content = element.getAttribute("stroke-width", "");
 			if (content.length() != 0) {
@@ -253,7 +256,7 @@ public class Base {
 				if (content.equals("none")) {
 					// OK, Nothing to do ...
 				} else {
-					Log.todo(" 'stroke-dasharray' not implemented ...");
+					LOGGER.info("TODO 'stroke-dasharray' not implemented ...");
 				}
 			}
 			content = element.getAttribute("stroke-linecap", "");
@@ -266,7 +269,7 @@ public class Base {
 					this.paint.lineCap = CapMode.SQUARE;
 				} else {
 					this.paint.lineCap = CapMode.BUTT;
-					Log.error("not know stroke-linecap value : '" + content + "', not in [butt,round,square]");
+					LOGGER.error("not know stroke-linecap value : '" + content + "', not in [butt,round,square]");
 				}
 			}
 			content = element.getAttribute("stroke-linejoin", "");
@@ -279,12 +282,12 @@ public class Base {
 					this.paint.lineJoin = JoinMode.BEVEL;
 				} else {
 					this.paint.lineJoin = JoinMode.MITER;
-					Log.error("not know stroke-linejoin value : '" + content + "', not in [miter,round,bevel]");
+					LOGGER.error("not know stroke-linejoin value : '" + content + "', not in [miter,round,bevel]");
 				}
 			}
 			content = element.getAttribute("stroke-miterlimit", "");
 			if (content.length() != 0) {
-				float tmp = parseLength(content);
+				final float tmp = parseLength(content);
 				this.paint.miterLimit = FMath.max(0.0f, tmp);
 			}
 		}
@@ -309,7 +312,7 @@ public class Base {
 				} else if (content.equals("evenodd")) {
 					this.paint.flagEvenOdd = true;
 				} else {
-					Log.error("not know fill-rule value : \"" + content + "\", not in [nonzero,evenodd]");
+					LOGGER.error("not know fill-rule value : \"" + content + "\", not in [nonzero,evenodd]");
 				}
 			}
 			// ---------------- opacity ----------------
@@ -329,51 +332,56 @@ public class Base {
 		if (inputString.length() == 0) {
 			return;
 		}
-		Log.verbose("indexOf transform : '" + inputString + "'");
+		LOGGER.trace("indexOf transform : '" + inputString + "'");
 		inputString = inputString.replace(',', ' ');
-		Log.verbose("indexOf transform : '" + inputString + "'");
+		LOGGER.trace("indexOf transform : '" + inputString + "'");
 		// need to indexOf elements in order ...
 		String data = Base.extractTransformData(inputString, "matrix");
 		if (data.length() != 0) {
-			double[] matrix = FMath.getTableDouble(data, " ", 6);
+			final double[] matrix = FMath.getTableDouble(data, " ", 6);
 			if (matrix != null) {
 				this.transformMatrix = new Matrix2x3f(matrix);
 				// indexOf a matrix : simply exit ...
 				return;
 			}
-			Log.error("Parsing matrix() with wrong data ... '" + data + "'");
+			LOGGER.error("Parsing matrix() with wrong data ... '" + data + "'");
 		}
 		data = Base.extractTransformData(inputString, "translate");
 		if (data.length() != 0) {
-			float[] elements = FMath.getTableFloat(data, " ", 2);
+			final float[] elements = FMath.getTableFloat(data, " ", 2);
 			if (elements != null) {
-				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[0], elements[1])));
-				Log.verbose("Translate : " + elements[0] + ", " + elements[1]);
+				this.transformMatrix = this.transformMatrix
+						.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[0], elements[1])));
+				LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
 			} else {
-				float elem = Float.parseFloat(data);
+				final float elem = Float.parseFloat(data);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(elem, 0)));
 			}
 		}
 		data = Base.extractTransformData(inputString, "scale");
 		if (data.length() != 0) {
-			float[] elements = FMath.getTableFloat(data, " ", 2);
+			final float[] elements = FMath.getTableFloat(data, " ", 2);
 			if (elements != null) {
-				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
-				Log.verbose("Translate : " + elements[0] + ", " + elements[1]);
+				this.transformMatrix = this.transformMatrix
+						.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
+				LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
 			} else {
-				float elem = Float.parseFloat(data);
+				final float elem = Float.parseFloat(data);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createScale(elem));
 			}
 		}
 		data = Base.extractTransformData(inputString, "rotate");
 		if (data.length() != 0) {
-			float[] elements = FMath.getTableFloat(data, " ", 3);
+			final float[] elements = FMath.getTableFloat(data, " ", 3);
 			if (elements != null) {
-				float angle = (float) Math.toRadians(elements[0]);
-				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(-elements[1], -elements[2])));
+				final float angle = (float) Math.toRadians(elements[0]);
+				this.transformMatrix = this.transformMatrix
+						.multiply(Matrix2x3f.createTranslate(new Vector2f(-elements[1], -elements[2])));
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createRotate(angle));
-				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[1], elements[2])));
-				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
+				this.transformMatrix = this.transformMatrix
+						.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[1], elements[2])));
+				this.transformMatrix = this.transformMatrix
+						.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
 			} else {
 				float elem = Float.parseFloat(data);
 				elem = (float) Math.toRadians(elem);
@@ -455,7 +463,7 @@ public class Base {
 	}
 	
 	protected String spacingDist(final int spacing) {
-		StringBuilder out = new StringBuilder();
+		final StringBuilder out = new StringBuilder();
 		for (int iii = 0; iii < spacing; iii++) {
 			out.append("   ");
 		}

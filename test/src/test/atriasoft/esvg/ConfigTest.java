@@ -1,36 +1,37 @@
 package test.atriasoft.esvg;
 
-import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.EsvgDocument;
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2i;
-
 import org.atriasoft.pngencoder.PngEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigTest {
+	static final Logger LOGGER = LoggerFactory.getLogger(ConfigTest.class);
 	public static final String BASE_PATH = "./testResult/";//"~/dev/workspace-game/atriasoft/esvg/";
 	public static final boolean VISUAL_DEBUG = true;
-	
+
 	public static void generateAnImage(final EsvgDocument doc, final Uri uri) {
-		Image data = doc.renderImageFloatRGBA(null, ConfigTest.VISUAL_DEBUG);
+		final Image data = doc.renderImageFloatRGBA(null, ConfigTest.VISUAL_DEBUG);
 		if (data == null) {
-			Log.critical("No data generated ...");
+			LOGGER.error("No data generated ...");
 		}
-		Log.warning("Save file in " + uri.getPath());
-		byte[] outElem = new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toBytes();
-		Log.warning("outsize = " + outElem.length);
+		LOGGER.warn("Save file in " + uri.getPath());
+		final byte[] outElem = new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toBytes();
+		LOGGER.warn("outsize = " + outElem.length);
 		new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toFile(uri.getPath());
 	}
-	
+
 	public static void generateAnImage(final Weight weight, final Uri uri) {
-		ImageFloatRGBA image = new ImageFloatRGBA(weight.getWidth() + 2, weight.getHeight() + 2);
+		final ImageFloatRGBA image = new ImageFloatRGBA(weight.getWidth() + 2, weight.getHeight() + 2);
 		for (int yyy = 0; yyy < weight.getHeight(); yyy++) {
 			for (int xxx = 0; xxx < weight.getWidth(); xxx++) {
-				float elem = weight.get(new Vector2i(xxx, yyy));
+				final float elem = weight.get(new Vector2i(xxx, yyy));
 				image.setColorFloat(xxx, yyy, 1.0f, 1.0f, 1.0f, elem);
 			}
 		}
@@ -42,11 +43,11 @@ public class ConfigTest {
 			image.setColor(xxx, 0, Color.ORANGE);
 			image.setColor(xxx, weight.getHeight() + 1, Color.ORANGE);
 		}
-		Log.warning("Save file in " + uri.getPath());
-		byte[] outElem = new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toBytes();
-		Log.warning("outsize = " + outElem.length);
+		LOGGER.warn("Save file in " + uri.getPath());
+		final byte[] outElem = new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toBytes();
+		LOGGER.warn("outsize = " + outElem.length);
 		new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toFile(uri.getPath());
 	}
-	
+
 	private ConfigTest() {}
 }

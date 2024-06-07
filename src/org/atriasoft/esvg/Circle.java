@@ -3,7 +3,6 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.esvg.render.Point;
@@ -14,6 +13,8 @@ import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.exml.model.XmlElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -22,55 +23,61 @@ import org.atriasoft.exml.model.XmlElement;
  */
 
 public class Circle extends Base {
+	static final Logger LOGGER = LoggerFactory.getLogger(Circle.class);
 	private Vector2f position; //!< Position of the Circle
 	private float radius; //!< Radius of the Circle
-	
+
 	public Circle(final PaintState parentPaintState) {
 		super(parentPaintState);
 	}
-	
+
 	public Circle(final Vector2f position, final float radius, final PaintState parentPaintState) {
 		super(parentPaintState);
 		this.position = position;
 		this.radius = radius;
 	}
-	
+
 	private PathModel createPath() {
-		PathModel out = new PathModel();
+		final PathModel out = new PathModel();
 		out.moveTo(false, this.position.addX(this.radius));
-		out.curveTo(false, this.position.add(this.radius, this.radius * Base.kappa90), this.position.add(this.radius * Base.kappa90, this.radius), this.position.addY(this.radius));
-		out.curveTo(false, this.position.add(-this.radius * Base.kappa90, this.radius), this.position.add(-this.radius, this.radius * Base.kappa90), this.position.lessX(this.radius));
-		out.curveTo(false, this.position.add(-this.radius, -this.radius * Base.kappa90), this.position.add(-this.radius * Base.kappa90, -this.radius), this.position.lessY(this.radius));
-		out.curveTo(false, this.position.add(this.radius * Base.kappa90, -this.radius), this.position.add(this.radius, -this.radius * Base.kappa90), this.position.addX(this.radius));
+		out.curveTo(false, this.position.add(this.radius, this.radius * Base.kappa90),
+				this.position.add(this.radius * Base.kappa90, this.radius), this.position.addY(this.radius));
+		out.curveTo(false, this.position.add(-this.radius * Base.kappa90, this.radius),
+				this.position.add(-this.radius, this.radius * Base.kappa90), this.position.lessX(this.radius));
+		out.curveTo(false, this.position.add(-this.radius, -this.radius * Base.kappa90),
+				this.position.add(-this.radius * Base.kappa90, -this.radius), this.position.lessY(this.radius));
+		out.curveTo(false, this.position.add(this.radius * Base.kappa90, -this.radius),
+				this.position.add(this.radius, -this.radius * Base.kappa90), this.position.addX(this.radius));
 		out.close();
 		return out;
 	}
-	
+
 	@Override
 	public void display(final int spacing) {
-		Log.debug(spacingDist(spacing) + "Circle " + this.position + " radius=" + this.radius);
+		LOGGER.debug(spacingDist(spacing) + "Circle " + this.position + " radius=" + this.radius);
 	}
-	
+
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		Log.verbose(spacingDist(level) + "DRAW esvg::Circle");
+		LOGGER.trace(spacingDist(level) + "DRAW esvg::Circle");
 		if (this.radius <= 0.0f) {
-			Log.verbose(spacingDist(level + 1) + "Too small radius" + this.radius);
+			LOGGER.trace(spacingDist(level + 1) + "Too small radius" + this.radius);
 			return;
 		}
-		PathModel listElement = createPath();
-		
+		final PathModel listElement = createPath();
+
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
-		
+
 		PointList listPoints = new PointList();
-		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(), myRenderer.getInterpolationThreshold());
+		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(),
+				myRenderer.getInterpolationThreshold());
 		//listPoints.applyMatrix(mtx);
-		SegmentList listSegmentFill = new SegmentList();
-		SegmentList listSegmentStroke = new SegmentList();
-		Weight tmpFill = new Weight();
-		Weight tmpStroke = new Weight();
-		DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
+		final SegmentList listSegmentFill = new SegmentList();
+		final SegmentList listSegmentStroke = new SegmentList();
+		final Weight tmpFill = new Weight();
+		final Weight tmpStroke = new Weight();
+		final DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
 		DynamicColor colorStroke = null;
 		if (this.paint.strokeWidth > 0.0f) {
 			colorStroke = DynamicColor.createColor(this.paint.stroke, mtx);
@@ -85,7 +92,8 @@ public class Circle extends Base {
 		}
 		// check if we need to display stroke:
 		if (colorStroke != null) {
-			listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap, this.paint.lineJoin, this.paint.miterLimit);
+			listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap,
+					this.paint.lineJoin, this.paint.miterLimit);
 			colorStroke.setViewPort(listSegmentStroke.getViewPort());
 			listSegmentStroke.applyMatrix(mtx);
 			// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
@@ -96,25 +104,30 @@ public class Circle extends Base {
 		//myRenderer.addDebugSegment(listSegmentFill);
 		//myRenderer.addDebugSegment(listSegmentStroke);
 	}
-	
+
 	@Override
-	public void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
-		Log.verbose(spacingDist(level) + "DRAW Shape esvg::Circle");
-		PathModel listElement = createPath();
+	public void drawShapePoints(
+			final List<List<Vector2f>> out,
+			final int recurtionMax,
+			final float threshold,
+			final Matrix2x3f basicTrans,
+			final int level) {
+		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Circle");
+		final PathModel listElement = createPath();
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
 		PointList listPoints = new PointList();
 		listPoints = listElement.generateListPoints(level, recurtionMax, threshold);
 		listPoints.applyMatrix(mtx);
-		for (List<Point> it : listPoints.data) {
-			List<Vector2f> listPoint = new ArrayList<>();
-			for (Point itDot : it) {
+		for (final List<Point> it : listPoints.data) {
+			final List<Vector2f> listPoint = new ArrayList<>();
+			for (final Point itDot : it) {
 				listPoint.add(itDot.pos);
 			}
 			out.add(listPoint);
 		}
 	}
-	
+
 	@Override
 	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		this.radius = 0.0f;
@@ -124,10 +137,10 @@ public class Circle extends Base {
 		}
 		parseTransform(element);
 		parsePaintAttr(element);
-		
+
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
-		
+
 		String content = element.getAttribute("cx", "");
 		if (content.length() != 0) {
 			this.position = this.position.withX(parseLength(content));
@@ -138,13 +151,13 @@ public class Circle extends Base {
 		}
 		content = element.getAttribute("r", "");
 		if (content.length() == 0) {
-			Log.error("Circle \"r\" is not present");
+			LOGGER.error("Circle \"r\" is not present");
 			return false;
 		}
 		this.radius = parseLength(content);
 		if (0 > this.radius) {
 			this.radius = 0;
-			Log.error("Circle \"r\" is negative");
+			LOGGER.error("Circle \"r\" is negative");
 			return false;
 		}
 		sizeMax.value = new Vector2f(this.position.x() + this.radius, this.position.y() + this.radius);

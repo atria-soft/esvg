@@ -8,7 +8,6 @@ import java.util.Map;
 import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.font.Kerning;
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.esvg.render.RenderingConfig;
 import org.atriasoft.esvg.render.Weight;
@@ -21,6 +20,8 @@ import org.atriasoft.exml.Exml;
 import org.atriasoft.exml.exception.ExmlException;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // https://www.w3.org/TR/SVGTiny12/fonts.html
 
@@ -52,11 +53,11 @@ import org.atriasoft.exml.model.XmlNode;
                            <------------------------> : advance.x
                                 <------------> : sizeTexture.x
                            <---> : bearing.x
-                       
 
-                                                                          
-                                                                          
-                                                                          
+
+
+
+
                                                          _
                               *----------------------*   ^ ==> calculateFontRealHeight(fontSize);
                               |                      |   |   ^ ==> getAscent(fontSize);
@@ -72,12 +73,13 @@ import org.atriasoft.exml.model.XmlNode;
                               |                      |   |                |==> getDescent(fontSize);
                               |                      |   |                |
                               *----------------------*   |                |
-                                                                          
-                                        
+
+
 */
 
 public class EsvgFont {
-	
+	static final Logger LOGGER = LoggerFactory.getLogger(EsvgFont.class);
+
 	/**
 	 * Load the file that might contain the svg
 	 * @param uri File of the svg
@@ -99,24 +101,25 @@ public class EsvgFont {
 			return null;
 		}
 		if (!(doc instanceof final XmlElement root)) {
-			Log.error("can not load the SVG font ==> wrong root node");
+			LOGGER.error("can not load the SVG font ==> wrong root node");
 			return null;
 		}
 		if (!root.existNode("svg") || !(root.getNodeNoExcept("svg") instanceof final XmlElement svgNode)) {
-			Log.error("can not load Node <svg> in svg document");
+			LOGGER.error("can not load Node <svg> in svg document");
 			return null;
 		}
 		if (!svgNode.existNode("defs") || !(svgNode.getNodeNoExcept("defs") instanceof final XmlElement defsNode)) {
-			Log.error("can not load Node <defs> in svg document");
+			LOGGER.error("can not load Node <defs> in svg document");
 			return null;
 		}
-		if (!defsNode.existNode("font") || !(defsNode.getNodeNoExcept("font") instanceof final XmlElement fontElement)) {
-			Log.error("can not load Node <font> in svg document");
+		if (!defsNode.existNode("font")
+				|| !(defsNode.getNodeNoExcept("font") instanceof final XmlElement fontElement)) {
+			LOGGER.error("can not load Node <font> in svg document");
 			return null;
 		}
-		
+
 		font.horizAdvX = Integer.parseInt(fontElement.getAttribute("horiz-adv-x", "100"));
-		
+
 		int nbGlyph = 0;
 		for (final XmlNode values : fontElement.getNodes()) {
 			if (values.getValue().equals("font-face")) {
@@ -157,7 +160,7 @@ public class EsvgFont {
 		for (final XmlNode values : fontElement.getNodes()) {
 			if (values.getValue().equals("glyph")) {
 				nbGlyph++;
-				//Log.info("find flyph: " + nbGlyph);
+				//LOGGER.info("find flyph: " + nbGlyph);
 				final Glyph tmp = Glyph.valueOf(values.toElement(), font);
 				if (tmp != null) {
 					font.glyphs.put(tmp.getUnicodeValue(), tmp);
@@ -169,7 +172,7 @@ public class EsvgFont {
 			} else if (values.getValue().equals("font-face")) {
 				// already done ...
 			} else {
-				Log.warning("unsupported node name :" + values.getValue());
+				LOGGER.warn("unsupported node name :" + values.getValue());
 			}
 		}
 		for (final XmlNode values : fontElement.getNodes()) {
@@ -188,18 +191,18 @@ public class EsvgFont {
 					final String[] g2Splited = g2.split(",");
 					// create the list of kerning of the next elements
 					final List<Kerning> elementsKerning = new ArrayList<>();
-					for (int iii = 0; iii < g2Splited.length; iii++) {
+					for (final String element : g2Splited) {
 						for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-							if (entry.getValue().getName().equals(g2Splited[iii])) {
+							if (entry.getValue().getName().equals(element)) {
 								elementsKerning.add(new Kerning(offset, entry.getKey()));
 								break;
 							}
 						}
 					}
 					// add it on the
-					for (int iii = 0; iii < g1Splited.length; iii++) {
+					for (final String element : g1Splited) {
 						for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-							if (entry.getValue().getName().equals(g1Splited[iii])) {
+							if (entry.getValue().getName().equals(element)) {
 								entry.getValue().addKerning(elementsKerning);
 								font.hasKerning = true;
 								break;
@@ -211,7 +214,7 @@ public class EsvgFont {
 		}
 		return font;
 	}
-	
+
 	// The maximum accented height of the font within the font coordinate system.
 	private int ascent = 800; // this is the height of the font (on top...)
 	private int[] bbox = { -879, -545, 1767, 934 };
@@ -235,7 +238,7 @@ public class EsvgFont {
 	private int unitsPerEm = 1000; // full size of the font
 	// The height of lowercase glyphs in the font within the font coordinate system.
 	private int xHeight = 450;
-	
+
 	/**
 	 * Get the font real size use (height) for all the characters.
 	 * @param fontSize size of the font the user require
@@ -243,33 +246,33 @@ public class EsvgFont {
 	 */
 	public int calculateFontRealHeight(final int fontSize) {
 		return fontSize * this.unitsPerEm / this.capHeight;
-		
+
 	}
-	
+
 	public float calculateFontSizeWithHeight(final float fontHeight) {
 		return fontHeight * this.capHeight / this.unitsPerEm;
 	}
-	
+
 	public Vector2f calculateRenderOffset(final int fontSize) {
 		final int realSize = calculateFontRealHeight(fontSize);
 		final float deltaY = realSize * this.ascent / this.unitsPerEm;
 		return new Vector2f(0, deltaY);
 	}
-	
+
 	public float calculateSclaleFactor(final int fontSize) {
 		final int realSize = calculateFontRealHeight(fontSize);
 		return (float) realSize / (float) this.unitsPerEm;
 	}
-	
+
 	public Vector2i calculateTextSize(final int fontSize, final String data) {
 		final boolean withKerning = true;
 		final int widthOut = calculateWidth(data, fontSize, withKerning);
-		
+
 		final int realSize = calculateFontRealHeight(fontSize);
 		return new Vector2i(widthOut, realSize);
 		/*
 		float scale = (float) realSize / (float) this.unitsPerEm;
-				
+
 		int offsetWriting = 0;
 		int lastValue = 0;
 		for (char uVal : data.toCharArray()) {
@@ -282,7 +285,7 @@ public class EsvgFont {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
 				lastValue = uVal;
 			}
-			
+
 			float advenceXLocal = glyph.getHorizAdvX() * scale;
 			// No generation of output ...
 			offsetWriting += advenceXLocal;
@@ -290,7 +293,7 @@ public class EsvgFont {
 		return new Vector2i(offsetWriting, realSize);
 		*/
 	}
-	
+
 	public int calculateWidth(final int uVal, final int fontSize) {
 		final Glyph glyph = getGlyph(uVal);
 		if (glyph == null) {
@@ -300,15 +303,15 @@ public class EsvgFont {
 		final float scale = (float) realSize / (float) this.unitsPerEm;
 		return (int) (glyph.getHorizAdvX() * scale);
 	}
-	
+
 	public int calculateWidth(final String uVal, final int fontSize) {
 		return calculateWidth(uVal, fontSize, true);
 	}
-	
+
 	public int calculateWidth(final String data, final int fontSize, final boolean withKerning) {
 		final int realSize = calculateFontRealHeight(fontSize);
 		final float scale = (float) realSize / (float) this.unitsPerEm;
-		//Log.error("scale =" + scale+ " font size = " + fontSize + "  realSize=" + realSize);
+		//LOGGER.error("scale =" + scale+ " font size = " + fontSize + "  realSize=" + realSize);
 		float offsetWriting = 0;
 		int lastValue = 0;
 		for (final char uVal : data.toCharArray()) {
@@ -321,14 +324,14 @@ public class EsvgFont {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
 				lastValue = uVal;
 			}
-			
+
 			final float advenceXLocal = glyph.getHorizAdvX() * scale;
 			offsetWriting += advenceXLocal;
-			//Log.error("offset X =" + offsetWriting + " + " + advenceXLocal + "    " + uVal);
+			//LOGGER.error("offset X =" + offsetWriting + " + " + advenceXLocal + "    " + uVal);
 		}
 		return (int) offsetWriting;
 	}
-	
+
 	/**
 	 * Get the rendering size of the specific glyph (size rendered in the Weight class).
 	 * @param unicodeValue Unicode value to render
@@ -338,11 +341,11 @@ public class EsvgFont {
 	public Vector2i calculateWidthRendering(final Integer unicodeValue, final int fontSize) {
 		return new Vector2i(calculateWidth(unicodeValue, fontSize), calculateFontRealHeight(fontSize));
 	}
-	
+
 	public int getDescent() {
 		return this.descent;
 	}
-	
+
 	public Glyph getGlyph(final int glyphIndex) {
 		final Glyph out = this.glyphs.get(glyphIndex);
 		if (out == null) {
@@ -350,7 +353,7 @@ public class EsvgFont {
 		}
 		return out;
 	}
-	
+
 	public Glyph getGlyphNullIfMissing(final int glyphIndex) {
 		final Glyph out = this.glyphs.get(glyphIndex);
 		if (out == null) {
@@ -358,11 +361,11 @@ public class EsvgFont {
 		}
 		return out;
 	}
-	
+
 	public int getHorizAdvX() {
 		return this.horizAdvX;
 	}
-	
+
 	/**
 	 * Get the number of available glyph in the Font
 	 * @return the glyph count.
@@ -370,11 +373,11 @@ public class EsvgFont {
 	public int getNumGlyphs() {
 		return this.glyphs.size();
 	}
-	
+
 	public float getUnitsPerEm() {
 		return this.unitsPerEm;
 	}
-	
+
 	/**
 	 * Check if the font have some kerning data
 	 * @return true if kerning is availlable.
@@ -382,7 +385,7 @@ public class EsvgFont {
 	public boolean hasKerning() {
 		return this.hasKerning;
 	}
-	
+
 	public Weight render(final int uVal, final int fontSize) {
 		final int realSize = calculateFontRealHeight(fontSize);
 		final Glyph glyph = getGlyph(uVal);
@@ -391,7 +394,8 @@ public class EsvgFont {
 		}
 		final float scale = (float) realSize / (float) this.unitsPerEm;
 		final RenderingConfig config = new RenderingConfig(10, 0.25f, 8);
-		final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent)).multiply(Matrix2x3f.createScale(scale));
+		final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent))
+				.multiply(Matrix2x3f.createScale(scale));
 		final PathModel model = glyph.getModel();
 		if (model == null) {
 			return null;
@@ -399,19 +403,19 @@ public class EsvgFont {
 		final Weight data = glyph.getModel().drawFill(calculateWidthRendering(uVal, fontSize), transform, 8, config);
 		return data;
 	}
-	
+
 	public Weight render(final String uVal, final int fontSize) {
 		return render(uVal, fontSize, true);
 	}
-	
+
 	public Weight render(final String data, final int fontSize, final boolean withKerning) {
 		final int widthOut = calculateWidth(data, fontSize, withKerning);
-		
+
 		final int realSize = calculateFontRealHeight(fontSize);
 		final float scale = (float) realSize / (float) this.unitsPerEm;
-		
+
 		final Weight weight = new Weight(new Vector2i(widthOut, realSize));
-		
+
 		float offsetWriting = 0;
 		int lastValue = 0;
 		for (final char uVal : data.toCharArray()) {
@@ -422,21 +426,23 @@ public class EsvgFont {
 			}
 			if (withKerning) {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
-				Log.info("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
+				LOGGER.info("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
 				lastValue = uVal;
 			}
-			
+
 			final float advenceXLocal = glyph.getHorizAdvX() * scale;
-			
+
 			final RenderingConfig config = new RenderingConfig(10, 0.25f, 8);
-			final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent)).multiply(Matrix2x3f.createScale(scale));
+			final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent))
+					.multiply(Matrix2x3f.createScale(scale));
 			final PathModel model = glyph.getModel();
 			if (model != null) {
-				final Weight redered = model.drawFill(calculateWidthRendering((int) uVal, fontSize), transform, 8, config);
+				final Weight redered = model.drawFill(calculateWidthRendering((int) uVal, fontSize), transform, 8,
+						config);
 				weight.fusion(redered, (int) offsetWriting, 0);
 			}
 			offsetWriting += advenceXLocal;
-			
+
 		}
 		return weight;
 	}

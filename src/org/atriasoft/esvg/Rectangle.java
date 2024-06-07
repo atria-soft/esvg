@@ -1,20 +1,20 @@
 package org.atriasoft.esvg;
 
-import org.atriasoft.etk.math.Matrix2x3f;
-import org.atriasoft.exml.model.XmlElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.esvg.render.DynamicColor;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.esvg.render.Point;
 import org.atriasoft.esvg.render.PointList;
 import org.atriasoft.esvg.render.SegmentList;
 import org.atriasoft.esvg.render.Weight;
+import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
+import org.atriasoft.exml.model.XmlElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -22,29 +22,31 @@ import org.atriasoft.etk.util.Dynamic;
  * @license MPL v2.0 (see license file)
  */
 public class Rectangle extends Base {
+	static final Logger LOGGER = LoggerFactory.getLogger(Rectangle.class);
 	private Vector2f position = Vector2f.ZERO; //!< position of the rectangle
 	private Vector2f roundedCorner = Vector2f.ZERO; //!< property of the rounded corner
 	private Vector2f size = Vector2f.ZERO; //!< size of the rectangle
-	
+
 	public Rectangle(final PaintState parentPaintState) {
 		super(parentPaintState);
 	}
-	
+
 	public Rectangle(final Vector2f position, final Vector2f size, final PaintState parentPaintState) {
 		super(parentPaintState);
 		this.position = position;
 		this.size = size;
 	}
-	
-	public Rectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner, final PaintState parentPaintState) {
+
+	public Rectangle(final Vector2f position, final Vector2f size, final Vector2f roundedCorner,
+			final PaintState parentPaintState) {
 		super(parentPaintState);
 		this.position = position;
 		this.size = size;
 		this.roundedCorner = roundedCorner;
 	}
-	
+
 	private PathModel createPath() {
-		PathModel out = new PathModel();
+		final PathModel out = new PathModel();
 		out.clear();
 		if (this.roundedCorner.x() == 0.0f || this.roundedCorner.y() == 0.0f) {
 			out.moveTo(false, this.position);
@@ -55,43 +57,50 @@ public class Rectangle extends Base {
 			// Rounded rectangle
 			out.moveTo(false, this.position.add(this.roundedCorner.x(), 0.0f));
 			out.lineToH(true, this.size.x() - this.roundedCorner.x() * 2.0f);
-			out.curveTo(true, new Vector2f(this.roundedCorner.x() * Base.kappa90, 0.0f), new Vector2f(this.roundedCorner.x(), this.roundedCorner.y() * (1.0f - Base.kappa90)),
+			out.curveTo(true, new Vector2f(this.roundedCorner.x() * Base.kappa90, 0.0f),
+					new Vector2f(this.roundedCorner.x(), this.roundedCorner.y() * (1.0f - Base.kappa90)),
 					new Vector2f(this.roundedCorner.x(), this.roundedCorner.y()));
 			out.lineToV(true, this.size.y() - this.roundedCorner.y() * 2.0f);
-			out.curveTo(true, new Vector2f(0.0f, this.roundedCorner.y() * Base.kappa90), new Vector2f(-this.roundedCorner.x() * (1.0f - Base.kappa90), this.roundedCorner.y()),
+			out.curveTo(true, new Vector2f(0.0f, this.roundedCorner.y() * Base.kappa90),
+					new Vector2f(-this.roundedCorner.x() * (1.0f - Base.kappa90), this.roundedCorner.y()),
 					new Vector2f(-this.roundedCorner.x(), this.roundedCorner.y()));
 			out.lineToH(true, -(this.size.x() - this.roundedCorner.x() * 2.0f));
-			out.curveTo(true, new Vector2f(-this.roundedCorner.x() * Base.kappa90, 0.0f), new Vector2f(-this.roundedCorner.x(), -this.roundedCorner.y() * (1.0f - Base.kappa90)),
+			out.curveTo(true, new Vector2f(-this.roundedCorner.x() * Base.kappa90, 0.0f),
+					new Vector2f(-this.roundedCorner.x(), -this.roundedCorner.y() * (1.0f - Base.kappa90)),
 					new Vector2f(-this.roundedCorner.x(), -this.roundedCorner.y()));
 			out.lineToV(true, -(this.size.y() - this.roundedCorner.y() * 2.0f));
-			out.curveTo(true, new Vector2f(0.0f, -this.roundedCorner.y() * Base.kappa90), new Vector2f(this.roundedCorner.x() * (1.0f - Base.kappa90), -this.roundedCorner.y()),
+			out.curveTo(true, new Vector2f(0.0f, -this.roundedCorner.y() * Base.kappa90),
+					new Vector2f(this.roundedCorner.x() * (1.0f - Base.kappa90), -this.roundedCorner.y()),
 					new Vector2f(this.roundedCorner.x(), -this.roundedCorner.y()));
 		}
 		out.close();
 		return out;
 	}
-	
+
 	@Override
 	public void display(final int spacing) {
-		Log.debug(spacingDist(spacing) + "Rectangle : pos=" + this.position + " size=" + this.size + " corner=" + this.roundedCorner);
+		LOGGER.debug(spacingDist(spacing) + "Rectangle : pos=" + this.position + " size=" + this.size + " corner="
+				+ this.roundedCorner);
 	}
-	
+
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		Log.verbose(spacingDist(level) + "DRAW esvg::Rectangle: fill=" + this.paint.fill.first + "/" + this.paint.fill.second + " stroke=" + this.paint.stroke.first + "/" + this.paint.stroke.second);
-		PathModel listElement = createPath();
-		
+		LOGGER.trace(spacingDist(level) + "DRAW esvg::Rectangle: fill=" + this.paint.fill.first + "/"
+				+ this.paint.fill.second + " stroke=" + this.paint.stroke.first + "/" + this.paint.stroke.second);
+		final PathModel listElement = createPath();
+
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
 		listElement.display(2);
 		PointList listPoints = new PointList();
-		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(), myRenderer.getInterpolationThreshold());
+		listPoints = listElement.generateListPoints(level, myRenderer.getInterpolationRecurtionMax(),
+				myRenderer.getInterpolationThreshold());
 		//listPoints.applyMatrix(mtx);
-		SegmentList listSegmentFill = new SegmentList();
-		SegmentList listSegmentStroke = new SegmentList();
-		Weight tmpFill = new Weight();
-		Weight tmpStroke = new Weight();
-		DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
+		final SegmentList listSegmentFill = new SegmentList();
+		final SegmentList listSegmentStroke = new SegmentList();
+		final Weight tmpFill = new Weight();
+		final Weight tmpStroke = new Weight();
+		final DynamicColor colorFill = DynamicColor.createColor(this.paint.fill, mtx);
 		DynamicColor colorStroke = null;
 		if (this.paint.strokeWidth > 0.0f) {
 			colorStroke = DynamicColor.createColor(this.paint.stroke, mtx);
@@ -106,7 +115,8 @@ public class Rectangle extends Base {
 		}
 		// check if we need to display stroke:
 		if (colorStroke != null) {
-			listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap, this.paint.lineJoin, this.paint.miterLimit);
+			listSegmentStroke.createSegmentListStroke(listPoints, this.paint.strokeWidth, this.paint.lineCap,
+					this.paint.lineJoin, this.paint.miterLimit);
 			colorStroke.setViewPort(listSegmentStroke.getViewPort());
 			listSegmentStroke.applyMatrix(mtx);
 			// now, traverse the scanlines and find the intersections on each scanline, use non-zero rule
@@ -116,27 +126,32 @@ public class Rectangle extends Base {
 		myRenderer.print(tmpFill, colorFill, tmpStroke, colorStroke, this.paint.opacity);
 		//myRenderer.addDebugSegment(listSegmentFill);
 		//myRenderer.addDebugSegment(listSegmentStroke)
-		
+
 	}
-	
+
 	@Override
-	public void drawShapePoints(final List<List<Vector2f>> out, final int recurtionMax, final float threshold, final Matrix2x3f basicTrans, final int level) {
-		Log.verbose(spacingDist(level) + "DRAW Shape esvg::Rectangle");
-		PathModel listElement = createPath();
+	public void drawShapePoints(
+			final List<List<Vector2f>> out,
+			final int recurtionMax,
+			final float threshold,
+			final Matrix2x3f basicTrans,
+			final int level) {
+		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Rectangle");
+		final PathModel listElement = createPath();
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
 		PointList listPoints;
 		listPoints = listElement.generateListPoints(level, recurtionMax, threshold);
 		listPoints.applyMatrix(mtx);
-		for (List<Point> it : listPoints.data) {
-			List<Vector2f> listPoint = new ArrayList<>();
-			for (Point itDot : it) {
+		for (final List<Point> it : listPoints.data) {
+			final List<Vector2f> listPoint = new ArrayList<>();
+			for (final Point itDot : it) {
 				listPoint.add(itDot.pos);
 			}
 			out.add(listPoint);
 		}
 	}
-	
+
 	@Override
 	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		if (element == null) {
@@ -145,16 +160,16 @@ public class Rectangle extends Base {
 		this.position = Vector2f.ZERO;
 		this.size = Vector2f.ZERO;
 		this.roundedCorner = Vector2f.ZERO;
-		
+
 		parseTransform(element);
 		parsePaintAttr(element);
-		
+
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
-		
+
 		this.position = parseXmlPosition(element);
 		this.size = parseXmlSize(element);
-		
+
 		String content = element.getAttribute("rx", "");
 		if (content.length() != 0) {
 			this.roundedCorner = this.roundedCorner.withX(parseLength(content));
@@ -163,7 +178,8 @@ public class Rectangle extends Base {
 		if (content.length() != 0) {
 			this.roundedCorner = this.roundedCorner.withY(parseLength(content));
 		}
-		sizeMax.value = new Vector2f(this.position.x() + this.size.x() + this.paint.strokeWidth, this.position.y() + this.size.y() + this.paint.strokeWidth);
+		sizeMax.value = new Vector2f(this.position.x() + this.size.x() + this.paint.strokeWidth,
+				this.position.y() + this.size.y() + this.paint.strokeWidth);
 		return true;
 	}
 }

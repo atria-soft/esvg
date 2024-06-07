@@ -3,7 +3,6 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.esvg.internal.Log;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Dimension2f;
 import org.atriasoft.etk.Distance;
@@ -14,6 +13,8 @@ import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.util.Pair;
 import org.atriasoft.exml.model.XmlElement;
 import org.atriasoft.exml.model.XmlNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -22,63 +23,64 @@ import org.atriasoft.exml.model.XmlNode;
  */
 
 public class LinearGradient extends Base {
+	static final Logger LOGGER = LoggerFactory.getLogger(LinearGradient.class);
 	private final List<Pair<Float, Color>> data = new ArrayList<>(); //!< gradient position x1 y1
 	private String href = ""; //!< gradient position x2 y2
 	private Dimension2f pos1 = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT);
 	private Dimension2f pos2 = new Dimension2f(new Vector2f(50, 50), Distance.POURCENT);
-	
+
 	public SpreadMethod spread = SpreadMethod.PAD; //!< in case of using a single gradient in multiple gradient, the gradient is store in an other element...
-	
+
 	public GradientUnits unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX; //!< incompatible with href
-	
+
 	public LinearGradient(final PaintState parentPaintState) {
 		super(parentPaintState);
 	}
-	
+
 	@Override
 	public void display(final int spacing) {
-		
-		Log.debug(spacingDist(spacing) + "LinearGradient " + this.pos1 + " to " + this.pos2);
-		for (Pair<Float, Color> it : this.data) {
-			Log.debug(spacingDist(spacing + 1) + "STOP: offset=" + it.first + " color=" + it.second);
+
+		LOGGER.debug(spacingDist(spacing) + "LinearGradient " + this.pos1 + " to " + this.pos2);
+		for (final Pair<Float, Color> it : this.data) {
+			LOGGER.debug(spacingDist(spacing + 1) + "STOP: offset=" + it.first + " color=" + it.second);
 		}
 	}
-	
+
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		Log.verbose(spacingDist(level) + "DRAW esvg::LinearGradient");
+		LOGGER.trace(spacingDist(level) + "DRAW esvg::LinearGradient");
 	}
-	
+
 	public List<Pair<Float, Color>> getColors(final EsvgDocument document) {
 		if (this.href.isEmpty()) {
 			return this.data;
 		}
 		if (document == null) {
-			Log.error("Get null input for document");
+			LOGGER.error("Get null input for document");
 			return this.data;
 		}
-		Base base = document.getReference(this.href);
+		final Base base = document.getReference(this.href);
 		if (base == null) {
-			Log.error("Can not get base : '" + this.href + "'");
+			LOGGER.error("Can not get base : '" + this.href + "'");
 			return this.data;
 		}
-		if (base instanceof RadialGradient gradientR) {
+		if (base instanceof final RadialGradient gradientR) {
 			return gradientR.getColors(document);
 		}
-		if (base instanceof LinearGradient gradientL) {
+		if (base instanceof final LinearGradient gradientL) {
 			return gradientL.getColors(document);
 		}
 		return this.data;
 	}
-	
+
 	public Dimension2f getPosition1() {
 		return this.pos1;
 	}
-	
+
 	public Dimension2f getPosition2() {
 		return this.pos2;
 	}
-	
+
 	@Override
 	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		{
@@ -87,16 +89,16 @@ public class LinearGradient extends Base {
 			if (element == null) {
 				return false;
 			}
-			
+
 			// ---------------- get unique ID ----------------
 			this.id = element.getAttribute("id", "");
-			
+
 			//parseTransform(element);
 			//parsePaintAttr(element);
-			
+
 			// add the property of the parrent modifications ...
 			this.transformMatrix = this.transformMatrix.multiply(parentTrans);
-			
+
 			String contentX = element.getAttribute("x1", "");
 			String contentY = element.getAttribute("y1", "");
 			if (!contentX.isEmpty() && !contentY.isEmpty()) {
@@ -113,7 +115,8 @@ public class LinearGradient extends Base {
 			} else {
 				this.unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 				if (contentX.length() != 0 && contentX != "objectBoundingBox") {
-					Log.error("Parsing error of 'gradientUnits' ==> not suported value: '" + contentX + "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
+					LOGGER.error("Parsing error of 'gradientUnits' ==> not suported value: '" + contentX
+							+ "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
 				}
 			}
 			contentX = element.getAttribute("spreadMethod", "");
@@ -124,7 +127,8 @@ public class LinearGradient extends Base {
 			} else {
 				this.spread = SpreadMethod.PAD;
 				if (contentX.length() != 0 && !contentX.equals("pad")) {
-					Log.error("Parsing error of 'spreadMethod' ==> not suported value: '" + contentX + "' not in : {reflect/repeate/pad} use pad");
+					LOGGER.error("Parsing error of 'spreadMethod' ==> not suported value: '" + contentX
+							+ "' not in : {reflect/repeate/pad} use pad");
 				}
 			}
 			// note: xlink:href is incompatible with subNode "stop"
@@ -133,19 +137,20 @@ public class LinearGradient extends Base {
 				this.href = this.href.substring(1);
 			}
 			// parse all sub node :
-			for (XmlNode it : element.getNodes()) {
-				if (it instanceof XmlElement child) {
+			for (final XmlNode it : element.getNodes()) {
+				if (it instanceof final XmlElement child) {
 					if (child.getValue().equals("stop")) {
 						float offset = 100;
 						Color stopColor = Color.NONE;
 						String content = child.getAttribute("offset", "");
 						if (content.length() != 0) {
-							Pair<Float, Distance> tmp = parseLength2(content);
+							final Pair<Float, Distance> tmp = parseLength2(content);
 							if (tmp.second == Distance.PIXEL) {
 								// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
 								offset = tmp.first * 100.0f;
 							} else if (tmp.second != Distance.POURCENT) {
-								Log.error("offset : " + content + " res=" + tmp.first + "," + tmp.second + " Not support other than pourcent %");
+								LOGGER.error("offset : " + content + " res=" + tmp.first + "," + tmp.second
+										+ " Not support other than pourcent %");
 							} else {
 								offset = tmp.first;
 							}
@@ -153,29 +158,30 @@ public class LinearGradient extends Base {
 						content = child.getAttribute("stop-color", "");
 						if (content.length() != 0) {
 							stopColor = parseColor(content).first;
-							Log.verbose(" color : '" + content + "' == > " + stopColor);
+							LOGGER.trace(" color : '" + content + "' == > " + stopColor);
 						}
 						content = child.getAttribute("stop-opacity", "");
 						if (content.length() != 0) {
 							float opacity = parseLength(content);
 							opacity = FMath.avg(0.0f, opacity, 1.0f);
 							stopColor = stopColor.withA(opacity);
-							Log.verbose(" opacity : '" + content + "'  == > " + stopColor);
+							LOGGER.trace(" opacity : '" + content + "'  == > " + stopColor);
 						}
 						this.data.add(new Pair<>(offset, stopColor));
 					} else {
-						Log.error(" node not suported : '" + child.getValue() + "' must be [stop]");
+						LOGGER.error(" node not suported : '" + child.getValue() + "' must be [stop]");
 					}
 				}
 			}
 			if (this.data.size() != 0) {
 				if (!this.href.isEmpty()) {
-					Log.error(" node can not have an xlink:href element with sub node named: stop ==> removing href");
+					LOGGER.error(
+							" node can not have an xlink:href element with sub node named: stop ==> removing href");
 					this.href = "";
 				}
 			}
 			return true;
 		}
-		
+
 	}
 }

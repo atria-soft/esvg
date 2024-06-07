@@ -38,7 +38,7 @@ def configure(target, my_module):
 	    'src/org/atriasoft/esvg/Base.java',
 	    'src/org/atriasoft/esvg/Text.java',
 	    'src/org/atriasoft/esvg/RadialGradient.java',
-	    'src/org/atriasoft/esvg/internal/Log.java',
+	    'src/org/atriasoft/esvg/internal/LOGGER.java',
 	    'src/org/atriasoft/esvg/font/Kerning.java',
 	    'src/org/atriasoft/esvg/font/Glyph.java',
 	    'src/org/atriasoft/esvg/Renderer.java',
