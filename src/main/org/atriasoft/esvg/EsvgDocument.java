@@ -27,6 +27,7 @@ public class EsvgDocument extends Base {
 	private String title = ""; //!< sub-element list
 	private Uri uri = null; //!< reference elements ...
 	private String version = "0.0";
+	private static final boolean envDisplayRefs = "true".equals(System.getenv("ESQG_DISPLAY_REFS"));
 
 	public EsvgDocument() {
 
@@ -380,7 +381,7 @@ public class EsvgDocument extends Base {
 		} else {
 			this.size = Vector2f.clipInt(this.size);
 		}
-		if (!isReference) {
+		if (envDisplayRefs && !isReference) {
 			displayDebug();
 		}
 		return true;

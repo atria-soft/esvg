@@ -238,7 +238,7 @@ public class Base {
 		} else {
 			if (content.length() != 0) {
 				this.paint.stroke = parseColor(content);
-				LOGGER.error("Parse color : " + this.paint.stroke);
+				//LOGGER.trace("Parse color : " + this.paint.stroke);
 			}
 			content = element.getAttribute("stroke-width", "");
 			if (content.length() != 0) {
@@ -332,9 +332,9 @@ public class Base {
 		if (inputString.length() == 0) {
 			return;
 		}
-		LOGGER.trace("indexOf transform : '" + inputString + "'");
+		//LOGGER.trace("indexOf transform : '" + inputString + "'");
 		inputString = inputString.replace(',', ' ');
-		LOGGER.trace("indexOf transform : '" + inputString + "'");
+		//LOGGER.trace("indexOf transform : '" + inputString + "'");
 		// need to indexOf elements in order ...
 		String data = Base.extractTransformData(inputString, "matrix");
 		if (data.length() != 0) {
@@ -352,7 +352,7 @@ public class Base {
 			if (elements != null) {
 				this.transformMatrix = this.transformMatrix
 						.multiply(Matrix2x3f.createTranslate(new Vector2f(elements[0], elements[1])));
-				LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
+				//LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
 			} else {
 				final float elem = Float.parseFloat(data);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createTranslate(new Vector2f(elem, 0)));
@@ -364,7 +364,7 @@ public class Base {
 			if (elements != null) {
 				this.transformMatrix = this.transformMatrix
 						.multiply(Matrix2x3f.createScale(new Vector2f(elements[0], elements[1])));
-				LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
+				//LOGGER.trace("Translate : " + elements[0] + ", " + elements[1]);
 			} else {
 				final float elem = Float.parseFloat(data);
 				this.transformMatrix = this.transformMatrix.multiply(Matrix2x3f.createScale(elem));
