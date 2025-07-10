@@ -84,7 +84,7 @@
 		<sourceDirectory>src/main</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>${basedir}/src/resources</directory>
+				<directory>src/resources</directory>
 			</resource>
 		</resources>
 		<testSourceDirectory>src/test</testSourceDirectory>
