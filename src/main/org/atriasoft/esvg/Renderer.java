@@ -14,6 +14,8 @@ import org.atriasoft.etk.Color;
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -21,23 +23,24 @@ import org.atriasoft.etk.math.Vector2i;
  * @license MPL v2.0 (see license file)
  */
 public class Renderer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Renderer.class);
 	private static final boolean DEBUG_MODE = false;
 	protected ImageFloatRGBA buffer; // for debug
 	protected EsvgDocument document; // for debug
-	
+
 	private int factor = 1;
-	
+
 	protected int interpolationRecurtionMax = 10;
-	
+
 	protected float interpolationThreshold = 0.25f;
 	protected int nbSubScanLine = 8;
 	protected Vector2i size;
 	private final boolean visualDebug = false;
-	
+
 	public Renderer(final Vector2i size, final EsvgDocument document) {
 		this(size, document, false);
 	}
-	
+
 	public Renderer(final Vector2i size, final EsvgDocument document, final boolean visualDebug) {
 		this.size = size;
 		this.document = document;
@@ -48,7 +51,7 @@ public class Renderer {
 		}
 		setSize(size);
 	}
-	
+
 	void addDebugSegment(final SegmentList listSegment) {
 		if (!this.visualDebug) {
 			return;
@@ -130,31 +133,31 @@ public class Renderer {
 			}
 		}
 	}
-	
+
 	ImageFloatRGBA getData() {
 		return this.buffer;
 	}
-	
+
 	int getInterpolationRecurtionMax() {
 		return this.interpolationRecurtionMax;
 	}
-	
+
 	float getInterpolationThreshold() {
 		return this.interpolationThreshold;
 	}
-	
+
 	public EsvgDocument getMainDocument() {
 		return this.document;
 	}
-	
+
 	int getNumberSubScanLine() {
 		return this.nbSubScanLine;
 	}
-	
+
 	Vector2i getSize() {
 		return this.size;
 	}
-	
+
 	protected Color mergeColor(final Color base, final Color integration) {
 		/*
 		if (integration.a() < base.a()) {
@@ -178,23 +181,24 @@ public class Renderer {
 		*/
 		final float a1 = integration.a(); // alpha over
 		final float a0 = base.a(); // alpha under
-		
+
 		final float a = a1 + a0 * (1 - a1);
 		final float aCalc = a != 0 ? 1 / a : 1;
-
+		
 		final float r = (integration.r() * a1 + base.r() * a0 * (1 - a1)) * aCalc;
 		final float g = (integration.g() * a1 + base.g() * a0 * (1 - a1)) * aCalc;
 		final float b = (integration.b() * a1 + base.b() * a0 * (1 - a1)) * aCalc;
-
+		
 		return new Color(r, g, b, a);
 	}
-	
+
 	public void print(
 			final Weight weightFill,
 			final DynamicColor colorFill,
 			final Weight weightStroke,
 			final DynamicColor colorStroke,
 			final float opacity) {
+		final long startTime = System.currentTimeMillis();
 		if (colorFill != null) {
 			//colorFill.setViewPort(Pair<Vector2f, Vector2f>(new Vector2f(0,0), Vector2f(sizeX, sizeY)));
 			colorFill.generate(this.document);
@@ -205,14 +209,16 @@ public class Renderer {
 		}
 		// all together
 		for (int yyy = 0; yyy < this.size.y(); ++yyy) {
+			final long stopTime2 = System.currentTimeMillis();
+			LOGGER.trace("take time to gnerate: " + (stopTime2 - startTime) + " for " + yyy + "/" + this.size.y());
 			for (int xxx = 0; xxx < this.size.x(); ++xxx) {
-				
+
 				final Vector2i pos = new Vector2i(xxx, yyy);
 				final float valueFill = weightFill.get(pos);
 				final float valueStroke = weightStroke.get(pos);
 				// calculate merge of stroke and fill value:
 				Color intermediateColorFill = Color.NONE;
-				
+
 				Color intermediateColorStroke = Color.NONE;
 				if (colorFill != null && valueFill != 0.0f) {
 					intermediateColorFill = colorFill.getColor(pos);
@@ -237,9 +243,9 @@ public class Renderer {
 				}
 			}
 		}
-		
+
 		if (Renderer.DEBUG_MODE) {
-			
+
 			// display the gradient position:
 			if (colorFill instanceof final DynamicColorSpecial tmpColor) {
 				final SegmentList listSegment = new SegmentList();
@@ -266,20 +272,22 @@ public class Renderer {
 				addDebugSegment(listSegment);
 			}
 		}
+		final long stopTime = System.currentTimeMillis();
+		LOGGER.trace("take time to generate: " + (stopTime - startTime));
 	}
-	
+
 	public void setInterpolationRecurtionMax(final int value) {
 		this.interpolationRecurtionMax = FMath.avg(1, value, 200);
 	}
-	
+
 	void setInterpolationThreshold(final float value) {
 		this.interpolationThreshold = FMath.avg(0.0f, value, 20000.0f);
 	}
-	
+
 	void setNumberSubScanLine(final int value) {
 		this.nbSubScanLine = FMath.avg(1, value, 200);
 	}
-	
+
 	public void setSize(final Vector2i size) {
 		this.size = size;
 		if (Renderer.DEBUG_MODE) {
@@ -288,5 +296,5 @@ public class Renderer {
 			this.buffer = new ImageFloatRGBA(this.size.multiply(this.factor));
 		}
 	}
-	
+
 }
