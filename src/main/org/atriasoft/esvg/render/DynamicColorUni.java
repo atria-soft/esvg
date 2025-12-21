@@ -22,7 +22,7 @@ public class DynamicColorUni implements DynamicColor {
 	public Color getColor(final Vector2i pos) {
 		return this.color;
 	}
-	
+
 	@Override
 	public void setViewPort(final Pair<Vector2f, Vector2f> viewPort) {
 		// nothing to do ...

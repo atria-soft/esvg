@@ -3,6 +3,7 @@ package org.atriasoft.esvg.render;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.atriasoft.etk.math.FMath;
 import org.atriasoft.etk.math.Vector2f;
@@ -51,9 +52,16 @@ public class Weight {
 
 	public void generate(final Vector2i size, final int subSamplingCount, final SegmentList listSegment) {
 		resize(size);
-		// for each lines:
-		for (int yyy = 0; yyy < size.y(); ++yyy) {
-			LOGGER.trace("Weighting ... " + yyy + " / " + size.y());
+
+		final int sizeX = size.x();
+		final int sizeY = size.y();
+		final float deltaSize = 1.0f / subSamplingCount;
+
+		// OPTIMIZATION: Parallel processing of scanlines
+		IntStream.range(0, sizeY).parallel().forEach(yyy -> {
+			// Thread-local accumulator for this row
+			final float[] rowData = new float[sizeX];
+
 			// Reduce the number of lines in the subsampling parsing:
 			final List<Segment> availlableSegmentPixel = new ArrayList<>();
 			for (final Segment it : listSegment.data) {
@@ -61,15 +69,11 @@ public class Weight {
 					availlableSegmentPixel.add(it);
 				}
 			}
-			if (availlableSegmentPixel.size() == 0) {
-				continue;
+			if (availlableSegmentPixel.isEmpty()) {
+				return; // continue in lambda
 			}
-			LOGGER.trace("          Find Basic segments " + availlableSegmentPixel.size());
-			// This represent the pondaration on the subSampling
-			final float deltaSize = 1.0f / subSamplingCount;
+
 			for (int kkk = 0; kkk < subSamplingCount; ++kkk) {
-				LOGGER.trace("    Scanline ... " + kkk + " / " + subSamplingCount);
-				final Scanline scanline = new Scanline(size.x());
 				//find all the segment that cross the middle of the line of the center of the pixel line:
 				final float subSamplingCenterPos = yyy + deltaSize * 0.5f + deltaSize * kkk;
 				final List<Segment> availlableSegment = new ArrayList<>();
@@ -86,41 +90,37 @@ public class Weight {
 						}
 					}
 				}
-				LOGGER.trace("        Availlable Segment " + availlableSegment.size());
-				if (availlableSegment.size() == 0) {
+				if (availlableSegment.isEmpty()) {
 					continue;
 				}
-				for (final Segment it : availlableSegment) {
-					LOGGER.trace("        Availlable Segment " + it.p0 + " . " + it.p1 + " dir=" + it.direction);
-				}
-				// x position, angle
+
+				// x position, direction
 				final List<Pair<Float, Integer>> listPosition = new ArrayList<>();
 				for (final Segment it : availlableSegment) {
 					final Vector2f delta = it.p0.less(it.p1);
-					// x = coefficent*y+bbb;
+					// x = coefficient*y+bbb;
 					final float coefficient = delta.x() / delta.y();
 					final float bbb = it.p0.x() - coefficient * it.p0.y();
 					final float xpos = coefficient * subSamplingCenterPos + bbb;
 					listPosition.add(new Pair<>(xpos, it.direction));
 				}
-				LOGGER.trace("        List position " + listPosition.size());
+
 				// now we order position of the xPosition:
-				Collections.sort(listPosition, (e1, e2) -> ((int) (e1.first - e2.first)));
+				Collections.sort(listPosition, (e1, e2) -> Float.compare(e1.first, e2.first));
 
 				// move through all element in the point:
 				int lastState = 0;
 				float currentValue = 0.0f;
 				int currentPos = -1;
-				// *      |                \---------------/              |
-				// * current pos
-				//                         * pos ...
-				// TODO  Code the Odd/even and non-zero ...
+
 				for (final Pair<Float, Integer> it : listPosition) {
 					if (currentPos != it.first.intValue()) {
 						// fill to the new pos -1:
 						final float endValue = FMath.min(1.0f, FMath.abs(lastState)) * deltaSize;
 						for (int iii = currentPos + 1; iii < it.first.intValue(); ++iii) {
-							scanline.set(iii, endValue);
+							if (iii >= 0 && iii < sizeX) {
+								rowData[iii] += endValue;
+							}
 						}
 						currentPos = it.first.intValue();
 						currentValue = endValue;
@@ -135,25 +135,27 @@ public class Weight {
 						// something new to draw ...
 						final float ratio = 1.0f - (it.first - it.first.intValue());
 						currentValue -= ratio * deltaSize;
-					} else {
-						// nothing to do ...
 					}
 
-					if (currentPos == it.first.intValue()) {
-						scanline.set(currentPos, currentValue);
+					if (currentPos == it.first.intValue() && currentPos >= 0 && currentPos < sizeX) {
+						rowData[currentPos] += currentValue;
 					}
 				}
 				// if the counter is not at 0 ==> fill if to the end with full value ... 2.0
 				if (lastState != 0) {
 					// just past the last state to the end of the image ...
-					LOGGER.error("end of Path whith no end ... " + currentPos + " . " + size.x());
-					for (int xxx = currentPos; xxx < size.x(); ++xxx) {
-						scanline.set(xxx, 100.0f);
+					LOGGER.error("end of Path with no end ... " + currentPos + " . " + sizeX);
+					for (int xxx = currentPos; xxx < sizeX; ++xxx) {
+						if (xxx >= 0) {
+							rowData[xxx] += 100.0f;
+						}
 					}
 				}
-				append(yyy, scanline);
 			}
-		}
+
+			// Copy row data to main buffer (each row is independent, no sync needed)
+			System.arraycopy(rowData, 0, this.data[yyy], 0, sizeX);
+		});
 	}
 
 	public float get(final int xxx, final int yyy) {

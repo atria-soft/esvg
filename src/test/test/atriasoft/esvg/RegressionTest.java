@@ -499,4 +499,120 @@ class RegressionTest {
 		LOGGER.info("Average render time: " + String.format("%.2f", avgTimeMs) + " ms");
 		LOGGER.info("Renders per second: " + String.format("%.1f", 1000.0 / avgTimeMs));
 	}
+
+	/**
+	 * Test de profilage détaillé - identifie les goulots d'étranglement
+	 */
+	@Test
+	void testProfilingDetailedBreakdown() {
+		LOGGER.info("=== Profiling Breakdown Test ===");
+
+		// Test 1: Simple circle (forme simple, pas de gradient)
+		testProfileShape("circle_simple", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<circle cx='100' cy='100' r='80' fill='red' />
+				</svg>""");
+
+		// Test 2: Circle with stroke
+		testProfileShape("circle_stroke", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<circle cx='100' cy='100' r='80' fill='red' stroke='black' stroke-width='5' />
+				</svg>""");
+
+		// Test 3: Circle with linear gradient
+		testProfileShape("circle_gradient", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<defs>
+						<linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='100%'>
+							<stop offset='0%' style='stop-color:rgb(255,0,0);stop-opacity:1' />
+							<stop offset='100%' style='stop-color:rgb(0,0,255);stop-opacity:1' />
+						</linearGradient>
+					</defs>
+					<circle cx='100' cy='100' r='80' fill='url(#grad1)' />
+				</svg>""");
+
+		// Test 4: Complex path (star)
+		testProfileShape("path_star", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<path d='M100,20 L120,80 L180,80 L130,120 L150,180 L100,140 L50,180 L70,120 L20,80 L80,80 Z' fill='gold' />
+				</svg>""");
+
+		// Test 5: Multiple shapes
+		testProfileShape("multiple_shapes", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<circle cx='50' cy='50' r='30' fill='red' />
+					<circle cx='150' cy='50' r='30' fill='green' />
+					<circle cx='50' cy='150' r='30' fill='blue' />
+					<circle cx='150' cy='150' r='30' fill='yellow' />
+					<rect x='75' y='75' width='50' height='50' fill='purple' />
+				</svg>""");
+
+		// Test 6: Bezier curves
+		testProfileShape("bezier_path", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<path d='M10,80 C40,10 65,10 95,80 S150,150 180,80' stroke='black' stroke-width='2' fill='none' />
+					<path d='M10,120 Q50,180 100,120 T180,120' stroke='red' stroke-width='2' fill='none' />
+				</svg>""");
+
+		// Test 7: Large image
+		testProfileShapeWithSize("large_circle", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='500' width='500'>
+					<circle cx='250' cy='250' r='200' fill='red' />
+				</svg>""", 500, 500);
+
+		// Test 8: Radial gradient
+		testProfileShape("radial_gradient", """
+				<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+				<svg height='200' width='200'>
+					<defs>
+						<radialGradient id='grad1' cx='50%' cy='50%' r='50%'>
+							<stop offset='0%' style='stop-color:rgb(255,255,0);stop-opacity:1' />
+							<stop offset='100%' style='stop-color:rgb(255,0,0);stop-opacity:1' />
+						</radialGradient>
+					</defs>
+					<circle cx='100' cy='100' r='80' fill='url(#grad1)' />
+				</svg>""");
+	}
+
+	private void testProfileShape(String name, String svgData) {
+		testProfileShapeWithSize(name, svgData, -1, -1);
+	}
+
+	private void testProfileShapeWithSize(String name, String svgData, int width, int height) {
+		EsvgDocument doc = new EsvgDocument();
+		doc.parse(svgData);
+
+		// Warmup
+		for (int i = 0; i < 5; i++) {
+			if (width > 0) {
+				doc.renderImageFloatRGBA(new org.atriasoft.etk.math.Vector2i(width, height), false);
+			} else {
+				doc.renderImageFloatRGBA(null, false);
+			}
+		}
+
+		// Mesure
+		int iterations = 20;
+		long startTime = System.nanoTime();
+
+		for (int i = 0; i < iterations; i++) {
+			if (width > 0) {
+				doc.renderImageFloatRGBA(new org.atriasoft.etk.math.Vector2i(width, height), false);
+			} else {
+				doc.renderImageFloatRGBA(null, false);
+			}
+		}
+
+		long endTime = System.nanoTime();
+		double avgTimeMs = (endTime - startTime) / 1_000_000.0 / iterations;
+
+		LOGGER.info(String.format("  %-20s: %7.2f ms", name, avgTimeMs));
+	}
 }
