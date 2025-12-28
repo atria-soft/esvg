@@ -24,7 +24,7 @@ public interface DynamicColor {
 			return null;
 		}
 		if (color.second.isEmpty()) {
-			LOGGER.trace("use stroke color :" + color);
+			LOGGER.trace("use stroke color: {}", color);
 			return new DynamicColorUni(color.first);
 		}
 		return new DynamicColorSpecial(color.second, mtx);

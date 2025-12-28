@@ -54,14 +54,14 @@ public class Ellipse extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Ellipse c=" + this.c + " r=" + this.r);
+		LOGGER.debug("{}Ellipse c={} r={}", spacingDist(spacing), this.c, this.r);
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Ellipse");
+		LOGGER.trace("{}DRAW esvg::Ellipse", spacingDist(level));
 		if (this.r.x() <= 0.0f || this.r.y() <= 0.0f) {
-			LOGGER.trace(spacingDist(level + 1) + "Too small radius" + this.r);
+			LOGGER.trace("{}Too small radius {}", spacingDist(level + 1), this.r);
 			return;
 		}
 		final PathModel listElement = createPath();
@@ -112,7 +112,7 @@ public class Ellipse extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Ellipse");
+		LOGGER.trace("{}DRAW Shape esvg::Ellipse", spacingDist(level));
 		final PathModel listElement = createPath();
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);

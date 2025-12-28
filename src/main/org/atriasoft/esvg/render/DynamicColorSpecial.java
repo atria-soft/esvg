@@ -34,7 +34,7 @@ public class DynamicColorSpecial implements DynamicColor {
 					+ vect1.y() * point2.x()) / diviseur;
 			return point2.add(vect2.multiply(mmm));
 		}
-		LOGGER.error("Get divider / 0.0f");
+		LOGGER.warn("Get divider / 0.0f");
 		return point2;
 	}
 
@@ -121,7 +121,7 @@ public class DynamicColorSpecial implements DynamicColor {
 		}
 		final Base base = document.getReference(this.colorName);
 		if (base == null) {
-			LOGGER.error("Can not get base : '" + this.colorName + "'");
+			LOGGER.error("Can not get base: '{}'", this.colorName);
 			return;
 		}
 		// Now we can know if we use linear or radial gradient ...
@@ -131,7 +131,7 @@ public class DynamicColorSpecial implements DynamicColor {
 			gradient.display(2);
 			this.unit = gradient.unit;
 			this.spread = gradient.spread;
-			LOGGER.trace("    viewport = {" + this.viewPort.first + "," + this.viewPort.second + "}");
+			LOGGER.trace("    viewport = {{{},{}}}", this.viewPort.first, this.viewPort.second);
 			final Vector2f size = this.viewPort.second.less(this.viewPort.first);
 
 			final Dimension2f dimPos1 = gradient.getPosition1();
@@ -170,14 +170,14 @@ public class DynamicColorSpecial implements DynamicColor {
 		} else {
 			this.linear = false;
 			if (!(base instanceof final RadialGradient gradient)) {
-				LOGGER.error("Can not cast in a linear gradient: '" + this.colorName + "' ==> wrong type");
+				LOGGER.error("Can not cast in a linear gradient: '{}' ==> wrong type", this.colorName);
 				return;
 			}
 			LOGGER.trace("get for color Radial:");
 			gradient.display(2);
 			this.unit = gradient.unit;
 			this.spread = gradient.spread;
-			LOGGER.trace("    viewport = {" + this.viewPort.first + "," + this.viewPort.second + "}");
+			LOGGER.trace("    viewport = {{{},{}}}", this.viewPort.first, this.viewPort.second);
 			final Vector2f size = this.viewPort.second.less(this.viewPort.first);
 
 			final Dimension2f dimCenter = gradient.getCenter();
@@ -238,8 +238,8 @@ public class DynamicColorSpecial implements DynamicColor {
 					this.clipOut = false;
 				}
 			}
-			LOGGER.trace("baseSize=" + this.baseSize + " this.pos1=" + this.pos1 + " dim=" + dimCenter
-					+ " this.focal=" + this.focal + " this.pos2=" + this.pos2 + " dim=" + dimRadius);
+			LOGGER.trace("baseSize={} this.pos1={} dim={} this.focal={} this.pos2={} dim={}",
+					this.baseSize, this.pos1, dimCenter, this.focal, this.pos2, dimRadius);
 			// get all the colors
 			this.data = gradient.getColors(document);
 		}

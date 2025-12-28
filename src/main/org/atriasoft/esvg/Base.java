@@ -32,7 +32,7 @@ public class Base {
 		}
 		posStart += base.length();
 		if (value.length() < posStart + 2) {
-			LOGGER.error("Not enought spece in the String to have transform value for ' (' or '()' in '" + value + "'");
+			LOGGER.warn("Not enought spece in the String to have transform value for ' (' or '()' in '{}'", value);
 			return "";
 		}
 		if (value.charAt(posStart) == '(') {
@@ -41,19 +41,19 @@ public class Base {
 		} else if (value.charAt(posStart) == ' ' && value.charAt(posStart + 1) == '(') {
 			posStart += 2;
 		} else {
-			LOGGER.error("Can not indexOf ' (' or '(' in '" + value.substring(posStart) + "' for '" + value + "'");
+			LOGGER.warn("Can not indexOf ' (' or '(' in '{}' for '{}'", value.substring(posStart), value);
 			return "";
 		}
 		if (value.length() < posStart + 1) {
-			LOGGER.error("Not enought spece in the String to have transform value for ')' in '" + value + "'");
+			LOGGER.warn("Not enought spece in the String to have transform value for ')' in '{}'", value);
 			return "";
 		}
 		final int posEnd = value.indexOf(')', posStart);
 		if (posEnd == -1) {
-			LOGGER.error("Missing element ')' in '" + value + "' for " + base);
+			LOGGER.warn("Missing element ')' in '{}' for {}", value, base);
 			return "";
 		}
-		LOGGER.trace("indexOf : '" + value.substring(posStart, posEnd) + "' for " + base);
+		LOGGER.trace("indexOf : '{}' for {}", value.substring(posStart, posEnd), base);
 		return value.substring(posStart, posEnd);
 	}
 	
@@ -85,7 +85,7 @@ public class Base {
 	 * @param level Level of the tree
 	 */
 	void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.warn(spacingDist(level) + "DRAW esvg::Base ... ==> No drawing availlable");
+		LOGGER.debug("{}DRAW esvg::Base ... ==> No drawing availlable", spacingDist(level));
 	}
 	
 	public void drawShapePoints(
@@ -134,8 +134,8 @@ public class Base {
 				final String color = inputData.substring(5, inputData.length() - 1);
 				localColor = new Pair<>(Color.NONE, color);
 			} else {
-				LOGGER.error(
-						"Problem in parsing the color : '" + inputData + "'  == > url(XXX) is not supported now ...");
+				LOGGER.warn(
+						"Problem in parsing the color : '{}'  == > url(XXX) is not supported now ...", inputData);
 			}
 		} else {
 			try {
@@ -145,7 +145,7 @@ public class Base {
 				e.printStackTrace();
 			}
 		}
-		LOGGER.trace("Parse color : \"" + inputData + "\"  == > " + localColor.first + " " + localColor.second);
+		LOGGER.trace("Parse color : \"{}\"  == > {} {}", inputData, localColor.first, localColor.second);
 		return localColor;
 	}
 	
@@ -156,7 +156,7 @@ public class Base {
 	 */
 	float parseLength(final String dataInput) {
 		final Pair<Float, Distance> value = parseLength2(dataInput);
-		LOGGER.trace(" lenght : '" + value.first + "' => unit=" + value.second);
+		LOGGER.trace(" lenght : '{}' => unit={}", value.first, value.second);
 		final float fontsize = 20.0f;
 		return switch (value.second) {
 			case POURCENT -> value.first; // / 100.0 * this.paint.viewPort.x();
@@ -269,7 +269,7 @@ public class Base {
 					this.paint.lineCap = CapMode.SQUARE;
 				} else {
 					this.paint.lineCap = CapMode.BUTT;
-					LOGGER.error("not know stroke-linecap value : '" + content + "', not in [butt,round,square]");
+					LOGGER.warn("not know stroke-linecap value : '{}', not in [butt,round,square]", content);
 				}
 			}
 			content = element.getAttribute("stroke-linejoin", "");
@@ -282,7 +282,7 @@ public class Base {
 					this.paint.lineJoin = JoinMode.BEVEL;
 				} else {
 					this.paint.lineJoin = JoinMode.MITER;
-					LOGGER.error("not know stroke-linejoin value : '" + content + "', not in [miter,round,bevel]");
+					LOGGER.warn("not know stroke-linejoin value : '{}', not in [miter,round,bevel]", content);
 				}
 			}
 			content = element.getAttribute("stroke-miterlimit", "");
@@ -312,7 +312,7 @@ public class Base {
 				} else if (content.equals("evenodd")) {
 					this.paint.flagEvenOdd = true;
 				} else {
-					LOGGER.error("not know fill-rule value : \"" + content + "\", not in [nonzero,evenodd]");
+					LOGGER.warn("not know fill-rule value : \"{}\", not in [nonzero,evenodd]", content);
 				}
 			}
 			// ---------------- opacity ----------------
@@ -344,7 +344,7 @@ public class Base {
 				// indexOf a matrix : simply exit ...
 				return;
 			}
-			LOGGER.error("Parsing matrix() with wrong data ... '" + data + "'");
+			LOGGER.warn("Parsing matrix() with wrong data ... '{}'", data);
 		}
 		data = Base.extractTransformData(inputString, "translate");
 		if (data.length() != 0) {

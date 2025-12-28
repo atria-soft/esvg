@@ -43,7 +43,7 @@ public class Path extends Base {
 
 	public static PathModel createPathModel(final String d) {
 		final PathModel out = new PathModel();
-		LOGGER.trace("Parse Path : \"" + d + "\"");
+		LOGGER.trace("Parse Path : \"{}\"", d);
 		final List<String> commandsSplited = Path.splitCommand(d);
 		String[] listDot = null;
 
@@ -66,11 +66,11 @@ public class Path extends Base {
 					relative = true;
 				case 'M': // Move to (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					if (listDot.length % 2 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " must be a multiple of 2");
+						LOGGER.warn("the PATH command {} must be a multiple of 2", sss.cmd);
 						break;
 					}
 					// 2 Elements ...
@@ -86,11 +86,11 @@ public class Path extends Base {
 					relative = true;
 				case 'L': // Line to (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					if (listDot.length % 2 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " must be a multiple of 2");
+						LOGGER.warn("the PATH command {} must be a multiple of 2", sss.cmd);
 						break;
 					}
 					for (int iii = 0; iii < listDot.length; iii += 2) {
@@ -104,7 +104,7 @@ public class Path extends Base {
 				case 'V': // Vertical Line to (absolute)
 					// 1 Element ...
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					for (final String element : listDot) {
@@ -117,7 +117,7 @@ public class Path extends Base {
 				case 'H': // Horizantal Line to (absolute)
 					// 1 Element ...
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					for (final String element : listDot) {
@@ -129,13 +129,12 @@ public class Path extends Base {
 					relative = true;
 				case 'Q': // Quadratic Bezier curve (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					// 4 Elements ...
 					if (listDot.length % 4 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length + " (must have 4 numbers)");
+						LOGGER.warn("the PATH command {} has not the good number of element = {} (must have 4 numbers)", sss.cmd, listDot.length);
 						break;
 					}
 					for (int iii = 0; iii < listDot.length; iii += 4) {
@@ -149,13 +148,12 @@ public class Path extends Base {
 					relative = true;
 				case 'T': // smooth quadratic Bezier curve to (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					// 4 Elements ...
 					if (listDot.length % 2 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length + " (must have 2 numbers)");
+						LOGGER.warn("the PATH command {} has not the good number of element = {} (must have 2 numbers)", sss.cmd, listDot.length);
 						break;
 					}
 					// 2 Elements ...
@@ -169,13 +167,12 @@ public class Path extends Base {
 					relative = true;
 				case 'C': // curve to (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					// 6 Elements ...
 					if (listDot.length % 6 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length + "(Must be a multiple of 6)");
+						LOGGER.warn("the PATH command {} has not the good number of element = {} (Must be a multiple of 6)", sss.cmd, listDot.length);
 						break;
 					}
 					for (int iii = 0; iii < listDot.length; iii += 6) {
@@ -190,13 +187,12 @@ public class Path extends Base {
 					relative = true;
 				case 'S': // smooth curve to (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					// 4 Elements ...
 					if (listDot.length % 4 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length + "(Must be a multiple of 4)");
+						LOGGER.warn("the PATH command {} has not the good number of element = {} (Must be a multiple of 4)", sss.cmd, listDot.length);
 						break;
 					}
 					for (int iii = 0; iii < listDot.length; iii += 4) {
@@ -210,13 +206,12 @@ public class Path extends Base {
 					relative = true;
 				case 'A': // elliptical Arc (absolute)
 					if (listDot == null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = " + listDot);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot);
 						break;
 					}
 					// 4 element ff,ff f i,i ff,ff  Elements ...
 					if (listDot.length % 7 != 0) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot.length);
 						break;
 					}
 					for (int iii = 0; iii < listDot.length; iii += 7) {
@@ -239,14 +234,13 @@ public class Path extends Base {
 				case 'Z': // closepath (absolute)
 					// 0 Element ...
 					if (listDot != null) {
-						LOGGER.warn("the PATH command " + sss.cmd + " has not the good number of element = "
-								+ listDot.length);
+						LOGGER.warn("the PATH command {} has not the good number of element = {}", sss.cmd, listDot.length);
 						break;
 					}
 					out.close(relative);
 					break;
 				default:
-					LOGGER.error("Unknow error : '" + sss.cmd + "'");
+					LOGGER.error("Unknow error : '{}'", sss.cmd);
 			}
 		}
 		return out;
@@ -263,12 +257,12 @@ public class Path extends Base {
 		//			LOGGER.warn("        -[" + iii + "] '" + input.get(iii) + "'");
 		//		}
 		if (input.get(offset).length() != 1) {
-			LOGGER.error("Error in the SVG Path : '" + input.get(offset) + "' [" + Integer.toString(offset));
+			LOGGER.error("Error in the SVG Path : '{}' [{}]", input.get(offset), offset);
 			return null;
 		}
 		final char cmd = input.get(offset).charAt(0);
 		if (!((cmd <= 'Z' && cmd >= 'A') || (cmd <= 'z' && cmd >= 'a'))) {
-			LOGGER.error("Error in the SVG Path : '" + cmd + "' [" + Integer.toString(offset));
+			LOGGER.error("Error in the SVG Path : '{}' [{}]", cmd, offset);
 			return null;
 		}
 		//LOGGER.trace("Find command : " + cmd);
@@ -318,7 +312,7 @@ public class Path extends Base {
 				isNumber = false;
 				out.add(Character.toString(it));
 			} else {
-				LOGGER.error("Can not parse path : '" + it + "'");
+				LOGGER.error("Can not parse path : '{}'", it);
 			}
 		}
 		final String elements = tmpString.toString();
@@ -346,7 +340,7 @@ public class Path extends Base {
 
 	@Override
 	void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Path");
+		LOGGER.trace("{}DRAW esvg::Path", spacingDist(level));
 
 		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 
@@ -396,7 +390,7 @@ public class Path extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Path");
+		LOGGER.trace("{}DRAW Shape esvg::Path", spacingDist(level));
 
 		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 

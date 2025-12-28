@@ -31,12 +31,12 @@ public class PointList {
 	}
 
 	public void display() {
-		LOGGER.trace(" Display list of points : size=" + this.data.size());
+		LOGGER.trace(" Display list of points: size={}", this.data.size());
 		for (final List<Point> it : this.data) {
-			LOGGER.trace("    Find List " + it.size() + " members");
+			LOGGER.trace("    Find List {} members", it.size());
 			for (int iii = 0; iii < it.size(); ++iii) {
 				final Point elem = it.get(iii);
-				LOGGER.trace("        [" + iii + "] Find " + elem.type + " " + elem.pos);
+				LOGGER.trace("        [{}] Find {} {}", iii, elem.type, elem.pos);
 			}
 		}
 	}

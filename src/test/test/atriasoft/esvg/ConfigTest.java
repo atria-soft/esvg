@@ -21,9 +21,9 @@ public class ConfigTest {
 		if (data == null) {
 			LOGGER.error("No data generated ...");
 		}
-		LOGGER.warn("Save file in " + uri.getPath());
+		LOGGER.debug("Save file in {}", uri.getPath());
 		final byte[] outElem = new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toBytes();
-		LOGGER.warn("outsize = " + outElem.length);
+		LOGGER.debug("outsize = {}", outElem.length);
 		new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toFile(uri.getPath());
 	}
 
@@ -43,9 +43,9 @@ public class ConfigTest {
 			image.setColor(xxx, 0, Color.ORANGE);
 			image.setColor(xxx, weight.getHeight() + 1, Color.ORANGE);
 		}
-		LOGGER.warn("Save file in " + uri.getPath());
+		LOGGER.debug("Save file in {}", uri.getPath());
 		final byte[] outElem = new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toBytes();
-		LOGGER.warn("outsize = " + outElem.length);
+		LOGGER.debug("outsize = {}", outElem.length);
 		new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toFile(uri.getPath());
 	}
 

@@ -210,7 +210,7 @@ public class Renderer {
 		// all together
 		for (int yyy = 0; yyy < this.size.y(); ++yyy) {
 			final long stopTime2 = System.currentTimeMillis();
-			LOGGER.trace("take time to gnerate: " + (stopTime2 - startTime) + " for " + yyy + "/" + this.size.y());
+			LOGGER.trace("take time to gnerate: {} for {}/{}", (stopTime2 - startTime), yyy, this.size.y());
 			for (int xxx = 0; xxx < this.size.x(); ++xxx) {
 
 				final Vector2i pos = new Vector2i(xxx, yyy);
@@ -273,7 +273,7 @@ public class Renderer {
 			}
 		}
 		final long stopTime = System.currentTimeMillis();
-		LOGGER.trace("take time to generate: " + (stopTime - startTime));
+		LOGGER.trace("take time to generate: {}", (stopTime - startTime));
 	}
 
 	public void setInterpolationRecurtionMax(final int value) {

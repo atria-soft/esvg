@@ -172,7 +172,7 @@ public class EsvgFont {
 			} else if (values.getValue().equals("font-face")) {
 				// already done ...
 			} else {
-				LOGGER.warn("unsupported node name :" + values.getValue());
+				LOGGER.debug("unsupported node name :{}", values.getValue());
 			}
 		}
 		for (final XmlNode values : fontElement.getNodes()) {
@@ -426,7 +426,7 @@ public class EsvgFont {
 			}
 			if (withKerning) {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
-				LOGGER.info("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
+				LOGGER.debug("    ==> kerning offset = {}", (glyph.getKerning(lastValue) * scale));
 				lastValue = uVal;
 			}
 

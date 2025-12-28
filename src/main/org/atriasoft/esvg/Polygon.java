@@ -42,12 +42,12 @@ public class Polygon extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Polygon nbPoint=" + this.listPoint.size());
+		LOGGER.debug("{}Polygon nbPoint={}", spacingDist(spacing), this.listPoint.size());
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Polygon");
+		LOGGER.trace("{}DRAW esvg::Polygon", spacingDist(level));
 
 		final PathModel listElement = createPath();
 
@@ -96,7 +96,7 @@ public class Polygon extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Polygon");
+		LOGGER.trace("{}DRAW Shape esvg::Polygon", spacingDist(level));
 		final PathModel listElement = createPath();
 		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 		PointList listPoints;
@@ -119,21 +119,21 @@ public class Polygon extends Base {
 		parseTransform(element);
 		parsePaintAttr(element);
 
-		LOGGER.trace("parsed P1.   trans: " + this.transformMatrix);
+		LOGGER.trace("parsed P1.   trans: {}", this.transformMatrix);
 
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		LOGGER.trace("parsed P2.   trans: " + this.transformMatrix);
+		LOGGER.trace("parsed P2.   trans: {}", this.transformMatrix);
 
 		final String sss1 = element.getAttribute("points", "");
 		if (sss1.length() == 0) {
-			LOGGER.error("(l "/*+element.Pos()*/ + ") polygon: missing points attribute");
+			LOGGER.error("(l {}) polygon: missing points attribute", ""/*+element.Pos()*/);
 			return false;
 		}
 
 		sizeMax.value = Vector2f.ZERO;
-		LOGGER.trace("Parse polyline : '" + sss1 + "'");
+		LOGGER.trace("Parse polyline : '{}'", sss1);
 		final String[] elems = sss1.split(" ");
 		for (final String elem : elems) {
 			final Vector2f pos = Vector2f.valueOf(elem);

@@ -53,17 +53,17 @@ public class Text extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.trace(spacingDist(spacing) + "Text : ");
+		LOGGER.trace("{}Text : ", spacingDist(spacing));
 		for (final TextSpan elem : this.texts) {
-			LOGGER.debug(spacingDist(spacing + 1) + elem.toString());
+			LOGGER.debug("{}{}", spacingDist(spacing + 1), elem.toString());
 		}
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Text                   ==> position = " + this.position);
+		LOGGER.trace("{}DRAW esvg::Text                   ==> position = {}", spacingDist(level), this.position);
 		if (this.texts.size() == 0) {
-			LOGGER.trace(spacingDist(level + 1) + "No text ...");
+			LOGGER.trace("{}No text ...", spacingDist(level + 1));
 			return;
 		}
 		final boolean withKerning = true;
@@ -73,7 +73,7 @@ public class Text extends Base {
 			final EsvgFont font = FontCache.getFont(elem.fontState().fontName(), elem.fontState().bold(),
 					elem.fontState().italic());
 			if (font == null) {
-				LOGGER.error("Can not get the font :" + elem.fontState());
+				LOGGER.warn("Can not get the font: {}", elem.fontState());
 				return;
 			}
 
@@ -85,8 +85,7 @@ public class Text extends Base {
 			float offsetWriting = 0;
 			int lastValue = 0;
 			for (final char uVal : elem.text().toCharArray()) {
-				LOGGER.trace(
-						spacingDist(level) + "                                 elem.position = " + elem.position());
+				LOGGER.trace("{}                                 elem.position = {}", spacingDist(level), elem.position());
 				final Glyph glyph = font.getGlyph(uVal);
 				if (glyph == null) {
 					//lastValue = uVal;
@@ -94,7 +93,7 @@ public class Text extends Base {
 				}
 				if (withKerning) {
 					offsetWriting -= glyph.getKerning(lastValue) * scale;
-					LOGGER.trace("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
+					LOGGER.trace("    ==> kerning offset = {}", glyph.getKerning(lastValue) * scale);
 					lastValue = uVal;
 				}
 
@@ -103,7 +102,7 @@ public class Text extends Base {
 				//Matrix2x3f mtx = this.transformMatrix;
 				final Vector2f tranlate = new Vector2f(elem.position().x() + offsetWriting,
 						elem.position().y() - font.getDescent() * scale);
-				LOGGER.trace("translate : " + tranlate);
+				LOGGER.trace("translate : {}", tranlate);
 				final Matrix2x3f translateGlyph = Matrix2x3f.createTranslate(tranlate);
 				final Matrix2x3f scaleGlyph = Matrix2x3f.createScale(new Vector2f(scale, -scale));
 
@@ -193,7 +192,7 @@ public class Text extends Base {
 		} else if ("normal".equals(fontStyle)) {
 			italic = false;
 		} else {
-			LOGGER.error("can not parse font-style='" + fontStyle + "' support ['normal', 'italic']");
+			LOGGER.warn("can not parse font-style='{}' support ['normal', 'italic']", fontStyle);
 		}
 		boolean bold = false;
 		final String fontWeight = element.getAttribute("font-weight", "normal");
@@ -202,13 +201,13 @@ public class Text extends Base {
 		} else if ("normal".equals(fontWeight)) {
 			bold = false;
 		} else {
-			LOGGER.error("can not parse font-weight='" + fontWeight + "' support ['normal', 'bold']");
+			LOGGER.warn("can not parse font-weight='{}' support ['normal', 'bold']", fontWeight);
 		}
 		String fontFamily = element.getAttribute("font-family", "FreeSans");
 		if (fontStyle.contains(";")) {
 			fontFamily = fontFamily.split(";")[0];
 		}
-		LOGGER.info("Get font family: '" + fontFamily + "'");
+		LOGGER.debug("Get font family: '{}'", fontFamily);
 
 		final float fontSize = parseLength(element.getAttribute("font-size", "50"));
 		this.position = Vector2f.ZERO;
@@ -230,7 +229,7 @@ public class Text extends Base {
 				this.texts.add(new TextSpan(this.position, elementText.getValue(),
 						new FontProperty(fontFamily, fontSize, bold, italic), this.paint.clone()));
 			} else {
-				LOGGER.warn("not managed element : " + elem);
+				LOGGER.debug("not managed element : {}", elem);
 			}
 		}
 
@@ -257,7 +256,7 @@ public class Text extends Base {
 			}
 			if (withKerning) {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
-				LOGGER.info("    ==> kerning offset = " + (glyph.getKerning(lastValue) * scale));
+				LOGGER.debug("    ==> kerning offset = {}", (glyph.getKerning(lastValue) * scale));
 				lastValue = uVal;
 			}
 

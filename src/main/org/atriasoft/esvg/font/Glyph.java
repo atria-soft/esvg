@@ -23,43 +23,43 @@ public class Glyph {
 			return null;
 		}
 		final String name = element.getAttribute("glyph-name", null);
-		LOGGER.trace("get glyph name = '" + name + "'");
+		LOGGER.trace("get glyph name = '{}'", name);
 		final String tmpValue = element.getAttribute("horiz-adv-x", null);
 		int horizAdvX = font == null ? 100 : font.getHorizAdvX();
 		if (tmpValue != null && tmpValue.length() != 0) {
 			horizAdvX = Integer.parseInt(tmpValue);
 		}
-		LOGGER.trace("        horizAdvX= '" + horizAdvX + "'");
+		LOGGER.trace("        horizAdvX= '{}'", horizAdvX);
 		final String unicode = element.getAttribute("unicode", null);
-		LOGGER.trace("        unicode= '" + unicode + "'");
+		LOGGER.trace("        unicode= '{}'", unicode);
 		if (unicode == null) {
-			LOGGER.debug("Not manage glyph : '" + name + "' (missing unicode value)");
+			LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", name);
 			return null;
 		}
 		final String d = element.getAttribute("d", null);
-		LOGGER.trace("        d= '" + d + "'");
+		LOGGER.trace("        d= '{}'", d);
 		int unicodeValue = 0;
 		if (unicode.startsWith("&#x") && unicode.endsWith(";")) {
 			final String subElement = unicode.substring(3, unicode.length() - 1);
 			if (subElement.indexOf("&") != -1) {
-				LOGGER.debug("not supported glyph concatenarion" + name + " value='" + unicode + "'");
+				LOGGER.debug("not supported glyph concatenarion {} value='{}'", name, unicode);
 				return null;
 			}
 			unicodeValue = Integer.parseInt(subElement, 16);
 		} else if (unicode.startsWith("&#") && unicode.endsWith(";")) {
 			final String subElement = unicode.substring(2, unicode.length() - 1);
 			if (subElement.indexOf("&") != -1) {
-				LOGGER.debug("not supported glyph concatenarion" + name + " value='" + unicode + "'");
+				LOGGER.debug("not supported glyph concatenarion {} value='{}'", name, unicode);
 				return null;
 			}
 			unicodeValue = Integer.parseInt(subElement, 16);
 		} else if (unicode.length() != 1) {
-			LOGGER.debug("not supported glyph concatenarion" + name + " value='" + unicode + "'");
+			LOGGER.debug("not supported glyph concatenarion {} value='{}'", name, unicode);
 			return null;
 		} else {
 			unicodeValue = unicode.charAt(0);
 		}
-		LOGGER.trace("        unicodeValue= '" + unicodeValue + "'");
+		LOGGER.trace("        unicodeValue= '{}'", unicodeValue);
 		final Glyph out = new Glyph(horizAdvX, d, name, unicode, unicodeValue);
 		if (!Glyph.LAZY_MODE) {
 			// when not in lazy mode we force the parsing of the model, this permit to check the whole font... otherwise many font is really big > 8000 glyph, then it is a waste of time...
@@ -111,8 +111,7 @@ public class Glyph {
 		}
 		for (final Kerning elem : this.kernings) {
 			if (elem.unicode() == unicodeValue) {
-				LOGGER.trace("Get kerning between : '" + (char) this.unicodeValue + "' and '" + (char) unicodeValue
-						+ "'  => " + elem.offset());
+				LOGGER.trace("Get kerning between : '{}' and '{}'  => {}", (char) this.unicodeValue, (char) unicodeValue, elem.offset());
 				return elem.offset();
 			}
 		}

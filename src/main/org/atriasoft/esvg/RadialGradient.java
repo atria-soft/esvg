@@ -38,16 +38,15 @@ public class RadialGradient extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "RadialGradient center=" + this.center + " focal=" + this.focal + " radius="
-				+ this.radius);
+		LOGGER.debug("{}RadialGradient center={} focal={} radius={}", spacingDist(spacing), this.center, this.focal, this.radius);
 		for (final Pair<Float, Color> it : this.data) {
-			LOGGER.debug(spacingDist(spacing + 1) + "STOP: offset=" + it.first + " color=" + it.second);
+			LOGGER.debug("{}STOP: offset={} color={}", spacingDist(spacing + 1), it.first, it.second);
 		}
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::RadialGradient");
+		LOGGER.trace("{}DRAW esvg::RadialGradient", spacingDist(level));
 	}
 
 	public Dimension2f getCenter() {
@@ -64,7 +63,7 @@ public class RadialGradient extends Base {
 		}
 		final Base base = document.getReference(this.href);
 		if (base == null) {
-			LOGGER.error("Can not get base : '" + this.href + "'");
+			LOGGER.error("Can not get base : '{}'", this.href);
 			return this.data;
 		}
 		if (base instanceof final RadialGradient gradientR) {
@@ -121,8 +120,7 @@ public class RadialGradient extends Base {
 		} else {
 			this.unit = GradientUnits.GRADIENT_UNITS_OBJECT_BOUNDING_BOX;
 			if (contentX.length() != 0 && contentX != "objectBoundingBox") {
-				LOGGER.error("Parsing error of 'gradientUnits' ==> not suported value: '" + contentX
-						+ "' not in : {userSpaceOnUse/objectBoundingBox} use objectBoundingBox");
+				LOGGER.warn("Parsing error of 'gradientUnits' ==> not suported value: '{}' not in : {{userSpaceOnUse/objectBoundingBox}} use objectBoundingBox", contentX);
 			}
 		}
 		contentX = element.getAttribute("spreadMethod", "");
@@ -133,8 +131,7 @@ public class RadialGradient extends Base {
 		} else {
 			this.spread = SpreadMethod.PAD;
 			if (contentX.length() != 0 && !contentX.equals("pad")) {
-				LOGGER.error("Parsing error of 'spreadMethod' ==> not suported value: '" + contentX
-						+ "' not in : {reflect/repeate/pad} use pad");
+				LOGGER.warn("Parsing error of 'spreadMethod' ==> not suported value: '{}' not in : {{reflect/repeate/pad}} use pad", contentX);
 			}
 		}
 		// note: xlink:href is incompatible with subNode "stop"
@@ -155,8 +152,7 @@ public class RadialGradient extends Base {
 							// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
 							offset = tmp.first * 100.0f;
 						} else if (tmp.second != Distance.POURCENT) {
-							LOGGER.error("offset : " + content + " res=" + tmp.first + "," + tmp.second
-									+ " Not support other than pourcent %");
+							LOGGER.warn("offset : {} res={},{} Not support other than pourcent %", content, tmp.first, tmp.second);
 						} else {
 							offset = tmp.first;
 						}
@@ -164,24 +160,24 @@ public class RadialGradient extends Base {
 					content = child.getAttribute("stop-color", "");
 					if (content.length() != 0) {
 						stopColor = parseColor(content).first;
-						LOGGER.trace(" color : \"" + content + "\"  == > " + stopColor);
+						LOGGER.trace(" color : \"{}\"  == > {}", content, stopColor);
 					}
 					content = child.getAttribute("stop-opacity", "");
 					if (content.length() != 0) {
 						float opacity = parseLength(content);
 						opacity = FMath.avg(0.0f, opacity, 1.0f);
 						stopColor = stopColor.withA(opacity);
-						LOGGER.trace(" opacity : '" + content + "'  == > " + stopColor);
+						LOGGER.trace(" opacity : '{}'  == > {}", content, stopColor);
 					}
 					this.data.add(new Pair<>(offset, stopColor));
 				} else {
-					LOGGER.error("node not suported : '" + child.getValue() + "' must be [stop]");
+					LOGGER.warn("node not suported : '{}' must be [stop]", child.getValue());
 				}
 			}
 		}
 		if (this.data.size() != 0) {
 			if (!this.href.isEmpty()) {
-				LOGGER.error("node can not have an xlink:href element with sub node named: stop ==> removing href");
+				LOGGER.warn("node can not have an xlink:href element with sub node named: stop ==> removing href");
 				this.href = "";
 			}
 		}

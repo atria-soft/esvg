@@ -26,20 +26,18 @@ public class Group extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Group (START) fill=" + this.paint.fill.first + "/" + this.paint.fill.second
-				+ " stroke=" + this.paint.stroke.first + "/" + this.paint.stroke.second + " stroke-width="
-				+ this.paint.strokeWidth);
+		LOGGER.debug("{}Group (START) fill={}/{} stroke={}/{} stroke-width={}", spacingDist(spacing), this.paint.fill.first, this.paint.fill.second, this.paint.stroke.first, this.paint.stroke.second, this.paint.strokeWidth);
 		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.display(spacing + 1);
 			}
 		}
-		LOGGER.debug(spacingDist(spacing) + "Group (STOP)");
+		LOGGER.debug("{}Group (STOP)", spacingDist(spacing));
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::group");
+		LOGGER.trace("{}DRAW esvg::group", spacingDist(level));
 		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.draw(myRenderer, basicTrans, level + 1);
@@ -54,7 +52,7 @@ public class Group extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW shape esvg::group");
+		LOGGER.trace("{}DRAW shape esvg::group", spacingDist(level));
 		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.drawShapePoints(out, recurtionMax, threshold, basicTrans, level + 1);
@@ -74,12 +72,12 @@ public class Group extends Base {
 		pos = parseXmlPosition(element);
 		size = parseXmlSize(element);
 		parsePaintAttr(element);
-		LOGGER.trace("parsed G1.   trans : " + this.transformMatrix);
+		LOGGER.trace("parsed G1.   trans : {}", this.transformMatrix);
 
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		LOGGER.trace("parsed G2.   trans : " + this.transformMatrix);
+		LOGGER.trace("parsed G2.   trans : {}", this.transformMatrix);
 
 		sizeMax.value = Vector2f.ZERO;
 		final Dynamic<Vector2f> tmpPos = new Dynamic<>(Vector2f.ZERO);
@@ -111,15 +109,14 @@ public class Group extends Base {
 			} else if (child.getValue().equals("text")) {
 				elementParser = new Text(this.paint);
 			} else {
-				LOGGER.error("node not suported : '" + child.getValue()
-						+ "' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+				LOGGER.warn("node not suported : '{}' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]", child.getValue());
 			}
 			if (elementParser == null) {
-				LOGGER.error("error on node: '" + child.getValue() + "' allocation error or not supported ...");
+				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getValue());
 				continue;
 			}
 			if (!elementParser.parseXML(child, this.transformMatrix, tmpPos)) {
-				LOGGER.error(" error on node: '" + child.getValue() + "' Sub Parsing ERROR");
+				LOGGER.warn(" error on node: '{}' Sub Parsing ERROR", child.getValue());
 				elementParser = null;
 				continue;
 			}

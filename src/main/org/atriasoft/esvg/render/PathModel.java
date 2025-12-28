@@ -171,7 +171,7 @@ public class PathModel {
 	}
 
 	public PointList generateListPoints(final int level, final int recurtionMax, final float threshold) {
-		LOGGER.trace(PathModel.spacingDist(level) + "Generate List Points ... from a path");
+		LOGGER.trace("{}Generate List Points ... from a path", PathModel.spacingDist(level));
 		final PointList out = new PointList();
 		List<Point> tmpListPoint = new ArrayList<>();
 		Vector2f lastPosition = Vector2f.ZERO;
@@ -181,13 +181,13 @@ public class PathModel {
 			if (it == null) {
 				continue;
 			}
-			LOGGER.trace(PathModel.spacingDist(level + 1) + " Draw : " + it.toString());
+			LOGGER.trace("{} Draw: {}", PathModel.spacingDist(level + 1), it.toString());
 			switch (it.getType()) {
 				case STOP:
 					if (tmpListPoint.size() != 0) {
 						if (tmpListPoint.size() == 0) {
-							LOGGER.warn(
-									PathModel.spacingDist(level + 1) + " Request path stop of not starting path ...");
+							LOGGER.warn("{} Request path stop of not starting path ...",
+									PathModel.spacingDist(level + 1));
 						} else {
 							tmpListPoint.get(tmpListPoint.size() - 1).setEndPath();
 							out.addList(tmpListPoint);
@@ -200,8 +200,8 @@ public class PathModel {
 				case CLOSE:
 					if (tmpListPoint.size() != 0) {
 						if (tmpListPoint.size() == 0) {
-							LOGGER.warn(
-									PathModel.spacingDist(level + 1) + " Request path close of not starting path ...");
+							LOGGER.warn("{} Request path close of not starting path ...",
+									PathModel.spacingDist(level + 1));
 						} else {
 							// find the previous tart of the path ...
 							tmpListPoint.get(0).type = PointType.join;
@@ -209,8 +209,8 @@ public class PathModel {
 							final Vector2f delta = (tmpListPoint.get(0).pos
 									.less(tmpListPoint.get(tmpListPoint.size() - 1).pos)).abs();
 							if (delta.x() <= 0.00001 && delta.y() <= 0.00001) {
-								LOGGER.trace("        Remove point Z property : "
-										+ tmpListPoint.get(tmpListPoint.size() - 1).pos + " with delta=" + delta);
+								LOGGER.trace("        Remove point Z property: {} with delta={}",
+										tmpListPoint.get(tmpListPoint.size() - 1).pos, delta);
 								tmpListPoint.remove(tmpListPoint.size() - 1);
 							}
 							out.addList(tmpListPoint);
@@ -354,13 +354,12 @@ public class PathModel {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
 					} {
 					final ElementElliptic tmpIt = (ElementElliptic) it;
-					LOGGER.info(
-							"TODO:" + PathModel.spacingDist(level + 1) + " Elliptic arc: radius=" + tmpIt.getPos1());
-					LOGGER.info("TODO:" + PathModel.spacingDist(level + 1) + "               angle=" + tmpIt.angle);
-					LOGGER.info("TODO:" + PathModel.spacingDist(level + 1) + "               this.largeArcFlag="
-							+ tmpIt.largeArcFlag);
-					LOGGER.info("TODO:" + PathModel.spacingDist(level + 1) + "               this.sweepFlag="
-							+ tmpIt.sweepFlag);
+					LOGGER.debug("TODO: {} Elliptic arc: radius={}", PathModel.spacingDist(level + 1), tmpIt.getPos1());
+					LOGGER.debug("TODO: {}               angle={}", PathModel.spacingDist(level + 1), tmpIt.angle);
+					LOGGER.debug("TODO: {}               this.largeArcFlag={}",
+							PathModel.spacingDist(level + 1), tmpIt.largeArcFlag);
+					LOGGER.debug("TODO: {}               this.sweepFlag={}",
+							PathModel.spacingDist(level + 1), tmpIt.sweepFlag);
 
 					final Vector2f lastPosStore = lastPosition;
 					if (!it.getRelative()) {
@@ -480,7 +479,7 @@ public class PathModel {
 				}
 					break;
 				default:
-					LOGGER.error(PathModel.spacingDist(level + 1) + " Unknow PATH commant (internal error)");
+					LOGGER.error("{}Unknown PATH command (internal error)", PathModel.spacingDist(level + 1));
 					break;
 			}
 		}

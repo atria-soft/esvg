@@ -422,7 +422,7 @@ class RegressionTest {
 			if (!refFile.exists()) {
 				// Pas d'image de référence, on la crée
 				saveImage(image, refPath);
-				LOGGER.info("Created reference image: " + refPath);
+				LOGGER.debug("Created reference image: {}", refPath);
 				generated++;
 			} else {
 				// Comparer avec la référence
@@ -434,18 +434,18 @@ class RegressionTest {
 					failures.add(tc.name() + ": " + result.message());
 				} else {
 					passed++;
-					LOGGER.info("PASS: " + tc.name() + " - " + result.message());
+					LOGGER.debug("PASS: {} - {}", tc.name(), result.message());
 				}
 			}
 		}
 
 		// Rapport
 		LOGGER.info("=== Regression Test Report ===");
-		LOGGER.info("Total test cases: " + testCases.size());
-		LOGGER.info("New references generated: " + generated);
-		LOGGER.info("Compared with references: " + compared);
-		LOGGER.info("Passed: " + passed);
-		LOGGER.info("Failed: " + failures.size());
+		LOGGER.info("Total test cases: {}", testCases.size());
+		LOGGER.info("New references generated: {}", generated);
+		LOGGER.info("Compared with references: {}", compared);
+		LOGGER.info("Passed: {}", passed);
+		LOGGER.info("Failed: {}", failures.size());
 
 		if (!failures.isEmpty()) {
 			LOGGER.error("=== Failures ===");
@@ -496,8 +496,8 @@ class RegressionTest {
 		double avgTimeMs = (endTime - startTime) / 1_000_000.0 / iterations;
 
 		LOGGER.info("=== Performance Test ===");
-		LOGGER.info("Average render time: " + String.format("%.2f", avgTimeMs) + " ms");
-		LOGGER.info("Renders per second: " + String.format("%.1f", 1000.0 / avgTimeMs));
+		LOGGER.info("Average render time: {} ms", String.format("%.2f", avgTimeMs));
+		LOGGER.info("Renders per second: {}", String.format("%.1f", 1000.0 / avgTimeMs));
 	}
 
 	/**

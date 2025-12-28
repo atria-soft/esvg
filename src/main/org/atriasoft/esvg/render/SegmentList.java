@@ -34,7 +34,7 @@ public class SegmentList {
 					+ vect1.y() * point2.x()) / diviseur;
 			return point2.add(vect2.multiply(mmm));
 		}
-		LOGGER.error("Get divider / 0.0f");
+		LOGGER.warn("Get divider / 0.0f");
 		return point2;
 	}
 	
@@ -117,11 +117,11 @@ public class SegmentList {
 				if (itListPoint.get(idCurrent).type == PointType.join
 						|| itListPoint.get(idCurrent).type == PointType.interpolation) {
 					if (idPevious < 0) {
-						LOGGER.error("an error occure a previous ID is < 0.... ");
+						LOGGER.error("an error occurred: previous ID is < 0");
 						continue;
 					}
 					if (idNext >= itListPoint.size()) {
-						LOGGER.error("an error occure a next ID is >= nbPoint len .... ");
+						LOGGER.error("an error occurred: next ID is >= nbPoint len");
 						continue;
 					}
 					//LOGGER.debug("JOIN : id : prev/curr/next : " + idPevious + "/" + idCurrent + "/" + idNext);
@@ -159,7 +159,7 @@ public class SegmentList {
 					itListPoint.get(idCurrent).orthoAxeNext = itListPoint.get(idCurrent).miterAxe;
 				} else if (itListPoint.get(idCurrent).type == PointType.stop) {
 					if (idPevious < 0) {
-						LOGGER.error("an error occure a previous ID is < 0.... ");
+						LOGGER.error("an error occurred: previous ID is < 0");
 						continue;
 					}
 					itListPoint.get(idCurrent).posPrevious = itListPoint.get(idPevious).pos;
@@ -204,7 +204,7 @@ public class SegmentList {
 								// Check the miter limit:
 								final float limitRight = (left.less(it.pos)).length() / width * 2.0f;
 								final float limitLeft = (right.less(it.pos)).length() / width * 2.0f;
-								LOGGER.trace("    miter Limit: " + limitRight + " " + limitLeft + " <= " + miterLimit);
+								LOGGER.trace("    miter Limit: {} {} <= {}", limitRight, limitLeft, miterLimit);
 								if (limitRight <= miterLimit && limitLeft <= miterLimit) {
 									leftPoint.value = left;
 									rightPoint.value = right;
@@ -239,10 +239,10 @@ public class SegmentList {
 				switch (it.type) {
 					case single:
 						// just do nothing ....
-						LOGGER.trace("Find Single " + it.pos);
+						LOGGER.trace("Find Single {}", it.pos);
 						break;
 					case start:
-						LOGGER.trace("Find Start " + it.pos);
+						LOGGER.trace("Find Start {}", it.pos);
 						if (haveStartLine) {
 							// close previous :
 							LOGGER.warn(" find a non close path ...");
@@ -252,7 +252,7 @@ public class SegmentList {
 						startStopPoint(leftPoint, rightPoint, it, cap, width, true);
 						break;
 					case stop:
-						LOGGER.trace("Find Stop " + it.pos);
+						LOGGER.trace("Find Stop {}", it.pos);
 						if (!haveStartLine) {
 							LOGGER.warn("find close path without start part ...");
 							break;
@@ -261,22 +261,22 @@ public class SegmentList {
 						startStopPoint(leftPoint, rightPoint, it, cap, width, false);
 						break;
 					case interpolation: {
-						LOGGER.trace("Find interpolation " + it.pos);
+						LOGGER.trace("Find interpolation {}", it.pos);
 						final Vector2f left = SegmentList.getIntersect(leftPoint.value, it.pos.less(it.posPrevious),
 								it.pos, it.miterAxe);
 						final Vector2f right = SegmentList.getIntersect(rightPoint.value, it.pos.less(it.posPrevious),
 								it.pos, it.miterAxe);
 						//Draw from previous point:
 						addSegment(leftPoint.value, left);
-						LOGGER.trace("    segment :" + leftPoint + " . " + left);
+						LOGGER.trace("    segment: {} . {}", leftPoint, left);
 						addSegment(right, rightPoint.value);
-						LOGGER.trace("    segment :" + right + " . " + rightPoint);
+						LOGGER.trace("    segment: {} . {}", right, rightPoint);
 						leftPoint.value = left;
 						rightPoint.value = right;
 					}
 						break;
 					case join:
-						LOGGER.trace("Find join " + it.pos);
+						LOGGER.trace("Find join {}", it.pos);
 						switch (join) {
 							case MITER: {
 								final Vector2f left = SegmentList.getIntersect(leftPoint.value,
@@ -286,13 +286,13 @@ public class SegmentList {
 								// Check the miter limit:
 								final float limitRight = left.less(it.pos).length() / width * 2.0f;
 								final float limitLeft = right.less(it.pos).length() / width * 2.0f;
-								LOGGER.trace("    miter Limit: " + limitRight + " " + limitLeft + " <= " + miterLimit);
+								LOGGER.trace("    miter Limit: {} {} <= {}", limitRight, limitLeft, miterLimit);
 								if (limitRight <= miterLimit && limitLeft <= miterLimit) {
 									//Draw from previous point:
 									addSegment(leftPoint.value, left);
-									LOGGER.trace("    segment :" + leftPoint + " . " + left);
+									LOGGER.trace("    segment: {} . {}", leftPoint, left);
 									addSegment(right, rightPoint.value);
-									LOGGER.trace("    segment :" + right + " . " + rightPoint);
+									LOGGER.trace("    segment: {} . {}", right, rightPoint);
 									leftPoint.value = left;
 									rightPoint.value = right;
 									break;
@@ -311,16 +311,16 @@ public class SegmentList {
 									final Vector2f left2 = it.pos.add(it.orthoAxeNext.multiply(width * 0.5f));
 									//Draw from previous point:
 									addSegment(leftPoint.value, left1);
-									LOGGER.trace("    segment :" + leftPoint + " . " + left1);
+									LOGGER.trace("    segment: {} . {}", leftPoint, left1);
 									if (join != JoinMode.ROUND) {
 										// Miter and bevel:
 										addSegment(left1, left2);
-										LOGGER.trace("    segment :" + left1 + " . " + left2);
+										LOGGER.trace("    segment: {} . {}", left1, left2);
 									} else {
 										createSegmentListStroke(left1, left2, it.pos, width, false);
 									}
 									addSegment(right, rightPoint.value);
-									LOGGER.trace("    segment :" + right + " . " + rightPoint);
+									LOGGER.trace("    segment: {} . {}", right, rightPoint);
 									leftPoint.value = left2;
 									rightPoint.value = right;
 								} else {
@@ -330,13 +330,13 @@ public class SegmentList {
 									final Vector2f right2 = it.pos.less(it.orthoAxeNext.multiply(width * 0.5f));
 									//Draw from previous point:
 									addSegment(leftPoint.value, left);
-									LOGGER.trace("    segment :" + leftPoint + " . " + left);
+									LOGGER.trace("    segment: {} . {}", leftPoint, left);
 									addSegment(right1, rightPoint.value);
-									LOGGER.trace("    segment :" + right1 + " . " + rightPoint);
+									LOGGER.trace("    segment: {} . {}", right1, rightPoint);
 									if (join != JoinMode.ROUND) {
 										// Miter and bevel:
 										addSegment(right2, right1);
-										LOGGER.trace("    segment :" + right2 + " . " + right1);
+										LOGGER.trace("    segment: {} . {}", right2, right1);
 									} else {
 										createSegmentListStroke(right1, right2, it.pos, width, true);
 									}
@@ -387,19 +387,19 @@ public class SegmentList {
 			ppp2 = center.add(axeRotate.multiply(width * 0.5f));
 			if (isStart) {
 				addSegment(ppp2, ppp1);
-				LOGGER.trace("    segment :" + ppp2 + " . " + ppp1);
+				LOGGER.trace("    segment: {} . {}", ppp2, ppp1);
 			} else {
 				addSegment(ppp1, ppp2);
-				LOGGER.trace("    segment :" + ppp1 + " . " + ppp2);
+				LOGGER.trace("    segment: {} . {}", ppp1, ppp2);
 			}
 			ppp1 = ppp2;
 		}
 		if (isStart) {
 			addSegment(point2, ppp1);
-			LOGGER.trace("    segment :" + point2 + " . " + ppp1);
+			LOGGER.trace("    segment: {} . {}", point2, ppp1);
 		} else {
 			addSegment(ppp1, point2);
-			LOGGER.trace("    segment :" + ppp1 + " . " + point2);
+			LOGGER.trace("    segment: {} . {}", ppp1, point2);
 		}
 	}
 	
@@ -426,19 +426,19 @@ public class SegmentList {
 				if (!isStart) {
 					//Draw from previous point:
 					addSegment(leftPoint.value, left);
-					LOGGER.trace("    segment :" + leftPoint + " . " + left);
+					LOGGER.trace("    segment: {} . {}", leftPoint, left);
 					addSegment(right, rightPoint.value);
-					LOGGER.trace("    segment :" + right + " . " + rightPoint);
+					LOGGER.trace("    segment: {} . {}", right, rightPoint);
 				}
 				leftPoint.value = left;
 				rightPoint.value = right;
 			}
 				if (!isStart) {
 					addSegment(leftPoint.value, rightPoint.value);
-					LOGGER.trace("    segment :" + leftPoint + " . " + rightPoint);
+					LOGGER.trace("    segment: {} . {}", leftPoint, rightPoint);
 				} else {
 					addSegment(rightPoint.value, leftPoint.value);
-					LOGGER.trace("    segment :" + rightPoint + " . " + leftPoint);
+					LOGGER.trace("    segment: {} . {}", rightPoint, leftPoint);
 				}
 				break;
 			case ROUND: {
@@ -448,9 +448,9 @@ public class SegmentList {
 					if (!isStart) {
 						//Draw from previous point:
 						addSegment(leftPoint.value, left);
-						LOGGER.trace("    segment :" + leftPoint + " . " + left);
+						LOGGER.trace("    segment: {} . {}", leftPoint, left);
 						addSegment(right, rightPoint.value);
-						LOGGER.trace("    segment :" + right + " . " + rightPoint);
+						LOGGER.trace("    segment: {} . {}", right, rightPoint);
 					}
 					leftPoint.value = left;
 					rightPoint.value = right;
@@ -479,20 +479,20 @@ public class SegmentList {
 				if (!isStart) {
 					//Draw from previous point:
 					addSegment(leftPoint.value, left);
-					LOGGER.trace("    segment :" + leftPoint + " . " + left);
+					LOGGER.trace("    segment: {} . {}", leftPoint, left);
 					addSegment(right, rightPoint.value);
-					LOGGER.trace("    segment :" + right + " . " + rightPoint);
+					LOGGER.trace("    segment: {} . {}", right, rightPoint);
 				}
 				leftPoint.value = left;
 				rightPoint.value = right;
 				if (!isStart) {
 					addSegment(leftPoint.value, rightPoint.value);
-					LOGGER.trace("    segment :" + leftPoint + " . " + rightPoint);
+					LOGGER.trace("    segment: {} . {}", leftPoint, rightPoint);
 				} else {
 					addSegment(rightPoint.value, leftPoint.value);
-					LOGGER.trace("    segment :" + rightPoint + " . " + leftPoint);
+					LOGGER.trace("    segment: {} . {}", rightPoint, leftPoint);
 				}
-				LOGGER.trace("    segment :" + leftPoint + " . " + rightPoint);
+				LOGGER.trace("    segment: {} . {}", leftPoint, rightPoint);
 			}
 				break;
 			default:

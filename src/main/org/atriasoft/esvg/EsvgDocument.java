@@ -58,7 +58,7 @@ public class EsvgDocument extends Base {
 					for (final String it1 : listStyle) {
 						final String[] value = it1.split(":");
 						if (value.length != 2) {
-							LOGGER.error("parsing style with a wrong patern : " + it1 + " missing ':'");
+							LOGGER.warn("parsing style with a wrong patern : {} missing ':'", it1);
 							continue;
 						}
 						// TODO Check if the attibute already exist ...
@@ -86,7 +86,7 @@ public class EsvgDocument extends Base {
 			 * Display all the node in the svg file.
 			 */
 	public void displayDebug() {
-		LOGGER.debug("Main SVG: size=" + this.size);
+		LOGGER.debug("Main SVG: size={}", this.size);
 		LOGGER.debug("    refs:");
 		for (final Base element : this.refList) {
 			if (element != null) {
@@ -117,7 +117,7 @@ public class EsvgDocument extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW shape EsvgDocument");
+		LOGGER.trace("{}DRAW shape EsvgDocument", spacingDist(level));
 		for (final Base it : this.subElementList) {
 			if (it != null) {
 				it.drawShapePoints(out, recurtionMax, threshold, basicTrans, level + 1);
@@ -142,7 +142,7 @@ public class EsvgDocument extends Base {
 		if (size.y() <= 0) {
 			size = size.withY(this.size.y());
 		}
-		LOGGER.debug("lineification size " + size);
+		LOGGER.debug("lineification size {}", size);
 		// create the first element matrix modification ...
 		final Matrix2x3f basicTrans = Matrix2x3f.IDENTITY
 				.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
@@ -163,7 +163,7 @@ public class EsvgDocument extends Base {
 				return it;
 			}
 		}
-		LOGGER.error("Can not find reference name : '" + name + "'");
+		LOGGER.warn("Can not find reference name : '{}'", name);
 		return null;
 	}
 	
@@ -286,7 +286,7 @@ public class EsvgDocument extends Base {
 			pos = parseXmlPosition(root);
 			this.size = parseXmlSize(root);
 			parsePaintAttr(root);
-			LOGGER.trace("parsed .ROOT trans: " + this.transformMatrix);
+			LOGGER.trace("parsed .ROOT trans: {}", this.transformMatrix);
 		} else {
 			LOGGER.trace("Parse Reference section ... (no attibute)");
 		}
@@ -326,19 +326,19 @@ public class EsvgDocument extends Base {
 				elementParser = new Text(this.paint);
 			} else if (child.getValue().equals("radialGradient")) {
 				if (!isReference) {
-					LOGGER.error("'" + child.getValue() + "' node must not be defined outside a defs Section");
+					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getValue());
 					continue;
 				}
 				elementParser = new RadialGradient(this.paint);
 			} else if (child.getValue().equals("linearGradient")) {
 				if (!isReference) {
-					LOGGER.error("'" + child.getValue() + "' node must not be defined outside a defs Section");
+					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getValue());
 					continue;
 				}
 				elementParser = new LinearGradient(this.paint);
 			} else if (child.getValue().equals("defs")) {
 				if (isReference) {
-					LOGGER.error("'" + child.getValue() + "' node must not be defined in a defs Section");
+					LOGGER.warn("'{}' node must not be defined in a defs Section", child.getValue());
 					continue;
 				}
 				final boolean retRefs = parseXMLData(child, true);
@@ -351,15 +351,14 @@ public class EsvgDocument extends Base {
 				// Node ignore : generaly inkscape data
 				continue;
 			} else {
-				LOGGER.error("node not suported : '" + child.getValue()
-						+ "' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
+				LOGGER.warn("node not suported : '{}' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]", child.getValue());
 			}
 			if (elementParser == null) {
-				LOGGER.error("error on node: '" + child.getValue() + "' allocation error or not supported ...");
+				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getValue());
 				continue;
 			}
 			if (!elementParser.parseXML(child, this.transformMatrix, size)) {
-				LOGGER.error("error on node: '" + child.getValue() + "' Sub Parsing ERROR");
+				LOGGER.warn("error on node: '{}' Sub Parsing ERROR", child.getValue());
 				elementParser = null;
 				continue;
 			}
@@ -403,7 +402,7 @@ public class EsvgDocument extends Base {
 				size = size.withY((int) this.size.y());
 			}
 		}
-		LOGGER.debug("Generate size " + size);
+		LOGGER.debug("Generate size {}", size);
 		Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
 		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
@@ -434,12 +433,12 @@ public class EsvgDocument extends Base {
 			}
 		}
 		if (size.x() <= 0) {
-			LOGGER.error("Generate size " + size);
+			LOGGER.warn("Generate size X is invalid: {}", size);
 		}
 		if (size.y() <= 0) {
-			LOGGER.error("Generate size " + size);
+			LOGGER.warn("Generate size Y is invalid: {}", size);
 		}
-		LOGGER.trace("Generate size " + size);
+		LOGGER.trace("Generate size {}", size);
 		final Renderer renderedElement = new Renderer(size, this, visualDebug);
 		// create the first element matrix modification ...
 		final Matrix2x3f basicTrans = Matrix2x3f.IDENTITY

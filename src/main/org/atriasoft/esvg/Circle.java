@@ -54,14 +54,14 @@ public class Circle extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Circle " + this.position + " radius=" + this.radius);
+		LOGGER.debug("{}Circle {} radius={}", spacingDist(spacing), this.position, this.radius);
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Circle");
+		LOGGER.trace("{}DRAW esvg::Circle", spacingDist(level));
 		if (this.radius <= 0.0f) {
-			LOGGER.trace(spacingDist(level + 1) + "Too small radius" + this.radius);
+			LOGGER.trace("{}Too small radius {}", spacingDist(level + 1), this.radius);
 			return;
 		}
 		final PathModel listElement = createPath();
@@ -112,7 +112,7 @@ public class Circle extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Circle");
+		LOGGER.trace("{}DRAW Shape esvg::Circle", spacingDist(level));
 		final PathModel listElement = createPath();
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);

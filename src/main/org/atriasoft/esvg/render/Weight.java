@@ -144,7 +144,7 @@ public class Weight {
 				// if the counter is not at 0 ==> fill if to the end with full value ... 2.0
 				if (lastState != 0) {
 					// just past the last state to the end of the image ...
-					LOGGER.error("end of Path with no end ... " + currentPos + " . " + sizeX);
+					LOGGER.error("end of Path with no end... {} . {}", currentPos, sizeX);
 					for (int xxx = currentPos; xxx < sizeX; ++xxx) {
 						if (xxx >= 0) {
 							rowData[xxx] += 100.0f;
@@ -190,11 +190,11 @@ public class Weight {
 	public void resize(final Vector2i size) {
 		this.size = size;
 		if (this.size.x() <= 0) {
-			LOGGER.error("Error in the Weight size : " + this.size);
+			LOGGER.error("Error in the Weight size: {}", this.size);
 			this.size = this.size.withX(1);
 		}
 		if (this.size.y() <= 0) {
-			LOGGER.error("Error in the Weight size : " + this.size);
+			LOGGER.error("Error in the Weight size: {}", this.size);
 			this.size = this.size.withY(1);
 		}
 		this.data = new float[this.size.y()][this.size.x()];

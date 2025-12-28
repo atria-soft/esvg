@@ -42,12 +42,12 @@ public class Polyline extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Polyline nbPoint=" + this.listPoint.size());
+		LOGGER.debug("{}Polyline nbPoint={}", spacingDist(spacing), this.listPoint.size());
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Polyline");
+		LOGGER.trace("{}DRAW esvg::Polyline", spacingDist(level));
 
 		final PathModel listElement = createPath();
 
@@ -96,7 +96,7 @@ public class Polyline extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Polyline");
+		LOGGER.trace("{}DRAW Shape esvg::Polyline", spacingDist(level));
 		final PathModel listElement = createPath();
 		final Matrix2x3f mtx = this.transformMatrix.multiply(basicTrans);
 		PointList listPoints;
@@ -130,7 +130,7 @@ public class Polyline extends Base {
 			return false;
 		}
 		sizeMax.value = Vector2f.ZERO;
-		LOGGER.trace("Parse polyline : '" + sss1 + "'");
+		LOGGER.trace("Parse polyline : '{}'", sss1);
 		final String[] elems = sss1.split(" ");
 		for (final String elem : elems) {
 			final Vector2f pos = Vector2f.valueOf(elem);

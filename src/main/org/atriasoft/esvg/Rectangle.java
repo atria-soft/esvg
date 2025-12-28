@@ -79,14 +79,12 @@ public class Rectangle extends Base {
 
 	@Override
 	public void display(final int spacing) {
-		LOGGER.debug(spacingDist(spacing) + "Rectangle : pos=" + this.position + " size=" + this.size + " corner="
-				+ this.roundedCorner);
+		LOGGER.debug("{}Rectangle : pos={} size={} corner={}", spacingDist(spacing), this.position, this.size, this.roundedCorner);
 	}
 
 	@Override
 	public void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW esvg::Rectangle: fill=" + this.paint.fill.first + "/"
-				+ this.paint.fill.second + " stroke=" + this.paint.stroke.first + "/" + this.paint.stroke.second);
+		LOGGER.trace("{}DRAW esvg::Rectangle: fill={}/{} stroke={}/{}", spacingDist(level), this.paint.fill.first, this.paint.fill.second, this.paint.stroke.first, this.paint.stroke.second);
 		final PathModel listElement = createPath();
 
 		Matrix2x3f mtx = this.transformMatrix;
@@ -136,7 +134,7 @@ public class Rectangle extends Base {
 			final float threshold,
 			final Matrix2x3f basicTrans,
 			final int level) {
-		LOGGER.trace(spacingDist(level) + "DRAW Shape esvg::Rectangle");
+		LOGGER.trace("{}DRAW Shape esvg::Rectangle", spacingDist(level));
 		final PathModel listElement = createPath();
 		Matrix2x3f mtx = this.transformMatrix;
 		mtx = mtx.multiply(basicTrans);
