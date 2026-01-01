@@ -253,9 +253,12 @@ public class PathModel {
 						tmpListPoint.add(new Point(lastPosition, PointType.start));
 					}
 					if (!it.getRelative()) {
-						lastPosition = Vector2f.ZERO;
+						// For absolute H, only change X, keep current Y
+						lastPosition = lastPosition.withX(it.getPos().x());
+					} else {
+						// For relative h, add to X only
+						lastPosition = lastPosition.add(it.getPos());
 					}
-					lastPosition = lastPosition.add(it.getPos());
 					tmpListPoint.add(new Point(lastPosition, PointType.join));
 					lastAngle = lastPosition;
 					break;
@@ -265,9 +268,12 @@ public class PathModel {
 						tmpListPoint.add(new Point(lastPosition, PointType.start));
 					}
 					if (!it.getRelative()) {
-						lastPosition = Vector2f.ZERO;
+						// For absolute V, only change Y, keep current X
+						lastPosition = lastPosition.withY(it.getPos().y());
+					} else {
+						// For relative v, add to Y only
+						lastPosition = lastPosition.add(it.getPos());
 					}
-					lastPosition = lastPosition.add(it.getPos());
 					tmpListPoint.add(new Point(lastPosition, PointType.join));
 					lastAngle = lastPosition;
 					break;
