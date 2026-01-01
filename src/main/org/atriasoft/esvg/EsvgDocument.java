@@ -285,6 +285,31 @@ public class EsvgDocument extends Base {
 			parseTransform(root);
 			pos = parseXmlPosition(root);
 			this.size = parseXmlSize(root);
+			// If width/height are not defined, try to deduce size from viewBox
+			if (this.size.x() == 0 || this.size.y() == 0) {
+				final String viewBox = root.getAttribute("viewBox", "");
+				if (!viewBox.isEmpty()) {
+					// viewBox format: "minX minY width height" (can use space or comma as separator)
+					final String[] parts = viewBox.trim().split("[\\s,]+");
+					if (parts.length == 4) {
+						try {
+							final float viewBoxWidth = Float.parseFloat(parts[2]);
+							final float viewBoxHeight = Float.parseFloat(parts[3]);
+							if (this.size.x() == 0) {
+								this.size = this.size.withX(viewBoxWidth);
+							}
+							if (this.size.y() == 0) {
+								this.size = this.size.withY(viewBoxHeight);
+							}
+							LOGGER.trace("Size deduced from viewBox: {}", this.size);
+						} catch (final NumberFormatException e) {
+							LOGGER.warn("Failed to parse viewBox values: '{}'", viewBox);
+						}
+					} else {
+						LOGGER.warn("Invalid viewBox format (expected 4 values): '{}'", viewBox);
+					}
+				}
+			}
 			parsePaintAttr(root);
 			LOGGER.trace("parsed .ROOT trans: {}", this.transformMatrix);
 		} else {
