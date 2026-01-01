@@ -411,8 +411,7 @@ public class PathModel {
 								sss * -radius.y() * deltaPrim.x() / radius.x());
 						// Compute center from center'
 						final Matrix2x3f matrix = Matrix2x3f.createRotate(rotationX);
-						final Vector2f center = lastPosStore.multiply(pos).multiply(0.5f)
-								.add(matrix.multiply(centerPrime));
+						final Vector2f center = lastPosStore.add(pos).multiply(0.5f).add(matrix.multiply(centerPrime));
 						//this.debugInformation.addSegment(center-Vector2f(3.0,3.0), center+Vector2f(3.0,3.0));
 						//	this.debugInformation.addSegment(center-Vector2f(3.0,-3.0), center+Vector2f(3.0,-3.0));
 						// Calculate theta1, and delta theta.
@@ -437,7 +436,7 @@ public class PathModel {
 							}
 						}
 						// Approximate the arc using cubic spline segments.
-						matrix.translate(center);
+						final Matrix2x3f matrixWithCenter = matrix.translate(center);
 						// Split arc into max 90 degree segments.
 						// The loop assumes an iteration per end point (including start and end), this +1.
 						final int ndivs = (int) (Math.abs(deltaTheta) / ((float) Math.PI * 0.5f)) + 1;
@@ -453,7 +452,7 @@ public class PathModel {
 							final float a = theta1 + deltaTheta * ((float) iii / (float) ndivs);
 							delta = new Vector2f(FMath.cos(a), FMath.sin(a));
 							// position
-							final Vector2f pointPos = matrix
+							final Vector2f pointPos = matrixWithCenter
 									.multiply(new Vector2f(delta.x() * radius.x(), delta.y() * radius.y()));
 							// tangent
 							final Vector2f tangent = matrix.applyScaleRotation(
