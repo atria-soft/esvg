@@ -458,14 +458,11 @@ public class PathModel {
 							final Vector2f tangent = matrix.applyScaleRotation(
 									new Vector2f(-delta.y() * radius.x() * kappa, delta.x() * radius.y() * kappa));
 							if (iii > 0) {
-								final Vector2f zlastPosStore = lastPosition;
-								if (!it.getRelative()) {
-									lastPosition = Vector2f.ZERO;
-								}
+								// Use pointPosPrevious as start point for Bezier curve (not lastPosition)
 								final Vector2f zpos1 = pointPosPrevious.add(tangentPrevious);
 								final Vector2f zpos2 = pointPos.less(tangent);
 								final Vector2f zpos = pointPos;
-								PathModel.interpolateCubicBezier(tmpListPoint, recurtionMax, threshold, zlastPosStore,
+								PathModel.interpolateCubicBezier(tmpListPoint, recurtionMax, threshold, pointPosPrevious,
 										zpos1, zpos2, zpos, 0, PointType.join);
 								lastPosition = zpos;
 								lastAngle = zpos2;
