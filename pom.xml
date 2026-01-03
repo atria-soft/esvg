@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.atriasoft</groupId>
-  <artifactId>esvg</artifactId>
-  <version>0.1.0</version>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.atriasoft</groupId>
+	<artifactId>esvg</artifactId>
+	<version>0.1.0</version>
 	<licenses>
 		<license>
 			<name>Mozilla Public License 2.0</name>
@@ -21,24 +21,22 @@
 			</roles>
 		</developer>
 	</developers>
-
 	<repositories>
-	  <repository>
-	    <id>gitea</id>
-	    <url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-	  </repository>
+		<repository>
+			<id>gitea</id>
+			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
-	  <repository>
-	    <id>gitea</id>
-	    <url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-	  </repository>
-	  <snapshotRepository>
-	    <id>gitea</id>
-	    <url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-	  </snapshotRepository>
+		<repository>
+			<id>gitea</id>
+			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
+		</repository>
+		<snapshotRepository>
+			<id>gitea</id>
+			<url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
+		</snapshotRepository>
 	</distributionManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.atriasoft</groupId>
@@ -79,7 +77,6 @@
 			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<sourceDirectory>src/main</sourceDirectory>
 		<resources>
@@ -118,7 +115,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
 			</plugin>
-		    <plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
@@ -130,7 +127,7 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 				</configuration>
-		    </plugin>
+			</plugin>
 			<!-- Java-doc generation for stand-alone site -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -156,5 +153,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 </project>

@@ -28,19 +28,19 @@ public class EsvgDocument extends Base {
 	private Uri uri = null; //!< reference elements ...
 	private String version = "0.0";
 	private static final boolean envDisplayRefs = "true".equals(System.getenv("ESQG_DISPLAY_REFS"));
-	
+
 	public EsvgDocument() {
-		
+
 	}
-	
+
 	public EsvgDocument(final Vector2i size) {
 		this.size = new Vector2f(size.x(), size.y());
 	}
-	
+
 	public void addElement(final Base elem) {
 		this.subElementList.add(elem);
 	}
-	
+
 	/**
 	 * change all style in a xml atribute
 	 */
@@ -73,7 +73,7 @@ public class EsvgDocument extends Base {
 		}
 		return true;
 	}
-	
+
 	public void clear() {
 		this.uri = null;
 		this.version = "0.0";
@@ -81,7 +81,7 @@ public class EsvgDocument extends Base {
 		this.paint.clear();
 		this.size = Vector2f.ZERO;
 	}
-	
+
 	/**
 			 * Display all the node in the svg file.
 			 */
@@ -100,7 +100,7 @@ public class EsvgDocument extends Base {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void draw(final Renderer myRenderer, final Matrix2x3f basicTrans, final int level) {
 		for (final Base element : this.subElementList) {
@@ -109,7 +109,7 @@ public class EsvgDocument extends Base {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void drawShapePoints(
 			final List<List<Vector2f>> out,
@@ -124,16 +124,16 @@ public class EsvgDocument extends Base {
 			}
 		}
 	}
-	
+
 	// TODO remove this fucntion : use generic function ...
 	public Vector2f getDefinedSize() {
 		return this.size;
 	}
-	
+
 	public List<List<Vector2f>> getLines() {
 		return getLines(new Vector2f(256, 256));
 	}
-	
+
 	public List<List<Vector2f>> getLines(Vector2f size) {
 		final List<List<Vector2f>> out = new ArrayList<>();
 		if (size.x() <= 0) {
@@ -149,7 +149,7 @@ public class EsvgDocument extends Base {
 		drawShapePoints(out, 10, 0.25f, basicTrans);
 		return out;
 	}
-	
+
 	public Base getReference(final String name) {
 		if (name.isEmpty()) {
 			LOGGER.error("request a reference with no name ... ");
@@ -166,11 +166,11 @@ public class EsvgDocument extends Base {
 		LOGGER.warn("Can not find reference name : '{}'", name);
 		return null;
 	}
-	
+
 	public boolean isLoadOk() {
 		return this.loadOK;
 	}
-	
+
 	/*
 	//! @previous
 	public List<Color> renderImageFloatRGB(final Vector2i size) {
@@ -183,7 +183,7 @@ public class EsvgDocument extends Base {
 		}
 		return out;
 	}
-	
+
 	//! @previous
 	public List<Color<uint8t,4>> renderImageU8RGBA(final Vector2i size) {
 		List<Color> data = renderImageFloatRGBA(size);
@@ -195,7 +195,7 @@ public class EsvgDocument extends Base {
 		}
 		return out;
 	}
-	
+
 	//! @previous
 	public List<Color<uint8t,3>> renderImageU8RGB(final Vector2i size) {
 		List<Color> data = renderImageFloatRGBA(size);
@@ -225,21 +225,9 @@ public class EsvgDocument extends Base {
 			e.printStackTrace();
 			return false;
 		}
-		if (doc instanceof final XmlElement elem && elem.existNode("svg")) {
-			try {
-				if (elem.getNode("svg") instanceof final XmlElement rootElement) {
-					cleanStyleProperty(rootElement);
-					this.loadOK = parseXMLData(rootElement);
-				}
-			} catch (final ExmlNodeDoesNotExist e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return this.loadOK;
+		return parseXML(doc);
 	}
-	
+
 	/**
 	 * parse a string that contain an svg stream
 	 * @param data Data to parse
@@ -248,7 +236,6 @@ public class EsvgDocument extends Base {
 	 */
 	public boolean parse(final String data) {
 		clear();
-		this.uri = null;
 		XmlNode doc = null;
 		try {
 			doc = Exml.parse(data);
@@ -257,6 +244,10 @@ public class EsvgDocument extends Base {
 			e.printStackTrace();
 			return false;
 		}
+		return parseXML(doc);
+	}
+	
+	public boolean parseXML(final XmlNode doc) {
 		if (doc instanceof final XmlElement elem && elem.existNode("svg")) {
 			try {
 				if (elem.getNode("svg") instanceof final XmlElement rootElement) {
@@ -275,7 +266,7 @@ public class EsvgDocument extends Base {
 	public boolean parseXMLData(final XmlElement root) {
 		return parseXMLData(root, false);
 	}
-	
+
 	public boolean parseXMLData(final XmlElement root, final boolean isReference) {
 		// get the svg version :
 		this.version = root.getAttribute("version", "");
@@ -315,7 +306,7 @@ public class EsvgDocument extends Base {
 		} else {
 			LOGGER.trace("Parse Reference section ... (no attibute)");
 		}
-		
+
 		Vector2f maxSize = Vector2f.ZERO;
 		final Dynamic<Vector2f> size = new Dynamic<>(Vector2f.ZERO);
 		// parse all sub node:
@@ -376,7 +367,9 @@ public class EsvgDocument extends Base {
 				// Node ignore : generaly inkscape data
 				continue;
 			} else {
-				LOGGER.warn("node not suported : '{}' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]", child.getValue());
+				LOGGER.warn(
+						"node not suported : '{}' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]",
+						child.getValue());
 			}
 			if (elementParser == null) {
 				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getValue());
@@ -410,12 +403,12 @@ public class EsvgDocument extends Base {
 		}
 		return true;
 	}
-	
+
 	/*
 	public float[][] renderImageFloat(final Vector2i size) {
 		return renderImageFloat(size, false);
 	}
-	
+
 	public float[][] renderImageFloat(Vector2i size, final boolean visualDebug) {
 		if (size == null) {
 			size = new Vector2i((int) this.size.x(), (int) this.size.y());
@@ -432,7 +425,7 @@ public class EsvgDocument extends Base {
 		// create the first element matrix modification ...
 		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
 		draw(renderedElement, basicTrans);
-	
+
 		// direct return the generated data ...
 		return renderedElement.getData();
 	}
@@ -445,7 +438,7 @@ public class EsvgDocument extends Base {
 	public ImageFloatRGBA renderImageFloatRGBA(final Vector2i size) {
 		return renderImageFloatRGBA(size, false);
 	}
-	
+
 	public ImageFloatRGBA renderImageFloatRGBA(Vector2i size, final boolean visualDebug) {
 		if (size == null) {
 			size = new Vector2i((int) this.size.x(), (int) this.size.y());
@@ -469,9 +462,9 @@ public class EsvgDocument extends Base {
 		final Matrix2x3f basicTrans = Matrix2x3f.IDENTITY
 				.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
 		draw(renderedElement, basicTrans);
-		
+
 		// direct return the generated data ...
 		return renderedElement.getData();
 	}
-	
+
 }

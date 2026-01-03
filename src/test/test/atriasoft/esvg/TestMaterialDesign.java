@@ -316,5 +316,32 @@ class TestMaterialDesign {
 		Assertions.assertDoesNotThrow(
 				() -> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "testCheckBox.svg"), data.replace("'", "\"")));
 	}
-	
+
+	@Test
+	public void testPropertyScanLineFail() {
+		Esvg.init();
+		//@formatter:off
+		final String data = """
+				<svg
+				   width="32"
+				   height="32">
+				  <rect
+				     x="16.79899"
+				     y="-3.5857863"
+				     width="6"
+				     height="10"
+				     rx="1"
+				     transform="rotate(45)"
+				     style="fill:#FFFFFF;fill-opacity:1"
+				     id="rect5" />
+				</svg>
+				""";
+		//@formatter:on
+		final EsvgDocument doc = new EsvgDocument();
+		doc.parse(data);
+		ConfigTest.generateAnImage(doc, new Uri(ConfigTest.BASE_PATH + "testPropertyScanLineFail.png"));
+		Assertions.assertDoesNotThrow(() -> Uri.writeAll(new Uri(ConfigTest.BASE_PATH + "testPropertyScanLineFail.svg"),
+				data.replace("'", "\"")));
+	}
+
 }
