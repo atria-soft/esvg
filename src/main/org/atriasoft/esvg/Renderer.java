@@ -159,36 +159,26 @@ public class Renderer {
 	}
 
 	protected Color mergeColor(final Color base, final Color integration) {
-		/*
-		if (integration.a() < base.a()) {
-			result = integration;
-			integration = base;
-			base = result;
-		}
-		*/
-		/*
-		float r = (integration.a() * integration.r() + base.a() * (1.0f - integration.a()) * base.r());
-		float g = (integration.a() * integration.g() + base.a() * (1.0f - integration.a()) * base.g());
-		float b = (integration.a() * integration.b() + base.a() * (1.0f - integration.a()) * base.b());
-		float a = (integration.a() + base.a() * (1.0f - integration.a()));
-		if (a != 0.0f) {
-			float reverse = 1.0f / a;
-			r *= reverse;
-			g *= reverse;
-			b *= reverse;
-		}
-		return new Color(r, g, b, a);
-		*/
 		final float a1 = integration.a(); // alpha over
 		final float a0 = base.a(); // alpha under
 
+		// Si l'intégration est complètement transparente, retourner la base
+		if (a1 == 0.0f) {
+			return base;
+		}
+		// Si la base est complètement transparente, retourner l'intégration
+		if (a0 == 0.0f) {
+			return integration;
+		}
+
+		// Formule Porter-Duff "over" standard
 		final float a = a1 + a0 * (1 - a1);
 		final float aCalc = a != 0 ? 1 / a : 1;
-		
+
 		final float r = (integration.r() * a1 + base.r() * a0 * (1 - a1)) * aCalc;
 		final float g = (integration.g() * a1 + base.g() * a0 * (1 - a1)) * aCalc;
 		final float b = (integration.b() * a1 + base.b() * a0 * (1 - a1)) * aCalc;
-		
+
 		return new Color(r, g, b, a);
 	}
 
