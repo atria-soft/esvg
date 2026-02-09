@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 public class PathModel {
 	static final Logger LOGGER = LoggerFactory.getLogger(PathModel.class);
-	
+
 	private static void interpolateCubicBezier(
 			final List<Point> listPoint,
 			final int recurtionMax,
@@ -37,11 +37,11 @@ public class PathModel {
 		final Vector2f pos12 = pos1.add(pos2).multiply(0.5f);
 		final Vector2f pos23 = pos2.add(pos3).multiply(0.5f);
 		final Vector2f pos34 = pos3.add(pos4).multiply(0.5f);
-
+		
 		final Vector2f delta = pos4.less(pos1);
 		final float distance2 = Math.abs(((pos2.x() - pos4.x()) * delta.y() - (pos2.y() - pos4.y()) * delta.x()));
 		final float distance3 = Math.abs(((pos3.x() - pos4.x()) * delta.y() - (pos3.y() - pos4.y()) * delta.x()));
-
+		
 		if ((distance2 + distance3) * (distance2 + distance3) < threshold * delta.length2()) {
 			listPoint.add(new Point(pos4, type));
 			return;
@@ -49,13 +49,13 @@ public class PathModel {
 		final Vector2f pos123 = pos12.add(pos23).multiply(0.5f);
 		final Vector2f pos234 = pos23.add(pos34).multiply(0.5f);
 		final Vector2f pos1234 = pos123.add(pos234).multiply(0.5f);
-
+		
 		PathModel.interpolateCubicBezier(listPoint, recurtionMax, threshold, pos1, pos12, pos123, pos1234, level + 1,
 				PointType.interpolation);
 		PathModel.interpolateCubicBezier(listPoint, recurtionMax, threshold, pos1234, pos234, pos34, pos4, level + 1,
 				type);
 	}
-
+	
 	/**
 	 *  add indentation of the string input.
 	 * @param data String where the indentation is done.
@@ -68,45 +68,45 @@ public class PathModel {
 		}
 		return data.toString();
 	}
-
+	
 	private static float vectorAngle(Vector2f uuu, Vector2f vvv) {
 		uuu = uuu.safeNormalize();
 		vvv = vvv.safeNormalize();
 		return (float) Math.atan2(uuu.cross(vvv), uuu.dot(vvv));
 	}
-
+	
 	SegmentList debugInformation;
-
+	
 	public List<Element> listElement = new ArrayList<>();
-
+	
 	public PathModel() {
-
+		
 	}
-
+	
 	public void bezierCurveTo(final boolean relative, final Vector2f pos1, final Vector2f pos) {
 		this.listElement.add(new ElementBezierCurveTo(relative, pos1, pos));
 	}
-
+	
 	public void bezierSmoothCurveTo(final boolean relative, final Vector2f pos) {
 		this.listElement.add(new ElementBezierSmoothCurveTo(relative, pos));
 	}
-
+	
 	public void clear() {
 		this.listElement.clear();
 	}
-
+	
 	public void close() {
 		close(false);
 	}
-
+	
 	public void close(final boolean relative) {
 		this.listElement.add(new ElementClose(relative));
 	}
-
+	
 	public void curveTo(final boolean relative, final Vector2f pos1, final Vector2f pos2, final Vector2f pos) {
 		this.listElement.add(new ElementCurveTo(relative, pos1, pos2, pos));
 	}
-
+	
 	public void display(final int spacing) {
 		//LOGGER.trace(PathModel.spacingDist(spacing) + "Path");
 		for (final Element it : this.listElement) {
@@ -116,7 +116,7 @@ public class PathModel {
 			//LOGGER.trace(PathModel.spacingDist(spacing + 1) + it);
 		}
 	}
-
+	
 	public Weight drawFill(
 			final Vector2i size,
 			final Matrix2x3f basicTrans,
@@ -133,7 +133,7 @@ public class PathModel {
 		weight.generate(size, config.numberOfScanline(), listSegment);
 		return weight;
 	}
-
+	
 	public Weight drawStroke(
 			final Vector2i size,
 			final Matrix2x3f basicTrans,
@@ -151,7 +151,7 @@ public class PathModel {
 		weight.generate(size, config.numberOfScanline(), listSegment);
 		return weight;
 	}
-
+	
 	public void ellipticTo(
 			final boolean relative,
 			final Vector2f radius,
@@ -161,15 +161,15 @@ public class PathModel {
 			final Vector2f pos) {
 		this.listElement.add(new ElementElliptic(relative, radius, angle, largeArcFlag, sweepFlag, pos));
 	}
-
+	
 	public PointList generateListPoints(final int level) {
 		return generateListPoints(level, 10);
 	}
-
+	
 	public PointList generateListPoints(final int level, final int recurtionMax) {
 		return generateListPoints(level, recurtionMax, 0.25f);
 	}
-
+	
 	public PointList generateListPoints(final int level, final int recurtionMax, final float threshold) {
 		LOGGER.trace("{}Generate List Points ... from a path", PathModel.spacingDist(level));
 		final PointList out = new PointList();
@@ -360,13 +360,6 @@ public class PathModel {
 						tmpListPoint.add(new Point(lastPosition, PointType.join));
 					} {
 					final ElementElliptic tmpIt = (ElementElliptic) it;
-					LOGGER.debug("TODO: {} Elliptic arc: radius={}", PathModel.spacingDist(level + 1), tmpIt.getPos1());
-					LOGGER.debug("TODO: {}               angle={}", PathModel.spacingDist(level + 1), tmpIt.angle);
-					LOGGER.debug("TODO: {}               this.largeArcFlag={}",
-							PathModel.spacingDist(level + 1), tmpIt.largeArcFlag);
-					LOGGER.debug("TODO: {}               this.sweepFlag={}",
-							PathModel.spacingDist(level + 1), tmpIt.sweepFlag);
-
 					final Vector2f lastPosStore = lastPosition;
 					if (!it.getRelative()) {
 						lastPosition = Vector2f.ZERO;
@@ -374,8 +367,6 @@ public class PathModel {
 					final Vector2f pos = lastPosition.add(it.getPos());
 					final float rotationX = tmpIt.angle * ((float) Math.PI / 180.0f);
 					Vector2f radius = tmpIt.getPos1();
-
-					//this.debugInformation.addSegment(lastPosStore, pos);
 					Vector2f delta = lastPosStore.less(pos);
 					float ddd = delta.length();
 					if (ddd < 1e-6f || radius.x() < 1e-6f || radius.y() < 1e-6f) {
@@ -446,7 +437,7 @@ public class PathModel {
 						// Split arc into max 90 degree segments.
 						// The loop assumes an iteration per end point (including start and end), this +1.
 						final int ndivs = (int) (Math.abs(deltaTheta) / ((float) Math.PI * 0.5f)) + 1;
-
+						
 						final float hda = (deltaTheta / ndivs) * 0.5f;
 						float kappa = (float) Math.abs(4.0f / 3.0f * (1.0f - Math.cos(hda)) / Math.sin(hda));
 						if (deltaTheta < 0.0f) {
@@ -468,8 +459,8 @@ public class PathModel {
 								final Vector2f zpos1 = pointPosPrevious.add(tangentPrevious);
 								final Vector2f zpos2 = pointPos.less(tangent);
 								final Vector2f zpos = pointPos;
-								PathModel.interpolateCubicBezier(tmpListPoint, recurtionMax, threshold, pointPosPrevious,
-										zpos1, zpos2, zpos, 0, PointType.join);
+								PathModel.interpolateCubicBezier(tmpListPoint, recurtionMax, threshold,
+										pointPosPrevious, zpos1, zpos2, zpos, 0, PointType.join);
 								lastPosition = zpos;
 								lastAngle = zpos2;
 							}
@@ -495,29 +486,29 @@ public class PathModel {
 		out.display();
 		return out;
 	}
-
+	
 	public void lineTo(final boolean relative, final Vector2f pos) {
 		this.listElement.add(new ElementLineTo(relative, pos));
 	}
-
+	
 	public void lineToH(final boolean relative, final float posX) {
 		this.listElement.add(new ElementLineToH(relative, posX));
 	}
-
+	
 	public void lineToV(final boolean relative, final float posY) {
 		this.listElement.add(new ElementLineToV(relative, posY));
 	}
-
+	
 	public void moveTo(final boolean relative, final Vector2f pos) {
 		this.listElement.add(new ElementMoveTo(relative, pos));
 	}
-
+	
 	public void smoothCurveTo(final boolean relative, final Vector2f pos2, final Vector2f pos) {
 		this.listElement.add(new ElementSmoothCurveTo(relative, pos2, pos));
 	}
-
+	
 	public void stop() {
 		this.listElement.add(new ElementStop());
 	}
-
+	
 }
