@@ -12,7 +12,8 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +130,7 @@ public class Circle extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		this.radius = 0.0f;
 		this.position = Vector2f.ZERO;
 		if (element == null) {
@@ -141,15 +142,15 @@ public class Circle extends Base {
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		String content = element.getAttribute("cx", "");
+		String content = XmlHelper.attr(element, "cx", "");
 		if (content.length() != 0) {
 			this.position = this.position.withX(parseLength(content));
 		}
-		content = element.getAttribute("cy", "");
+		content = XmlHelper.attr(element, "cy", "");
 		if (content.length() != 0) {
 			this.position = this.position.withY(parseLength(content));
 		}
-		content = element.getAttribute("r", "");
+		content = XmlHelper.attr(element, "r", "");
 		if (content.length() == 0) {
 			LOGGER.error("Circle \"r\" is not present");
 			return false;

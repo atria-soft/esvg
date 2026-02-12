@@ -5,8 +5,9 @@ import java.util.List;
 
 import org.atriasoft.esvg.EsvgFont;
 import org.atriasoft.esvg.Path;
+import org.atriasoft.esvg.internal.XmlHelper;
 import org.atriasoft.esvg.render.PathModel;
-import org.atriasoft.exml.model.XmlElement;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,29 +15,29 @@ public class Glyph {
 	private static final boolean LAZY_MODE = true;
 	static final Logger LOGGER = LoggerFactory.getLogger(Glyph.class);
 
-	public static Glyph valueOf(final XmlElement element) {
+	public static Glyph valueOf(final Element element) {
 		return Glyph.valueOf(element, null);
 	}
 
-	public static Glyph valueOf(final XmlElement element, final EsvgFont font) {
+	public static Glyph valueOf(final Element element, final EsvgFont font) {
 		if (element == null) {
 			return null;
 		}
-		final String name = element.getAttribute("glyph-name", null);
+		final String name = XmlHelper.attr(element, "glyph-name", null);
 		LOGGER.trace("get glyph name = '{}'", name);
-		final String tmpValue = element.getAttribute("horiz-adv-x", null);
+		final String tmpValue = XmlHelper.attr(element, "horiz-adv-x", null);
 		int horizAdvX = font == null ? 100 : font.getHorizAdvX();
 		if (tmpValue != null && tmpValue.length() != 0) {
 			horizAdvX = Integer.parseInt(tmpValue);
 		}
 		LOGGER.trace("        horizAdvX= '{}'", horizAdvX);
-		final String unicode = element.getAttribute("unicode", null);
+		final String unicode = XmlHelper.attr(element, "unicode", null);
 		LOGGER.trace("        unicode= '{}'", unicode);
 		if (unicode == null) {
 			LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", name);
 			return null;
 		}
-		final String d = element.getAttribute("d", null);
+		final String d = XmlHelper.attr(element, "d", null);
 		LOGGER.trace("        d= '{}'", d);
 		int unicodeValue = 0;
 		if (unicode.startsWith("&#x") && unicode.endsWith(";")) {

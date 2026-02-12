@@ -12,9 +12,9 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
-import org.atriasoft.exml.model.XmlText;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,7 +173,7 @@ public class Text extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		// line must have a minimum size...
 		this.paint.strokeWidth = 0;
 		if (element == null) {
@@ -186,7 +186,7 @@ public class Text extends Base {
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
 		boolean italic = false;
-		final String fontStyle = element.getAttribute("font-style", "normal");
+		final String fontStyle = XmlHelper.attr(element, "font-style", "normal");
 		if ("italic".equals(fontStyle)) {
 			italic = true;
 		} else if ("normal".equals(fontStyle)) {
@@ -195,7 +195,7 @@ public class Text extends Base {
 			LOGGER.warn("can not parse font-style='{}' support ['normal', 'italic']", fontStyle);
 		}
 		boolean bold = false;
-		final String fontWeight = element.getAttribute("font-weight", "normal");
+		final String fontWeight = XmlHelper.attr(element, "font-weight", "normal");
 		if ("bold".equals(fontWeight)) {
 			bold = true;
 		} else if ("normal".equals(fontWeight)) {
@@ -203,30 +203,30 @@ public class Text extends Base {
 		} else {
 			LOGGER.warn("can not parse font-weight='{}' support ['normal', 'bold']", fontWeight);
 		}
-		String fontFamily = element.getAttribute("font-family", "FreeSans");
+		String fontFamily = XmlHelper.attr(element, "font-family", "FreeSans");
 		if (fontStyle.contains(";")) {
 			fontFamily = fontFamily.split(";")[0];
 		}
 		LOGGER.debug("Get font family: '{}'", fontFamily);
 
-		final float fontSize = parseLength(element.getAttribute("font-size", "50"));
+		final float fontSize = parseLength(XmlHelper.attr(element, "font-size", "50"));
 		this.position = Vector2f.ZERO;
 
-		String content = element.getAttribute("x", "");
+		String content = XmlHelper.attr(element, "x", "");
 		if (content.length() != 0) {
 			this.position = this.position.withX(parseLength(content));
 		}
-		content = element.getAttribute("y", "");
+		content = XmlHelper.attr(element, "y", "");
 		if (content.length() != 0) {
 			this.position = this.position.withY(parseLength(content));
 		}
 
 		// parse all subElement in the Text <TSPAN/>
-		for (final XmlNode elem : element.getNodes()) {
-			if (elem instanceof final XmlElement elementSpan && "tspan".equals(elementSpan.getValue())) {
+		for (final Node elem : XmlHelper.allChildNodes(element)) {
+			if (elem instanceof final Element elementSpan && "tspan".equals(elementSpan.getTagName())) {
 
-			} else if (elem instanceof final XmlText elementText) {
-				this.texts.add(new TextSpan(this.position, elementText.getValue(),
+			} else if (elem instanceof final org.w3c.dom.Text elementText) {
+				this.texts.add(new TextSpan(this.position, elementText.getTextContent(),
 						new FontProperty(fontFamily, fontSize, bold, italic), this.paint.clone()));
 			} else {
 				LOGGER.debug("not managed element : {}", elem);

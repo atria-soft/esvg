@@ -12,7 +12,8 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +130,7 @@ public class Ellipse extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		if (element == null) {
 			return false;
 		}
@@ -142,21 +143,21 @@ public class Ellipse extends Base {
 		this.c = Vector2f.ZERO;
 		this.r = Vector2f.ZERO;
 
-		String content = element.getAttribute("cx", "");
+		String content = XmlHelper.attr(element, "cx", "");
 		if (content.length() != 0) {
 			this.c = this.c.withX(parseLength(content));
 		}
-		content = element.getAttribute("cy", "");
+		content = XmlHelper.attr(element, "cy", "");
 		if (content.length() != 0) {
 			this.c = this.c.withY(parseLength(content));
 		}
-		content = element.getAttribute("rx", "");
+		content = XmlHelper.attr(element, "rx", "");
 		if (content.length() == 0) {
 			LOGGER.error("Ellipse \"rx\" is not present");
 			return false;
 		}
 		this.r = this.r.withX(parseLength(content));
-		content = element.getAttribute("ry", "");
+		content = XmlHelper.attr(element, "ry", "");
 		if (content.length() == 0) {
 			LOGGER.error("Ellipse \"ry\" is not present");
 			return false;

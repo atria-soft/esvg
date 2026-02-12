@@ -1,0 +1,15 @@
+/** Basic module interface.
+ *
+ * @author Edouard DUPIN */
+
+open module org.atriasoft.esvg {
+	exports org.atriasoft.esvg;
+	exports org.atriasoft.esvg.font;
+	exports org.atriasoft.esvg.render;
+
+	requires transitive org.atriasoft.etk;
+	requires java.xml;
+	requires org.atriasoft.pngencoder;
+	requires java.desktop;
+	requires org.atriasoft.egami;
+}

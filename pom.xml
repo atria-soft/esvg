@@ -40,11 +40,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.atriasoft</groupId>
-			<artifactId>exml</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
 			<artifactId>png-encoder</artifactId>
 			<version>0.1.0</version>
 		</dependency>
@@ -70,11 +65,6 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>2.1.0-alpha1</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.atriasoft</groupId>
-			<artifactId>aknot</artifactId>
-			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
 	<build>

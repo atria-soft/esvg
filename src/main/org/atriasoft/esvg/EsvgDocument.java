@@ -3,18 +3,14 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.exception.ExmlException;
-import org.atriasoft.exml.exception.ExmlNodeDoesNotExist;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +40,12 @@ public class EsvgDocument extends Base {
 	/**
 	 * change all style in a xml atribute
 	 */
-	public boolean cleanStyleProperty(final XmlElement root) {
+	public boolean cleanStyleProperty(final Element root) {
 		// for each nodes:
-		for (final XmlNode it : root.getNodes()) {
-			if (!(it instanceof final XmlElement child)) {
-				continue;
-			}
+		for (final Element child : XmlHelper.children(root)) {
 			// get attribute style:
-			if (child.existAttribute("style")) {
-				final String content = child.getAttribute("style", "");
+			if (child.hasAttribute("style")) {
+				final String content = XmlHelper.attr(child, "style", "");
 				if (content.length() != 0) {
 					final String[] listStyle = content.split(";");
 					for (final String it1 : listStyle) {
@@ -62,7 +55,7 @@ public class EsvgDocument extends Base {
 							continue;
 						}
 						// TODO Check if the attibute already exist ...
-						child.setAttribute(value[0], value[1]);
+						child.setAttribute(value[0].trim(), value[1].trim());
 					}
 				}
 				// remove attribute style:
@@ -217,12 +210,15 @@ public class EsvgDocument extends Base {
 	public boolean load(final Uri uri) {
 		clear();
 		this.uri = uri;
-		XmlNode doc = null;
-		try {
-			doc = Exml.parse(uri);
-		} catch (final ExmlException | AknotException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Element doc = null;
+		try (final java.io.InputStream is = Uri.getStream(uri)) {
+			if (is == null) {
+				LOGGER.error("Can not read the Stream : {}", uri);
+				return false;
+			}
+			doc = XmlHelper.parse(is);
+		} catch (final Exception e) {
+			LOGGER.error("Failed to load SVG from URI: {}", uri, e);
 			return false;
 		}
 		return parseXML(doc);
@@ -236,40 +232,42 @@ public class EsvgDocument extends Base {
 	 */
 	public boolean parse(final String data) {
 		clear();
-		XmlNode doc = null;
+		Element doc = null;
 		try {
-			doc = Exml.parse(data);
-		} catch (final ExmlException | AknotException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			doc = XmlHelper.parse(data);
+		} catch (final Exception e) {
+			LOGGER.error("Failed to parse SVG data", e);
 			return false;
 		}
 		return parseXML(doc);
 	}
 	
-	public boolean parseXML(final XmlNode doc) {
-		if (doc instanceof final XmlElement elem && elem.existNode("svg")) {
-			try {
-				if (elem.getNode("svg") instanceof final XmlElement rootElement) {
-					cleanStyleProperty(rootElement);
-					this.loadOK = parseXMLData(rootElement);
-				}
-			} catch (final ExmlNodeDoesNotExist e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
+	public boolean parseXML(final Element doc) {
+		if (doc == null) {
+			return false;
+		}
+		// If the root element is already <svg>, use it directly
+		if ("svg".equals(doc.getTagName())) {
+			cleanStyleProperty(doc);
+			this.loadOK = parseXMLData(doc);
+		} else {
+			// Otherwise look for <svg> as a child
+			final Element svgElement = XmlHelper.getNode(doc, "svg");
+			if (svgElement != null) {
+				cleanStyleProperty(svgElement);
+				this.loadOK = parseXMLData(svgElement);
 			}
 		}
 		return this.loadOK;
 	}
 	
-	public boolean parseXMLData(final XmlElement root) {
+	public boolean parseXMLData(final Element root) {
 		return parseXMLData(root, false);
 	}
 
-	public boolean parseXMLData(final XmlElement root, final boolean isReference) {
+	public boolean parseXMLData(final Element root, final boolean isReference) {
 		// get the svg version :
-		this.version = root.getAttribute("version", "");
+		this.version = XmlHelper.attr(root, "version", "");
 		// parse ...
 		Vector2f pos = Vector2f.ZERO;
 		if (!isReference) {
@@ -278,7 +276,7 @@ public class EsvgDocument extends Base {
 			this.size = parseXmlSize(root);
 			// If width/height are not defined, try to deduce size from viewBox
 			if (this.size.x() == 0 || this.size.y() == 0) {
-				final String viewBox = root.getAttribute("viewBox", "");
+				final String viewBox = XmlHelper.attr(root, "viewBox", "");
 				if (!viewBox.isEmpty()) {
 					// viewBox format: "minX minY width height" (can use space or comma as separator)
 					final String[] parts = viewBox.trim().split("[\\s,]+");
@@ -310,73 +308,69 @@ public class EsvgDocument extends Base {
 		Vector2f maxSize = Vector2f.ZERO;
 		final Dynamic<Vector2f> size = new Dynamic<>(Vector2f.ZERO);
 		// parse all sub node:
-		for (final XmlNode it : root.getNodes()) {
-			if (!(it instanceof final XmlElement child)) {
-				// comment can be here...
-				continue;
-			}
+		for (final Element child : XmlHelper.children(root)) {
 			Base elementParser = null;
-			if (child.getValue().equals("g")) {
+			if (child.getTagName().equals("g")) {
 				elementParser = new Group(this.paint);
-			} else if (child.getValue().equals("a")) {
+			} else if (child.getTagName().equals("a")) {
 				LOGGER.info("Note : 'a' balise is parsed like a g balise ...");
 				elementParser = new Group(this.paint);
-			} else if (child.getValue().equals("title")) {
+			} else if (child.getTagName().equals("title")) {
 				this.title = "TODO : set the title here ...";
 				continue;
-			} else if (child.getValue().equals("path")) {
+			} else if (child.getTagName().equals("path")) {
 				elementParser = new Path(this.paint);
-			} else if (child.getValue().equals("rect")) {
+			} else if (child.getTagName().equals("rect")) {
 				elementParser = new Rectangle(this.paint);
-			} else if (child.getValue().equals("circle")) {
+			} else if (child.getTagName().equals("circle")) {
 				elementParser = new Circle(this.paint);
-			} else if (child.getValue().equals("ellipse")) {
+			} else if (child.getTagName().equals("ellipse")) {
 				elementParser = new Ellipse(this.paint);
-			} else if (child.getValue().equals("line")) {
+			} else if (child.getTagName().equals("line")) {
 				elementParser = new Line(this.paint);
-			} else if (child.getValue().equals("polyline")) {
+			} else if (child.getTagName().equals("polyline")) {
 				elementParser = new Polyline(this.paint);
-			} else if (child.getValue().equals("polygon")) {
+			} else if (child.getTagName().equals("polygon")) {
 				elementParser = new Polygon(this.paint);
-			} else if (child.getValue().equals("text")) {
+			} else if (child.getTagName().equals("text")) {
 				elementParser = new Text(this.paint);
-			} else if (child.getValue().equals("radialGradient")) {
+			} else if (child.getTagName().equals("radialGradient")) {
 				if (!isReference) {
-					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getValue());
+					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getTagName());
 					continue;
 				}
 				elementParser = new RadialGradient(this.paint);
-			} else if (child.getValue().equals("linearGradient")) {
+			} else if (child.getTagName().equals("linearGradient")) {
 				if (!isReference) {
-					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getValue());
+					LOGGER.warn("'{}' node must not be defined outside a defs Section", child.getTagName());
 					continue;
 				}
 				elementParser = new LinearGradient(this.paint);
-			} else if (child.getValue().equals("defs")) {
+			} else if (child.getTagName().equals("defs")) {
 				if (isReference) {
-					LOGGER.warn("'{}' node must not be defined in a defs Section", child.getValue());
+					LOGGER.warn("'{}' node must not be defined in a defs Section", child.getTagName());
 					continue;
 				}
 				final boolean retRefs = parseXMLData(child, true);
 				// TODO Use retRefs ...
 				continue;
-			} else if (child.getValue().equals("sodipodi:namedview")) {
+			} else if (child.getTagName().equals("sodipodi:namedview")) {
 				// Node ignore : generaly inkscape data
 				continue;
-			} else if (child.getValue().equals("metadata")) {
+			} else if (child.getTagName().equals("metadata")) {
 				// Node ignore : generaly inkscape data
 				continue;
 			} else {
 				LOGGER.warn(
 						"node not suported : '{}' must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]",
-						child.getValue());
+						child.getTagName());
 			}
 			if (elementParser == null) {
-				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getValue());
+				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getTagName());
 				continue;
 			}
 			if (!elementParser.parseXML(child, this.transformMatrix, size)) {
-				LOGGER.warn("error on node: '{}' Sub Parsing ERROR", child.getValue());
+				LOGGER.warn("error on node: '{}' Sub Parsing ERROR", child.getTagName());
 				elementParser = null;
 				continue;
 			}

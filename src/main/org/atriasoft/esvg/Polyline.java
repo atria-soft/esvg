@@ -12,7 +12,8 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class Polyline extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		// line must have a minimum size...
 		this.paint.strokeWidth = 1;
 		if (element == null) {
@@ -124,7 +125,7 @@ public class Polyline extends Base {
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		final String sss1 = element.getAttribute("points", "");
+		final String sss1 = XmlHelper.attr(element, "points", "");
 		if (sss1.length() == 0) {
 			LOGGER.error("polyline: missing points attribute");
 			return false;

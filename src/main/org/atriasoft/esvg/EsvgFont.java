@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.atriasoft.aknot.exception.AknotException;
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.font.Kerning;
+import org.atriasoft.esvg.internal.XmlHelper;
 import org.atriasoft.esvg.render.PathModel;
 import org.atriasoft.esvg.render.RenderingConfig;
 import org.atriasoft.esvg.render.Weight;
@@ -16,10 +16,7 @@ import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.util.Pair;
-import org.atriasoft.exml.Exml;
-import org.atriasoft.exml.exception.ExmlException;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,125 +85,122 @@ public class EsvgFont {
 	 */
 	public static EsvgFont load(final Uri uri) {
 		final EsvgFont font = new EsvgFont();
-		XmlNode doc = null;
-		try {
-			doc = Exml.parse(uri);
-		} catch (final ExmlException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} catch (final AknotException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		if (!(doc instanceof final XmlElement root)) {
-			LOGGER.error("can not load the SVG font ==> wrong root node");
+		Element doc = null;
+		try (final java.io.InputStream is = Uri.getStream(uri)) {
+			if (is == null) {
+				LOGGER.error("Can not read the Stream : {}", uri);
+				return null;
+			}
+			doc = XmlHelper.parse(is);
+		} catch (final Exception e) {
+			LOGGER.error("Failed to load SVG font from URI: {}", uri, e);
 			return null;
 		}
-		if (!root.existNode("svg") || !(root.getNodeNoExcept("svg") instanceof final XmlElement svgNode)) {
-			LOGGER.error("can not load Node <svg> in svg document");
-			return null;
+		// Navigate to <svg> — may be the root element itself
+		Element svgNode = doc;
+		if (!"svg".equals(doc.getTagName())) {
+			svgNode = XmlHelper.getNode(doc, "svg");
+			if (svgNode == null) {
+				LOGGER.error("can not load Node <svg> in svg document");
+				return null;
+			}
 		}
-		if (!svgNode.existNode("defs") || !(svgNode.getNodeNoExcept("defs") instanceof final XmlElement defsNode)) {
+		final Element defsNode = XmlHelper.getNode(svgNode, "defs");
+		if (defsNode == null) {
 			LOGGER.error("can not load Node <defs> in svg document");
 			return null;
 		}
-		if (!defsNode.existNode("font")
-				|| !(defsNode.getNodeNoExcept("font") instanceof final XmlElement fontElement)) {
+		final Element fontElement = XmlHelper.getNode(defsNode, "font");
+		if (fontElement == null) {
 			LOGGER.error("can not load Node <font> in svg document");
 			return null;
 		}
 
-		font.horizAdvX = Integer.parseInt(fontElement.getAttribute("horiz-adv-x", "100"));
+		font.horizAdvX = Integer.parseInt(XmlHelper.attr(fontElement, "horiz-adv-x", "100"));
 
 		int nbGlyph = 0;
-		for (final XmlNode values : fontElement.getNodes()) {
-			if (values.getValue().equals("font-face")) {
-				if (values instanceof final XmlElement fontFace) {
-					font.fontFamily = fontFace.getAttribute("font-family", "unknown");
-					font.fontStretch = fontFace.getAttribute("font-stretch", "normal");
-					font.fontWeight = Integer.parseInt(fontFace.getAttribute("font-weight", "400"));
-					font.unitsPerEm = Integer.parseInt(fontFace.getAttribute("units-per-em", "1000"));
-					font.ascent = Integer.parseInt(fontFace.getAttribute("ascent", "800"));
-					font.descent = Integer.parseInt(fontFace.getAttribute("descent", "-200"));
-					font.xHeight = Integer.parseInt(fontFace.getAttribute("x-height", "450"));
-					font.capHeight = Integer.parseInt(fontFace.getAttribute("cap-height", "662"));
-					font.underlineThickness = Integer.parseInt(fontFace.getAttribute("underline-thickness", "50"));
-					font.underlinePosition = Integer.parseInt(fontFace.getAttribute("underline-position", "-150"));
-					//panose-1="2 2 6 3 5 4 5 2 3 4"
-					String tmp = fontFace.getAttribute("panose-1", null);
-					String[] tmpSplit = tmp.split(" ");
-					font.panose1 = new int[tmpSplit.length];
-					for (int iii = 0; iii < tmpSplit.length; iii++) {
-						font.panose1[iii] = Integer.parseInt(tmpSplit[iii]);
-					}
-					//bbox="-879 -545 1767 934"
-					tmp = fontFace.getAttribute("bbox", null);
-					tmpSplit = tmp.split(" ");
-					font.bbox = new int[tmpSplit.length];
-					for (int iii = 0; iii < tmpSplit.length; iii++) {
-						font.bbox[iii] = Integer.parseInt(tmpSplit[iii]);
-					}
-					//unicode-range="U+0020-1F093"
-					tmp = fontFace.getAttribute("unicode-range", null);
-					tmpSplit = tmp.split("-");
-					final int start = Integer.parseInt(tmpSplit[0].substring(2), 16);
-					final int stop = Integer.parseInt(tmpSplit[1], 16);
-					font.unicodeRange = new Pair<>(start, stop);
+		for (final Element child : XmlHelper.children(fontElement)) {
+			if (child.getTagName().equals("font-face")) {
+				font.fontFamily = XmlHelper.attr(child, "font-family", "unknown");
+				font.fontStretch = XmlHelper.attr(child, "font-stretch", "normal");
+				font.fontWeight = Integer.parseInt(XmlHelper.attr(child, "font-weight", "400"));
+				font.unitsPerEm = Integer.parseInt(XmlHelper.attr(child, "units-per-em", "1000"));
+				font.ascent = Integer.parseInt(XmlHelper.attr(child, "ascent", "800"));
+				font.descent = Integer.parseInt(XmlHelper.attr(child, "descent", "-200"));
+				font.xHeight = Integer.parseInt(XmlHelper.attr(child, "x-height", "450"));
+				font.capHeight = Integer.parseInt(XmlHelper.attr(child, "cap-height", "662"));
+				font.underlineThickness = Integer.parseInt(XmlHelper.attr(child, "underline-thickness", "50"));
+				font.underlinePosition = Integer.parseInt(XmlHelper.attr(child, "underline-position", "-150"));
+				//panose-1="2 2 6 3 5 4 5 2 3 4"
+				String tmp = XmlHelper.attr(child, "panose-1", null);
+				String[] tmpSplit = tmp.split(" ");
+				font.panose1 = new int[tmpSplit.length];
+				for (int iii = 0; iii < tmpSplit.length; iii++) {
+					font.panose1[iii] = Integer.parseInt(tmpSplit[iii]);
 				}
+				//bbox="-879 -545 1767 934"
+				tmp = XmlHelper.attr(child, "bbox", null);
+				tmpSplit = tmp.split(" ");
+				font.bbox = new int[tmpSplit.length];
+				for (int iii = 0; iii < tmpSplit.length; iii++) {
+					font.bbox[iii] = Integer.parseInt(tmpSplit[iii]);
+				}
+				//unicode-range="U+0020-1F093"
+				tmp = XmlHelper.attr(child, "unicode-range", null);
+				tmpSplit = tmp.split("-");
+				final int start = Integer.parseInt(tmpSplit[0].substring(2), 16);
+				final int stop = Integer.parseInt(tmpSplit[1], 16);
+				font.unicodeRange = new Pair<>(start, stop);
 			}
 		}
-		for (final XmlNode values : fontElement.getNodes()) {
-			if (values.getValue().equals("glyph")) {
+		for (final Element child : XmlHelper.children(fontElement)) {
+			if (child.getTagName().equals("glyph")) {
 				nbGlyph++;
 				//LOGGER.info("find flyph: " + nbGlyph);
-				final Glyph tmp = Glyph.valueOf(values.toElement(), font);
+				final Glyph tmp = Glyph.valueOf(child, font);
 				if (tmp != null) {
 					font.glyphs.put(tmp.getUnicodeValue(), tmp);
 				}
-			} else if (values.getValue().equals("hkern")) {
+			} else if (child.getTagName().equals("hkern")) {
 				// check later ...
-			} else if (values.getValue().equals("missing-glyph")) {
-				font.missingGlyph = Glyph.valueOf(values.toElement(), font);
-			} else if (values.getValue().equals("font-face")) {
+			} else if (child.getTagName().equals("missing-glyph")) {
+				font.missingGlyph = Glyph.valueOf(child, font);
+			} else if (child.getTagName().equals("font-face")) {
 				// already done ...
 			} else {
-				LOGGER.debug("unsupported node name :{}", values.getValue());
+				LOGGER.debug("unsupported node name :{}", child.getTagName());
 			}
 		}
-		for (final XmlNode values : fontElement.getNodes()) {
-			if (values.getValue().equals("hkern")) {
-				if (values instanceof final XmlElement kernElem) {
-					final String g1 = kernElem.getAttribute("g1", null);
-					final String g2 = kernElem.getAttribute("g2", null);
-					if (g1 == null || g2 == null) {
-						continue;
-					}
-					final float offset = Float.parseFloat(kernElem.getAttribute("k", "0"));
-					if (offset == 0.0f) {
-						continue;
-					}
-					final String[] g1Splited = g1.split(",");
-					final String[] g2Splited = g2.split(",");
-					// create the list of kerning of the next elements
-					final List<Kerning> elementsKerning = new ArrayList<>();
-					for (final String element : g2Splited) {
-						for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-							if (entry.getValue().getName().equals(element)) {
-								elementsKerning.add(new Kerning(offset, entry.getKey()));
-								break;
-							}
+		for (final Element child : XmlHelper.children(fontElement)) {
+			if (child.getTagName().equals("hkern")) {
+				final String g1 = XmlHelper.attr(child, "g1", null);
+				final String g2 = XmlHelper.attr(child, "g2", null);
+				if (g1 == null || g2 == null) {
+					continue;
+				}
+				final float offset = Float.parseFloat(XmlHelper.attr(child, "k", "0"));
+				if (offset == 0.0f) {
+					continue;
+				}
+				final String[] g1Splited = g1.split(",");
+				final String[] g2Splited = g2.split(",");
+				// create the list of kerning of the next elements
+				final List<Kerning> elementsKerning = new ArrayList<>();
+				for (final String element : g2Splited) {
+					for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
+						if (entry.getValue().getName().equals(element)) {
+							elementsKerning.add(new Kerning(offset, entry.getKey()));
+							break;
 						}
 					}
-					// add it on the
-					for (final String element : g1Splited) {
-						for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-							if (entry.getValue().getName().equals(element)) {
-								entry.getValue().addKerning(elementsKerning);
-								font.hasKerning = true;
-								break;
-							}
+				}
+				// add it on the
+				for (final String element : g1Splited) {
+					for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
+						if (entry.getValue().getName().equals(element)) {
+							entry.getValue().addKerning(elementsKerning);
+							font.hasKerning = true;
+							break;
 						}
 					}
 				}

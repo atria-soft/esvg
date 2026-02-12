@@ -12,7 +12,8 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +108,7 @@ public class Line extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		// line must have a minimum size...
 		this.paint.strokeWidth = 1;
 		if (element == null) {
@@ -119,19 +120,19 @@ public class Line extends Base {
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		String content = element.getAttribute("x1", "");
+		String content = XmlHelper.attr(element, "x1", "");
 		if (content.length() != 0) {
 			this.startPos = this.startPos.withX(parseLength(content));
 		}
-		content = element.getAttribute("y1", "");
+		content = XmlHelper.attr(element, "y1", "");
 		if (content.length() != 0) {
 			this.startPos = this.startPos.withY(parseLength(content));
 		}
-		content = element.getAttribute("x2", "");
+		content = XmlHelper.attr(element, "x2", "");
 		if (content.length() != 0) {
 			this.stopPos = this.stopPos.withX(parseLength(content));
 		}
-		content = element.getAttribute("y2", "");
+		content = XmlHelper.attr(element, "y2", "");
 		if (content.length() != 0) {
 			this.stopPos = this.stopPos.withY(parseLength(content));
 		}

@@ -11,8 +11,8 @@ import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.util.Pair;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +82,7 @@ public class LinearGradient extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		{
 			// line must have a minimum size...
 			//this.paint.strokeWidth = 1;
@@ -91,7 +91,7 @@ public class LinearGradient extends Base {
 			}
 
 			// ---------------- get unique ID ----------------
-			this.id = element.getAttribute("id", "");
+			this.id = XmlHelper.attr(element, "id", "");
 
 			//parseTransform(element);
 			//parsePaintAttr(element);
@@ -99,17 +99,17 @@ public class LinearGradient extends Base {
 			// add the property of the parrent modifications ...
 			this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-			String contentX = element.getAttribute("x1", "");
-			String contentY = element.getAttribute("y1", "");
+			String contentX = XmlHelper.attr(element, "x1", "");
+			String contentY = XmlHelper.attr(element, "y1", "");
 			if (!contentX.isEmpty() && !contentY.isEmpty()) {
 				this.pos1 = Dimension2f.valueOf(contentX, contentY);
 			}
-			contentX = element.getAttribute("x2", "");
-			contentY = element.getAttribute("y2", "");
+			contentX = XmlHelper.attr(element, "x2", "");
+			contentY = XmlHelper.attr(element, "y2", "");
 			if (!contentX.isEmpty() && !contentY.isEmpty()) {
 				this.pos2 = Dimension2f.valueOf(contentX, contentY);
 			}
-			contentX = element.getAttribute("gradientUnits", "");
+			contentX = XmlHelper.attr(element, "gradientUnits", "");
 			if (contentX.equals("userSpaceOnUse")) {
 				this.unit = GradientUnits.GRADIENT_UNITS_USER_SPACE_ON_USE;
 			} else {
@@ -118,7 +118,7 @@ public class LinearGradient extends Base {
 					LOGGER.warn("Parsing error of 'gradientUnits' ==> not suported value: '{}' not in : {{userSpaceOnUse/objectBoundingBox}} use objectBoundingBox", contentX);
 				}
 			}
-			contentX = element.getAttribute("spreadMethod", "");
+			contentX = XmlHelper.attr(element, "spreadMethod", "");
 			if (contentX.equals("reflect")) {
 				this.spread = SpreadMethod.REFLECT;
 			} else if (contentX.equals("repeat")) {
@@ -130,44 +130,42 @@ public class LinearGradient extends Base {
 				}
 			}
 			// note: xlink:href is incompatible with subNode "stop"
-			this.href = element.getAttribute("xlink:href", "");
+			this.href = XmlHelper.attr(element, "xlink:href", "");
 			if (this.href.length() != 0) {
 				this.href = this.href.substring(1);
 			}
 			// parse all sub node :
-			for (final XmlNode it : element.getNodes()) {
-				if (it instanceof final XmlElement child) {
-					if (child.getValue().equals("stop")) {
-						float offset = 100;
-						Color stopColor = Color.NONE;
-						String content = child.getAttribute("offset", "");
-						if (content.length() != 0) {
-							final Pair<Float, Distance> tmp = parseLength2(content);
-							if (tmp.second == Distance.PIXEL) {
-								// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
-								offset = tmp.first * 100.0f;
-							} else if (tmp.second != Distance.POURCENT) {
-								LOGGER.warn("offset : {} res={},{} Not support other than pourcent %", content, tmp.first, tmp.second);
-							} else {
-								offset = tmp.first;
-							}
+			for (final Element child : XmlHelper.children(element)) {
+				if (child.getTagName().equals("stop")) {
+					float offset = 100;
+					Color stopColor = Color.NONE;
+					String content = XmlHelper.attr(child, "offset", "");
+					if (content.length() != 0) {
+						final Pair<Float, Distance> tmp = parseLength2(content);
+						if (tmp.second == Distance.PIXEL) {
+							// special case ==> all time % then no type define ==> % in [0.0 .. 1.0]
+							offset = tmp.first * 100.0f;
+						} else if (tmp.second != Distance.POURCENT) {
+							LOGGER.warn("offset : {} res={},{} Not support other than pourcent %", content, tmp.first, tmp.second);
+						} else {
+							offset = tmp.first;
 						}
-						content = child.getAttribute("stop-color", "");
-						if (content.length() != 0) {
-							stopColor = parseColor(content).first;
-							LOGGER.trace(" color : '{}' == > {}", content, stopColor);
-						}
-						content = child.getAttribute("stop-opacity", "");
-						if (content.length() != 0) {
-							float opacity = parseLength(content);
-							opacity = FMath.avg(0.0f, opacity, 1.0f);
-							stopColor = stopColor.withA(opacity);
-							LOGGER.trace(" opacity : '{}'  == > {}", content, stopColor);
-						}
-						this.data.add(new Pair<>(offset, stopColor));
-					} else {
-						LOGGER.warn(" node not suported : '{}' must be [stop]", child.getValue());
 					}
+					content = XmlHelper.attr(child, "stop-color", "");
+					if (content.length() != 0) {
+						stopColor = parseColor(content).first;
+						LOGGER.trace(" color : '{}' == > {}", content, stopColor);
+					}
+					content = XmlHelper.attr(child, "stop-opacity", "");
+					if (content.length() != 0) {
+						float opacity = parseLength(content);
+						opacity = FMath.avg(0.0f, opacity, 1.0f);
+						stopColor = stopColor.withA(opacity);
+						LOGGER.trace(" opacity : '{}'  == > {}", content, stopColor);
+					}
+					this.data.add(new Pair<>(offset, stopColor));
+				} else {
+					LOGGER.warn(" node not suported : '{}' must be [stop]", child.getTagName());
 				}
 			}
 			if (this.data.size() != 0) {

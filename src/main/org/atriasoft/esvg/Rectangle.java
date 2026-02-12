@@ -12,7 +12,8 @@ import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,7 +152,7 @@ public class Rectangle extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		if (element == null) {
 			return false;
 		}
@@ -168,11 +169,11 @@ public class Rectangle extends Base {
 		this.position = parseXmlPosition(element);
 		this.size = parseXmlSize(element);
 
-		String content = element.getAttribute("rx", "");
+		String content = XmlHelper.attr(element, "rx", "");
 		if (content.length() != 0) {
 			this.roundedCorner = this.roundedCorner.withX(parseLength(content));
 		}
-		content = element.getAttribute("ry", "");
+		content = XmlHelper.attr(element, "ry", "");
 		if (content.length() != 0) {
 			this.roundedCorner = this.roundedCorner.withY(parseLength(content));
 		}

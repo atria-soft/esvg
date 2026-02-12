@@ -13,7 +13,8 @@ import org.atriasoft.etk.Tools;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -407,7 +408,7 @@ public class Path extends Base {
 	}
 
 	@Override
-	boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		if (element == null) {
 			return false;
 		}
@@ -417,7 +418,7 @@ public class Path extends Base {
 		// add the property of the parrent modifications ...
 		this.transformMatrix = this.transformMatrix.multiply(parentTrans);
 
-		final String elementXML1 = element.getAttribute("d", "");
+		final String elementXML1 = XmlHelper.attr(element, "d", "");
 		if (elementXML1.length() == 0) {
 			LOGGER.warn("path: missing 'd' attribute or empty");
 			return false;

@@ -9,7 +9,8 @@ import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
 import org.atriasoft.etk.util.Pair;
-import org.atriasoft.exml.model.XmlElement;
+import org.atriasoft.esvg.internal.XmlHelper;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -220,7 +221,7 @@ public class Base {
 	 * parse a Painting attribute of a specific node
 	 * @param element Basic node of the XML that might be parsed
 	 */
-	void parsePaintAttr(final XmlElement element) {
+	void parsePaintAttr(final Element element) {
 		if (element == null) {
 			return;
 		}
@@ -230,9 +231,9 @@ public class Base {
 		*/
 		String content;
 		// ---------------- get unique ID ----------------
-		this.id = element.getAttribute("id", "");
+		this.id = XmlHelper.attr(element, "id", "");
 		// ---------------- stroke ----------------
-		content = element.getAttribute("stroke", "");
+		content = XmlHelper.attr(element, "stroke", "");
 		if (content.equals("none")) {
 			this.paint.stroke = new Pair<>(Color.NONE, "");
 		} else {
@@ -240,18 +241,18 @@ public class Base {
 				this.paint.stroke = parseColor(content);
 				//LOGGER.trace("Parse color : " + this.paint.stroke);
 			}
-			content = element.getAttribute("stroke-width", "");
+			content = XmlHelper.attr(element, "stroke-width", "");
 			if (content.length() != 0) {
 				this.paint.strokeWidth = parseLength(content);
 			}
-			content = element.getAttribute("stroke-opacity", "");
+			content = XmlHelper.attr(element, "stroke-opacity", "");
 			if (content.length() != 0) {
 				float opacity = parseLength(content);
 				opacity = FMath.avg(0.0f, opacity, 1.0f);
 				this.paint.stroke = this.paint.stroke.withFirst(this.paint.stroke.first.withA(opacity));
 			}
 			
-			content = element.getAttribute("stroke-dasharray", "");
+			content = XmlHelper.attr(element, "stroke-dasharray", "");
 			if (content.length() != 0) {
 				if (content.equals("none")) {
 					// OK, Nothing to do ...
@@ -259,7 +260,7 @@ public class Base {
 					LOGGER.info("TODO 'stroke-dasharray' not implemented ...");
 				}
 			}
-			content = element.getAttribute("stroke-linecap", "");
+			content = XmlHelper.attr(element, "stroke-linecap", "");
 			if (content.length() != 0) {
 				if (content.equals("butt")) {
 					this.paint.lineCap = CapMode.BUTT;
@@ -272,7 +273,7 @@ public class Base {
 					LOGGER.warn("not know stroke-linecap value : '{}', not in [butt,round,square]", content);
 				}
 			}
-			content = element.getAttribute("stroke-linejoin", "");
+			content = XmlHelper.attr(element, "stroke-linejoin", "");
 			if (content.length() != 0) {
 				if (content.equals("miter")) {
 					this.paint.lineJoin = JoinMode.MITER;
@@ -285,27 +286,27 @@ public class Base {
 					LOGGER.warn("not know stroke-linejoin value : '{}', not in [miter,round,bevel]", content);
 				}
 			}
-			content = element.getAttribute("stroke-miterlimit", "");
+			content = XmlHelper.attr(element, "stroke-miterlimit", "");
 			if (content.length() != 0) {
 				final float tmp = parseLength(content);
 				this.paint.miterLimit = FMath.max(0.0f, tmp);
 			}
 		}
 		// ---------------- FILL ----------------
-		content = element.getAttribute("fill", "");
+		content = XmlHelper.attr(element, "fill", "");
 		if (content.equals("none")) {
 			this.paint.fill = new Pair<>(Color.NONE, "");
 		} else {
 			if (content.length() != 0) {
 				this.paint.fill = parseColor(content);
 			}
-			content = element.getAttribute("fill-opacity", "");
+			content = XmlHelper.attr(element, "fill-opacity", "");
 			if (content.length() != 0) {
 				float opacity = parseLength(content);
 				opacity = FMath.avg(0.0f, opacity, 1.0f);
 				this.paint.fill = this.paint.fill.withFirst(this.paint.fill.first.withA(opacity));
 			}
-			content = element.getAttribute("fill-rule", "");
+			content = XmlHelper.attr(element, "fill-rule", "");
 			if (content.length() != 0) {
 				if (content.equals("nonzero")) {
 					this.paint.flagEvenOdd = false;
@@ -316,7 +317,7 @@ public class Base {
 				}
 			}
 			// ---------------- opacity ----------------
-			content = element.getAttribute("opacity", "");
+			content = XmlHelper.attr(element, "opacity", "");
 			if (content.length() != 0) {
 				this.paint.opacity = parseLength(content);
 				this.paint.opacity = FMath.avg(0.0f, this.paint.opacity, 1.0f);
@@ -324,11 +325,11 @@ public class Base {
 		}
 	}
 	
-	protected void parseTransform(final XmlElement element) {
+	protected void parseTransform(final Element element) {
 		if (element == null) {
 			return;
 		}
-		String inputString = element.getAttribute("transform", "");
+		String inputString = XmlHelper.attr(element, "transform", "");
 		if (inputString.length() == 0) {
 			return;
 		}
@@ -407,10 +408,10 @@ public class Base {
 	 * @param element standart XML node
 	 * @return true if no problem arrived
 	 */
-	boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		// TODO UNDERSTAND why nothing is done here ...
 		// Parse basic elements (ID...):
-		this.id = element.getAttribute("id", "");
+		this.id = XmlHelper.attr(element, "id", "");
 		sizeMax.value = Vector2f.ZERO;
 		return false;
 	}
@@ -421,33 +422,33 @@ public class Base {
 	 * @param pos parsed position
 	 * @param size parsed dimention
 	 */
-	protected Vector2f parseXmlPosition(final XmlElement element) {
+	protected Vector2f parseXmlPosition(final Element element) {
 		Vector2f out = Vector2f.ZERO;
 		
 		if (element == null) {
 			return out;
 		}
-		String content = element.getAttribute("x", "");
+		String content = XmlHelper.attr(element, "x", "");
 		if (content.length() != 0) {
 			out = out.withX(parseLength(content));
 		}
-		content = element.getAttribute("y", "");
+		content = XmlHelper.attr(element, "y", "");
 		if (content.length() != 0) {
 			out = out.withY(parseLength(content));
 		}
 		return out;
 	}
 	
-	protected Vector2f parseXmlSize(final XmlElement element) {
+	protected Vector2f parseXmlSize(final Element element) {
 		Vector2f out = Vector2f.ZERO;
 		if (element == null) {
 			return out;
 		}
-		String content = element.getAttribute("width", "");
+		String content = XmlHelper.attr(element, "width", "");
 		if (content.length() != 0) {
 			out = out.withX(parseLength(content));
 		}
-		content = element.getAttribute("height", "");
+		content = XmlHelper.attr(element, "height", "");
 		if (content.length() != 0) {
 			out = out.withY(parseLength(content));
 		}

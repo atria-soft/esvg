@@ -3,11 +3,11 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.atriasoft.esvg.internal.XmlHelper;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.util.Dynamic;
-import org.atriasoft.exml.model.XmlElement;
-import org.atriasoft.exml.model.XmlNode;
+import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public class Group extends Base {
 	}
 
 	@Override
-	public boolean parseXML(final XmlElement element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
+	public boolean parseXML(final Element element, final Matrix2x3f parentTrans, final Dynamic<Vector2f> sizeMax) {
 		if (element == null) {
 			return false;
 		}
@@ -82,41 +82,37 @@ public class Group extends Base {
 		sizeMax.value = Vector2f.ZERO;
 		final Dynamic<Vector2f> tmpPos = new Dynamic<>(Vector2f.ZERO);
 		// parse all sub node :
-		for (final XmlNode it : element.getNodes()) {
-			if (!(it instanceof final XmlElement child)) {
-				// can be a comment ...
-				continue;
-			}
+		for (final Element child : XmlHelper.children(element)) {
 			Base elementParser = null;
-			if (child.getValue().equals("g")) {
+			if (child.getTagName().equals("g")) {
 				elementParser = new Group(this.paint);
-			} else if (child.getValue().equals("a")) {
+			} else if (child.getTagName().equals("a")) {
 				// TODO ...
-			} else if (child.getValue().equals("path")) {
+			} else if (child.getTagName().equals("path")) {
 				elementParser = new Path(this.paint);
-			} else if (child.getValue().equals("rect")) {
+			} else if (child.getTagName().equals("rect")) {
 				elementParser = new Rectangle(this.paint);
-			} else if (child.getValue().equals("circle")) {
+			} else if (child.getTagName().equals("circle")) {
 				elementParser = new Circle(this.paint);
-			} else if (child.getValue().equals("ellipse")) {
+			} else if (child.getTagName().equals("ellipse")) {
 				elementParser = new Ellipse(this.paint);
-			} else if (child.getValue().equals("line")) {
+			} else if (child.getTagName().equals("line")) {
 				elementParser = new Line(this.paint);
-			} else if (child.getValue().equals("polyline")) {
+			} else if (child.getTagName().equals("polyline")) {
 				elementParser = new Polyline(this.paint);
-			} else if (child.getValue().equals("polygon")) {
+			} else if (child.getTagName().equals("polygon")) {
 				elementParser = new Polygon(this.paint);
-			} else if (child.getValue().equals("text")) {
+			} else if (child.getTagName().equals("text")) {
 				elementParser = new Text(this.paint);
 			} else {
-				LOGGER.warn("node not suported : '{}' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]", child.getValue());
+				LOGGER.warn("node not suported : '{}' must be [g,a,path,rect,circle,ellipse,line,polyline,polygon,text]", child.getTagName());
 			}
 			if (elementParser == null) {
-				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getValue());
+				LOGGER.warn("error on node: '{}' allocation error or not supported ...", child.getTagName());
 				continue;
 			}
 			if (!elementParser.parseXML(child, this.transformMatrix, tmpPos)) {
-				LOGGER.warn(" error on node: '{}' Sub Parsing ERROR", child.getValue());
+				LOGGER.warn(" error on node: '{}' Sub Parsing ERROR", child.getTagName());
 				elementParser = null;
 				continue;
 			}
