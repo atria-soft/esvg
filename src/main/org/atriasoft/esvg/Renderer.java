@@ -3,8 +3,8 @@ package org.atriasoft.esvg;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.egami.ImageFloatRGBA;
 import org.atriasoft.esvg.render.DynamicColor;
+import org.atriasoft.esvg.render.SvgRenderBuffer;
 import org.atriasoft.esvg.render.DynamicColorSpecial;
 import org.atriasoft.esvg.render.Point;
 import org.atriasoft.esvg.render.Segment;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class Renderer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Renderer.class);
 	private static final boolean DEBUG_MODE = false;
-	protected ImageFloatRGBA buffer; // for debug
+	protected SvgRenderBuffer buffer; // for debug
 	protected EsvgDocument document; // for debug
 
 	private int factor = 1;
@@ -134,7 +134,7 @@ public class Renderer {
 		}
 	}
 
-	ImageFloatRGBA getData() {
+	SvgRenderBuffer getData() {
 		return this.buffer;
 	}
 
@@ -281,9 +281,9 @@ public class Renderer {
 	public void setSize(final Vector2i size) {
 		this.size = size;
 		if (Renderer.DEBUG_MODE) {
-			this.buffer = new ImageFloatRGBA(this.size);
+			this.buffer = new SvgRenderBuffer(this.size);
 		} else {
-			this.buffer = new ImageFloatRGBA(this.size.multiply(this.factor));
+			this.buffer = new SvgRenderBuffer(this.size.multiply(this.factor));
 		}
 	}
 

@@ -1,9 +1,10 @@
 package org.atriasoft.esvg;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.atriasoft.egami.ImageFloatRGBA;
+import org.atriasoft.esvg.render.SvgRenderBuffer;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
@@ -164,43 +165,6 @@ public class EsvgDocument extends Base {
 		return this.loadOK;
 	}
 
-	/*
-	//! @previous
-	public List<Color> renderImageFloatRGB(final Vector2i size) {
-		List<Color> data = renderImageFloatRGBA(size);
-		// Reduce scope:
-		List<Color<float,3>> out;
-		out.resize(data.size());
-		for (sizet iii=0; iii<data.size(); ++iii) {
-			out[iii] = data[iii];
-		}
-		return out;
-	}
-
-	//! @previous
-	public List<Color<uint8t,4>> renderImageU8RGBA(final Vector2i size) {
-		List<Color> data = renderImageFloatRGBA(size);
-		// Reduce scope:
-		List<Color<uint8t,4>> out;
-		out.resize(data.size());
-		for (sizet iii=0; iii<data.size(); ++iii) {
-			out[iii] = data[iii];
-		}
-		return out;
-	}
-
-	//! @previous
-	public List<Color<uint8t,3>> renderImageU8RGB(final Vector2i size) {
-		List<Color> data = renderImageFloatRGBA(size);
-		// Reduce scope:
-		List<Color<uint8t,3>> out;
-		out.resize(data.size());
-		for (sizet iii=0; iii<data.size(); ++iii) {
-			out[iii] = data[iii];
-		}
-		return out;
-	}
-	*/
 	/**
 	 * Load the file that might contain the svg
 	 * @param uri File of the svg
@@ -398,42 +362,30 @@ public class EsvgDocument extends Base {
 		return true;
 	}
 
-	/*
-	public float[][] renderImageFloat(final Vector2i size) {
-		return renderImageFloat(size, false);
-	}
-
-	public float[][] renderImageFloat(Vector2i size, final boolean visualDebug) {
-		if (size == null) {
-			size = new Vector2i((int) this.size.x(), (int) this.size.y());
-		} else {
-			if (size.x() <= 0) {
-				size = size.withX((int) this.size.x());
-			}
-			if (size.y() <= 0) {
-				size = size.withY((int) this.size.y());
-			}
-		}
-		LOGGER.debug("Generate size {}", size);
-		Renderer renderedElement = new Renderer(size, this, visualDebug);
-		// create the first element matrix modification ...
-		Matrix2x3f basicTrans = Matrix2x3f.IDENTITY.multiply(Matrix2x3f.createScale(new Vector2f(size.x() / this.size.x(), size.y() / this.size.y())));
-		draw(renderedElement, basicTrans);
-
-		// direct return the generated data ...
-		return renderedElement.getData();
-	}
-	*/
 	/**
-	 * Generate Image in a specific format.
-	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.) return the size generate
-	 * @return Vector of the data used to display (simple vector: generic to transmit)
+	 * Render the SVG to a standard Java {@link BufferedImage}.
+	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.)
+	 * @return The rendered image as a BufferedImage (TYPE_INT_ARGB)
 	 */
-	public ImageFloatRGBA renderImageFloatRGBA(final Vector2i size) {
-		return renderImageFloatRGBA(size, false);
+	public BufferedImage renderImage(final Vector2i size) {
+		return renderImage(size, false);
 	}
 
-	public ImageFloatRGBA renderImageFloatRGBA(Vector2i size, final boolean visualDebug) {
+	public BufferedImage renderImage(Vector2i size, final boolean visualDebug) {
+		return renderSvgBuffer(size, visualDebug).toBufferedImage();
+	}
+
+	/**
+	 * Render the SVG to an internal float RGBA buffer.
+	 * Useful for tests that need float-precision pixel access.
+	 * @param size Size expected of the rendered image (value <=0 if it need to be automatic.)
+	 * @return The rendered buffer with float RGBA data
+	 */
+	public SvgRenderBuffer renderSvgBuffer(final Vector2i size) {
+		return renderSvgBuffer(size, false);
+	}
+
+	public SvgRenderBuffer renderSvgBuffer(Vector2i size, final boolean visualDebug) {
 		if (size == null) {
 			size = new Vector2i((int) this.size.x(), (int) this.size.y());
 		} else {

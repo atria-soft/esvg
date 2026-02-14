@@ -40,7 +40,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.atriasoft</groupId>
-			<artifactId>egami</artifactId>
+			<artifactId>etk</artifactId>
 			<version>0.1.0</version>
 		</dependency>
 		<dependency>

@@ -1,8 +1,7 @@
 package test.atriasoft.esvg;
 
-import org.atriasoft.egami.Image;
-import org.atriasoft.egami.ToolImage;
 import org.atriasoft.esvg.EsvgDocument;
+import org.atriasoft.esvg.render.SvgRenderBuffer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests de non-régression visuels pour ESVG.
- * Compare les images générées avec des images de référence pixel par pixel.
+ * Tests de non-regression visuels pour ESVG.
+ * Compare les images generees avec des images de reference pixel par pixel.
  */
 class RegressionTest {
 	static final Logger LOGGER = LoggerFactory.getLogger(RegressionTest.class);
@@ -26,22 +25,22 @@ class RegressionTest {
 	public static final String REFERENCE_PATH = "./testReference/";
 	public static final String RESULT_PATH = "./testResult/";
 
-	// Tolérance pour la comparaison des couleurs (0-255)
-	// Une petite tolérance est nécessaire pour les différences de précision float
+	// Tolerance pour la comparaison des couleurs (0-255)
+	// Une petite tolerance est necessaire pour les differences de precision float
 	public static final int COLOR_TOLERANCE = 1;
 
-	// Pourcentage maximum de pixels différents autorisé
+	// Pourcentage maximum de pixels differents autorise
 	public static final double MAX_DIFF_PERCENT = 0.0;
 
 	@BeforeAll
 	static void setup() {
-		// Créer les répertoires si nécessaire
+		// Creer les repertoires si necessaire
 		new File(REFERENCE_PATH).mkdirs();
 		new File(RESULT_PATH).mkdirs();
 	}
 
 	/**
-	 * Représente un cas de test SVG
+	 * Represente un cas de test SVG
 	 */
 	record TestCase(String name, String svgData) {}
 
@@ -267,21 +266,21 @@ class RegressionTest {
 	}
 
 	/**
-	 * Génère une image à partir d'un SVG
+	 * Genere une image a partir d'un SVG (retourne le buffer float pour comparaison precise)
 	 */
-	static Image renderSvg(String svgData) {
-		EsvgDocument doc = new EsvgDocument();
+	static SvgRenderBuffer renderSvg(final String svgData) {
+		final EsvgDocument doc = new EsvgDocument();
 		doc.parse(svgData);
-		return doc.renderImageFloatRGBA(null, false);
+		return doc.renderSvgBuffer(null, false);
 	}
 
 	/**
-	 * Sauvegarde une image au format PNG
+	 * Sauvegarde un buffer de rendu au format PNG
 	 */
-	static void saveImage(Image image, String path) {
+	static void saveImage(final SvgRenderBuffer buffer, final String path) {
 		try {
-			ToolImage.storeImage(java.nio.file.Path.of(path), image);
-		} catch (IOException e) {
+			ImageIO.write(buffer.toBufferedImage(), "png", new File(path));
+		} catch (final IOException e) {
 			throw new RuntimeException("Failed to store image: " + path, e);
 		}
 	}
@@ -289,16 +288,16 @@ class RegressionTest {
 	/**
 	 * Charge une image depuis un fichier PNG
 	 */
-	static BufferedImage loadImage(String path) throws IOException {
+	static BufferedImage loadImage(final String path) throws IOException {
 		return ImageIO.read(new File(path));
 	}
 
 	/**
 	 * Compare deux images pixel par pixel
-	 * Compare l'image générée avec l'image de référence chargée depuis PNG
-	 * @return Le pourcentage de pixels différents
+	 * Compare l'image generee avec l'image de reference chargee depuis PNG
+	 * @return Le pourcentage de pixels differents
 	 */
-	static ComparisonResult compareImages(Image generated, BufferedImage reference) {
+	static ComparisonResult compareImages(final SvgRenderBuffer generated, final BufferedImage reference) {
 		if (generated == null) {
 			return new ComparisonResult(100.0, "Generated image is null");
 		}
@@ -352,9 +351,9 @@ class RegressionTest {
 	}
 
 	/**
-	 * Compare deux images Image directement (pour tests de non-régression après optimisation)
+	 * Compare deux SvgRenderBuffer directement (pour tests de non-regression apres optimisation)
 	 */
-	static ComparisonResult compareImages(Image generated, Image reference) {
+	static ComparisonResult compareImages(final SvgRenderBuffer generated, final SvgRenderBuffer reference) {
 		if (generated == null || reference == null) {
 			return new ComparisonResult(100.0, "Image is null");
 		}
@@ -397,7 +396,7 @@ class RegressionTest {
 	record ComparisonResult(double diffPercent, String message) {}
 
 	/**
-	 * Test de non-régression principal
+	 * Test de non-regression principal
 	 */
 	@Test
 	void testAllSvgRendering() throws IOException {
@@ -411,28 +410,28 @@ class RegressionTest {
 			String refPath = REFERENCE_PATH + tc.name() + ".png";
 			String resultPath = RESULT_PATH + tc.name() + ".png";
 
-			// Générer l'image
-			Image image = renderSvg(tc.svgData());
+			// Generer l'image
+			SvgRenderBuffer buffer = renderSvg(tc.svgData());
 
-			if (image == null) {
+			if (buffer == null) {
 				failures.add(tc.name() + ": Failed to render SVG");
 				continue;
 			}
 
-			// Sauvegarder le résultat
-			saveImage(image, resultPath);
+			// Sauvegarder le resultat
+			saveImage(buffer, resultPath);
 
 			File refFile = new File(refPath);
 			if (!refFile.exists()) {
-				// Pas d'image de référence, on la crée
-				saveImage(image, refPath);
+				// Pas d'image de reference, on la cree
+				saveImage(buffer, refPath);
 				LOGGER.debug("Created reference image: {}", refPath);
 				generated++;
 			} else {
-				// Comparer avec la référence
+				// Comparer avec la reference
 				compared++;
 				BufferedImage reference = loadImage(refPath);
-				ComparisonResult result = compareImages(image, reference);
+				ComparisonResult result = compareImages(buffer, reference);
 
 				if (result.diffPercent() > MAX_DIFF_PERCENT) {
 					failures.add(tc.name() + ": " + result.message());
@@ -485,7 +484,7 @@ class RegressionTest {
 
 		// Warmup
 		for (int i = 0; i < 3; i++) {
-			doc.renderImageFloatRGBA(null, false);
+			doc.renderSvgBuffer(null, false);
 		}
 
 		// Mesure
@@ -493,7 +492,7 @@ class RegressionTest {
 		long startTime = System.nanoTime();
 
 		for (int i = 0; i < iterations; i++) {
-			doc.renderImageFloatRGBA(null, false);
+			doc.renderSvgBuffer(null, false);
 		}
 
 		long endTime = System.nanoTime();
@@ -505,7 +504,7 @@ class RegressionTest {
 	}
 
 	/**
-	 * Test de profilage détaillé - identifie les goulots d'étranglement
+	 * Test de profilage detaille - identifie les goulots d'etranglement
 	 */
 	@Test
 	void testProfilingDetailedBreakdown() {
@@ -585,37 +584,37 @@ class RegressionTest {
 				</svg>""");
 	}
 
-	private void testProfileShape(String name, String svgData) {
+	private void testProfileShape(final String name, final String svgData) {
 		testProfileShapeWithSize(name, svgData, -1, -1);
 	}
 
-	private void testProfileShapeWithSize(String name, String svgData, int width, int height) {
-		EsvgDocument doc = new EsvgDocument();
+	private void testProfileShapeWithSize(final String name, final String svgData, final int width, final int height) {
+		final EsvgDocument doc = new EsvgDocument();
 		doc.parse(svgData);
 
 		// Warmup
 		for (int i = 0; i < 5; i++) {
 			if (width > 0) {
-				doc.renderImageFloatRGBA(new org.atriasoft.etk.math.Vector2i(width, height), false);
+				doc.renderSvgBuffer(new org.atriasoft.etk.math.Vector2i(width, height), false);
 			} else {
-				doc.renderImageFloatRGBA(null, false);
+				doc.renderSvgBuffer(null, false);
 			}
 		}
 
 		// Mesure
-		int iterations = 20;
-		long startTime = System.nanoTime();
+		final int iterations = 20;
+		final long startTime = System.nanoTime();
 
 		for (int i = 0; i < iterations; i++) {
 			if (width > 0) {
-				doc.renderImageFloatRGBA(new org.atriasoft.etk.math.Vector2i(width, height), false);
+				doc.renderSvgBuffer(new org.atriasoft.etk.math.Vector2i(width, height), false);
 			} else {
-				doc.renderImageFloatRGBA(null, false);
+				doc.renderSvgBuffer(null, false);
 			}
 		}
 
-		long endTime = System.nanoTime();
-		double avgTimeMs = (endTime - startTime) / 1_000_000.0 / iterations;
+		final long endTime = System.nanoTime();
+		final double avgTimeMs = (endTime - startTime) / 1_000_000.0 / iterations;
 
 		LOGGER.info(String.format("  %-20s: %7.2f ms", name, avgTimeMs));
 	}

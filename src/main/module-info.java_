@@ -9,7 +9,5 @@ open module org.atriasoft.esvg {
 
 	requires transitive org.atriasoft.etk;
 	requires java.xml;
-	requires org.atriasoft.pngencoder;
 	requires java.desktop;
-	requires org.atriasoft.egami;
 }
