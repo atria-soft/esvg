@@ -1,8 +1,8 @@
 package test.atriasoft.esvg;
 
 import org.atriasoft.egami.Image;
+import org.atriasoft.egami.ToolImage;
 import org.atriasoft.esvg.EsvgDocument;
-import org.atriasoft.pngencoder.PngEncoder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -279,7 +279,11 @@ class RegressionTest {
 	 * Sauvegarde une image au format PNG
 	 */
 	static void saveImage(Image image, String path) {
-		new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toFile(path);
+		try {
+			ToolImage.storeImage(java.nio.file.Path.of(path), image);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to store image: " + path, e);
+		}
 	}
 
 	/**

@@ -1,13 +1,16 @@
 package test.atriasoft.esvg;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.atriasoft.egami.Image;
 import org.atriasoft.egami.ImageFloatRGBA;
+import org.atriasoft.egami.ToolImage;
 import org.atriasoft.esvg.EsvgDocument;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Color;
 import org.atriasoft.etk.Uri;
 import org.atriasoft.etk.math.Vector2i;
-import org.atriasoft.pngencoder.PngEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +25,11 @@ public class ConfigTest {
 			LOGGER.error("No data generated ...");
 		}
 		LOGGER.debug("Save file in {}", uri.getPath());
-		final byte[] outElem = new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toBytes();
-		LOGGER.debug("outsize = {}", outElem.length);
-		new PngEncoder().withBufferedImage(data).withCompressionLevel(9).toFile(uri.getPath());
+		try {
+			ToolImage.storeImage(Path.of(uri.getPath()), data);
+		} catch (final IOException e) {
+			LOGGER.error("Failed to store image: {}", uri.getPath(), e);
+		}
 	}
 
 	public static void generateAnImage(final Weight weight, final Uri uri) {
@@ -44,9 +49,11 @@ public class ConfigTest {
 			image.setColor(xxx, weight.getHeight() + 1, Color.ORANGE);
 		}
 		LOGGER.debug("Save file in {}", uri.getPath());
-		final byte[] outElem = new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toBytes();
-		LOGGER.debug("outsize = {}", outElem.length);
-		new PngEncoder().withBufferedImage(image).withCompressionLevel(9).toFile(uri.getPath());
+		try {
+			ToolImage.storeImage(Path.of(uri.getPath()), image);
+		} catch (final IOException e) {
+			LOGGER.error("Failed to store image: {}", uri.getPath(), e);
+		}
 	}
 
 	private ConfigTest() {}
