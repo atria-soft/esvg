@@ -243,7 +243,7 @@ public class SvgFont {
 	/**
 	 * Get a glyph by Unicode value. Returns the missing glyph if not found.
 	 * @param glyphIndex the Unicode code point
-	 * @return the glyph, or the missing glyph fallback
+	 * @return the glyph, the missing glyph fallback, or null if no missing glyph is defined
 	 */
 	public Glyph getGlyph(final int glyphIndex) {
 		final Glyph out = this.glyphs.get(glyphIndex);

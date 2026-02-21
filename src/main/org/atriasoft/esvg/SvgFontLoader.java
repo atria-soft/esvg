@@ -1,5 +1,6 @@
 package org.atriasoft.esvg;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,12 @@ final class SvgFontLoader {
 		if (value == null || value.isEmpty()) {
 			return defaultValue;
 		}
-		return Integer.parseInt(value);
+		try {
+			return Integer.parseInt(value);
+		} catch (final NumberFormatException e) {
+			LOGGER.warn("Invalid integer value '{}', using default {}", value, defaultValue);
+			return defaultValue;
+		}
 	}
 
 	/**
@@ -53,7 +59,7 @@ final class SvgFontLoader {
 				return null;
 			}
 			svg = XML_MAPPER.readValue(is, SvgDto.class);
-		} catch (final Exception e) {
+		} catch (final IOException e) {
 			LOGGER.error("Failed to load SVG font from URI: {}", uri, e);
 			return null;
 		}
@@ -67,6 +73,15 @@ final class SvgFontLoader {
 			return null;
 		}
 
+		try {
+			return parseFont(font, fontDto);
+		} catch (final NumberFormatException e) {
+			LOGGER.error("Malformed numeric attribute in SVG font: {}", uri, e);
+			return null;
+		}
+	}
+
+	private static SvgFont parseFont(final SvgFont font, final FontDto fontDto) {
 		font.horizAdvX = parseInt(fontDto.getHorizAdvX(), 100);
 
 		// Parse font-face
@@ -85,45 +100,47 @@ final class SvgFontLoader {
 			// panose-1="2 2 6 3 5 4 5 2 3 4"
 			final String panoseStr = face.getPanose1();
 			if (panoseStr != null) {
-				final String[] tmpSplit = panoseStr.split(" ");
-				font.panose1 = new int[tmpSplit.length];
-				for (int iii = 0; iii < tmpSplit.length; iii++) {
-					font.panose1[iii] = Integer.parseInt(tmpSplit[iii]);
+				final String[] panoseParts = panoseStr.split(" ");
+				font.panose1 = new int[panoseParts.length];
+				for (int i = 0; i < panoseParts.length; i++) {
+					font.panose1[i] = Integer.parseInt(panoseParts[i]);
 				}
 			}
 			// bbox="-879 -545 1767 934"
 			final String bboxStr = face.getBbox();
 			if (bboxStr != null) {
-				final String[] tmpSplit = bboxStr.split(" ");
-				font.bbox = new int[tmpSplit.length];
-				for (int iii = 0; iii < tmpSplit.length; iii++) {
-					font.bbox[iii] = Integer.parseInt(tmpSplit[iii]);
+				final String[] bboxParts = bboxStr.split(" ");
+				font.bbox = new int[bboxParts.length];
+				for (int i = 0; i < bboxParts.length; i++) {
+					font.bbox[i] = Integer.parseInt(bboxParts[i]);
 				}
 			}
 			// unicode-range="U+0020-1F093"
 			final String rangeStr = face.getUnicodeRange();
-			if (rangeStr != null) {
-				final String[] tmpSplit = rangeStr.split("-");
-				final int start = Integer.parseInt(tmpSplit[0].substring(2), 16);
-				final int stop = Integer.parseInt(tmpSplit[1], 16);
-				font.unicodeRange = new Pair<>(start, stop);
+			if (rangeStr != null && rangeStr.contains("-")) {
+				final String[] rangeParts = rangeStr.split("-", 2);
+				if (rangeParts.length == 2) {
+					final int start = Integer.parseInt(rangeParts[0].substring(2), 16);
+					final int stop = Integer.parseInt(rangeParts[1], 16);
+					font.unicodeRange = new Pair<>(start, stop);
+				}
 			}
 		}
 
 		// Parse glyphs — unicode entities are already decoded by the StAX parser
-		for (final GlyphDto g : fontDto.getGlyphs()) {
-			final String unicode = g.getUnicode();
+		for (final GlyphDto glyphDto : fontDto.getGlyphs()) {
+			final String unicode = glyphDto.getUnicode();
 			if (unicode == null) {
-				LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", g.getGlyphName());
+				LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", glyphDto.getGlyphName());
 				continue;
 			}
 			if (unicode.length() != 1) {
-				LOGGER.debug("not supported glyph concatenation {} value='{}'", g.getGlyphName(), unicode);
+				LOGGER.debug("not supported glyph concatenation {} value='{}'", glyphDto.getGlyphName(), unicode);
 				continue;
 			}
 			final int unicodeValue = unicode.charAt(0);
-			final int glyphHorizAdvX = parseInt(g.getHorizAdvX(), font.horizAdvX);
-			final Glyph glyph = new Glyph(glyphHorizAdvX, g.getD(), g.getGlyphName(), unicode, unicodeValue);
+			final int glyphHorizAdvX = parseInt(glyphDto.getHorizAdvX(), font.horizAdvX);
+			final Glyph glyph = new Glyph(glyphHorizAdvX, glyphDto.getD(), glyphDto.getGlyphName(), unicode, unicodeValue);
 			font.glyphs.put(unicodeValue, glyph);
 		}
 
@@ -138,13 +155,13 @@ final class SvgFontLoader {
 		}
 
 		// Parse hkern
-		for (final HKernDto hk : fontDto.getHkerns()) {
-			final String g1 = hk.getG1();
-			final String g2 = hk.getG2();
+		for (final HKernDto hkernDto : fontDto.getHkerns()) {
+			final String g1 = hkernDto.getG1();
+			final String g2 = hkernDto.getG2();
 			if (g1 == null || g2 == null) {
 				continue;
 			}
-			final float offset = hk.getK() != null ? Float.parseFloat(hk.getK()) : 0.0f;
+			final float offset = hkernDto.getK() != null ? Float.parseFloat(hkernDto.getK()) : 0.0f;
 			if (offset == 0.0f) {
 				continue;
 			}

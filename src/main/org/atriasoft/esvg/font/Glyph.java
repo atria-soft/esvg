@@ -23,7 +23,7 @@ public class Glyph {
 
 	private int horizAdvX;
 	private List<Kerning> kernings = new ArrayList<>();
-	private Shape shape;
+	private volatile Shape shape;
 	private String name;
 	private final String path;
 	private String unicode;
@@ -149,5 +149,4 @@ public class Glyph {
 	public void setUnicodeValue(final int unicodeValue) {
 		this.unicodeValue = unicodeValue;
 	}
-
 }

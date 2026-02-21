@@ -39,10 +39,10 @@ public final class GlyphRenderer {
 		}
 		final float scale = (float) realSize / font.getUnitsPerEm();
 		final Vector2i renderSize = font.calculateWidthRendering(unicodeValue, fontSize);
-		final int w = Math.max(1, renderSize.x());
-		final int h = Math.max(1, renderSize.y());
+		final int width = Math.max(1, renderSize.x());
+		final int height = Math.max(1, renderSize.y());
 
-		final BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
 		final Graphics2D g2d = image.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(java.awt.Color.WHITE);
@@ -53,10 +53,10 @@ public final class GlyphRenderer {
 		g2d.fill(shape);
 		g2d.dispose();
 
-		final GlyphRaster raster = new GlyphRaster(new Vector2i(w, h));
+		final GlyphRaster raster = new GlyphRaster(new Vector2i(width, height));
 		final Raster imageRaster = image.getRaster();
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
 				raster.set(new Vector2i(x, y), imageRaster.getSample(x, y, 0) / 255.0f);
 			}
 		}
@@ -89,7 +89,6 @@ public final class GlyphRenderer {
 			}
 			if (withKerning) {
 				offsetWriting -= glyph.getKerning(lastValue) * scale;
-				LOGGER.debug("    ==> kerning offset = {}", (glyph.getKerning(lastValue) * scale));
 				lastValue = uVal;
 			}
 

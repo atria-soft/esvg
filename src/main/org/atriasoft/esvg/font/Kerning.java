@@ -1,35 +1,35 @@
 package org.atriasoft.esvg.font;
 
 /**
- * @notindoc
- * Kerning properties of one specific Glyph with an other
- * 
- * Without Kerning :
- * [pre]
- *                                     
- *        \          /      /\         
- *         \        /      /  \        
- *          \      /      /    \       
- *           \    /      /------\      
- *            \  /      /        \     
- *             \/      /          \    
- *        v          v a          a    
- * [/pre]
- * 
- * With Kerning :
- * [pre]
- *                                     
- *        \          /  /\             
- *         \        /  /  \            
- *          \      /  /    \           
- *           \    /  /\          
- *            \  /  /        \         
- *             \/  /          \        
- *        v        a v        a        
- * [/pre]
- * 
- * @note The "Kerning" is the methode to provide a better display for some string like
- *       the "VA" has 2 letter that overlap themself. This name Kerning
+ * Kerning pair between two glyphs.
+ * <p>
+ * Kerning adjusts the horizontal spacing between specific pairs of characters
+ * to improve visual appearance. For example, "VA" typically has the letters
+ * overlapping slightly:
+ * <pre>
+ * Without Kerning:
+ *
+ *        \          /      /\
+ *         \        /      /  \
+ *          \      /      /    \
+ *           \    /      /------\
+ *            \  /      /        \
+ *             \/      /          \
+ *        v          v a          a
+ *
+ * With Kerning:
+ *
+ *        \          /  /\
+ *         \        /  /  \
+ *          \      /  /    \
+ *           \    /  /------\
+ *            \  /  /        \
+ *             \/  /          \
+ *        v        a v        a
+ * </pre>
+ *
+ * @param offset the kerning offset in font units (negative values move glyphs closer)
+ * @param unicode the Unicode code point of the paired glyph
  */
 public record Kerning(
 		float offset,

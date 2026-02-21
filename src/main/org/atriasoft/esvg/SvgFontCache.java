@@ -1,7 +1,8 @@
 package org.atriasoft.esvg;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.atriasoft.etk.ConfigFont;
 import org.atriasoft.etk.Configs;
@@ -12,7 +13,7 @@ import org.atriasoft.etk.Uri;
  * Resolves font variants (bold, italic/oblique) and falls back to the default font.
  */
 public class SvgFontCache {
-	private static final Map<String, SvgFont> CACHE_FONTS = new HashMap<>();
+	private static final Map<String, SvgFont> CACHE_FONTS = new ConcurrentHashMap<>();
 
 	/**
 	 * Check whether a font variant exists.
@@ -87,13 +88,15 @@ public class SvgFontCache {
 			}
 			if (theoricUri != null) {
 				final SvgFont loaded = SvgFont.load(theoricUri);
-				SvgFontCache.CACHE_FONTS.put(finalName, loaded);
+				if (loaded != null) {
+					SvgFontCache.CACHE_FONTS.put(finalName, loaded);
+				}
 				return loaded;
 			}
 		}
 		// Fallback to default font
 		final String defaultFontName = Configs.getConfigFonts().getName();
-		if (defaultFontName.equals(fontName)) {
+		if (Objects.equals(defaultFontName, fontName)) {
 			return null;
 		}
 		return SvgFontCache.getFont(defaultFontName, bold, italic);
