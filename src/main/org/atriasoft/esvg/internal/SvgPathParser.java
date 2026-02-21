@@ -1,4 +1,4 @@
-package org.atriasoft.esvg.render;
+package org.atriasoft.esvg.internal;
 
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
@@ -10,7 +10,7 @@ import org.apache.batik.parser.PathParser;
  * Converts SVG path {@code d} attribute strings to {@link java.awt.Shape}
  * using Apache Batik's path parser.
  */
-public final class SvgPathToShape {
+public final class SvgPathParser {
 
 	/**
 	 * Parse an SVG path data string into a Java2D Shape.
@@ -28,5 +28,5 @@ public final class SvgPathToShape {
 		return producer.getShape();
 	}
 
-	private SvgPathToShape() {}
+	private SvgPathParser() {}
 }
