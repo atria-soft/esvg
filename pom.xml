@@ -43,6 +43,18 @@
 			<artifactId>etk</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		<!-- Batik SVG path parser for font glyph rendering -->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-parser</artifactId>
+			<version>1.18</version>
+		</dependency>
+		<!-- Jackson XML for SVG font file parsing -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.18.3</version>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>

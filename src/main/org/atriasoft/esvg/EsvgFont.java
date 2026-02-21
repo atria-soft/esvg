@@ -1,22 +1,33 @@
 package org.atriasoft.esvg;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import org.atriasoft.esvg.font.Glyph;
 import org.atriasoft.esvg.font.Kerning;
-import org.atriasoft.esvg.internal.XmlHelper;
-import org.atriasoft.esvg.render.PathModel;
-import org.atriasoft.esvg.render.RenderingConfig;
+import org.atriasoft.esvg.internal.dto.FontDto;
+import org.atriasoft.esvg.internal.dto.FontFaceDto;
+import org.atriasoft.esvg.internal.dto.GlyphDto;
+import org.atriasoft.esvg.internal.dto.HKernDto;
+import org.atriasoft.esvg.internal.dto.MissingGlyphDto;
+import org.atriasoft.esvg.internal.dto.SvgDto;
 import org.atriasoft.esvg.render.Weight;
 import org.atriasoft.etk.Uri;
-import org.atriasoft.etk.math.Matrix2x3f;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
 import org.atriasoft.etk.util.Pair;
-import org.w3c.dom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +88,17 @@ import org.slf4j.LoggerFactory;
 public class EsvgFont {
 	static final Logger LOGGER = LoggerFactory.getLogger(EsvgFont.class);
 
+	private static final XmlMapper XML_MAPPER = XmlMapper.builder()
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.build();
+
+	private static int parseInt(final String value, final int defaultValue) {
+		if (value == null || value.isEmpty()) {
+			return defaultValue;
+		}
+		return Integer.parseInt(value);
+	}
+
 	/**
 	 * Load the file that might contain the svg
 	 * @param uri File of the svg
@@ -85,123 +107,126 @@ public class EsvgFont {
 	 */
 	public static EsvgFont load(final Uri uri) {
 		final EsvgFont font = new EsvgFont();
-		Element doc = null;
-		try (final java.io.InputStream is = Uri.getStream(uri)) {
+		final SvgDto svg;
+		try (final InputStream is = Uri.getStream(uri)) {
 			if (is == null) {
 				LOGGER.error("Can not read the Stream : {}", uri);
 				return null;
 			}
-			doc = XmlHelper.parse(is);
+			svg = XML_MAPPER.readValue(is, SvgDto.class);
 		} catch (final Exception e) {
 			LOGGER.error("Failed to load SVG font from URI: {}", uri, e);
 			return null;
 		}
-		// Navigate to <svg> — may be the root element itself
-		Element svgNode = doc;
-		if (!"svg".equals(doc.getTagName())) {
-			svgNode = XmlHelper.getNode(doc, "svg");
-			if (svgNode == null) {
-				LOGGER.error("can not load Node <svg> in svg document");
-				return null;
-			}
-		}
-		final Element defsNode = XmlHelper.getNode(svgNode, "defs");
-		if (defsNode == null) {
-			LOGGER.error("can not load Node <defs> in svg document");
+		if (svg.getDefs() == null) {
+			LOGGER.error("can not load Node <defs> in svg document: {}", uri);
 			return null;
 		}
-		final Element fontElement = XmlHelper.getNode(defsNode, "font");
-		if (fontElement == null) {
-			LOGGER.error("can not load Node <font> in svg document");
+		final FontDto fontDto = svg.getDefs().getFont();
+		if (fontDto == null) {
+			LOGGER.error("can not load Node <font> in svg document: {}", uri);
 			return null;
 		}
 
-		font.horizAdvX = Integer.parseInt(XmlHelper.attr(fontElement, "horiz-adv-x", "100"));
+		font.horizAdvX = parseInt(fontDto.getHorizAdvX(), 100);
 
-		int nbGlyph = 0;
-		for (final Element child : XmlHelper.children(fontElement)) {
-			if (child.getTagName().equals("font-face")) {
-				font.fontFamily = XmlHelper.attr(child, "font-family", "unknown");
-				font.fontStretch = XmlHelper.attr(child, "font-stretch", "normal");
-				font.fontWeight = Integer.parseInt(XmlHelper.attr(child, "font-weight", "400"));
-				font.unitsPerEm = Integer.parseInt(XmlHelper.attr(child, "units-per-em", "1000"));
-				font.ascent = Integer.parseInt(XmlHelper.attr(child, "ascent", "800"));
-				font.descent = Integer.parseInt(XmlHelper.attr(child, "descent", "-200"));
-				font.xHeight = Integer.parseInt(XmlHelper.attr(child, "x-height", "450"));
-				font.capHeight = Integer.parseInt(XmlHelper.attr(child, "cap-height", "662"));
-				font.underlineThickness = Integer.parseInt(XmlHelper.attr(child, "underline-thickness", "50"));
-				font.underlinePosition = Integer.parseInt(XmlHelper.attr(child, "underline-position", "-150"));
-				//panose-1="2 2 6 3 5 4 5 2 3 4"
-				String tmp = XmlHelper.attr(child, "panose-1", null);
-				String[] tmpSplit = tmp.split(" ");
+		// Parse font-face
+		final FontFaceDto face = fontDto.getFontFace();
+		if (face != null) {
+			font.fontFamily = face.getFontFamily() != null ? face.getFontFamily() : "unknown";
+			font.fontStretch = face.getFontStretch() != null ? face.getFontStretch() : "normal";
+			font.fontWeight = parseInt(face.getFontWeight(), 400);
+			font.unitsPerEm = parseInt(face.getUnitsPerEm(), 1000);
+			font.ascent = parseInt(face.getAscent(), 800);
+			font.descent = parseInt(face.getDescent(), -200);
+			font.xHeight = parseInt(face.getXHeight(), 450);
+			font.capHeight = parseInt(face.getCapHeight(), 662);
+			font.underlineThickness = parseInt(face.getUnderlineThickness(), 50);
+			font.underlinePosition = parseInt(face.getUnderlinePosition(), -150);
+			// panose-1="2 2 6 3 5 4 5 2 3 4"
+			final String panoseStr = face.getPanose1();
+			if (panoseStr != null) {
+				final String[] tmpSplit = panoseStr.split(" ");
 				font.panose1 = new int[tmpSplit.length];
 				for (int iii = 0; iii < tmpSplit.length; iii++) {
 					font.panose1[iii] = Integer.parseInt(tmpSplit[iii]);
 				}
-				//bbox="-879 -545 1767 934"
-				tmp = XmlHelper.attr(child, "bbox", null);
-				tmpSplit = tmp.split(" ");
+			}
+			// bbox="-879 -545 1767 934"
+			final String bboxStr = face.getBbox();
+			if (bboxStr != null) {
+				final String[] tmpSplit = bboxStr.split(" ");
 				font.bbox = new int[tmpSplit.length];
 				for (int iii = 0; iii < tmpSplit.length; iii++) {
 					font.bbox[iii] = Integer.parseInt(tmpSplit[iii]);
 				}
-				//unicode-range="U+0020-1F093"
-				tmp = XmlHelper.attr(child, "unicode-range", null);
-				tmpSplit = tmp.split("-");
+			}
+			// unicode-range="U+0020-1F093"
+			final String rangeStr = face.getUnicodeRange();
+			if (rangeStr != null) {
+				final String[] tmpSplit = rangeStr.split("-");
 				final int start = Integer.parseInt(tmpSplit[0].substring(2), 16);
 				final int stop = Integer.parseInt(tmpSplit[1], 16);
 				font.unicodeRange = new Pair<>(start, stop);
 			}
 		}
-		for (final Element child : XmlHelper.children(fontElement)) {
-			if (child.getTagName().equals("glyph")) {
-				nbGlyph++;
-				//LOGGER.info("find flyph: " + nbGlyph);
-				final Glyph tmp = Glyph.valueOf(child, font);
-				if (tmp != null) {
-					font.glyphs.put(tmp.getUnicodeValue(), tmp);
-				}
-			} else if (child.getTagName().equals("hkern")) {
-				// check later ...
-			} else if (child.getTagName().equals("missing-glyph")) {
-				font.missingGlyph = Glyph.valueOf(child, font);
-			} else if (child.getTagName().equals("font-face")) {
-				// already done ...
-			} else {
-				LOGGER.debug("unsupported node name :{}", child.getTagName());
+
+		// Parse glyphs — unicode entities are already decoded by the StAX parser
+		for (final GlyphDto g : fontDto.getGlyphs()) {
+			final String unicode = g.getUnicode();
+			if (unicode == null) {
+				LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", g.getGlyphName());
+				continue;
 			}
+			if (unicode.length() != 1) {
+				LOGGER.debug("not supported glyph concatenation {} value='{}'", g.getGlyphName(), unicode);
+				continue;
+			}
+			final int unicodeValue = unicode.charAt(0);
+			final int glyphHorizAdvX = parseInt(g.getHorizAdvX(), font.horizAdvX);
+			final Glyph glyph = new Glyph(glyphHorizAdvX, g.getD(), g.getGlyphName(), unicode, unicodeValue);
+			font.glyphs.put(unicodeValue, glyph);
 		}
-		for (final Element child : XmlHelper.children(fontElement)) {
-			if (child.getTagName().equals("hkern")) {
-				final String g1 = XmlHelper.attr(child, "g1", null);
-				final String g2 = XmlHelper.attr(child, "g2", null);
-				if (g1 == null || g2 == null) {
-					continue;
-				}
-				final float offset = Float.parseFloat(XmlHelper.attr(child, "k", "0"));
-				if (offset == 0.0f) {
-					continue;
-				}
-				final String[] g1Splited = g1.split(",");
-				final String[] g2Splited = g2.split(",");
-				// create the list of kerning of the next elements
-				final List<Kerning> elementsKerning = new ArrayList<>();
-				for (final String element : g2Splited) {
-					for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-						if (entry.getValue().getName().equals(element)) {
-							elementsKerning.add(new Kerning(offset, entry.getKey()));
-							break;
-						}
+
+		// Parse missing-glyph
+		final MissingGlyphDto missingDto = fontDto.getMissingGlyph();
+		if (missingDto != null) {
+			final int mgHorizAdvX = parseInt(missingDto.getHorizAdvX(), font.horizAdvX);
+			final String mgUnicode = missingDto.getUnicode();
+			final int mgUnicodeValue = mgUnicode != null && mgUnicode.length() == 1 ? mgUnicode.charAt(0) : 0;
+			font.missingGlyph = new Glyph(mgHorizAdvX, missingDto.getD(), missingDto.getGlyphName(),
+					mgUnicode, mgUnicodeValue);
+		}
+
+		// Parse hkern
+		for (final HKernDto hk : fontDto.getHkerns()) {
+			final String g1 = hk.getG1();
+			final String g2 = hk.getG2();
+			if (g1 == null || g2 == null) {
+				continue;
+			}
+			final float offset = hk.getK() != null ? Float.parseFloat(hk.getK()) : 0.0f;
+			if (offset == 0.0f) {
+				continue;
+			}
+			final String[] g1Split = g1.split(",");
+			final String[] g2Split = g2.split(",");
+			// create the list of kerning of the next elements
+			final List<Kerning> elementsKerning = new ArrayList<>();
+			for (final String element : g2Split) {
+				for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
+					if (entry.getValue().getName() != null && entry.getValue().getName().equals(element)) {
+						elementsKerning.add(new Kerning(offset, entry.getKey()));
+						break;
 					}
 				}
-				// add it on the
-				for (final String element : g1Splited) {
-					for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
-						if (entry.getValue().getName().equals(element)) {
-							entry.getValue().addKerning(elementsKerning);
-							font.hasKerning = true;
-							break;
-						}
+			}
+			for (final String element : g1Split) {
+				for (final Map.Entry<Integer, Glyph> entry : font.glyphs.entrySet()) {
+					if (entry.getValue().getName() != null && entry.getValue().getName().equals(element)) {
+						entry.getValue().addKerning(elementsKerning);
+						font.hasKerning = true;
+						break;
 					}
 				}
 			}
@@ -386,16 +411,34 @@ public class EsvgFont {
 		if (glyph == null) {
 			return null;
 		}
-		final float scale = (float) realSize / (float) this.unitsPerEm;
-		final RenderingConfig config = new RenderingConfig(10, 0.25f, 8);
-		final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent))
-				.multiply(Matrix2x3f.createScale(scale));
-		final PathModel model = glyph.getModel();
-		if (model == null) {
+		final Shape shape = glyph.getShape();
+		if (shape == null) {
 			return null;
 		}
-		final Weight data = glyph.getModel().drawFill(calculateWidthRendering(uVal, fontSize), transform, 8, config);
-		return data;
+		final float scale = (float) realSize / (float) this.unitsPerEm;
+		final Vector2i renderSize = calculateWidthRendering(uVal, fontSize);
+		final int w = Math.max(1, renderSize.x());
+		final int h = Math.max(1, renderSize.y());
+
+		final BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+		final Graphics2D g2d = image.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(java.awt.Color.WHITE);
+		final AffineTransform tx = new AffineTransform();
+		tx.scale(scale, scale);
+		tx.translate(0, -this.descent);
+		g2d.setTransform(tx);
+		g2d.fill(shape);
+		g2d.dispose();
+
+		final Weight weight = new Weight(new Vector2i(w, h));
+		final Raster raster = image.getRaster();
+		for (int yyy = 0; yyy < h; yyy++) {
+			for (int xxx = 0; xxx < w; xxx++) {
+				weight.set(new Vector2i(xxx, yyy), raster.getSample(xxx, yyy, 0) / 255.0f);
+			}
+		}
+		return weight;
 	}
 
 	public Weight render(final String uVal, final int fontSize) {
@@ -408,7 +451,7 @@ public class EsvgFont {
 		final int realSize = calculateFontRealHeight(fontSize);
 		final float scale = (float) realSize / (float) this.unitsPerEm;
 
-		final Weight weight = new Weight(new Vector2i(widthOut, realSize));
+		final Weight weight = new Weight(new Vector2i(Math.max(1, widthOut), realSize));
 
 		float offsetWriting = 0;
 		int lastValue = 0;
@@ -426,17 +469,14 @@ public class EsvgFont {
 
 			final float advenceXLocal = glyph.getHorizAdvX() * scale;
 
-			final RenderingConfig config = new RenderingConfig(10, 0.25f, 8);
-			final Matrix2x3f transform = Matrix2x3f.createTranslate(new Vector2f(0, -this.descent))
-					.multiply(Matrix2x3f.createScale(scale));
-			final PathModel model = glyph.getModel();
-			if (model != null) {
-				final Weight redered = model.drawFill(calculateWidthRendering((int) uVal, fontSize), transform, 8,
-						config);
-				weight.fusion(redered, (int) offsetWriting, 0);
+			final Shape shape = glyph.getShape();
+			if (shape != null) {
+				final Weight rendered = render(uVal, fontSize);
+				if (rendered != null) {
+					weight.fusion(rendered, (int) offsetWriting, 0);
+				}
 			}
 			offsetWriting += advenceXLocal;
-
 		}
 		return weight;
 	}
