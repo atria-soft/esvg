@@ -30,7 +30,7 @@ org.atriasoft.esvg/
 ```
 SVG font file (.svg)
     → Jackson XmlMapper (SvgFontLoader)
-        → DTOs (SvgDto → DefsDto → FontDto → GlyphDto[], HKernDto[], FontFaceDto)
+        → DTOs (SvgDto → DefsDto → FontDto → GlyphDto[], HKernDto[], FontFaceDto, MissingGlyphDto)
             → SvgFont (domain model with Glyph[] + metrics)
 
 Text rendering:
