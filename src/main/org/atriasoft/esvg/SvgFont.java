@@ -1,5 +1,6 @@
 package org.atriasoft.esvg;
 
+import java.awt.Shape;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -227,13 +228,54 @@ public class SvgFont {
 	}
 
 	/**
-	 * Get the rendering size of a specific glyph.
+	 * Get the rendering size of a specific glyph based on its actual bounding box.
+	 * <p>
+	 * Unlike {@link #calculateWidth(int, int)} which returns the advance width,
+	 * this method returns the actual rendered size needed to fully display the glyph
+	 * without clipping.
 	 * @param unicodeValue the character code point
 	 * @param fontSize the font size
 	 * @return the rendering size in pixels
 	 */
 	public Vector2i calculateWidthRendering(final Integer unicodeValue, final int fontSize) {
-		return new Vector2i(calculateWidth(unicodeValue, fontSize), calculateFontRealHeight(fontSize));
+		final Glyph glyph = getGlyph(unicodeValue);
+		if (glyph == null) {
+			return new Vector2i(0, calculateFontRealHeight(fontSize));
+		}
+		final int realSize = calculateFontRealHeight(fontSize);
+		final float scale = (float) realSize / (float) this.unitsPerEm;
+		final Shape shape = glyph.getShape();
+		if (shape != null) {
+			final java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
+			// Account for shapes extending left of origin (minX < 0)
+			final double minX = Math.min(0, bounds.getMinX());
+			final double maxX = Math.max(glyph.getHorizAdvX(), bounds.getMaxX());
+			final int shapeWidth = (int) Math.ceil((maxX - minX) * scale);
+			return new Vector2i(Math.max(1, shapeWidth), realSize);
+		}
+		return new Vector2i(calculateWidth(unicodeValue, fontSize), realSize);
+	}
+
+	/**
+	 * Get the left-side bearing offset for a glyph (how far the shape extends left of the origin).
+	 * Used by the renderer to shift the glyph right so it doesn't clip.
+	 * @param unicodeValue the character code point
+	 * @return the offset in font units (0 or positive), to be added as a translation
+	 */
+	public float getGlyphLeftOverhang(final int unicodeValue) {
+		final Glyph glyph = getGlyph(unicodeValue);
+		if (glyph == null) {
+			return 0;
+		}
+		final Shape shape = glyph.getShape();
+		if (shape == null) {
+			return 0;
+		}
+		final double minX = shape.getBounds2D().getMinX();
+		if (minX < 0) {
+			return (float) -minX;
+		}
+		return 0;
 	}
 
 	// ========================================================================
@@ -304,6 +346,19 @@ public class SvgFont {
 	// ========================================================================
 
 	/**
+	 * Calculate the raster size for a glyph with optional synthetic bold/italic.
+	 * @param unicodeValue the Unicode code point
+	 * @param fontSize the font size in pixels
+	 * @param syntheticBold true if synthetic bold will be applied
+	 * @param syntheticItalic true if synthetic italic will be applied
+	 * @return the raster dimensions, or null if the glyph has no shape
+	 */
+	public Vector2i calculateRasterSize(final int unicodeValue, final int fontSize,
+			final boolean syntheticBold, final boolean syntheticItalic) {
+		return GlyphRenderer.calculateRasterSize(this, unicodeValue, fontSize, syntheticBold, syntheticItalic);
+	}
+
+	/**
 	 * Render a single glyph to a grayscale raster.
 	 * @param unicodeValue the Unicode code point to render
 	 * @param fontSize the font size in pixels
@@ -311,6 +366,21 @@ public class SvgFont {
 	 */
 	public GlyphRaster render(final int unicodeValue, final int fontSize) {
 		return GlyphRenderer.renderGlyph(this, unicodeValue, fontSize);
+	}
+
+	/**
+	 * Render a single glyph to a grayscale raster with optional synthetic bold/italic.
+	 * <p>
+	 * Used when the font does not have native bold or italic variants.
+	 * @param unicodeValue the Unicode code point to render
+	 * @param fontSize the font size in pixels
+	 * @param syntheticBold true to apply synthetic bold (stroke + fill)
+	 * @param syntheticItalic true to apply synthetic italic (shear transform)
+	 * @return the rendered raster, or null if the glyph has no shape
+	 */
+	public GlyphRaster render(final int unicodeValue, final int fontSize,
+			final boolean syntheticBold, final boolean syntheticItalic) {
+		return GlyphRenderer.renderGlyph(this, unicodeValue, fontSize, syntheticBold, syntheticItalic);
 	}
 
 	/**
