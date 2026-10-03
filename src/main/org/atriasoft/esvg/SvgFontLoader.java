@@ -128,20 +128,27 @@ final class SvgFontLoader {
 		}
 
 		// Parse glyphs — unicode entities are already decoded by the StAX parser
+		// Glyphs without a single unicode value (alternates, ligatures) are expected in a font: traced only.
+		int skippedGlyphs = 0;
 		for (final GlyphDto glyphDto : fontDto.getGlyphs()) {
 			final String unicode = glyphDto.getUnicode();
 			if (unicode == null) {
-				LOGGER.debug("Not manage glyph : '{}' (missing unicode value)", glyphDto.getGlyphName());
+				LOGGER.trace("Not manage glyph : '{}' (missing unicode value)", glyphDto.getGlyphName());
+				skippedGlyphs++;
 				continue;
 			}
 			if (unicode.length() != 1) {
-				LOGGER.debug("not supported glyph concatenation {} value='{}'", glyphDto.getGlyphName(), unicode);
+				LOGGER.trace("not supported glyph concatenation {} value='{}'", glyphDto.getGlyphName(), unicode);
+				skippedGlyphs++;
 				continue;
 			}
 			final int unicodeValue = unicode.charAt(0);
 			final int glyphHorizAdvX = parseInt(glyphDto.getHorizAdvX(), font.horizAdvX);
 			final Glyph glyph = new Glyph(glyphHorizAdvX, glyphDto.getD(), glyphDto.getGlyphName(), unicode, unicodeValue);
 			font.glyphs.put(unicodeValue, glyph);
+		}
+		if (skippedGlyphs > 0) {
+			LOGGER.debug("Font '{}': {} glyph(s) without a single unicode value skipped", font.fontFamily, skippedGlyphs);
 		}
 
 		// Parse missing-glyph
